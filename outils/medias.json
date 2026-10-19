@@ -1,0 +1,3275 @@
+{
+ "oeuvres": {
+  "en-cours-1": {
+   "original": [
+    2653,
+    4032
+   ],
+   "640": [
+    421,
+    640
+   ],
+   "1600": [
+    1053,
+    1600
+   ],
+   "hd": [
+    2106,
+    3200
+   ],
+   "dominante": "#d3cabb",
+   "fond": "#eeebe6",
+   "accent": "#7b6540"
+  },
+  "en-cours-2": {
+   "original": [
+    768,
+    1024
+   ],
+   "640": [
+    480,
+    640
+   ],
+   "1600": [
+    768,
+    1024
+   ],
+   "dominante": "#a28763",
+   "fond": "#f3eade",
+   "accent": "#7e6441"
+  },
+  "en-cours-3": {
+   "original": [
+    650,
+    938
+   ],
+   "640": [
+    443,
+    640
+   ],
+   "1600": [
+    650,
+    938
+   ],
+   "dominante": "#556e73",
+   "fond": "#e4edef",
+   "accent": "#3c727d"
+  },
+  "en-cours-4": {
+   "original": [
+    768,
+    1024
+   ],
+   "640": [
+    480,
+    640
+   ],
+   "1600": [
+    768,
+    1024
+   ],
+   "dominante": "#b1a671",
+   "fond": "#efecda",
+   "accent": "#746936"
+  },
+  "en-cours-5": {
+   "original": [
+    360,
+    480
+   ],
+   "640": [
+    360,
+    480
+   ],
+   "1600": [
+    360,
+    480
+   ],
+   "dominante": "#debe9a",
+   "fond": "#f4e9de",
+   "accent": "#7f6342"
+  },
+  "en-cours-6": {
+   "original": [
+    768,
+    1024
+   ],
+   "640": [
+    480,
+    640
+   ],
+   "1600": [
+    768,
+    1024
+   ],
+   "dominante": "#9fa392",
+   "fond": "#ebece6",
+   "accent": "#666e45"
+  },
+  "hope-1": {
+   "original": [
+    2565,
+    900
+   ],
+   "640": [
+    640,
+    225
+   ],
+   "1600": [
+    1600,
+    561
+   ],
+   "hd": [
+    2565,
+    900
+   ],
+   "dominante": "#aa4636",
+   "fond": "#ffe4de",
+   "accent": "#a94535"
+  },
+  "hope-2": {
+   "original": [
+    1823,
+    1697
+   ],
+   "640": [
+    640,
+    596
+   ],
+   "1600": [
+    1600,
+    1489
+   ],
+   "hd": [
+    1823,
+    1697
+   ],
+   "dominante": "#ccb56c",
+   "fond": "#f2ebd4",
+   "accent": "#7d6719"
+  },
+  "hope-3": {
+   "original": [
+    2562,
+    2807
+   ],
+   "640": [
+    584,
+    640
+   ],
+   "1600": [
+    1460,
+    1600
+   ],
+   "hd": [
+    2562,
+    2807
+   ],
+   "dominante": "#dea746",
+   "fond": "#f7e9d4",
+   "accent": "#905d00"
+  },
+  "hope-4": {
+   "original": [
+    3007,
+    3524
+   ],
+   "640": [
+    546,
+    640
+   ],
+   "1600": [
+    1365,
+    1600
+   ],
+   "hd": [
+    2731,
+    3200
+   ],
+   "dominante": "#b9b99b",
+   "fond": "#ecece2",
+   "accent": "#6c6c42"
+  },
+  "cool-reflections": {
+   "original": [
+    1591,
+    1257
+   ],
+   "640": [
+    640,
+    506
+   ],
+   "1600": [
+    1591,
+    1257
+   ],
+   "hd": [
+    1591,
+    1257
+   ],
+   "dominante": "#817f74",
+   "fond": "#ecebe7",
+   "accent": "#736940"
+  },
+  "des-reflets-froids": {
+   "original": [
+    2674,
+    2674
+   ],
+   "640": [
+    640,
+    640
+   ],
+   "1600": [
+    1600,
+    1600
+   ],
+   "hd": [
+    2674,
+    2674
+   ],
+   "dominante": "#dad6cb",
+   "fond": "#ecebe7",
+   "accent": "#776740"
+  },
+  "reaching-for-the-sky": {
+   "original": [
+    2335,
+    1712
+   ],
+   "640": [
+    640,
+    469
+   ],
+   "1600": [
+    1600,
+    1173
+   ],
+   "hd": [
+    2335,
+    1712
+   ],
+   "dominante": "#797472",
+   "fond": "#ecebea",
+   "accent": "#855f49"
+  },
+  "your-mountains-majesty": {
+   "original": [
+    2398,
+    2398
+   ],
+   "640": [
+    640,
+    640
+   ],
+   "1600": [
+    1600,
+    1600
+   ],
+   "hd": [
+    2398,
+    2398
+   ],
+   "dominante": "#8d7767",
+   "fond": "#f1e9e4",
+   "accent": "#836146"
+  },
+  "in-denial": {
+   "original": [
+    2398,
+    2398
+   ],
+   "640": [
+    640,
+    640
+   ],
+   "1600": [
+    1600,
+    1600
+   ],
+   "hd": [
+    2398,
+    2398
+   ],
+   "dominante": "#3396c7",
+   "fond": "#d7effe",
+   "accent": "#0072a1"
+  },
+  "the-mellow-bar": {
+   "original": [
+    2048,
+    2480
+   ],
+   "640": [
+    529,
+    640
+   ],
+   "1600": [
+    1321,
+    1600
+   ],
+   "hd": [
+    2048,
+    2480
+   ],
+   "dominante": "#a78955",
+   "fond": "#f4ead9",
+   "accent": "#806430"
+  },
+  "a-moment-at-the-art-show": {
+   "original": [
+    2048,
+    2732
+   ],
+   "640": [
+    480,
+    640
+   ],
+   "1600": [
+    1199,
+    1600
+   ],
+   "hd": [
+    2048,
+    2732
+   ],
+   "dominante": "#fefefe",
+   "fond": "#ebebeb",
+   "accent": "#706a41"
+  },
+  "a-moment-at-the-airport": {
+   "original": [
+    1024,
+    768
+   ],
+   "640": [
+    640,
+    480
+   ],
+   "1600": [
+    1024,
+    768
+   ],
+   "dominante": "#69766f",
+   "fond": "#e8ecea",
+   "accent": "#47745f"
+  },
+  "a-moment-on-the-malecon": {
+   "original": [
+    2048,
+    2732
+   ],
+   "640": [
+    480,
+    640
+   ],
+   "1600": [
+    1199,
+    1600
+   ],
+   "hd": [
+    2048,
+    2732
+   ],
+   "dominante": "#fafafa",
+   "fond": "#ebebeb",
+   "accent": "#47745f"
+  },
+  "a-moment-at-the-lecture": {
+   "original": [
+    3073,
+    4096
+   ],
+   "640": [
+    480,
+    640
+   ],
+   "1600": [
+    1200,
+    1600
+   ],
+   "hd": [
+    2401,
+    3200
+   ],
+   "dominante": "#d6d96c",
+   "fond": "#eceed5",
+   "accent": "#6e6e00"
+  },
+  "a-moment-in-time": {
+   "original": [
+    3508,
+    4961
+   ],
+   "640": [
+    453,
+    640
+   ],
+   "1600": [
+    1131,
+    1600
+   ],
+   "hd": [
+    2263,
+    3200
+   ],
+   "dominante": "#fefefe",
+   "fond": "#ebebeb",
+   "accent": "#766840"
+  },
+  "the-bauhaus-lecture": {
+   "original": [
+    2048,
+    2732
+   ],
+   "640": [
+    480,
+    640
+   ],
+   "1600": [
+    1199,
+    1600
+   ],
+   "hd": [
+    2048,
+    2732
+   ],
+   "dominante": "#fefefe",
+   "fond": "#ebebeb",
+   "accent": "#7e6441"
+  },
+  "the-rembrandt-drawing-room": {
+   "original": [
+    2048,
+    2732
+   ],
+   "640": [
+    480,
+    640
+   ],
+   "1600": [
+    1199,
+    1600
+   ],
+   "hd": [
+    2048,
+    2732
+   ],
+   "dominante": "#fefefe",
+   "fond": "#ebebeb",
+   "accent": "#7c6540"
+  },
+  "paperless": {
+   "original": [
+    2398,
+    3200
+   ],
+   "640": [
+    480,
+    640
+   ],
+   "1600": [
+    1199,
+    1600
+   ],
+   "hd": [
+    2398,
+    3200
+   ],
+   "dominante": "#c4c68c",
+   "fond": "#ecedda",
+   "accent": "#6c6d36"
+  },
+  "passport": {
+   "original": [
+    2398,
+    3200
+   ],
+   "640": [
+    480,
+    640
+   ],
+   "1600": [
+    1199,
+    1600
+   ],
+   "hd": [
+    2398,
+    3200
+   ],
+   "dominante": "#b3a26c",
+   "fond": "#f1ebda",
+   "accent": "#786833"
+  },
+  "passport-2": {
+   "original": [
+    1535,
+    2048
+   ],
+   "640": [
+    480,
+    640
+   ],
+   "1600": [
+    1199,
+    1600
+   ],
+   "hd": [
+    1535,
+    2048
+   ],
+   "dominante": "#bb3d2d",
+   "fond": "#ffe4df",
+   "accent": "#af3e2f"
+  },
+  "the-grunge-and-glow-of-havana": {
+   "original": [
+    800,
+    600
+   ],
+   "640": [
+    640,
+    480
+   ],
+   "1600": [
+    800,
+    600
+   ],
+   "dominante": "#d1dda8",
+   "fond": "#e9eddd",
+   "accent": "#656f3e"
+  },
+  "tomorrows-light": {
+   "original": [
+    800,
+    600
+   ],
+   "640": [
+    640,
+    480
+   ],
+   "1600": [
+    800,
+    600
+   ],
+   "dominante": "#d5543c",
+   "fond": "#ffe4de",
+   "accent": "#ae3f2b"
+  },
+  "the-shade": {
+   "original": [
+    800,
+    600
+   ],
+   "640": [
+    640,
+    480
+   ],
+   "1600": [
+    800,
+    600
+   ],
+   "dominante": "#e2e294",
+   "fond": "#ededd5",
+   "accent": "#6e6d1d"
+  },
+  "red-phones": {
+   "original": [
+    800,
+    1000
+   ],
+   "640": [
+    512,
+    640
+   ],
+   "1600": [
+    800,
+    1000
+   ],
+   "dominante": "#cc803d",
+   "fond": "#fce7d6",
+   "accent": "#9b5400"
+  },
+  "habanero": {
+   "original": [
+    2400,
+    1800
+   ],
+   "640": [
+    640,
+    480
+   ],
+   "1600": [
+    1600,
+    1200
+   ],
+   "hd": [
+    2400,
+    1800
+   ],
+   "dominante": "#d6626c",
+   "fond": "#ffe3e4",
+   "accent": "#ad3d4a"
+  },
+  "easily-distracted": {
+   "original": [
+    800,
+    600
+   ],
+   "640": [
+    640,
+    480
+   ],
+   "1600": [
+    800,
+    600
+   ],
+   "dominante": "#be5636",
+   "fond": "#ffe4dc",
+   "accent": "#aa4424"
+  },
+  "eshu": {
+   "original": [
+    800,
+    640
+   ],
+   "640": [
+    640,
+    512
+   ],
+   "1600": [
+    800,
+    640
+   ],
+   "dominante": "#10273f",
+   "fond": "#e3ecf7",
+   "accent": "#344f6d"
+  },
+  "intrepid": {
+   "original": [
+    800,
+    600
+   ],
+   "640": [
+    640,
+    480
+   ],
+   "1600": [
+    800,
+    600
+   ],
+   "dominante": "#bf492a",
+   "fond": "#ffe4dd",
+   "accent": "#ae4023"
+  },
+  "cuban-chess": {
+   "original": [
+    2480,
+    3508
+   ],
+   "640": [
+    452,
+    640
+   ],
+   "1600": [
+    1131,
+    1600
+   ],
+   "hd": [
+    2262,
+    3200
+   ],
+   "dominante": "#3392f3",
+   "fond": "#dcedff",
+   "accent": "#106abc"
+  },
+  "dream-big": {
+   "original": [
+    4000,
+    6000
+   ],
+   "640": [
+    427,
+    640
+   ],
+   "1600": [
+    1067,
+    1600
+   ],
+   "hd": [
+    2133,
+    3200
+   ],
+   "dominante": "#4e505d",
+   "fond": "#eaebf0",
+   "accent": "#4a4e72"
+  },
+  "tic-tact-toe": {
+   "original": [
+    3007,
+    3518
+   ],
+   "640": [
+    547,
+    640
+   ],
+   "1600": [
+    1368,
+    1600
+   ],
+   "hd": [
+    2735,
+    3200
+   ],
+   "dominante": "#18213f",
+   "fond": "#e6ebf8",
+   "accent": "#404b6e"
+  },
+  "nyc-contrasts": {
+   "original": [
+    4000,
+    4000
+   ],
+   "640": [
+    640,
+    640
+   ],
+   "1600": [
+    1600,
+    1600
+   ],
+   "hd": [
+    3200,
+    3200
+   ],
+   "dominante": "#d1865e",
+   "fond": "#fee5d9",
+   "accent": "#9a532c"
+  },
+  "dubai-contrasts": {
+   "original": [
+    3024,
+    4032
+   ],
+   "640": [
+    480,
+    640
+   ],
+   "1600": [
+    1200,
+    1600
+   ],
+   "hd": [
+    2400,
+    3200
+   ],
+   "dominante": "#a08f81",
+   "fond": "#f0eae5",
+   "accent": "#826145"
+  },
+  "hope-has-a-champion": {
+   "original": [
+    2590,
+    1943
+   ],
+   "640": [
+    640,
+    480
+   ],
+   "1600": [
+    1600,
+    1200
+   ],
+   "hd": [
+    2590,
+    1943
+   ],
+   "dominante": "#5d3d4b",
+   "fond": "#f4e7ec",
+   "accent": "#663f51"
+  },
+  "connections-2": {
+   "original": [
+    800,
+    566
+   ],
+   "640": [
+    640,
+    453
+   ],
+   "1600": [
+    800,
+    566
+   ],
+   "dominante": "#8cbaca",
+   "fond": "#dfeef3",
+   "accent": "#3e7181"
+  },
+  "bank": {
+   "original": [
+    800,
+    566
+   ],
+   "640": [
+    640,
+    453
+   ],
+   "1600": [
+    800,
+    566
+   ],
+   "dominante": "#978472",
+   "fond": "#f1eae4",
+   "accent": "#816244"
+  },
+  "connections-3": {
+   "original": [
+    800,
+    566
+   ],
+   "640": [
+    640,
+    453
+   ],
+   "1600": [
+    800,
+    566
+   ],
+   "dominante": "#525357",
+   "fond": "#eaebec",
+   "accent": "#475275"
+  },
+  "11-9": {
+   "original": [
+    2200,
+    1530
+   ],
+   "640": [
+    640,
+    445
+   ],
+   "1600": [
+    1600,
+    1113
+   ],
+   "hd": [
+    2200,
+    1530
+   ],
+   "dominante": "#453a2c",
+   "fond": "#efeae5",
+   "accent": "#624726"
+  },
+  "constructing-life": {
+   "original": [
+    800,
+    267
+   ],
+   "640": [
+    640,
+    214
+   ],
+   "1600": [
+    800,
+    267
+   ],
+   "dominante": "#898174",
+   "fond": "#edebe6",
+   "accent": "#7b6640"
+  },
+  "constructing-life-2": {
+   "original": [
+    800,
+    566
+   ],
+   "640": [
+    640,
+    453
+   ],
+   "1600": [
+    800,
+    566
+   ],
+   "dominante": "#d86a40",
+   "fond": "#ffe5db",
+   "accent": "#ac4313"
+  },
+  "rituals": {
+   "original": [
+    800,
+    558
+   ],
+   "640": [
+    640,
+    446
+   ],
+   "1600": [
+    800,
+    558
+   ],
+   "dominante": "#c1b9a3",
+   "fond": "#eeebe4",
+   "accent": "#766840"
+  },
+  "footsies": {
+   "original": [
+    800,
+    601
+   ],
+   "640": [
+    640,
+    481
+   ],
+   "1600": [
+    800,
+    601
+   ],
+   "dominante": "#21201d",
+   "fond": "#ebebea",
+   "accent": "#544e25"
+  },
+  "gazes": {
+   "original": [
+    800,
+    533
+   ],
+   "640": [
+    640,
+    426
+   ],
+   "1600": [
+    800,
+    533
+   ],
+   "dominante": "#4c4e59",
+   "fond": "#eaebef",
+   "accent": "#464c70"
+  },
+  "tubers": {
+   "original": [
+    800,
+    561
+   ],
+   "640": [
+    640,
+    449
+   ],
+   "1600": [
+    800,
+    561
+   ],
+   "dominante": "#987d57",
+   "fond": "#f3eadd",
+   "accent": "#7e643e"
+  },
+  "my-seat": {
+   "original": [
+    800,
+    566
+   ],
+   "640": [
+    640,
+    453
+   ],
+   "1600": [
+    800,
+    566
+   ],
+   "dominante": "#d5bd89",
+   "fond": "#f2eada",
+   "accent": "#7c6633"
+  },
+  "blue-and-ken": {
+   "original": [
+    2700,
+    2100
+   ],
+   "640": [
+    640,
+    498
+   ],
+   "1600": [
+    1600,
+    1244
+   ],
+   "hd": [
+    2700,
+    2100
+   ],
+   "dominante": "#d19d4c",
+   "fond": "#f8e9d4",
+   "accent": "#8e5e00"
+  },
+  "threesome": {
+   "original": [
+    4800,
+    3600
+   ],
+   "640": [
+    640,
+    480
+   ],
+   "1600": [
+    1600,
+    1200
+   ],
+   "hd": [
+    3200,
+    2400
+   ],
+   "dominante": "#c5b9a2",
+   "fond": "#efebe3",
+   "accent": "#7a6640"
+  },
+  "long-day": {
+   "original": [
+    2700,
+    2100
+   ],
+   "640": [
+    640,
+    498
+   ],
+   "1600": [
+    1600,
+    1244
+   ],
+   "hd": [
+    2700,
+    2100
+   ],
+   "dominante": "#da995c",
+   "fond": "#fbe7d6",
+   "accent": "#945915"
+  },
+  "furry-hat": {
+   "original": [
+    711,
+    800
+   ],
+   "640": [
+    569,
+    640
+   ],
+   "1600": [
+    711,
+    800
+   ],
+   "dominante": "#d4b997",
+   "fond": "#f3eade",
+   "accent": "#7e6441"
+  },
+  "st-pauls": {
+   "original": [
+    800,
+    533
+   ],
+   "640": [
+    640,
+    426
+   ],
+   "1600": [
+    800,
+    533
+   ],
+   "dominante": "#bfb3a0",
+   "fond": "#efeae4",
+   "accent": "#7c6540"
+  },
+  "taint-easy-bein-green": {
+   "original": [
+    800,
+    600
+   ],
+   "640": [
+    640,
+    480
+   ],
+   "1600": [
+    800,
+    600
+   ],
+   "dominante": "#635d55",
+   "fond": "#edebe8",
+   "accent": "#725936"
+  },
+  "shared-space": {
+   "original": [
+    1536,
+    2048
+   ],
+   "640": [
+    480,
+    640
+   ],
+   "1600": [
+    1200,
+    1600
+   ],
+   "hd": [
+    1536,
+    2048
+   ],
+   "dominante": "#e7e5df",
+   "fond": "#ecebe9",
+   "accent": "#766840"
+  },
+  "colour": {
+   "original": [
+    4961,
+    6996
+   ],
+   "640": [
+    454,
+    640
+   ],
+   "1600": [
+    1135,
+    1600
+   ],
+   "hd": [
+    2269,
+    3200
+   ],
+   "dominante": "#af6f4a",
+   "fond": "#fde6d9",
+   "accent": "#955732"
+  },
+  "music": {
+   "original": [
+    4961,
+    7016
+   ],
+   "640": [
+    453,
+    640
+   ],
+   "1600": [
+    1131,
+    1600
+   ],
+   "hd": [
+    2263,
+    3200
+   ],
+   "dominante": "#3b352e",
+   "fond": "#edebe8",
+   "accent": "#624726"
+  },
+  "joy": {
+   "original": [
+    550,
+    569
+   ],
+   "640": [
+    550,
+    569
+   ],
+   "1600": [
+    550,
+    569
+   ],
+   "dominante": "#b3a9a5",
+   "fond": "#eeeae9",
+   "accent": "#875e4e"
+  },
+  "b-family-commission": {
+   "original": [
+    3024,
+    4032
+   ],
+   "640": [
+    480,
+    640
+   ],
+   "1600": [
+    1200,
+    1600
+   ],
+   "hd": [
+    2400,
+    3200
+   ],
+   "dominante": "#e5cfb0",
+   "fond": "#f1eae0",
+   "accent": "#7d6441"
+  },
+  "b-if-commission": {
+   "original": [
+    3024,
+    4032
+   ],
+   "640": [
+    480,
+    640
+   ],
+   "1600": [
+    1200,
+    1600
+   ],
+   "hd": [
+    2400,
+    3200
+   ],
+   "dominante": "#67574a",
+   "fond": "#f0eae5",
+   "accent": "#735336"
+  },
+  "ski-chalet-commission": {
+   "original": [
+    800,
+    640
+   ],
+   "640": [
+    640,
+    512
+   ],
+   "1600": [
+    800,
+    640
+   ],
+   "dominante": "#664f41",
+   "fond": "#f2e9e4",
+   "accent": "#6f4c33"
+  },
+  "where-do-i-begin": {
+   "original": [
+    2104,
+    2400
+   ],
+   "640": [
+    561,
+    640
+   ],
+   "1600": [
+    1403,
+    1600
+   ],
+   "hd": [
+    2104,
+    2400
+   ],
+   "dominante": "#fbfdfe",
+   "fond": "#ebebeb",
+   "accent": "#456f86"
+  }
+ },
+ "photos": {
+  "artiste/bandeau-collage-lisa": {
+   "original": [
+    2400,
+    1004
+   ],
+   "800": [
+    800,
+    335
+   ],
+   "1600": [
+    1600,
+    669
+   ],
+   "fond": "#ecebe9"
+  },
+  "artiste/lisa-a-4-ans": {
+   "original": [
+    1800,
+    2400
+   ],
+   "800": [
+    600,
+    800
+   ],
+   "1600": [
+    1200,
+    1600
+   ],
+   "fond": "#f5e8e4"
+  },
+  "artiste/lisa-cascade-avec-son-chien": {
+   "original": [
+    1800,
+    2400
+   ],
+   "800": [
+    600,
+    800
+   ],
+   "1600": [
+    1200,
+    1600
+   ],
+   "fond": "#ebebe8"
+  },
+  "artiste/lisa-et-grand-portrait": {
+   "original": [
+    800,
+    800
+   ],
+   "800": [
+    800,
+    800
+   ],
+   "fond": "#f6e8e0"
+  },
+  "artiste/lisa-ipad-malecon-nuit-etchr": {
+   "original": [
+    1226,
+    1181
+   ],
+   "800": [
+    800,
+    771
+   ],
+   "1600": [
+    1226,
+    1181
+   ],
+   "fond": "#e9ebf3"
+  },
+  "artiste/lisa-ipad-malecon-nuit": {
+   "original": [
+    1800,
+    2400
+   ],
+   "800": [
+    600,
+    800
+   ],
+   "1600": [
+    1200,
+    1600
+   ],
+   "fond": "#f2eadd"
+  },
+  "artiste/lisa-peint-au-chevalet": {
+   "original": [
+    2400,
+    1804
+   ],
+   "800": [
+    800,
+    601
+   ],
+   "1600": [
+    1600,
+    1203
+   ],
+   "fond": "#f2eae2"
+  },
+  "artiste/lisa-peint-grand-format-bleu": {
+   "original": [
+    2049,
+    1537
+   ],
+   "800": [
+    800,
+    600
+   ],
+   "1600": [
+    1600,
+    1200
+   ],
+   "fond": "#e3edf3"
+  },
+  "artiste/lisa-peint-sur-ipad": {
+   "original": [
+    1152,
+    864
+   ],
+   "800": [
+    800,
+    600
+   ],
+   "1600": [
+    1152,
+    864
+   ],
+   "fond": "#dbeefe"
+  },
+  "artiste/lisa-peint-un-glacier": {
+   "original": [
+    535,
+    510
+   ],
+   "800": [
+    535,
+    510
+   ],
+   "fond": "#e9eced"
+  },
+  "artiste/lisa-photographie-cuba": {
+   "original": [
+    2400,
+    1600
+   ],
+   "800": [
+    800,
+    533
+   ],
+   "1600": [
+    1600,
+    1067
+   ],
+   "fond": "#eeeae8"
+  },
+  "artiste/lisa-portrait-fond-glacier": {
+   "original": [
+    1800,
+    2400
+   ],
+   "800": [
+    600,
+    800
+   ],
+   "1600": [
+    1200,
+    1600
+   ],
+   "fond": "#f0eae3"
+  },
+  "artiste/plongeon-eau-libre": {
+   "original": [
+    1664,
+    1530
+   ],
+   "800": [
+    800,
+    736
+   ],
+   "1600": [
+    1600,
+    1471
+   ],
+   "fond": "#e4ecf4"
+  },
+  "atelier/chalumeau-encaustique": {
+   "original": [
+    2400,
+    1604
+   ],
+   "800": [
+    800,
+    535
+   ],
+   "1600": [
+    1600,
+    1069
+   ],
+   "fond": "#ecece4"
+  },
+  "atelier/home-sur-chevalet": {
+   "original": [
+    640,
+    635
+   ],
+   "800": [
+    640,
+    635
+   ],
+   "fond": "#edece0"
+  },
+  "atelier/melange-resines-pigments-cire": {
+   "original": [
+    1598,
+    1682
+   ],
+   "800": [
+    760,
+    800
+   ],
+   "1600": [
+    1520,
+    1600
+   ],
+   "fond": "#f0eae3"
+  },
+  "atelier/oeuvre-en-cours-pastels-sur-cire": {
+   "original": [
+    768,
+    1024
+   ],
+   "800": [
+    600,
+    800
+   ],
+   "1600": [
+    768,
+    1024
+   ],
+   "fond": "#efebe1"
+  },
+  "atelier/outils-encaustique-bandeau": {
+   "original": [
+    1530,
+    514
+   ],
+   "800": [
+    800,
+    269
+   ],
+   "1600": [
+    1530,
+    514
+   ],
+   "fond": "#f2eae0"
+  },
+  "atelier/table-des-cires": {
+   "original": [
+    1024,
+    768
+   ],
+   "800": [
+    800,
+    600
+   ],
+   "1600": [
+    1024,
+    768
+   ],
+   "fond": "#f7e9d5"
+  },
+  "atelier/video-encaustic-painting-process": {
+   "original": [
+    1080,
+    1920
+   ],
+   "800": [
+    450,
+    800
+   ],
+   "1600": [
+    900,
+    1600
+   ],
+   "fond": "#efeae4"
+  },
+  "atelier/video-hot-surface": {
+   "original": [
+    720,
+    406
+   ],
+   "800": [
+    720,
+    406
+   ],
+   "fond": "#eeeae7"
+  },
+  "atelier/video-rose-coloured-glasses": {
+   "original": [
+    1280,
+    720
+   ],
+   "800": [
+    800,
+    450
+   ],
+   "1600": [
+    1280,
+    720
+   ],
+   "fond": "#f5ead5"
+  },
+  "conferences/atelier-blouses-blanches": {
+   "original": [
+    2400,
+    2400
+   ],
+   "800": [
+    800,
+    800
+   ],
+   "1600": [
+    1600,
+    1600
+   ],
+   "fond": "#eaebf1"
+  },
+  "conferences/atelier-zetland-cires-jaunes": {
+   "original": [
+    2400,
+    1800
+   ],
+   "800": [
+    800,
+    600
+   ],
+   "1600": [
+    1600,
+    1200
+   ],
+   "fond": "#f4e9e0"
+  },
+  "conferences/from-oil-paint-to-pixels-affiche": {
+   "original": [
+    1200,
+    1600
+   ],
+   "800": [
+    600,
+    800
+   ],
+   "1600": [
+    1200,
+    1600
+   ],
+   "fond": "#eeeae7"
+  },
+  "conferences/performance-numerique-ecran-geant": {
+   "original": [
+    2400,
+    1800
+   ],
+   "800": [
+    800,
+    600
+   ],
+   "1600": [
+    1600,
+    1200
+   ],
+   "fond": "#efebe2"
+  },
+  "conferences/salle-de-conference": {
+   "original": [
+    1086,
+    724
+   ],
+   "800": [
+    800,
+    533
+   ],
+   "1600": [
+    1086,
+    724
+   ],
+   "fond": "#f4e9e2"
+  },
+  "conferences/stem-to-steam-cuba": {
+   "original": [
+    2400,
+    1800
+   ],
+   "800": [
+    800,
+    600
+   ],
+   "1600": [
+    1600,
+    1200
+   ],
+   "fond": "#ebece1"
+  },
+  "cours/atelier-blouse-feuille-verte": {
+   "original": [
+    1773,
+    1773
+   ],
+   "800": [
+    800,
+    800
+   ],
+   "1600": [
+    1600,
+    1600
+   ],
+   "fond": "#eaebf0"
+  },
+  "cours/atelier-cartes-de-voeux-couple": {
+   "original": [
+    2350,
+    2400
+   ],
+   "800": [
+    783,
+    800
+   ],
+   "1600": [
+    1567,
+    1600
+   ],
+   "fond": "#ffe4e1"
+  },
+  "cours/atelier-cartes-de-voeux": {
+   "original": [
+    2400,
+    1800
+   ],
+   "800": [
+    800,
+    600
+   ],
+   "1600": [
+    1600,
+    1200
+   ],
+   "fond": "#efeae5"
+  },
+  "cours/atelier-fusain": {
+   "original": [
+    480,
+    640
+   ],
+   "800": [
+    480,
+    640
+   ],
+   "fond": "#eeebe6"
+  },
+  "cours/atelier-groupe-grande-table": {
+   "original": [
+    2400,
+    2218
+   ],
+   "800": [
+    800,
+    739
+   ],
+   "1600": [
+    1600,
+    1479
+   ],
+   "fond": "#edebe9"
+  },
+  "cours/atelier-libre-pastel": {
+   "original": [
+    768,
+    1024
+   ],
+   "800": [
+    600,
+    800
+   ],
+   "1600": [
+    768,
+    1024
+   ],
+   "fond": "#f3e9e1"
+  },
+  "cours/carnet-de-voyage-aquarelle": {
+   "original": [
+    2400,
+    2236
+   ],
+   "800": [
+    800,
+    745
+   ],
+   "1600": [
+    1600,
+    1491
+   ],
+   "fond": "#edebe8"
+  },
+  "cours/cours-encaustique-sur-papier": {
+   "original": [
+    1024,
+    768
+   ],
+   "800": [
+    800,
+    600
+   ],
+   "1600": [
+    1024,
+    768
+   ],
+   "fond": "#efeae9"
+  },
+  "cours/debutants-plateau-beauregard": {
+   "original": [
+    2400,
+    1961
+   ],
+   "800": [
+    800,
+    654
+   ],
+   "1600": [
+    1600,
+    1307
+   ],
+   "fond": "#f6e8e0"
+  },
+  "cours/demo-aquarelle-automne": {
+   "original": [
+    1024,
+    768
+   ],
+   "800": [
+    800,
+    600
+   ],
+   "1600": [
+    1024,
+    768
+   ],
+   "fond": "#f3e9e2"
+  },
+  "cours/eleve-aquarelle-montagne": {
+   "original": [
+    768,
+    1024
+   ],
+   "800": [
+    600,
+    800
+   ],
+   "1600": [
+    768,
+    1024
+   ],
+   "fond": "#f0eae3"
+  },
+  "cours/eleve-theorie-des-couleurs": {
+   "original": [
+    1800,
+    2400
+   ],
+   "800": [
+    600,
+    800
+   ],
+   "1600": [
+    1200,
+    1600
+   ],
+   "fond": "#f0eae4"
+  },
+  "cours/eleves-montrent-leurs-toiles": {
+   "original": [
+    640,
+    480
+   ],
+   "800": [
+    640,
+    480
+   ],
+   "fond": "#f1eae4"
+  },
+  "cours/etudes-a-l-huile": {
+   "original": [
+    1024,
+    768
+   ],
+   "800": [
+    800,
+    600
+   ],
+   "1600": [
+    1024,
+    768
+   ],
+   "fond": "#eeeae6"
+  },
+  "cours/groupe-cartes-de-voeux": {
+   "original": [
+    2400,
+    1800
+   ],
+   "800": [
+    800,
+    600
+   ],
+   "1600": [
+    1600,
+    1200
+   ],
+   "fond": "#f0eae6"
+  },
+  "cours/in-the-studio": {
+   "original": [
+    768,
+    1024
+   ],
+   "800": [
+    600,
+    800
+   ],
+   "1600": [
+    768,
+    1024
+   ],
+   "fond": "#f1e9e5"
+  },
+  "cours/pinceaux-bandeau": {
+   "original": [
+    2400,
+    715
+   ],
+   "800": [
+    800,
+    238
+   ],
+   "1600": [
+    1600,
+    477
+   ],
+   "fond": "#f0eae4"
+  },
+  "cours/table-aquarelle-2": {
+   "original": [
+    2099,
+    2400
+   ],
+   "800": [
+    700,
+    800
+   ],
+   "1600": [
+    1399,
+    1600
+   ],
+   "fond": "#eeeae6"
+  },
+  "cours/table-aquarelle": {
+   "original": [
+    1800,
+    2400
+   ],
+   "800": [
+    600,
+    800
+   ],
+   "1600": [
+    1200,
+    1600
+   ],
+   "fond": "#edebe7"
+  },
+  "cours/table-dessin-cheminee": {
+   "original": [
+    1800,
+    2400
+   ],
+   "800": [
+    600,
+    800
+   ],
+   "1600": [
+    1200,
+    1600
+   ],
+   "fond": "#f1eae2"
+  },
+  "decors/pinceau-dessin-ipad": {
+   "original": [
+    587,
+    2400
+   ],
+   "800": [
+    196,
+    800
+   ],
+   "1600": [
+    391,
+    1600
+   ],
+   "fond": "#ebebeb"
+  },
+  "decors/tulipes-numeriques-bandeau": {
+   "original": [
+    1800,
+    664
+   ],
+   "800": [
+    800,
+    295
+   ],
+   "1600": [
+    1600,
+    590
+   ],
+   "fond": "#dff1e0"
+  },
+  "espace/atelier-rangements": {
+   "original": [
+    1024,
+    768
+   ],
+   "800": [
+    800,
+    600
+   ],
+   "1600": [
+    1024,
+    768
+   ],
+   "fond": "#edebe6"
+  },
+  "espace/collectionneur-et-sculpteur": {
+   "original": [
+    768,
+    1024
+   ],
+   "800": [
+    600,
+    800
+   ],
+   "1600": [
+    768,
+    1024
+   ],
+   "fond": "#f4e9dc"
+  },
+  "espace/enseigne-rue-village": {
+   "original": [
+    886,
+    886
+   ],
+   "800": [
+    800,
+    800
+   ],
+   "fond": "#f1eae1"
+  },
+  "espace/facade-de-nuit": {
+   "original": [
+    1024,
+    768
+   ],
+   "800": [
+    800,
+    600
+   ],
+   "1600": [
+    1024,
+    768
+   ],
+   "fond": "#f1eae0"
+  },
+  "espace/panorama-interieur": {
+   "original": [
+    2400,
+    943
+   ],
+   "800": [
+    800,
+    314
+   ],
+   "1600": [
+    1600,
+    629
+   ],
+   "fond": "#efeae5"
+  },
+  "espace/salon-canape": {
+   "original": [
+    1024,
+    768
+   ],
+   "800": [
+    800,
+    600
+   ],
+   "1600": [
+    1024,
+    768
+   ],
+   "fond": "#f0eae1"
+  },
+  "espace/salon-vertical": {
+   "original": [
+    1801,
+    2400
+   ],
+   "800": [
+    600,
+    800
+   ],
+   "1600": [
+    1201,
+    1600
+   ],
+   "fond": "#efeae6"
+  },
+  "espace/table-vue-pistes": {
+   "original": [
+    768,
+    1024
+   ],
+   "800": [
+    600,
+    800
+   ],
+   "1600": [
+    768,
+    1024
+   ],
+   "fond": "#f6e9d8"
+  },
+  "espace/tournage-video": {
+   "original": [
+    1024,
+    768
+   ],
+   "800": [
+    800,
+    600
+   ],
+   "1600": [
+    1024,
+    768
+   ],
+   "fond": "#f3e9e3"
+  },
+  "espace/visiteuse-contemplation": {
+   "original": [
+    768,
+    1024
+   ],
+   "800": [
+    600,
+    800
+   ],
+   "1600": [
+    768,
+    1024
+   ],
+   "fond": "#edebe6"
+  },
+  "evenements/apero-bandeau": {
+   "original": [
+    1302,
+    345
+   ],
+   "800": [
+    800,
+    212
+   ],
+   "1600": [
+    1302,
+    345
+   ],
+   "fond": "#efebdf"
+  },
+  "evenements/apero-prive": {
+   "original": [
+    2400,
+    1800
+   ],
+   "800": [
+    800,
+    600
+   ],
+   "1600": [
+    1600,
+    1200
+   ],
+   "fond": "#eeeae8"
+  },
+  "evenements/apero-rencontre-regards-sur-cuba-affiche": {
+   "original": [
+    1696,
+    2400
+   ],
+   "800": [
+    565,
+    800
+   ],
+   "1600": [
+    1131,
+    1600
+   ],
+   "fond": "#edeae8"
+  },
+  "evenements/cuba-musiciens": {
+   "original": [
+    1930,
+    2400
+   ],
+   "800": [
+    643,
+    800
+   ],
+   "1600": [
+    1287,
+    1600
+   ],
+   "fond": "#e0ecff"
+  },
+  "evenements/table-de-diner-dans-la-galerie": {
+   "original": [
+    768,
+    1024
+   ],
+   "800": [
+    600,
+    800
+   ],
+   "1600": [
+    768,
+    1024
+   ],
+   "fond": "#efeae8"
+  },
+  "evenements/verres-de-vin-galerie": {
+   "original": [
+    2400,
+    1800
+   ],
+   "800": [
+    800,
+    600
+   ],
+   "1600": [
+    1600,
+    1200
+   ],
+   "fond": "#edebe7"
+  },
+  "exposition-en-cours/affiche-vernissage-bnt": {
+   "original": [
+    1434,
+    2032
+   ],
+   "800": [
+    565,
+    800
+   ],
+   "1600": [
+    1129,
+    1600
+   ],
+   "fond": "#ebebeb"
+  },
+  "exposition-en-cours/bnt-designs-soudure": {
+   "original": [
+    1206,
+    1564
+   ],
+   "800": [
+    617,
+    800
+   ],
+   "1600": [
+    1206,
+    1564
+   ],
+   "fond": "#eeeae8"
+  },
+  "exposition-en-cours/collage-cuba": {
+   "original": [
+    1456,
+    586
+   ],
+   "800": [
+    800,
+    322
+   ],
+   "1600": [
+    1456,
+    586
+   ],
+   "fond": "#eeeae5"
+  },
+  "expositions/art-below-affiche-regards": {
+   "original": [
+    800,
+    800
+   ],
+   "800": [
+    800,
+    800
+   ],
+   "fond": "#f3e9e1"
+  },
+  "expositions/art-below-regents-park": {
+   "original": [
+    641,
+    1024
+   ],
+   "800": [
+    501,
+    800
+   ],
+   "1600": [
+    641,
+    1024
+   ],
+   "fond": "#f7e9d6"
+  },
+  "expositions/bermondsey-gallery-salle": {
+   "original": [
+    2400,
+    1800
+   ],
+   "800": [
+    800,
+    600
+   ],
+   "1600": [
+    1600,
+    1200
+   ],
+   "fond": "#eeeae8"
+  },
+  "expositions/bermondsey-gallery-vitrine-nuit": {
+   "original": [
+    2400,
+    1800
+   ],
+   "800": [
+    800,
+    600
+   ],
+   "1600": [
+    1600,
+    1200
+   ],
+   "fond": "#e8ebef"
+  },
+  "expositions/kyoto-rencontre": {
+   "original": [
+    1280,
+    960
+   ],
+   "800": [
+    800,
+    600
+   ],
+   "1600": [
+    1280,
+    960
+   ],
+   "fond": "#efeae3"
+  },
+  "expositions/salon-automne-2019-paris": {
+   "original": [
+    1024,
+    1024
+   ],
+   "800": [
+    800,
+    800
+   ],
+   "1600": [
+    1024,
+    1024
+   ],
+   "fond": "#e5efda"
+  },
+  "expositions/salon-beaux-arts-2018-affiche": {
+   "original": [
+    1800,
+    2400
+   ],
+   "800": [
+    600,
+    800
+   ],
+   "1600": [
+    1200,
+    1600
+   ],
+   "fond": "#f2eae1"
+  },
+  "expositions/salon-beaux-arts-2019-affiche": {
+   "original": [
+    738,
+    733
+   ],
+   "800": [
+    738,
+    733
+   ],
+   "fond": "#fde5e1"
+  },
+  "expositions/salon-beaux-arts-galerie": {
+   "original": [
+    2400,
+    1800
+   ],
+   "800": [
+    800,
+    600
+   ],
+   "1600": [
+    1600,
+    1200
+   ],
+   "fond": "#fbe6db"
+  },
+  "expositions/the-other-art-fair-2018": {
+   "original": [
+    1024,
+    768
+   ],
+   "800": [
+    800,
+    600
+   ],
+   "1600": [
+    1024,
+    768
+   ],
+   "fond": "#f2eae1"
+  },
+  "expositions/vernissage-galerie-herrick": {
+   "original": [
+    2400,
+    1800
+   ],
+   "800": [
+    800,
+    600
+   ],
+   "1600": [
+    1600,
+    1200
+   ],
+   "fond": "#eeeae6"
+  },
+  "expositions/vernissage-grand-portrait": {
+   "original": [
+    2400,
+    1800
+   ],
+   "800": [
+    800,
+    600
+   ],
+   "1600": [
+    1600,
+    1200
+   ],
+   "fond": "#f0eae5"
+  },
+  "paysages/annecy-canal-vertical": {
+   "original": [
+    341,
+    768
+   ],
+   "800": [
+    341,
+    768
+   ],
+   "fond": "#dbeefe"
+  },
+  "paysages/annecy-canal": {
+   "original": [
+    1024,
+    768
+   ],
+   "800": [
+    800,
+    600
+   ],
+   "1600": [
+    1024,
+    768
+   ],
+   "fond": "#deedfe"
+  },
+  "paysages/aravis-chapelle-au-couchant": {
+   "original": [
+    2400,
+    1521
+   ],
+   "800": [
+    800,
+    507
+   ],
+   "1600": [
+    1600,
+    1014
+   ],
+   "fond": "#f7e8de"
+  },
+  "paysages/brume-sur-la-neige": {
+   "original": [
+    2400,
+    2400
+   ],
+   "800": [
+    800,
+    800
+   ],
+   "1600": [
+    1600,
+    1600
+   ],
+   "fond": "#e4ecf5"
+  },
+  "paysages/cheval-plateau-beauregard": {
+   "original": [
+    2246,
+    2100
+   ],
+   "800": [
+    800,
+    748
+   ],
+   "1600": [
+    1600,
+    1496
+   ],
+   "fond": "#ebeddc"
+  },
+  "paysages/fleurs-alpage-bandeau": {
+   "original": [
+    2400,
+    636
+   ],
+   "800": [
+    800,
+    212
+   ],
+   "1600": [
+    1600,
+    424
+   ],
+   "fond": "#e9ede0"
+  },
+  "paysages/lac-annecy-parapentes": {
+   "original": [
+    1121,
+    701
+   ],
+   "800": [
+    800,
+    500
+   ],
+   "1600": [
+    1121,
+    701
+   ],
+   "fond": "#e2ecf9"
+  },
+  "paysages/lac-annecy-talloires-panorama": {
+   "original": [
+    2400,
+    1357
+   ],
+   "800": [
+    800,
+    452
+   ],
+   "1600": [
+    1600,
+    905
+   ],
+   "fond": "#e6ebf6"
+  },
+  "paysages/nuages-telesiege": {
+   "original": [
+    480,
+    360
+   ],
+   "800": [
+    480,
+    360
+   ],
+   "fond": "#e7ebf1"
+  },
+  "paysages/office-de-tourisme-la-clusaz": {
+   "original": [
+    2377,
+    2250
+   ],
+   "800": [
+    800,
+    757
+   ],
+   "1600": [
+    1600,
+    1515
+   ],
+   "fond": "#efebe3"
+  },
+  "paysages/oiseau-et-montagnes": {
+   "original": [
+    2400,
+    1800
+   ],
+   "800": [
+    800,
+    600
+   ],
+   "1600": [
+    1600,
+    1200
+   ],
+   "fond": "#f1ecd5"
+  },
+  "paysages/route-des-aravis-au-soir": {
+   "original": [
+    768,
+    1024
+   ],
+   "800": [
+    600,
+    800
+   ],
+   "1600": [
+    768,
+    1024
+   ],
+   "fond": "#e2edf6"
+  },
+  "paysages/vaches-alpage-lumiere-doree": {
+   "original": [
+    768,
+    1024
+   ],
+   "800": [
+    600,
+    800
+   ],
+   "1600": [
+    768,
+    1024
+   ],
+   "fond": "#f7e9d7"
+  },
+  "presse/app-whisperer-podcast": {
+   "original": [
+    1024,
+    768
+   ],
+   "800": [
+    800,
+    600
+   ],
+   "1600": [
+    1024,
+    768
+   ],
+   "fond": "#eeeae8"
+  },
+  "presse/art-rabbit": {
+   "original": [
+    607,
+    702
+   ],
+   "800": [
+    607,
+    702
+   ],
+   "fond": "#ebebeb"
+  },
+  "presse/artslant": {
+   "original": [
+    415,
+    453
+   ],
+   "800": [
+    415,
+    453
+   ],
+   "fond": "#edebe7"
+  },
+  "presse/bbc-documentaire": {
+   "original": [
+    982,
+    748
+   ],
+   "800": [
+    800,
+    609
+   ],
+   "fond": "#ebebeb"
+  },
+  "presse/financial-times": {
+   "original": [
+    726,
+    1004
+   ],
+   "800": [
+    578,
+    800
+   ],
+   "1600": [
+    726,
+    1004
+   ],
+   "fond": "#eeeae7"
+  },
+  "presse/ft-article-best-of-the-rest": {
+   "original": [
+    413,
+    2400
+   ],
+   "800": [
+    138,
+    800
+   ],
+   "1600": [
+    275,
+    1600
+   ],
+   "fond": "#eeeae7"
+  },
+  "presse/ft-extrait-texte": {
+   "original": [
+    1184,
+    440
+   ],
+   "800": [
+    800,
+    297
+   ],
+   "1600": [
+    1184,
+    440
+   ],
+   "fond": "#efeae7"
+  },
+  "presse/ft-nyc-contrasts": {
+   "original": [
+    2400,
+    2400
+   ],
+   "800": [
+    800,
+    800
+   ],
+   "1600": [
+    1600,
+    1600
+   ],
+   "fond": "#fde6da"
+  },
+  "presse/london-visual-arts": {
+   "original": [
+    804,
+    942
+   ],
+   "800": [
+    683,
+    800
+   ],
+   "fond": "#f3eadf"
+  },
+  "presse/made-in-shoreditch": {
+   "original": [
+    767,
+    687
+   ],
+   "800": [
+    767,
+    687
+   ],
+   "fond": "#e6ecf1"
+  },
+  "presse/maison-et-jardin-2022": {
+   "original": [
+    1702,
+    2226
+   ],
+   "800": [
+    612,
+    800
+   ],
+   "1600": [
+    1223,
+    1600
+   ],
+   "fond": "#ebebeb"
+  },
+  "presse/riseart-just-marvelous": {
+   "original": [
+    672,
+    517
+   ],
+   "800": [
+    672,
+    517
+   ],
+   "fond": "#efeae4"
+  },
+  "presse/stanford-arts-monthly-review": {
+   "original": [
+    479,
+    191
+   ],
+   "800": [
+    479,
+    191
+   ],
+   "fond": "#ffe4e0"
+  },
+  "retraites/aquarelle-sur-souche": {
+   "original": [
+    1800,
+    2400
+   ],
+   "800": [
+    600,
+    800
+   ],
+   "1600": [
+    1200,
+    1600
+   ],
+   "fond": "#e8ebf0"
+  },
+  "retraites/atelier-cire-en-groupe": {
+   "original": [
+    2400,
+    1800
+   ],
+   "800": [
+    800,
+    600
+   ],
+   "1600": [
+    1600,
+    1200
+   ],
+   "fond": "#ebebe8"
+  },
+  "retraites/croquis-col-des-aravis": {
+   "original": [
+    768,
+    1024
+   ],
+   "800": [
+    600,
+    800
+   ],
+   "1600": [
+    768,
+    1024
+   ],
+   "fond": "#eaece7"
+  },
+  "retraites/diner-coucher-de-soleil-parapentes": {
+   "original": [
+    2118,
+    2400
+   ],
+   "800": [
+    706,
+    800
+   ],
+   "1600": [
+    1412,
+    1600
+   ],
+   "fond": "#eeebe1"
+  },
+  "retraites/groupe-painters-in-paradise": {
+   "original": [
+    848,
+    926
+   ],
+   "800": [
+    733,
+    800
+   ],
+   "fond": "#ececde"
+  },
+  "retraites/isabelle-gaborit-portrait": {
+   "original": [
+    2048,
+    2022
+   ],
+   "800": [
+    800,
+    790
+   ],
+   "1600": [
+    1600,
+    1580
+   ],
+   "fond": "#ecebe8"
+  },
+  "retraites/journee-talloires-dejeuner": {
+   "original": [
+    2341,
+    2400
+   ],
+   "800": [
+    780,
+    800
+   ],
+   "1600": [
+    1561,
+    1600
+   ],
+   "fond": "#f4e9e3"
+  },
+  "retraites/ouverture-des-boites-magiques": {
+   "original": [
+    2048,
+    1536
+   ],
+   "800": [
+    800,
+    600
+   ],
+   "1600": [
+    1600,
+    1200
+   ],
+   "fond": "#f0eae5"
+  },
+  "retraites/peinture-en-plein-air": {
+   "original": [
+    1800,
+    2400
+   ],
+   "800": [
+    600,
+    800
+   ],
+   "1600": [
+    1200,
+    1600
+   ],
+   "fond": "#eaeddb"
+  },
+  "retraites/plein-air-en-foret": {
+   "original": [
+    1024,
+    768
+   ],
+   "800": [
+    800,
+    600
+   ],
+   "1600": [
+    1024,
+    768
+   ],
+   "fond": "#eeebe6"
+  },
+  "retraites/ponton-lac-talloires": {
+   "original": [
+    769,
+    1024
+   ],
+   "800": [
+    601,
+    800
+   ],
+   "1600": [
+    769,
+    1024
+   ],
+   "fond": "#e4ecf5"
+  },
+  "retraites/randonnee-col-des-aravis": {
+   "original": [
+    360,
+    480
+   ],
+   "800": [
+    360,
+    480
+   ],
+   "fond": "#dfecff"
+  },
+  "retraites/randonnee-sentier": {
+   "original": [
+    1800,
+    2400
+   ],
+   "800": [
+    600,
+    800
+   ],
+   "1600": [
+    1200,
+    1600
+   ],
+   "fond": "#e2ecfd"
+  },
+  "retraites/roc-de-chere": {
+   "original": [
+    768,
+    1024
+   ],
+   "800": [
+    600,
+    800
+   ],
+   "1600": [
+    768,
+    1024
+   ],
+   "fond": "#dfedfb"
+  },
+  "retraites/viennoiseries-petit-dejeuner": {
+   "original": [
+    1800,
+    2400
+   ],
+   "800": [
+    600,
+    800
+   ],
+   "1600": [
+    1200,
+    1600
+   ],
+   "fond": "#fce6d9"
+  },
+  "teambuilding/atelier-cires-jaunes": {
+   "original": [
+    1014,
+    811
+   ],
+   "800": [
+    800,
+    640
+   ],
+   "1600": [
+    1014,
+    811
+   ],
+   "fond": "#f4ead5"
+  },
+  "teambuilding/conference-tables-rondes": {
+   "original": [
+    480,
+    360
+   ],
+   "800": [
+    480,
+    360
+   ],
+   "fond": "#eeebe6"
+  }
+ },
+ "decors": {
+  "carnet-de-terrain-4x5": {
+   "original": [
+    784,
+    1168
+   ],
+   "full": [
+    784,
+    1168
+   ],
+   "640": [
+    430,
+    640
+   ]
+  },
+  "chantier-crepuscule-16x9": {
+   "original": [
+    1168,
+    784
+   ],
+   "full": [
+    1168,
+    784
+   ],
+   "640": [
+    640,
+    430
+   ]
+  },
+  "cire-fondue-1x1": {
+   "original": [
+    1168,
+    784
+   ],
+   "full": [
+    1168,
+    784
+   ],
+   "640": [
+    640,
+    430
+   ]
+  },
+  "glacier-crevasse-4x5": {
+   "original": [
+    784,
+    1168
+   ],
+   "full": [
+    784,
+    1168
+   ],
+   "640": [
+    430,
+    640
+   ]
+  },
+  "materiel-art-4x5": {
+   "original": [
+    784,
+    1168
+   ],
+   "full": [
+    784,
+    1168
+   ],
+   "640": [
+    430,
+    640
+   ]
+  },
+  "metro-wagon-vide-16x9": {
+   "original": [
+    1168,
+    784
+   ],
+   "full": [
+    1168,
+    784
+   ],
+   "640": [
+    640,
+    430
+   ]
+  },
+  "refuge-alpage-terrasse-16x9": {
+   "original": [
+    1168,
+    784
+   ],
+   "full": [
+    1168,
+    784
+   ],
+   "640": [
+    640,
+    430
+   ]
+  },
+  "roche-strates-16x9": {
+   "original": [
+    1168,
+    784
+   ],
+   "full": [
+    1168,
+    784
+   ],
+   "640": [
+    640,
+    430
+   ]
+  },
+  "salon-de-the-tasses-4x5": {
+   "original": [
+    784,
+    1168
+   ],
+   "full": [
+    784,
+    1168
+   ],
+   "640": [
+    430,
+    640
+   ]
+  },
+  "strates-cire-16x9": {
+   "original": [
+    1168,
+    784
+   ],
+   "full": [
+    1168,
+    784
+   ],
+   "640": [
+    640,
+    430
+   ]
+  },
+  "strates-cire-9x16": {
+   "original": [
+    784,
+    1168
+   ],
+   "full": [
+    784,
+    1168
+   ],
+   "640": [
+    430,
+    640
+   ]
+  },
+  "sumi-e-nature-morte-4x5": {
+   "original": [
+    784,
+    1168
+   ],
+   "full": [
+    784,
+    1168
+   ],
+   "640": [
+    430,
+    640
+   ]
+  },
+  "village-nuit-etoiles-16x9": {
+   "original": [
+    1168,
+    784
+   ],
+   "full": [
+    1168,
+    784
+   ],
+   "640": [
+    640,
+    430
+   ]
+  },
+  "voir-au-mur-chalet-16x9": {
+   "original": [
+    1168,
+    784
+   ],
+   "full": [
+    1168,
+    784
+   ],
+   "640": [
+    640,
+    430
+   ]
+  },
+  "voir-au-mur-chalet-9x16": {
+   "original": [
+    784,
+    1168
+   ],
+   "full": [
+    784,
+    1168
+   ],
+   "640": [
+    430,
+    640
+   ]
+  },
+  "voir-au-mur-galerie-16x9": {
+   "original": [
+    1168,
+    784
+   ],
+   "full": [
+    1168,
+    784
+   ],
+   "640": [
+    640,
+    430
+   ]
+  }
+ },
+ "logos": {
+  "signature": [
+   1000,
+   578
+  ],
+  "signature-complete": [
+   1000,
+   268
+  ],
+  "espace": [
+   480,
+   480
+  ]
+ }
+}
