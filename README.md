@@ -1,4 +1,4 @@
-# Lisa Cirenza · maquette v1 (direction « Strates »)
+# Lisa Cirenza · maquette v2 (direction « Strates »)
 
 Site statique (HTML, CSS, JavaScript), sans étape de construction, prêt pour Vercel.
 
@@ -8,25 +8,15 @@ Site statique (HTML, CSS, JavaScript), sans étape de construction, prêt pour V
 - Polices hébergées avec le site (`assets/polices`) : Fraunces et IBM Plex Mono, licence SIL OFL (fichiers joints).
 - Formulaires simulés : aucun message n'est envoyé, le visiteur peut ouvrir un courriel prérempli.
 
-## Effets
+## v2
 
-Ouverture « carotte de cire » qui fond (WebGL, version CSS sans WebGL), révélation des images en coulure de cire,
-salles d'œuvres horizontales, fiche d'œuvre avec loupe HD et « Voir au mur » à l'échelle, grattage de cire,
-colonne stratigraphique des séries, frise du parcours, carte des retraites tracée au défilement, statut ouvert ou fermé
-de l'Espace (heure de Paris), comptes à rebours, curseur chalumeau, altimètre. Tout respecte « réduire les animations ».
+- « Voir au mur » : toile, règle et silhouette tiennent toujours dans l'écran, à l'échelle réelle.
+- Grattage de cire : légende alignée sur la toile.
+- Six bandes de photos réelles qui glissent au défilement : cours, Espace, artiste, parcours, événements, retraites.
 
 ## Modifier les contenus
 
-Les textes et données sont dans `outils/` (exclu du déploiement) :
-
-- `outils/contenu.py` : textes, coordonnées, horaires, presse, expositions, carte des boissons, agenda.
-- `outils/retraites.py` : les deux retraites.
-- `outils/catalogue.py` : œuvres (titre, dimensions, technique, année, statut).
-
-Puis, depuis le dossier du site :
-
-```
-python3 outils/generer.py . --liens propres
-```
+Les textes et données sont dans `outils/` (exclu du déploiement) : `contenu.py`, `retraites.py`, `catalogue.py`.
+Puis, depuis le dossier du site : `python3 outils/generer.py . --liens propres`
 
 Les informations absentes du site actuel sont marquées « à compléter » ou « prix sur demande ».

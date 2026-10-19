@@ -297,6 +297,24 @@
         img.style.transform = 'translate3d(' + (-p * 16).toFixed(2) + '%,0,0)';
       });
     });
+    // carnets de photos : la bande glisse à l'horizontale pendant que la section traverse l'écran
+    $$('[data-defile]').forEach(function (piste) {
+      var fen = piste.parentNode, sec = piste.closest('section') || fen;
+      var dist = 0, haut = 0, h = 0, dernier = -1;
+      function mesurer() {
+        piste.style.transform = 'none';
+        dist = Math.max(0, piste.scrollWidth - fen.clientWidth);
+        var r = sec.getBoundingClientRect(); haut = r.top + scrollY; h = r.height; dernier = -1;
+      }
+      mesurer(); surRedim(mesurer); addEventListener('load', mesurer);
+      taches.push(function () {
+        if (!dist) return;
+        var p = clamp((scrollY + innerHeight - haut) / (innerHeight + h), 0, 1);
+        if (Math.abs(p - dernier) < 0.0005) return;
+        dernier = p;
+        piste.style.transform = 'translate3d(' + (-p * dist).toFixed(1) + 'px,0,0)';
+      });
+    });
     // panorama épinglé de l'Espace
     $$('[data-panorama-pin]').forEach(function (sec) {
       var col = $('.panorama__collant', sec), img = $('img', sec);
@@ -1428,24 +1446,31 @@
       var centreCm = Math.max(150, d.basMin + (ph / k) / 2);
       var cx = ox + d.cx * s;
       var cy = oy + (d.sol - centreCm * d.pxcm) * s;
+      // toile, règle (à gauche) et silhouette (à droite) forment un groupe qui doit tenir dans l'écran, à l'échelle réelle
+      var m = 12, ecart = 40 * k, R = 100 * k;
+      var sh = 170 * k, sw = 60 * k;
+      var droite = this.silhouette ? ecart + sw : 0;
+      var regleCote = true;
+      var minX = m + R + ecart + pw / 2, maxX = W - m - droite - pw / 2;
+      if (minX > maxX) { regleCote = false; minX = m + pw / 2; }
+      var tx = minX <= maxX ? clamp(cx, minX, maxX) : (minX + maxX) / 2;
       this.toile.style.width = pw.toFixed(1) + 'px';
       this.toile.style.height = ph.toFixed(1) + 'px';
-      this.toile.style.left = (cx - pw / 2).toFixed(1) + 'px';
+      this.toile.style.left = (tx - pw / 2).toFixed(1) + 'px';
       this.toile.style.top = (cy - ph / 2).toFixed(1) + 'px';
-      var sh = 170 * k, sw = 60 * k;
-      var sx = cx + pw / 2 + 40 * k;
-      if (sx + sw > W - 8) sx = cx - pw / 2 - 40 * k - sw;
       this.sil.style.width = sw.toFixed(1) + 'px';
       this.sil.style.height = sh.toFixed(1) + 'px';
-      this.sil.style.left = sx.toFixed(1) + 'px';
+      this.sil.style.left = (tx + pw / 2 + ecart).toFixed(1) + 'px';
       this.sil.style.top = (oy + d.sol * s - sh).toFixed(1) + 'px';
       this.sil.style.opacity = this.silhouette ? '1' : '0';
-      this.regle.style.width = (100 * k).toFixed(1) + 'px';
-      var gauche = cx - pw / 2 - 100 * k - 40 * k;
-      if (gauche < 12) gauche = cx + pw / 2 + 40 * k;
-      if (this.silhouette && Math.abs(gauche - sx) < sw + 100 * k) gauche = Math.max(12, cx - pw / 2 - 100 * k - 40 * k);
-      this.regle.style.left = Math.max(12, gauche).toFixed(1) + 'px';
-      this.regle.style.top = (cy - ph / 2).toFixed(1) + 'px';
+      this.regle.style.width = R.toFixed(1) + 'px';
+      if (regleCote) {
+        this.regle.style.left = (tx - pw / 2 - ecart - R).toFixed(1) + 'px';
+        this.regle.style.top = (cy - ph / 2).toFixed(1) + 'px';
+      } else {
+        this.regle.style.left = (tx - pw / 2).toFixed(1) + 'px';
+        this.regle.style.top = Math.max(8, cy - ph / 2 - 36).toFixed(1) + 'px';
+      }
     }
   };
 

@@ -263,12 +263,12 @@ section { position: relative; }
 .geologie p { max-width: 52ch; }
 .geologie .bouton--ligne { color: var(--neige); border-color: var(--neige); }
 .geologie .cartel__faits, .geologie .etiquette { color: #d8d3ca; }
-.grattage { position: relative; }
-.grattage__oeuvre { position: relative; margin: 0; width: min(100%, calc(66vh * var(--ratio))); margin-inline: auto; }
+.grattage { position: relative; width: min(100%, calc(66vh * var(--ratio))); margin-inline: auto; }
+.grattage__oeuvre { position: relative; margin: 0; width: 100%; }
 .grattage__cire { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; border-radius: 2px; cursor: crosshair; transition: opacity .9s; }
 .grattage__cire.est-fini { opacity: 0; pointer-events: none; }
 .mouvement-reduit .grattage__cire, .no-js .grattage__cire { display: none; }
-.grattage__aide { display: flex; flex-wrap: wrap; gap: .4em 1.2em; justify-content: center; font-family: var(--mono); font-size: .76rem; margin-top: 1rem; }
+.grattage__aide { display: flex; flex-wrap: wrap; align-items: baseline; gap: .4em 1.2em; justify-content: flex-start; font-family: var(--mono); font-size: .76rem; margin-top: 1rem; }
 .geologie .lien-bouton { color: var(--ambre-clair); }
 .mouvement-reduit .grattage__aide { display: none; }
 
@@ -795,10 +795,10 @@ section { position: relative; }
 .mur[hidden] { display: none; }
 .mur__scene { position: relative; overflow: hidden; }
 .mur__decor { position: absolute; left: 0; top: 0; max-width: none; transform-origin: 0 0; }
-.mur__toile { position: absolute; box-shadow: 0 2px 3px rgba(0,0,0,.28), 0 18px 30px -12px rgba(0,0,0,.5); }
+.mur__toile { position: absolute; transition: left .5s var(--ease); box-shadow: 0 2px 3px rgba(0,0,0,.28), 0 18px 30px -12px rgba(0,0,0,.5); }
 .mur__toile img { width: 100%; height: 100%; object-fit: contain; }
-.mur__silhouette { position: absolute; fill: rgba(30,28,25,.55); transition: opacity .4s; }
-.mur__regle { position: absolute; height: 22px; border: 2px solid var(--granite); border-top: 0; font-family: var(--mono); font-size: .7rem; display: grid; place-items: center; color: var(--granite); background: rgba(251,250,246,.7); }
+.mur__silhouette { position: absolute; fill: rgba(30,28,25,.55); transition: opacity .4s, left .5s var(--ease); }
+.mur__regle { position: absolute; transition: left .5s var(--ease), top .5s var(--ease); height: 22px; border: 2px solid var(--granite); border-top: 0; font-family: var(--mono); font-size: .7rem; display: grid; place-items: center; color: var(--granite); background: rgba(251,250,246,.7); }
 .mur__barre { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between; padding: 14px var(--marge); background: var(--neige); }
 .mur__legende { margin: 0; font-size: .95rem; }
 .mur__legende small { font-family: var(--mono); font-size: .7rem; color: var(--granite-doux); }
@@ -895,7 +895,21 @@ section { position: relative; }
   .ouverture__actions .bouton { margin-bottom: .5rem; }
 }
 
+/* ---------------------------------------------------------------- carnets de photos */
+.carnet { padding: 12vh 0 10vh; overflow: hidden; }
+.carnet__tete { padding: 0 var(--marge); }
+.carnet__fenetre { overflow: hidden; }
+.carnet__piste { --hc: clamp(220px, 40vh, 430px); list-style: none; margin: 0; padding: 5vh var(--marge) 2vh; display: flex; align-items: flex-start; gap: clamp(14px, 2.2vw, 32px); width: max-content; will-change: transform; }
+.carnet__item { flex: none; width: calc(var(--hc) * var(--r)); max-width: 82vw; }
+.carnet__item:nth-child(3n+2) { margin-top: 7vh; }
+.carnet__item:nth-child(3n) { margin-top: 2.5vh; }
+.carnet__img { margin: 0; }
+.carnet__img img { aspect-ratio: var(--r); height: auto; }
+.mouvement-reduit .carnet__fenetre, .no-js .carnet__fenetre { overflow-x: auto; }
+@media (max-width: 600px) { .carnet__piste { --hc: clamp(200px, 34vh, 300px); } }
+
 /* ---------------------------------------------------------------- mouvement réduit */
 .mouvement-reduit *, .mouvement-reduit *::before, .mouvement-reduit *::after { scroll-behavior: auto !important; }
 .mouvement-reduit .salle__piste { flex-wrap: wrap; width: auto; }
+  .fiche-ouverte .badge-maquette, .menu-ouvert .badge-maquette { display: none; }
 @media print { .entete, .altimetre, .grain, .menu, .badge-maquette { display: none !important; } }

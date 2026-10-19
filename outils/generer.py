@@ -21,7 +21,7 @@ SITE = Path(sys.argv[1]).resolve()
 MODE = sys.argv[sys.argv.index("--liens") + 1] if "--liens" in sys.argv else "propres"
 APERCU = "--apercu" in sys.argv
 MED = json.loads((ICI / "medias.json").read_text())
-VERSION = "1"
+VERSION = "2"
 AUJ = DT.date(2026, 10, 19)
 LANGS = ("en", "fr")
 
@@ -493,8 +493,8 @@ def page_accueil(lang):
       <p data-apparait>{e(C.DEMARCHE["paragraphes"][lang][2])}</p>
       <p data-apparait>{bouton("The artist's statement" if lang == "en" else "La démarche de l'artiste", lien(lang, "artiste", prof, "#demarche"), "bouton bouton--ligne")}</p>
     </div>
-    <div class="grattage" data-grattage>
-      <figure class="grattage__oeuvre" style="--ratio:{OEUVRES["a-moment-in-time"]["ratio"]}">
+    <div class="grattage" data-grattage style="--ratio:{OEUVRES["a-moment-in-time"]["ratio"]}">
+      <figure class="grattage__oeuvre">
         {bouton_oeuvre(prof, "a-moment-in-time", lang, "layered-moments", "(max-width: 800px) 86vw, 40vw")}
         <canvas class="grattage__cire" aria-hidden="true"></canvas>
       </figure>
@@ -757,6 +757,7 @@ def page_artiste(lang):
   <div class="passions__texte">{surtitre("Other passions" if lang == "en" else "Autres passions", 4)}<p data-apparait>{e(C.PASSIONS[lang])}</p>
   <p data-apparait>{bouton(t["nav"]["parcours"], lien(lang, "parcours", prof))}{bouton(t["nav"]["presse"], lien(lang, "presse", prof), "bouton bouton--ligne")}</p></div>
 </section>'''
+    corps = avec_carnet(corps, lang, prof, "artiste")
     ecrire(chemin, page(lang, "artiste", chemin, t["nav"]["artiste"], corps, href_autre(lang, "artiste", prof), {}, "page-artiste"))
 
 
@@ -784,6 +785,7 @@ def page_parcours(lang):
   <p class="note">{e("Years with no line on the current site (2020, 2021, 2023) are not shown. The 2023 and 2024 PDF CVs list further shows." if lang == "en" else "Les années sans ligne sur le site actuel (2020, 2021, 2023) ne sont pas affichées. Les CV en PDF de 2023 et 2024 citent d'autres expositions.")}</p>
   <p>{bouton("Full CV 2024 (PDF)" if lang == "en" else "CV complet 2024 (PDF)", asset(prof, "docs/cv-2024.pdf"), "bouton bouton--ligne")}</p>
 </section>'''
+    corps = avec_carnet(corps, lang, prof, "parcours")
     ecrire(chemin, page(lang, "parcours", chemin, t["nav"]["parcours"], corps, href_autre(lang, "parcours", prof), {}, "page-parcours"))
 
 
@@ -814,6 +816,102 @@ def page_presse(lang):
   {figure_photo(prof, "atelier/video-encaustic-painting-process", "Lisa Cirenza at work in her encaustic studio" if lang == "en" else "Lisa Cirenza au travail dans son atelier d'encaustique", "", "fossile videos__img", "(max-width: 900px) 70vw, 26vw", ' data-parallaxe="-0.05"')}
 </section>'''
     ecrire(chemin, page(lang, "presse", chemin, t["nav"]["presse"], corps, href_autre(lang, "presse", prof), {}, "page-presse"))
+
+
+# ================================================================ carnets de photos (bandes qui glissent au défilement)
+CARNETS = {
+    "cours": {
+        "sur": ("Classes, as they happen", "Les cours, sur le vif"),
+        "titre": ("In the studio", "À l'atelier"),
+        "photos": [
+            ("cours/atelier-cartes-de-voeux", "A participant painting small cards at the studio table", "Une participante peint de petites cartes à la table de l'atelier"),
+            ("cours/groupe-cartes-de-voeux", "A group of participants holding up their painted cards", "Un groupe de participants montre ses cartes peintes"),
+            ("cours/atelier-cartes-de-voeux-couple", "Two participants showing their painted cards", "Deux participants montrent leurs cartes peintes"),
+            ("cours/eleves-montrent-leurs-toiles", "Participants showing their finished paintings", "Des participantes montrent leurs toiles terminées"),
+            ("cours/table-aquarelle-2", "Watercolour palettes and sketches spread on the long table", "Palettes d'aquarelle et esquisses sur la grande table"),
+            ("cours/eleve-aquarelle-montagne", "A participant painting a mountain in watercolour", "Une participante peint une montagne à l'aquarelle"),
+            ("cours/demo-aquarelle-automne", "Autumn leaves in watercolour, palette and brushes", "Feuilles d'automne à l'aquarelle, palette et pinceaux"),
+            ("cours/carnet-de-voyage-aquarelle", "A watercolour travel sketchbook with its paint box", "Un carnet de voyage à l'aquarelle et sa boîte de couleurs"),
+            ("cours/atelier-fusain", "Charcoal drawings in progress around the table", "Dessins au fusain en cours autour de la table"),
+            ("cours/table-dessin-cheminee", "A drawing table by the fireplace", "Une table à dessin près de la cheminée"),
+            ("cours/eleve-theorie-des-couleurs", "A participant presenting colour studies at the easel", "Un participant présente ses études de couleur au chevalet"),
+        ],
+    },
+    "espace": {
+        "sur": ("Life at the Espace", "La vie de l'Espace"),
+        "titre": ("Around the gallery", "Autour de la galerie"),
+        "photos": [
+            ("espace/collectionneur-et-sculpteur", "Two visitors in conversation at a gallery table", "Deux visiteurs en conversation à une table de la galerie"),
+            ("espace/salon-vertical", "The lounge, fireplace and bookshelves", "Le salon, la cheminée et la bibliothèque"),
+            ("espace/tournage-video", "A video interview being filmed in the gallery", "Une interview vidéo filmée dans la galerie"),
+            ("paysages/office-de-tourisme-la-clusaz", "The La Clusaz tourist office in summer flowers", "L'office de tourisme de La Clusaz fleuri en été"),
+            ("paysages/brume-sur-la-neige", "Mist over the snow above La Clusaz", "La brume sur la neige au-dessus de La Clusaz"),
+            ("paysages/nuages-telesiege", "A chairlift above a sea of clouds", "Un télésiège au-dessus d'une mer de nuages"),
+        ],
+    },
+    "artiste": {
+        "sur": ("Studio notes", "Carnet d'atelier"),
+        "titre": ("Behind the work", "Derrière les œuvres"),
+        "photos": [
+            ("artiste/lisa-peint-un-glacier", "Lisa Cirenza painting a large glacier canvas", "Lisa Cirenza peint une grande toile de glacier"),
+            ("atelier/home-sur-chevalet", "A painting on the easel among paints in the studio", "Une toile sur le chevalet, au milieu des couleurs de l'atelier"),
+            ("atelier/video-rose-coloured-glasses", "Yellow wax spread across a panel in the studio", "De la cire jaune étalée sur un panneau à l'atelier"),
+            ("atelier/video-hot-surface", "Working on a hot surface, thermometer at hand", "Travail sur surface chauffante, thermomètre à portée de main"),
+            ("artiste/lisa-et-grand-portrait", "Lisa Cirenza beside a large portrait", "Lisa Cirenza à côté d'un grand portrait"),
+            ("artiste/lisa-cascade-avec-son-chien", "Lisa Cirenza with her dog below a waterfall", "Lisa Cirenza et son chien au pied d'une cascade"),
+        ],
+    },
+    "parcours": {
+        "sur": ("On the walls", "Aux cimaises"),
+        "titre": ("Salons and openings", "Salons et vernissages"),
+        "photos": [
+            ("expositions/salon-beaux-arts-2018-affiche", "Lisa Cirenza in front of the Salon des Beaux Arts 2018 poster", "Lisa Cirenza devant l'affiche du Salon des Beaux Arts 2018"),
+            ("expositions/salon-beaux-arts-2019-affiche", "Salon des Beaux Arts 2019 poster, Carrousel du Louvre", "Affiche du Salon des Beaux Arts 2019, Carrousel du Louvre"),
+            ("expositions/vernissage-grand-portrait", "Visitors at an opening, a large portrait on the wall", "Des visiteurs à un vernissage, un grand portrait au mur"),
+        ],
+    },
+    "evenements": {
+        "sur": ("Talks, team days and soirées", "Conférences, séminaires et soirées"),
+        "titre": ("Past gatherings", "Rencontres passées"),
+        "photos": [
+            ("teambuilding/conference-tables-rondes", "A corporate event with round tables", "Un événement d'entreprise autour de tables rondes"),
+            ("conferences/atelier-zetland-cires-jaunes", "A hot-wax workshop set up in a conference room", "Un atelier de cire chaude installé dans une salle de conférence"),
+            ("conferences/performance-numerique-ecran-geant", "A live digital art performance on a giant screen", "Une performance d'art numérique en direct sur écran géant"),
+            ("conferences/stem-to-steam-cuba", "A talk titled STEM to STEAM", "Une conférence intitulée STEM to STEAM"),
+            ("evenements/apero-rencontre-regards-sur-cuba-affiche", "Poster for the Apéro-Rencontre « Regards sur Cuba »", "Affiche de l'Apéro-Rencontre « Regards sur Cuba »"),
+            ("evenements/cuba-musiciens", "Musicians performing in Cuba", "Des musiciens en concert à Cuba"),
+        ],
+    },
+    "retraites": {
+        "sur": ("Where the retreats take place", "Là où se passent les retraites"),
+        "titre": ("La Clusaz and Lake Annecy", "La Clusaz et le lac d'Annecy"),
+        "photos": [
+            ("paysages/lac-annecy-parapentes", "Paragliders above Lake Annecy", "Des parapentes au-dessus du lac d'Annecy"),
+            ("retraites/randonnee-sentier", "Walkers on a mountain trail", "Des marcheurs sur un sentier de montagne"),
+            ("paysages/route-des-aravis-au-soir", "The Aravis road in the evening light", "La route des Aravis dans la lumière du soir"),
+            ("paysages/vaches-alpage-lumiere-doree", "Cows grazing in golden alpine light", "Des vaches en alpage dans la lumière dorée"),
+            ("retraites/viennoiseries-petit-dejeuner", "Pastries for breakfast", "Des viennoiseries pour le petit-déjeuner"),
+        ],
+    },
+}
+
+
+def carnet(lang, prof, cle):
+    c = CARNETS[cle]
+    i = 0 if lang == "en" else 1
+    items = []
+    for src, en, fr in c["photos"]:
+        w, h = MED["photos"][src]["800"]
+        items.append(f'<li class="carnet__item" style="--r:{w / h:.4f}">{figure_photo(prof, src, en if lang == "en" else fr, "", "fossile carnet__img", "(max-width: 900px) 70vw, 30vw")}</li>')
+    return (f'<section class="carnet" data-strate="{e(c["titre"][i])}">'
+            f'<div class="carnet__tete">{surtitre(c["sur"][i])}<h2 class="titre-section">{lettres(c["titre"][i])}</h2></div>'
+            f'<div class="carnet__fenetre"><ul class="carnet__piste" data-defile>{"".join(items)}</ul></div></section>')
+
+
+def avec_carnet(corps, lang, prof, cle):
+    k = corps.rfind("<section")
+    bloc = carnet(lang, prof, cle) + "\n"
+    return corps[:k] + bloc + corps[k:] if k > 0 else corps + bloc
 
 
 # ================================================================ l'Espace
@@ -882,6 +980,7 @@ def page_espace(lang):
   <address>{e(C.COORD["espace"])}<br>{e(C.COORD["rue"])}<br>{e(C.COORD["ville"])}</address><p><a href="mailto:{C.COORD["courriel_espace"]}">{C.COORD["courriel_espace"]}</a></p></div>
 </section>
 {lettre_info(lang, prof)}'''
+    corps = avec_carnet(corps, lang, prof, "espace")
     ecrire(chemin, page(lang, "espace", chemin, "Espace Créa-Tea-Vité", corps, href_autre(lang, "espace", prof), {"expoFin": ex["fin"]}, "page-espace"))
 
 
@@ -912,6 +1011,7 @@ def page_cours(lang):
   <div>{surtitre(L(lang, co["groupe"]), 3)}<h2 class="titre-section">{lettres(co["titre"])}</h2><p data-apparait>{e(L(lang, co["texte"]))}</p><p class="prix-grand" data-apparait>{co["prix"]} €</p>
   <p data-apparait>{bouton("Book a session" if lang == "en" else "Réserver une séance", lien(lang, "contact", prof) + "?objet=cours")}</p></div>
 </section>'''
+    corps = avec_carnet(corps, lang, prof, "cours")
     ecrire(chemin, page(lang, "cours", chemin, t["nav"]["cours"], corps, href_autre(lang, "cours", prof), {}, "page-cours"))
 
 
@@ -945,6 +1045,7 @@ def page_evenements(lang):
   {figure_photo(prof, "cours/atelier-groupe-grande-table", "A group workshop around a long table" if lang == "en" else "Un atelier de groupe autour d'une grande table", "", "fossile art-thinking__img", "(max-width: 800px) 92vw, 60vw")}
   <div class="fin-page"><p data-apparait>{e(ev["fin"][lang])}</p><p>{bouton("Let's work together" if lang == "en" else "Travaillons ensemble", lien(lang, "contact", prof) + "?objet=evenement")}</p></div>
 </section>'''
+    corps = avec_carnet(corps, lang, prof, "evenements")
     ecrire(chemin, page(lang, "evenements", chemin, t["nav"]["evenements"], corps, href_autre(lang, "evenements", prof), {}, "page-evenements"))
 
 
@@ -1153,6 +1254,7 @@ def page_retraites(lang):
     {carte_retraite(lang, prof, R.MOLTEN, "molten", "retraites/atelier-cire-en-groupe")}
   </div>
 </section>'''
+    corps = avec_carnet(corps, lang, prof, "retraites")
     ecrire(chemin, page(lang, "retraites", chemin, t["nav"]["retraites"], corps, href_autre(lang, "retraites", prof), {}, "page-retraites"))
 
 
