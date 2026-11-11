@@ -1248,3 +1248,5 @@ section { position: relative; }
 .coachs--seule .coach > div { max-width: 64ch; }
 .bandeau--pause .bandeau__photo { aspect-ratio: 4/5; width: 72%; margin-top: 12%; object-position: 50% 30%; }
 @media (max-width: 900px) { .coachs--seule .coach__img { position: relative; top: auto; max-width: 320px; } }
+.champ label small { font-size: .75rem; }
+.fossile__cadre img[src*="lisa-a-17-ans"] { object-position: 50% 12%; }

@@ -375,7 +375,7 @@ SERIES = [
 ]
 
 HORS_SERIE = [
-    {"id": "where-do-i-begin", "src": "../photos/oeuvres-a-confirmer/where-do-i-begin-2.jpg", "titre": "Where Do I Begin?", "image_a_confirmer": True,
+    {"id": "where-do-i-begin", "src": "../photos/oeuvres-a-confirmer/where-do-i-begin-2.jpg", "titre": "Where Do I Begin?",
      "edition": {"en": "Limited edition print on archival museum paper", "fr": "Tirage en édition limitée sur papier d'archive de qualité musée"},
      "alt": {"en": "A silhouette in pale blue watercolour, filled with a misty landscape and wild grasses.", "fr": "Une silhouette à l'aquarelle bleu pâle, habitée d'un paysage brumeux et d'herbes folles."}},
 ]

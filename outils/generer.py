@@ -8,6 +8,7 @@ import datetime as DT
 import html as H
 import json
 import math
+import re
 import sys
 from pathlib import Path
 
@@ -338,7 +339,7 @@ def bascule_univers(lang, cle, prof, classe=""):
     return (f'<nav class="univers {classe}" aria-label="{e(u["aria"])}" data-univers="{cote}">'
             f'<a class="univers__cote univers__cote--atelier" href="{lien(lang, "oeuvres", prof)}"{a_cur}><span class="univers__nom">{e(u["atelier"])}</span><span class="univers__sous">{e(u["atelier_long"])}</span></a>'
             f'<span class="univers__curseur" aria-hidden="true"></span>'
-            f'<a class="univers__cote univers__cote--espace" href="{lien(lang, "espace", prof)}"{e_cur}><span class="univers__nom">{e(u["espace"])}</span><span class="univers__sous">{e(u["espace_long"])}</span></a></nav>')
+            f'<a class="univers__cote univers__cote--espace" href="{lien(lang, "espace", prof)}"{e_cur}><span class="univers__nom">{e(u["espace"])}</span><span class="univers__sous">Créa-Tea-Vité</span></a></nav>')
 
 
 def entete(lang, cle, prof, autre_href):
@@ -487,9 +488,30 @@ def page(lang, cle, chemin, titre_page, corps, autre_chemin, donnees_page=None, 
 '''
 
 
+def typo_fr(t):
+    """Espaces insécables du français : avant : ; ? ! », après «, entre un nombre et €."""
+    t = re.sub(r"[ \u00a0]+([:;?!»])", "\u00a0\\1", t)
+    t = re.sub(r"«[ \u00a0]*", "«\u00a0", t)
+    t = re.sub(r"(\d) (€|cm|h\b|%)", "\\1\u00a0\\2", t)
+    t = t.replace("n° ", "n°\u00a0")
+    return t
+
+
+def typo_html_fr(html_txt):
+    """Applique typo_fr au HTML, hors scripts et styles, et sans toucher aux adresses."""
+    morceaux = re.split(r"(<script\b.*?</script>|<style\b.*?</style>)", html_txt, flags=re.S)
+    def hors_url(m):
+        return m.group(0) if m.group(0).startswith(("http", "mailto", "tel")) else typo_fr(m.group(0))
+    for i in range(0, len(morceaux), 2):
+        morceaux[i] = re.sub(r"(?:https?://|mailto:|tel:)[^\s\"'<>]+|[^<>]+(?=<|$)", hors_url, morceaux[i])
+    return "".join(morceaux)
+
+
 def ecrire(chemin, texte):
     p = SITE / chemin
     p.parent.mkdir(parents=True, exist_ok=True)
+    if chemin.startswith("fr/"):
+        texte = typo_html_fr(texte)
     p.write_text(texte, encoding="utf-8")
 
 
@@ -634,7 +656,7 @@ def page_accueil(lang):
   <div class="portes__tete">
     {surtitre("One house, two sides" if lang == "en" else "Une maison, deux côtés", 4)}
     <p class="portes__mission" data-mots>{e(A["mission"][lang])}</p>
-    <p class="portes__porte" data-apparait lang="fr">« {e(C.M2616["porte"]["fr"])} »{"" if lang == "fr" else ' <span class="portes__trad">' + e("Here, everyone finds their own way in.") + "</span>"} <cite>M2616</cite></p>
+    <p class="portes__porte" data-apparait lang="fr">« {e(C.M2616["porte"]["fr"])} »{"" if lang == "fr" else ' <span class="portes__trad" lang="en">' + e("Here, everyone finds their own way in.") + "</span>"} <cite>M2616</cite></p>
   </div>
   <ul class="portes__liste">{portes}</ul>
 </section>
@@ -648,7 +670,6 @@ def page_accueil(lang):
     {surtitre("Limited edition" if lang == "en" else "Édition limitée", 5)}
     <h2 class="titre-section">{lettres("Where Do I Begin?")}</h2>
     <p data-apparait>{e(wdib["edition"][lang])}. {e(t["prix_demande"])}.</p>
-    <p class="note" data-apparait>{e(t["image_a_confirmer"])}{" — the image shown on the home page of the current site" if lang == "en" else " : image affichée sur l'accueil du site actuel"}</p>
     <p data-apparait>{bouton("In the shop" if lang == "en" else "En boutique", lien(lang, "boutique", prof, "#atelier"))}{bouton(t["demander"], lien(lang, "contact", prof) + "?oeuvre=where-do-i-begin", "bouton bouton--ligne")}</p>
   </div>
 </section>
@@ -1740,6 +1761,16 @@ def donnees_js(lang):
          "pageContact": C.PAGES["contact"][lang] + (".html" if MODE == "html" else ""),
          "espace": {"horaires": C.HORAIRES, "courriel": C.COORD["courriel"]},
          "retraites": {"pip": {"debut": R.PIP["debut"], "titre": R.PIP["titre"]}, "pause": {"debut": R.PAUSE["debut"], "titre": R.PAUSE["titre"]}}}
+    if lang == "fr":
+        def corriger(x):
+            if isinstance(x, str):
+                return typo_fr(x)
+            if isinstance(x, list):
+                return [corriger(y) for y in x]
+            if isinstance(x, dict):
+                return {k: (v if k in ("src", "t", "series", "oeuvres", "decors") else corriger(v)) for k, v in x.items()}
+            return x
+        d = corriger(d)
     (SITE / "assets" / "js" / f"donnees-{lang}.js").write_text("window.LC_DONNEES=" + json.dumps(d, ensure_ascii=False, separators=(",", ":")) + ";\n", encoding="utf-8")
 
 
