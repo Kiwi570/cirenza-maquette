@@ -1,8 +1,11 @@
 """Contenus du site Lisa Cirenza (anglais, version officielle, et français).
 
-Tout vient de cirenza.com (pages, PDF du CV et de la carte des boissons). Rien n'est inventé :
-ce qui manque est marqué « à compléter ». Les textes anglais sont ceux du site, les textes
-français en sont des traductions fidèles.
+Sources : cirenza.com (pages, PDF du CV et de la carte des boissons, nouvelle page d'accueil de
+novembre 2026), le magazine Wax Fusion (IEA, automne 2026, « Beyond the Surface »), l'article du
+magazine M2616 (La Clusaz, à paraître début décembre 2026), la vidéo « Un petit tour de l'Espace »
+(Vimeo) et la réunion de cadrage avec P'tit Kiwi. Rien n'est inventé : ce qui manque est marqué
+« à compléter ». Les textes anglais sont ceux de Lisa, les textes français en sont des traductions
+fidèles (sauf l'article M2616, écrit en français, traduit en anglais).
 """
 
 PAGES = {
@@ -16,7 +19,8 @@ PAGES = {
     "evenements": {"en": "private-events", "fr": "fr/evenements-prives"},
     "retraites": {"en": "retreats", "fr": "fr/retraites"},
     "pip": {"en": "retreats/painting-in-paradise", "fr": "fr/retraites/painting-in-paradise"},
-    "molten": {"en": "retreats/molten-magic", "fr": "fr/retraites/molten-magic"},
+    "pause": {"en": "retreats/alpine-pause", "fr": "fr/retraites/alpine-pause"},
+    "boutique": {"en": "shop", "fr": "fr/boutique"},
     "contact": {"en": "contact", "fr": "fr/contact"},
 }
 DOSSIER_SALLES = {"en": "works", "fr": "fr/oeuvres"}
@@ -33,6 +37,9 @@ COORD = {
     "tel_brut": "+33749095492",
     "siret_atelier": "888 534 534 00019",
     "siret_espace": "989 397 146 00014",
+    "forme_atelier": {"en": "artist-author (artiste-auteur)", "fr": "artiste-auteur"},
+    "forme_espace": {"en": "SAS (simplified joint-stock company)", "fr": "SAS"},
+    "instagram_espace": "https://www.instagram.com/espacecreateavite/",
     "instagram": "https://www.instagram.com/art.lc/",
     "linkedin": "https://fr.linkedin.com/in/lisa-cirenza-3baa4913/fr",
     "facebook": "https://www.facebook.com/LisaCirenzaFineArt/",
@@ -44,11 +51,15 @@ HORAIRES = {"jours": [4, 5, 6], "plages": [["14:30", "18:30"]], "dimanche_rdv": 
 T = {
     "en": {
         "metier": "Abstract Figurative Artist",
-        "description": "Lisa Cirenza, abstract figurative artist working in encaustic, oils and digital media, and her creative space Espace Créa-Tea-Vité in La Clusaz, French Alps.",
-        "nav": {"accueil": "Home", "oeuvres": "Works", "artiste": "The Artist", "parcours": "CV", "presse": "Press", "espace": "L'Espace", "cours": "Classes", "evenements": "Private events", "retraites": "Retreats", "pip": "Painting in Paradise", "molten": "Molten Magic", "contact": "Contact"},
+        "accroche": "Painting light, water, rock and time",
+        "description": "Lisa Cirenza paints light, water, rock and time in wax, oils and digital layers, in La Clusaz, French Alps, where she also runs Espace Créa-Tea-Vité: gallery, tea room, classes and creative retreats.",
+        "nav": {"accueil": "Home", "oeuvres": "Works", "artiste": "The Artist", "parcours": "CV", "presse": "Press", "espace": "L'Espace", "cours": "Classes", "evenements": "Private events", "retraites": "Retreats", "pip": "Painting in Paradise", "pause": "Autumn Alpine Pause", "boutique": "Shop", "contact": "Contact"},
+        "univers": {"atelier": "Atelier", "atelier_long": "Lisa Cirenza · Fine Art", "atelier_sous": "Works, editions, commissions", "espace": "Espace", "espace_long": "Espace Créa-Tea-Vité", "espace_sous": "Gallery, tea room, classes, retreats", "aria": "Choose a side of the house"},
+        "disponible": "Available", "non_disponible": "Not for sale", "en_pret": "On loan", "reserve": "Reserved",
+        "inventaire": "Inventory no.", "parue_dans": "Featured in",
         "menu": "Menu", "fermer": "Close", "aller_contenu": "Skip to content",
         "langue_autre": "Version française", "langue_autre_court": "FR",
-        "groupes_menu": {"oeuvres": "Works", "artiste": "The artist", "espace": "Espace Créa-Tea-Vité", "retraites": "Retreats 2027"},
+        "groupes_menu": {"oeuvres": "Atelier · the works", "artiste": "Atelier · the artist", "espace": "Espace Créa-Tea-Vité", "retraites": "Espace · retreats 2027"},
         "voir": "View", "agrandir": "Zoom", "a_completer": "to be completed", "titre_a_completer": "Title to be completed",
         "prix_demande": "Price on request", "vendu": "Sold", "en_cours": "Work in progress", "edition": "Edition",
         "photo_situation": "Photographed in situ",
@@ -71,6 +82,9 @@ T = {
         "jours_restants": "{n} days to go", "jour_restant": "1 day to go", "aujourdhui": "Today", "passe": "Past",
         "form_obligatoire": "This field is required.", "form_email_invalide": "Please check this email address.",
         "pied_droits": "All texts, images and works © Lisa Cirenza Fine Art",
+        "pied_atelier": "Works, editions and commissions are sold by Lisa Cirenza Fine Art, artist-author.",
+        "pied_espace": "Classes, retreats, events, tea room and boutique are run by Espace Créa-Tea-Vité, SAS.",
+        "mentions": "Legal notice", "confidentialite": "Privacy policy",
         "pied_maquette": "Design mock-up — not the live site",
         "traduction": "The official text is the English version of the site.",
         "tout_reveler": "Reveal everything", "gratter": "Scrape the wax",
@@ -78,11 +92,15 @@ T = {
     },
     "fr": {
         "metier": "Artiste figurative abstraite",
-        "description": "Lisa Cirenza, artiste figurative abstraite (encaustique, huile, art numérique), et son lieu de création, l'Espace Créa-Tea-Vité, à La Clusaz.",
-        "nav": {"accueil": "Accueil", "oeuvres": "Œuvres", "artiste": "L'artiste", "parcours": "Parcours", "presse": "Presse", "espace": "L'Espace", "cours": "Cours", "evenements": "Événements privés", "retraites": "Retraites", "pip": "Painting in Paradise", "molten": "Molten Magic", "contact": "Contact"},
+        "accroche": "Peindre la lumière, l'eau, la roche et le temps",
+        "description": "Lisa Cirenza peint la lumière, l'eau, la roche et le temps, en cire, à l'huile et en couches numériques, à La Clusaz, où elle anime aussi l'Espace Créa-Tea-Vité : galerie, salon de thé, cours et retraites créatives.",
+        "nav": {"accueil": "Accueil", "oeuvres": "Œuvres", "artiste": "L'artiste", "parcours": "Parcours", "presse": "Presse", "espace": "L'Espace", "cours": "Cours", "evenements": "Événements privés", "retraites": "Retraites", "pip": "Painting in Paradise", "pause": "Autumn Alpine Pause", "boutique": "Boutique", "contact": "Contact"},
+        "univers": {"atelier": "Atelier", "atelier_long": "Lisa Cirenza · Fine Art", "atelier_sous": "Œuvres, éditions, commandes", "espace": "Espace", "espace_long": "Espace Créa-Tea-Vité", "espace_sous": "Galerie, salon de thé, cours, retraites", "aria": "Choisir un côté de la maison"},
+        "disponible": "Disponible", "non_disponible": "Non disponible à la vente", "en_pret": "En prêt", "reserve": "Réservée",
+        "inventaire": "N° d'inventaire", "parue_dans": "Parue dans",
         "menu": "Menu", "fermer": "Fermer", "aller_contenu": "Aller au contenu",
         "langue_autre": "English version", "langue_autre_court": "EN",
-        "groupes_menu": {"oeuvres": "Œuvres", "artiste": "L'artiste", "espace": "Espace Créa-Tea-Vité", "retraites": "Retraites 2027"},
+        "groupes_menu": {"oeuvres": "Atelier · les œuvres", "artiste": "Atelier · l'artiste", "espace": "Espace Créa-Tea-Vité", "retraites": "Espace · retraites 2027"},
         "voir": "Voir", "agrandir": "Agrandir", "a_completer": "à compléter", "titre_a_completer": "Titre à compléter",
         "prix_demande": "Prix sur demande", "vendu": "Vendu", "en_cours": "En cours", "edition": "Édition",
         "photo_situation": "Photographiée en situation",
@@ -105,6 +123,9 @@ T = {
         "jours_restants": "J – {n}", "jour_restant": "J – 1", "aujourdhui": "Aujourd'hui", "passe": "Passé",
         "form_obligatoire": "Ce champ est obligatoire.", "form_email_invalide": "Vérifiez cette adresse électronique.",
         "pied_droits": "Textes, images et œuvres © Lisa Cirenza Fine Art",
+        "pied_atelier": "Les œuvres, éditions et commandes sont vendues par Lisa Cirenza Fine Art, artiste-auteur.",
+        "pied_espace": "Cours, retraites, événements, salon de thé et boutique relèvent de l'Espace Créa-Tea-Vité, SAS.",
+        "mentions": "Mentions légales", "confidentialite": "Politique de confidentialité",
         "pied_maquette": "Maquette de travail, pas le site en ligne",
         "traduction": "Le texte officiel est la version anglaise du site.",
         "tout_reveler": "Tout révéler", "gratter": "Grattez la cire",
@@ -152,7 +173,7 @@ BIO = [
      "titre": {"en": "Art and nature, early on", "fr": "L'art et la nature, très tôt"},
      "texte": {"en": "Lisa's passions for art and nature started early in life. She started oil painting at the age of 7, but was encouraged to devote her academic studies to \"something more practical\".",
                "fr": "La passion de Lisa pour l'art et la nature commence très tôt. Elle peint à l'huile dès 7 ans, mais on l'encourage à consacrer ses études à « quelque chose de plus concret »."}},
-    {"cle": "alaska", "decor": "glacier-crevasse-4x5", "legende": {"en": "Evocation · no photograph of the expedition on the site", "fr": "Évocation · aucune photo de l'expédition sur le site"},
+    {"cle": "alaska", "photo": "artiste/lisa-a-17-ans-juneau-icefield", "legende": {"en": "Lisa at 17, on the ice", "fr": "Lisa à 17 ans, sur la glace"},
      "titre": {"en": "Age 17, the Juneau Icefield", "fr": "17 ans, le champ de glace de Juneau"},
      "texte": {"en": "At the age of 17, she was selected for a National Science Foundation scholarship to be part of a glaciological research expedition on the Juneau Icefields in Alaska. She spent two summers traversing the glaciers, drawing and researching the geological, and climatological histories embedded in their flows. Her photographs and accounts of these experiences were published in “The Power of Ice”, a book published by Chicago Children’s Press that she co-authored to encourage other youngsters to pursue field sciences.",
                "fr": "À 17 ans, elle obtient une bourse de la National Science Foundation pour participer à une expédition de recherche glaciologique sur le Juneau Icefield, en Alaska. Pendant deux étés, elle traverse les glaciers, dessine et étudie les histoires géologiques et climatiques inscrites dans leur écoulement. Ses photographies et ses récits sont publiés dans « The Power of Ice », un livre des éditions Chicago Children's Press qu'elle cosigne pour donner envie à d'autres jeunes de se lancer dans les sciences de terrain."}},
@@ -164,6 +185,11 @@ BIO = [
      "titre": {"en": "Learning everywhere", "fr": "Apprendre partout"},
      "texte": {"en": "Whilst raising her 4 children in New Jersey, London, Tokyo, and Quebec, she studied constantly. Her schooling includes studies with a Master of Sumi-e in Tokyo, painting and drawing at Central St. Martins, and the Royal Drawing School in London, and the study of traditional oil techniques with the Jean Pierre Brazs Atelier in Paris, and the Norfolk Painting School. She acquired her love for, and many of her foundational techniques in encaustic art through Mulranny Arts in Ireland.",
                "fr": "En élevant ses quatre enfants dans le New Jersey, à Londres, à Tokyo et au Québec, elle ne cesse d'étudier : auprès d'un maître de sumi-e à Tokyo, en peinture et en dessin à Central Saint Martins et à la Royal Drawing School de Londres, en techniques traditionnelles de l'huile à l'atelier Jean-Pierre Brazs à Paris et à la Norfolk Painting School. C'est à Mulranny Arts, en Irlande, qu'elle découvre l'encaustique et en acquiert bien des techniques fondatrices."}},
+    {"cle": "cinquante", "photo": "artiste/lisa-aquarelle-nuancier", "legende": {"en": "Colour studies on the road", "fr": "Études de couleur en chemin"},
+     "titre": {"en": "At 50, the professional leap", "fr": "À 50 ans, le grand saut"},
+     "texte": {"en": "“When my youngest child entered high school, I finally dared to pursue a formal art degree. At 50, I launched my professional career, working seven days a week to catch up with younger peers. Success followed with international exhibitions from Miami Basel to the Venice Biennale and museums in Kyoto and Paris.”",
+               "fr": "« Quand mon plus jeune enfant est entré au lycée, j'ai enfin osé suivre une formation artistique diplômante. À 50 ans, j'ai lancé ma carrière professionnelle, sept jours sur sept, pour rattraper des artistes plus jeunes. Le succès a suivi, avec des expositions internationales de Miami Basel à la Biennale de Venise, et des musées à Kyoto et à Paris. »"},
+     "source": "Wax Fusion, 2026"},
     {"cle": "residences", "photo": "artiste/lisa-photographie-cuba",
      "titre": {"en": "Residencies", "fr": "Résidences"},
      "texte": {"en": "Artist residencies include time (and focuses) in Cuba (people, and colour), California (environment, and the sea), Kyoto (calligraphy and substrates), and the Tyrolean Alps (light and atmosphere in the Alps). Her works are united by her love of the environment, and her bewilderment at human behaviours. Humor is important, as is moving beyond the surface and mining the layers of moments and experiences for the truths hidden within.",
@@ -210,6 +236,8 @@ EXPOSITIONS = [
     (2025, "Nayabazar Gallery", "Pokhara, Nepal", "Pokhara, Népal", None),
     (2026, "London Art in Motion, Public Art PLogix Gallery", "London, UK", "Londres, Royaume-Uni", None),
     (2026, "Mouvement, Masse, et Lumière, EC Gallery", "La Clusaz, France", "La Clusaz", None),
+    (2026, "Salon d'Automne, sociétaire", "Paris, France", "Paris", None),
+    (2026, "La Gravité de la Grâce, with BNT Designs, Espace Créa-Tea-Vité", "La Clusaz, France", "La Clusaz", None),
 ]
 CONFERENCES = [
     (2016, "Burgh House Museum, workshop", "London, UK", "Londres"),
@@ -223,11 +251,20 @@ CONFERENCES = [
     (2019, "Barclays HQ, series of talks and workshops", "London, UK", "Londres"),
     (2019, "Musée Maillol, “Disruptive Technologies, Impressionists, and the Parallels with Contemporary Digital Art Trends”", "Paris, France", "Paris"),
 ]
+# 2026 « Salon d'Automne » : d'après l'article M2616 (« elle y expose à nouveau cette année à Paris »).
 PHOTOS_ANNEES = {2016: "conferences/from-oil-paint-to-pixels-affiche", 2017: "expositions/vernissage-galerie-herrick", 2018: "expositions/the-other-art-fair-2018",
                  2019: "expositions/salon-automne-2019-paris", 2022: "expositions/art-below-affiche-regards", 2025: "expositions/salon-beaux-arts-galerie",
                  2015: "expositions/kyoto-rencontre", 2014: "expositions/bermondsey-gallery-salle", 2024: "espace/visiteuse-contemplation", 2026: "exposition-en-cours/affiche-vernissage-bnt"}
 
 PRESSE = [
+    {"titre": "Beyond the Surface", "media": "Wax Fusion · International Encaustic Artists", "date": {"en": "Fall 2026, issue XIV", "fr": "automne 2026, n° XIV"},
+     "texte": {"en": "“The Luminous Layer: Cultivating Hope through Creativity in an Uncertain World.” A fourteen-page feature written by Lisa: the paradox of a hyper-connected world, the physics of light in wax, works in progress, and the founding of Espace Créa-Tea-Vité.",
+               "fr": "« The Luminous Layer : cultiver l'espoir par la créativité dans un monde incertain. » Un dossier de quatorze pages écrit par Lisa : le paradoxe d'un monde hyperconnecté, la physique de la lumière dans la cire, les œuvres en cours et la naissance de l'Espace Créa-Tea-Vité."},
+     "url": "https://online.fliphtml5.com/InternationalEncausticArtists/Wax_Fusion_Fall_2026_Issue_14_Master/#p=18", "image": "presse/wax-fusion-fall-2026-couverture", "nouveau": True},
+    {"titre": "L'art de créer du lien avec Lisa Cirenza", "media": "M2616 · La Clusaz", "date": {"en": "December 2026 (forthcoming)", "fr": "décembre 2026 (à paraître)"},
+     "texte": {"en": "Portrait in the La Clusaz lifestyle magazine: painter, trained scientist, mentor, passionate skier and nature lover. Magazine name and link to be confirmed on publication.",
+               "fr": "Portrait dans le magazine art de vivre de La Clusaz : « artiste peintre, scientifique de formation, mentor, skieuse passionnée et amoureuse de la nature ». Nom exact du magazine et lien à confirmer à la parution."},
+     "url": None, "image": "espace/visiteuse-contemplation", "nouveau": True, "a_paraitre": True},
     {"titre": "Quand Art Nous Connecte", "media": "Maison et Jardin", "date": {"en": "May 2022", "fr": "mai 2022"},
      "texte": {"en": "“When Art Connects Us”: feature interview in the French magazine Maison et Jardin.", "fr": "« Quand l'art nous connecte » : grand entretien dans le magazine Maison et Jardin."},
      "url": "https://www.pressreader.com/france/maison-et-jardin-magazine/20220516/289794336701817", "image": "presse/maison-et-jardin-2022"},
@@ -362,4 +399,121 @@ EVENEMENTS = {
                ({"en": "Bananas and Brainstorming", "fr": "Bananes et remue-méninges"}, {"en": "Creative problem-solving", "fr": "Résoudre les problèmes avec créativité"}),
                ({"en": "Team Painting", "fr": "Peindre en équipe"}, {"en": "How to keep creativity flowing (and have fun in the process)", "fr": "Garder la créativité vivante (et s'amuser en chemin)"})],
     "fin": {"en": "To discuss availability, pricing, or to design a customized experience, please get in touch. We are happy to help you create an event that is both meaningful and unforgettable.", "fr": "Pour connaître les disponibilités et les tarifs, ou imaginer une expérience sur mesure, contactez-nous. Nous serons heureux de vous aider à créer un événement qui ait du sens et dont on se souvienne."},
+}
+
+
+# ================================================================ v3 : mots de la nouvelle page d'accueil (cirenza.com, novembre 2026)
+ACCUEIL = {
+    "lire_le_temps": {"en": "I was trained to read time in glacial and rock layers. Now I'm interpreting the latest layer, the Anthropocene, in paint and wax.",
+                      "fr": "J'ai appris à lire le temps dans les couches de la glace et de la roche. J'interprète aujourd'hui la plus récente, l'Anthropocène, en peinture et en cire."},
+    "espoir": {"en": "In a melting world, I paint hope as light.", "fr": "Dans un monde qui fond, je peins l'espoir comme une lumière."},
+    "quatre_ans": {"en": "Me, learning to see", "fr": "Moi, en train d'apprendre à voir"},
+    "dix_sept_ans": {"en": "17 year old me, on the Juneau Icefield", "fr": "Moi à 17 ans, sur le champ de glace de Juneau"},
+    "mission": {"en": "I create to connect people to themselves, to each other and to nature, in a world wired together, yet drifting apart.",
+                "fr": "Je crée pour relier les gens à eux-mêmes, les uns aux autres et à la nature, dans un monde câblé de toutes parts et pourtant à la dérive."},
+}
+
+# Les publics de Lisa (réunion de cadrage) : chacun trouve sa porte d'entrée (M2616)
+PORTES = [
+    {"cle": "collectionner", "univers": "atelier", "page": "oeuvres", "photo": "expositions/vernissage-galerie-herrick",
+     "titre": {"en": "Collect", "fr": "Collectionner"},
+     "texte": {"en": "Originals, limited editions and commissions, from the glaciers to the London Tube.", "fr": "Originaux, éditions limitées et commandes, des glaciers au métro de Londres."},
+     "lien": {"en": "Enter the atelier", "fr": "Entrer dans l'atelier"}},
+    {"cle": "creer", "univers": "espace", "page": "retraites", "photo": "retraites/peinture-en-plein-air",
+     "titre": {"en": "Create", "fr": "Créer"},
+     "texte": {"en": "Private classes, open studios and two alpine retreats in 2027.", "fr": "Cours privés, ateliers ouverts et deux retraites alpines en 2027."},
+     "lien": {"en": "Classes and retreats", "fr": "Cours et retraites"}},
+    {"cle": "visiter", "univers": "espace", "page": "espace", "photo": "espace/salon-canape",
+     "titre": {"en": "Visit", "fr": "Visiter"},
+     "texte": {"en": "Gallery, tea room and boutique in the heart of La Clusaz.", "fr": "Galerie, salon de thé et boutique au cœur de La Clusaz."},
+     "lien": {"en": "Espace Créa-Tea-Vité", "fr": "L'Espace Créa-Tea-Vité"}},
+    {"cle": "reunir", "univers": "espace", "page": "evenements", "photo": "evenements/table-de-diner-dans-la-galerie",
+     "titre": {"en": "Gather", "fr": "Réunir"},
+     "texte": {"en": "Private dinners, team days and Art Thinking workshops, up to 40 guests.", "fr": "Dîners privés, séminaires et ateliers Art Thinking, jusqu'à 40 personnes."},
+     "lien": {"en": "Private events", "fr": "Événements privés"}},
+]
+
+# ================================================================ v3 : Wax Fusion (IEA), automne 2026, « Beyond the Surface », écrit par Lisa
+WAX_FUSION = {
+    "titre": "Beyond the Surface",
+    "sous_titre": "The Luminous Layer: Cultivating Hope through Creativity in an Uncertain World",
+    "media": "Wax Fusion, International Encaustic Artists",
+    "numero": {"en": "Fall 2026, issue XIV · “Finding Light: Encaustic Expression of Hope”", "fr": "Automne 2026, n° XIV · « Finding Light: Encaustic Expression of Hope »"},
+    "url": "https://online.fliphtml5.com/InternationalEncausticArtists/Wax_Fusion_Fall_2026_Issue_14_Master/#p=18",
+    "paradoxe": {"en": "We live in an age of profound paradox. We are more hyper-connected than at any point in human history, yet that very connectivity can isolate us into algorithm-directed narratives.",
+                 "fr": "Nous vivons une époque de profond paradoxe. Jamais nous n'avons été aussi hyperconnectés, et pourtant cette connexion même peut nous enfermer dans des récits dictés par les algorithmes."},
+    "antidote": {"en": "My work is an intentional antidote to this surface-level consumption. It refuses to deliver its message in a fleeting glance. Instead, it rewards the patient viewer: the longer you look, the more you discover, and the more questions you begin to ask about what lies beneath.",
+                 "fr": "Mon travail est un antidote délibéré à cette consommation en surface. Il refuse de livrer son message en un coup d'œil. Il récompense au contraire le regard patient : plus on regarde, plus on découvre, et plus on se pose de questions sur ce qui se cache dessous."},
+    "lumiere": {"en": "Light enters the translucent, tactile layers, strikes the substrate, and refracts back out to the viewer. Luminosity is held within the body of the piece, and surfaces truly play an active role, mirroring how human resilience functions over time.",
+                "fr": "La lumière pénètre les couches translucides et tactiles, frappe le support et revient, réfractée, vers celui qui regarde. La luminosité est tenue dans le corps même de l'œuvre, et la surface joue un vrai rôle actif, à l'image de la résilience humaine au fil du temps."},
+    "cire": {"en": "Wax mirrors life: we can never truly control it. As molten wax takes over, I allow myself to be guided by unexpected diversions: a drip, a ridge, or an accidental scorch from the torch. Initial hardship becomes the bedrock for the luminosity above.",
+             "fr": "La cire est à l'image de la vie : on ne la maîtrise jamais vraiment. Quand la cire en fusion prend le dessus, je me laisse guider par ses détours imprévus : une coulure, une arête, une brûlure accidentelle du chalumeau. La difficulté du départ devient le socle de la lumière qui vient dessus."},
+    "graines": {"en": "To plant sunflower seeds in alpine soil, collaborate with unpredictable wax, or open a studio door to a community is a quiet, radical act of faith.",
+                "fr": "Planter des graines de tournesol dans une terre d'altitude, collaborer avec une cire imprévisible ou ouvrir la porte d'un atelier à une communauté : c'est un acte de foi, discret et radical."},
+    "lumiere_choisie": {"en": "We are defined by the tangible light we choose to cultivate. The connection, joy, and optimism we long for aren't waiting in a digital feed; they are generated right here, in our studios.",
+                        "fr": "Ce qui nous définit, c'est la lumière tangible que nous choisissons de cultiver. Le lien, la joie et l'optimisme que nous cherchons ne nous attendent pas dans un fil d'actualité : ils naissent ici même, dans nos ateliers."},
+    "espace": {"en": "Art is my vehicle for cultivating connections; it was never my end goal. I needed agency, a way to add more positive value to the world. Which led me to found Espace Créa-Tea-Vité in La Clusaz, acquiring a former mountain restaurant to realize a creative physical sanctuary for those overwhelmed by modern demands.",
+               "fr": "L'art est mon véhicule pour cultiver les liens ; il n'a jamais été une fin en soi. J'avais besoin d'agir, d'apporter quelque chose de positif au monde. C'est ce qui m'a menée à fonder l'Espace Créa-Tea-Vité à La Clusaz, en rachetant un ancien restaurant de montagne pour en faire un refuge créatif, bien réel, pour celles et ceux que débordent les exigences de la vie moderne."},
+    "retraite": {"en": "It was a true manifestation of so many aspects of my art: connection, inner space, looking beyond the surface, finding the joy, all through the vehicle of art making and sharing.",
+                 "fr": "C'était l'expression même de tant d'aspects de mon art : le lien, l'espace intérieur, regarder au-delà de la surface, trouver la joie, le tout à travers le geste de créer et de partager."},
+}
+
+# ================================================================ v3 : article M2616 (magazine art de vivre de La Clusaz, à paraître début décembre 2026), écrit en français
+M2616 = {
+    "titre": "L'art de créer du lien avec Lisa Cirenza",
+    "portrait": {"fr": "Artiste peintre, scientifique de formation, mentor, skieuse passionnée et amoureuse de la nature.",
+                 "en": "Painter, scientist by training, mentor, passionate skier and nature lover."},
+    "sanctuaire": {"fr": "La montagne, pour moi, c'est plus qu'une maison : c'est mon sanctuaire.", "en": "For me, the mountain is more than a home: it is my sanctuary."},
+    "regarder": {"fr": "J'aimerais aider les gens à regarder la nature avec des yeux d'artiste. Plus on l'apprécie, mieux on en prend soin.",
+                 "en": "I would like to help people look at nature through an artist's eyes. The more we appreciate it, the better we take care of it."},
+    "porte": {"fr": "Ici, chacun trouve sa porte d'entrée.", "en": "Here, everyone finds their own way in."},
+    "village": {"fr": "C'est un village très soudé, qui protège farouchement son patrimoine, et je le respecte profondément.",
+                "en": "It is a very close-knit village that fiercely protects its heritage, and I deeply respect that."},
+    "lourson": {"fr": "En 2025, Lisa transforme l'ancien restaurant L'Ourson en atelier, salon de thé, galerie et espace de créativité. Elle en a conçu la rénovation, en s'inspirant de ses années au Japon pour faire dialoguer bois, textures, couleurs et nature.",
+                "en": "In 2025, Lisa turned the former L'Ourson restaurant into a studio, tea room, gallery and creative space. She designed the renovation herself, drawing on her years in Japan to bring wood, textures, colours and nature into conversation."},
+    "cloche": {"fr": "Une petite cloche ramenée du Népal tinte au début de chaque cours, pour inviter les participants à se libérer de leurs a priori et à se reconnecter à leur potentiel créatif.",
+               "en": "A small bell brought back from Nepal rings at the start of every class, inviting participants to let go of their preconceptions and reconnect with their creative potential."},
+    "musique": {"fr": "Un piano installé dans un placard de l'atelier, des soirées où musique et peinture dialoguent, et déjà l'idée d'expériences multisensorielles.",
+                "en": "A piano tucked into a cupboard of the studio, evenings where music and painting answer each other, and multisensory experiences already in the making."},
+    "demonstrations": {"fr": "Ses œuvres sont exposées en permanence à l'Espace, où l'on peut aussi la voir peindre et assister à des démonstrations d'encaustique.",
+                       "en": "Her works are on permanent display at the Espace, where visitors can also watch her paint and attend encaustic demonstrations."},
+    "jeunes": {"fr": "Elle y expose et accompagne de jeunes artistes du pays, et réfléchit, pour les Jeux olympiques d'hiver de 2030, à un projet qui relierait l'art, le patrimoine et la vie du village.",
+               "en": "She exhibits and mentors young local artists there, and is thinking about a project for the 2030 Winter Olympics linking art, heritage and village life."},
+}
+
+# Vidéo « Un petit tour de l'Espace » (Vimeo, non répertoriée ; sous-titres anglais à venir)
+VIDEO_ESPACE = {"id": "1244276713", "h": "526c6c3f2f", "titre": "Espace Crea-Tea-Vite", "image": "espace/visite-video-vignette",
+                "legende": {"en": "A short tour of the Espace, in French (English subtitles coming).", "fr": "Un petit tour de l'Espace, en français (sous-titres anglais à venir)."}}
+
+# Cours en ligne annoncé dans Wax Fusion
+COURS_EN_LIGNE = {
+    "titre": "Painting with Fire 6",
+    "organisateur": "Essence of Mulranny",
+    "url": "https://www.essenceofmulranny.com/retreats-and-classes/pwf-vol6",
+    "texte": {"en": "Online course: how Lisa uses digital drawing, photos and other source material to inform her encaustic work, with a deep dive into papers and into applying digital layers and ideas to an encaustic piece.",
+              "fr": "Cours en ligne : comment Lisa s'appuie sur le dessin numérique, la photo et d'autres sources pour nourrir son travail à l'encaustique, avec une plongée dans les papiers et dans l'application de couches et d'idées numériques à une œuvre à l'encaustique."},
+    "dates": {"en": "Dates and price on the organiser's site", "fr": "Dates et tarif sur le site de l'organisateur"},
+}
+PLEIN_AIR_PRIVE = {"titre": {"en": "Private plein-air course", "fr": "Cours privé en plein air"},
+                   "texte": {"en": "A page is in preparation on the current site: programme, length and price to be completed.", "fr": "Une page est en préparation sur le site actuel : programme, durée et tarif à compléter."}}
+
+# ================================================================ v3 : boutique (réunion de cadrage) : deux entités, deux comptes de paiement
+BOUTIQUE = {
+    "intro": {"en": "One house, two counters. Works, editions and commissions are sold by Lisa Cirenza Fine Art, the artist-author. Classes, retreats and the boutique belong to Espace Créa-Tea-Vité, a separate company. Each has its own basket and its own payment account, so a single order never mixes the two.",
+              "fr": "Une maison, deux comptoirs. Les œuvres, éditions et commandes sont vendues par Lisa Cirenza Fine Art, artiste-auteur. Les cours, retraites et la boutique relèvent de l'Espace Créa-Tea-Vité, une société distincte. Chacun a son panier et son compte de paiement : une commande ne mélange jamais les deux."},
+    "atelier_titre": {"en": "The atelier counter", "fr": "Le comptoir de l'atelier"},
+    "atelier_texte": {"en": "Limited edition prints, printed to order by a fine-art print partner, and original works reserved directly with the artist.",
+                      "fr": "Tirages en édition limitée, imprimés à la commande par un partenaire d'impression d'art, et œuvres originales réservées directement auprès de l'artiste."},
+    "espace_titre": {"en": "The Espace counter", "fr": "Le comptoir de l'Espace"},
+    "espace_texte": {"en": "Open studio sessions, retreat places after a discovery call, and a selection from the boutique.",
+                     "fr": "Séances d'atelier ouvert, places de retraite après un échange découverte, et une sélection de la boutique."},
+    "originaux": {"en": "Originals: price and availability on request. Your basket becomes a reservation request; nothing is charged.",
+                  "fr": "Originaux : prix et disponibilité sur demande. Votre panier devient une demande de réservation ; rien n'est débité."},
+    "livraison": {"en": "Shipping from La Clusaz: France, Europe and worldwide, insured and tracked; rates calculated at checkout (carrier to be confirmed). Outside the European Union, import duties and taxes may be charged on delivery.",
+                  "fr": "Expédition depuis La Clusaz : France, Europe et monde entier, assurée et suivie ; tarifs calculés à la commande (transporteur à confirmer). Hors Union européenne, des droits et taxes d'importation peuvent être demandés à la livraison."},
+    "retrait": {"en": "Free pick-up at the Espace, Thursday to Saturday, 2:30 – 6:30 pm.", "fr": "Retrait gratuit à l'Espace, du jeudi au samedi, 14 h 30 – 18 h 30."},
+    "simulation": {"en": "Mock-up: baskets and payments are simulated. On the live site each counter pays into its own Stripe account.",
+                   "fr": "Maquette : paniers et paiements simulés. Sur le site en ligne, chaque comptoir encaisse sur son propre compte Stripe."},
+    "boutique_espace": {"en": "Art materials and local gifts: in store at the Espace; online selection to be completed.",
+                        "fr": "Matériel d'art et cadeaux locaux : en boutique à l'Espace ; sélection en ligne à compléter."},
 }

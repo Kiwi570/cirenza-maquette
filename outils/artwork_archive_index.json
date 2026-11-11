@@ -1,0 +1,25 @@
+{
+ "_source": "Index public du profil Artwork Archive de Lisa (https://www.artworkarchive.com/profile/lisa-cirenza), lu le 11 novembre 2026 à travers un moteur de recherche : la page elle-même est protégée par une vérification anti-robot. Le profil compte environ 40 œuvres ; seules celles-ci apparaissent dans l'index, sans leurs images. L'export CSV de Lisa reste nécessaire.",
+ "profil": {
+  "url": "https://www.artworkarchive.com/profile/lisa-cirenza",
+  "presentation": "Multimedia artist, exploring the delicate dynamics of human relationships and our energetic bonds with the natural world.",
+  "lieux": ["La Clusaz", "Talloires-Montmin"]
+ },
+ "oeuvres": [
+  {"titre": "Where the Mountains Breathe", "annee": "2025", "technique": "Encaustic on paper with black archival matt board/frame", "dims_cm": [34, 25.5], "prix_eur": 145, "sur_le_site": false},
+  {"titre": "The Silence of Thawing Waters", "annee": null, "technique": "Encaustic and inks on paper with black archival matt board/frame", "dims_cm": [25.5, 34], "prix_eur": null, "sur_le_site": false},
+  {"titre": "Light Across the Thaw", "annee": null, "technique": "Encaustics on board", "dims_cm": [30, 30, 3.5], "prix_eur": 240, "sur_le_site": false},
+  {"titre": "Doucement Entrelacés", "annee": "2024", "technique": "Encaustic on paper with white archival matt board/frame", "dims_cm": [30, 25.5], "prix_eur": 80, "sur_le_site": false},
+  {"titre": "Blissful Light", "annee": "2024", "technique": "Encaustics on board", "dims_cm": [20, 19.5], "prix_eur": 200, "sur_le_site": false},
+  {"titre": "Talking to the Wild", "annee": "2023", "technique": "Archival inks on Dibond", "dims_cm": [113, 80], "prix_eur": null, "sur_le_site": false},
+  {"titre": "The Blues", "annee": "2021", "technique": "Mixed media on aluminium", "dims_cm": [100, 128], "prix_eur": null, "sur_le_site": false},
+  {"titre": "Lost in the trees, and missing the Forest", "annee": "2019", "technique": "Oils and waxes on board", "dims_cm": null, "prix_eur": null, "sur_le_site": false},
+  {"titre": "Cycles", "annee": null, "technique": null, "dims_cm": null, "prix_eur": null, "sur_le_site": false},
+  {"titre": "Heat Waves", "annee": null, "technique": null, "dims_cm": null, "prix_eur": null, "sur_le_site": false},
+  {"titre": "Chasing the Ephemeral (Unique Rice Paper)", "annee": null, "technique": "Hand-finished print on rice paper mounted on board", "dims_cm": [32, 41], "prix_eur": 240, "statut": "available", "sur_le_site": false},
+  {"titre": "UH-Huh", "annee": "2015", "technique": "Archival limited edition print on Hahnemühle paper", "dims_cm": null, "prix_eur": 125, "statut": "available", "sur_le_site": false},
+  {"titre": "A moment in Havanna", "annee": "2018", "technique": "Archival print on museum heritage paper", "dims_cm": [40, 30], "prix_eur": 150, "statut": "available", "collections": ["A Moment", "Cuba"], "sur_le_site": false},
+  {"titre": "The Grunge and the Glow of Havana", "annee": "2018", "technique": "Oil on canvas", "dims_cm": [90, 120], "statut": "sold", "sur_le_site": "the-grunge-and-glow-of-havana"},
+  {"titre": "Bank", "annee": "2016", "technique": "Mixed media on aluminium Dibond", "dims_cm": [60, 80], "prix_eur": 2250, "sur_le_site": "bank"}
+ ]
+}

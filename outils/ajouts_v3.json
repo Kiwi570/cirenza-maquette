@@ -1,0 +1,30 @@
+{
+ "_note": "Médias ajoutés en v3 et leur provenance. Zip = photo-dump envoyé par Lisa le 5 novembre 2026 ; cirenza.com = site actuel (Wix) ; Wax Fusion = magazine IEA, automne 2026, n° XIV.",
+ "oeuvres": {
+  "recente-01": "cirenza.com, accueil (19DD5599…heic, version 3024 × 4032) ; même œuvre que le zip 19DD5599",
+  "recente-02": "zip 04AE63BF (posée sur le chevalet)",
+  "recente-03": "zip 29C36E92",
+  "recente-04": "zip 2AAE523E",
+  "recente-05": "zip 2CAEC83A (posée sur le chevalet)",
+  "recente-06": "zip 47A58B3F",
+  "recente-07": "zip 4973E062",
+  "recente-08": "zip 4F2A2C3A (en cours, scotchée sur la planche)",
+  "recente-09": "zip 810656ED",
+  "recente-10": "zip 9C1C6A8C",
+  "recente-11": "zip FDEBF7B7",
+  "en-cours-3": "zip BBFC3BC1 : Emergence, état le plus récent (celui de Wax Fusion, p. 23), remplace l'ancienne photo"
+ },
+ "photos": {
+  "artiste/lisa-a-17-ans-juneau-icefield": "cirenza.com, partie centrale du bandeau (« 17 year old me »), voile blanc retiré",
+  "artiste/lisa-aquarelle-nuancier": "cirenza.com, page Alpine Pause (9FAB48F3)",
+  "atelier/seaside-village-detail": "zip A4A9A961 : détail de Seaside Village and the Pink Flowers",
+  "atelier/glacier-sur-le-chevalet": "zip 6C0FC819",
+  "atelier/detail-cire-blanche": "zip ACD9A910",
+  "atelier/encaustique-noir-et-blanc-sur-papier": "cirenza.com, page Alpine Pause (b&W Wax on Paper)",
+  "retraites/pause-face-aux-montagnes": "cirenza.com, page Alpine Pause",
+  "retraites/participante-peint-en-plein-air": "cirenza.com, page Painting in Paradise",
+  "presse/wax-fusion-fall-2026-couverture": "Wax Fusion, automne 2026, couverture",
+  "presse/wax-fusion-fall-2026-article": "Wax Fusion, automne 2026, p. 18 (Beyond the Surface)",
+  "espace/visite-video-vignette": "Vimeo, image de la vidéo « Espace Crea-Tea-Vite »"
+ }
+}

@@ -40,20 +40,24 @@
   },
   "en-cours-3": {
    "original": [
-    650,
-    938
+    1488,
+    2171
    ],
    "640": [
-    443,
+    439,
     640
    ],
    "1600": [
-    650,
-    938
+    1097,
+    1600
    ],
-   "dominante": "#556e73",
-   "fond": "#e4edef",
-   "accent": "#3c727d"
+   "hd": [
+    1488,
+    2171
+   ],
+   "dominante": "#648fa7",
+   "fond": "#e0eef6",
+   "accent": "#456f86"
   },
   "en-cours-4": {
    "original": [
@@ -1252,6 +1256,201 @@
    "dominante": "#fbfdfe",
    "fond": "#ebebeb",
    "accent": "#456f86"
+  },
+  "recente-01": {
+   "original": [
+    3024,
+    4032
+   ],
+   "640": [
+    480,
+    640
+   ],
+   "1600": [
+    1200,
+    1600
+   ],
+   "hd": [
+    2400,
+    3200
+   ],
+   "dominante": "#bfba9b",
+   "fond": "#edece1",
+   "accent": "#716a40"
+  },
+  "recente-02": {
+   "original": [
+    768,
+    1024
+   ],
+   "640": [
+    480,
+    640
+   ],
+   "1600": [
+    768,
+    1024
+   ],
+   "dominante": "#9c683c",
+   "fond": "#fae7d9",
+   "accent": "#8e5c2f"
+  },
+  "recente-03": {
+   "original": [
+    360,
+    480
+   ],
+   "640": [
+    360,
+    480
+   ],
+   "1600": [
+    360,
+    480
+   ],
+   "dominante": "#e3dcd2",
+   "fond": "#edebe7",
+   "accent": "#7d6441"
+  },
+  "recente-04": {
+   "original": [
+    768,
+    1024
+   ],
+   "640": [
+    480,
+    640
+   ],
+   "1600": [
+    768,
+    1024
+   ],
+   "dominante": "#dbcfbb",
+   "fond": "#efebe4",
+   "accent": "#7b6640"
+  },
+  "recente-05": {
+   "original": [
+    837,
+    938
+   ],
+   "640": [
+    571,
+    640
+   ],
+   "1600": [
+    837,
+    938
+   ],
+   "dominante": "#9a93a6",
+   "fond": "#eceaf0",
+   "accent": "#706186"
+  },
+  "recente-06": {
+   "original": [
+    1468,
+    2142
+   ],
+   "640": [
+    439,
+    640
+   ],
+   "1600": [
+    1097,
+    1600
+   ],
+   "hd": [
+    1468,
+    2142
+   ],
+   "dominante": "#6a7166",
+   "fond": "#e9ece8",
+   "accent": "#5c714c"
+  },
+  "recente-07": {
+   "original": [
+    1024,
+    768
+   ],
+   "640": [
+    640,
+    480
+   ],
+   "1600": [
+    1024,
+    768
+   ],
+   "dominante": "#b4b197",
+   "fond": "#ecece3",
+   "accent": "#706a41"
+  },
+  "recente-08": {
+   "original": [
+    1024,
+    769
+   ],
+   "640": [
+    640,
+    481
+   ],
+   "1600": [
+    1024,
+    769
+   ],
+   "dominante": "#b5a591",
+   "fond": "#f0eae3",
+   "accent": "#7d6441"
+  },
+  "recente-09": {
+   "original": [
+    768,
+    1024
+   ],
+   "640": [
+    480,
+    640
+   ],
+   "1600": [
+    768,
+    1024
+   ],
+   "dominante": "#bfb6a9",
+   "fond": "#eeebe6",
+   "accent": "#7d6441"
+  },
+  "recente-10": {
+   "original": [
+    884,
+    888
+   ],
+   "640": [
+    637,
+    640
+   ],
+   "1600": [
+    884,
+    888
+   ],
+   "dominante": "#c2bb81",
+   "fond": "#eeecd9",
+   "accent": "#726b32"
+  },
+  "recente-11": {
+   "original": [
+    768,
+    1024
+   ],
+   "640": [
+    480,
+    640
+   ],
+   "1600": [
+    768,
+    1024
+   ],
+   "dominante": "#d6cdbb",
+   "fond": "#eeebe5",
+   "accent": "#7a6640"
   }
  },
  "photos": {
@@ -3030,6 +3229,167 @@
     360
    ],
    "fond": "#eeebe6"
+  },
+  "artiste/lisa-a-17-ans-juneau-icefield": {
+   "original": [
+    560,
+    1215
+   ],
+   "800": [
+    369,
+    800
+   ],
+   "1600": [
+    560,
+    1215
+   ],
+   "fond": "#edebe8"
+  },
+  "artiste/lisa-aquarelle-nuancier": {
+   "original": [
+    708,
+    1112
+   ],
+   "800": [
+    509,
+    800
+   ],
+   "1600": [
+    708,
+    1112
+   ],
+   "fond": "#eeebe4"
+  },
+  "atelier/seaside-village-detail": {
+   "original": [
+    1024,
+    768
+   ],
+   "800": [
+    800,
+    600
+   ],
+   "1600": [
+    1024,
+    768
+   ],
+   "fond": "#f1eae1"
+  },
+  "atelier/glacier-sur-le-chevalet": {
+   "original": [
+    768,
+    1024
+   ],
+   "800": [
+    600,
+    800
+   ],
+   "1600": [
+    768,
+    1024
+   ],
+   "fond": "#eeebe6"
+  },
+  "atelier/detail-cire-blanche": {
+   "original": [
+    768,
+    1024
+   ],
+   "800": [
+    600,
+    800
+   ],
+   "1600": [
+    768,
+    1024
+   ],
+   "fond": "#edebe8"
+  },
+  "atelier/encaustique-noir-et-blanc-sur-papier": {
+   "original": [
+    1074,
+    732
+   ],
+   "800": [
+    800,
+    545
+   ],
+   "1600": [
+    1074,
+    732
+   ],
+   "fond": "#eeebe6"
+  },
+  "retraites/pause-face-aux-montagnes": {
+   "original": [
+    768,
+    1024
+   ],
+   "800": [
+    600,
+    800
+   ],
+   "1600": [
+    768,
+    1024
+   ],
+   "fond": "#ebebeb"
+  },
+  "retraites/participante-peint-en-plein-air": {
+   "original": [
+    768,
+    803
+   ],
+   "800": [
+    765,
+    800
+   ],
+   "fond": "#ebece1"
+  },
+  "presse/wax-fusion-fall-2026-couverture": {
+   "original": [
+    2164,
+    2800
+   ],
+   "800": [
+    618,
+    800
+   ],
+   "1600": [
+    1237,
+    1600
+   ],
+   "fond": "#e8ecec"
+  },
+  "presse/wax-fusion-fall-2026-article": {
+   "original": [
+    2164,
+    2800
+   ],
+   "800": [
+    618,
+    800
+   ],
+   "1600": [
+    1237,
+    1600
+   ],
+   "fond": "#ebebeb"
+  },
+  "espace/visite-video-vignette": {
+   "original": [
+    1920,
+    1080
+   ],
+   "800": [
+    800,
+    450
+   ],
+   "1600": [
+    1600,
+    900
+   ],
+   "fond": "#f0eae5"
   }
  },
  "decors": {
