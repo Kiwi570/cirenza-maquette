@@ -4,12 +4,32 @@
   "redirects": [
     {
       "source": "/retreats/molten-magic",
-      "destination": "/retreats/alpine-pause",
+      "destination": "/retreats/alpine-encaustics",
       "permanent": false
     },
     {
       "source": "/fr/retraites/molten-magic",
-      "destination": "/fr/retraites/alpine-pause",
+      "destination": "/fr/retraites/alpine-encaustics",
+      "permanent": false
+    },
+    {
+      "source": "/retreats/alpine-pause",
+      "destination": "/retreats/alpine-encaustics",
+      "permanent": false
+    },
+    {
+      "source": "/fr/retraites/alpine-pause",
+      "destination": "/fr/retraites/alpine-encaustics",
+      "permanent": false
+    },
+    {
+      "source": "/works/light-water-rock-and-time",
+      "destination": "/works/a-record-of-time",
+      "permanent": false
+    },
+    {
+      "source": "/fr/oeuvres/lumiere-eau-roche-et-temps",
+      "destination": "/fr/oeuvres/strates-du-temps",
       "permanent": false
     }
   ],

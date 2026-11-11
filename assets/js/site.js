@@ -257,7 +257,7 @@
 
   /* ------------------------------------------------------------ parallaxe douce */
   function parallaxes() {
-    if (ETAT.reduit) return;
+    return; // v4 : pas de parallaxe (brief de Lisa : « no parallax gimmicks »)
     var items = $$('[data-parallaxe]').map(function (el) { return { el: el, f: Number(el.getAttribute('data-parallaxe')) || 0, c: 0 }; });
     if (!items.length) return;
     var dernierY = -1;
@@ -285,7 +285,7 @@
 
   /* panorama du lac (glisse à l'horizontale) */
   function panoramas() {
-    if (ETAT.reduit) return;
+    return; // v4 : bandes et panoramas défilent au doigt ou à la molette, sans effet lié au défilement de la page
     $$('[data-panorama]').forEach(function (bloc) {
       var img = $('img', bloc);
       if (!img) return;
@@ -1730,6 +1730,16 @@
     });
   }
 
+  /* ------------------------------------------------------------ v4 · annonces de fermeture ou d'ouverture exceptionnelle */
+  function annonces() {
+    var auj = heureParis().date;
+    $$('[data-annonce]').forEach(function (a) {
+      var actif = auj >= a.getAttribute('data-du') && auj <= a.getAttribute('data-au');
+      a.hidden = !actif;
+      if (actif) html.classList.add('a-annonce');
+    });
+  }
+
   /* ------------------------------------------------------------ démarrage */
   function demarrer() {
     lissage.init();
@@ -1751,6 +1761,7 @@
     lettres();
     paniers();
     videos();
+    annonces();
     glaces();
     grattages();
     carottage();
