@@ -19,7 +19,10 @@ PAGES = {
     "evenements": {"en": "private-events", "fr": "fr/evenements-prives"},
     "retraites": {"en": "retreats", "fr": "fr/retraites"},
     "pip": {"en": "retreats/painting-in-paradise", "fr": "fr/retraites/painting-in-paradise"},
-    "pause": {"en": "retreats/alpine-pause", "fr": "fr/retraites/alpine-pause"},
+    "creative": {"en": "retreats/creative-pause", "fr": "fr/retraites/creative-pause"},
+    "encaustics": {"en": "retreats/alpine-encaustics", "fr": "fr/retraites/alpine-encaustics"},
+    "cours_prives": {"en": "private-courses", "fr": "fr/cours-prives"},
+    "studio": {"en": "studio-notes", "fr": "fr/notes-d-atelier"},
     "boutique": {"en": "shop", "fr": "fr/boutique"},
     "contact": {"en": "contact", "fr": "fr/contact"},
 }
@@ -50,16 +53,17 @@ HORAIRES = {"jours": [4, 5, 6], "plages": [["14:30", "18:30"]], "dimanche_rdv": 
 
 T = {
     "en": {
-        "metier": "Abstract Figurative Artist",
+        "metier": "Painter of light, water, rock and time",
         "accroche": "Painting light, water, rock and time",
-        "description": "Lisa Cirenza paints light, water, rock and time in wax, oils and digital layers, in La Clusaz, French Alps, where she also runs Espace Créa-Tea-Vité: gallery, tea room, classes and creative retreats.",
-        "nav": {"accueil": "Home", "oeuvres": "Works", "artiste": "The Artist", "parcours": "CV", "presse": "Press", "espace": "L'Espace", "cours": "Classes", "evenements": "Private events", "retraites": "Retreats", "pip": "Painting in Paradise", "pause": "Autumn Alpine Pause", "boutique": "Shop", "contact": "Contact"},
+        "description": "Lisa Cirenza is a painter in the French Alps: light, water, rock and time (ice, snow, fog, lake and mountains) in encaustic, mixed media, oil and watercolour.",
+        "nav": {"accueil": "Home", "oeuvres": "Works", "artiste": "The Artist", "parcours": "CV", "presse": "Press", "espace": "L'Espace", "cours": "Classes", "evenements": "Private events", "retraites": "Retreats", "pip": "Painting in Paradise", "creative": "A Creative Pause", "encaustics": "Alpine Encaustics", "boutique": "Shop", "contact": "Contact",
+                "cours_prives": "Private courses", "studio": "Studio notes", "archive": "Archive", "editions": "Collectors' editions", "recent": "A Record of Time", "declaration": "Statement", "bio": "Bio"},
         "univers": {"atelier": "Atelier", "atelier_long": "Lisa Cirenza · Fine Art", "atelier_sous": "Works, editions, commissions", "espace": "Espace", "espace_long": "Espace Créa-Tea-Vité", "espace_sous": "Gallery, tea room, classes, retreats", "aria": "Choose a side of the house"},
         "disponible": "Available", "non_disponible": "Not for sale", "en_pret": "On loan", "reserve": "Reserved",
         "inventaire": "Inventory no.", "parue_dans": "Featured in",
         "menu": "Menu", "fermer": "Close", "aller_contenu": "Skip to content",
         "langue_autre": "Version française", "langue_autre_court": "FR",
-        "groupes_menu": {"oeuvres": "Atelier · the works", "artiste": "Atelier · the artist", "espace": "Espace Créa-Tea-Vité", "retraites": "Espace · retreats 2027"},
+        "groupes_menu": {"oeuvres": "Atelier · the work", "artiste": "Atelier · the artist", "espace": "Espace Créa-Tea-Vité", "retraites": "Espace · retreats 2027"},
         "voir": "View", "agrandir": "Zoom", "a_completer": "to be completed", "titre_a_completer": "Title to be completed",
         "prix_demande": "Price on request", "vendu": "Sold", "en_cours": "Work in progress", "edition": "Edition",
         "photo_situation": "Photographed in situ",
@@ -91,16 +95,17 @@ T = {
         "plan": "Site map",
     },
     "fr": {
-        "metier": "Artiste figurative abstraite",
-        "accroche": "Peindre la lumière, l'eau, la roche et le temps",
-        "description": "Lisa Cirenza peint la lumière, l'eau, la roche et le temps, en cire, à l'huile et en couches numériques, à La Clusaz, où elle anime aussi l'Espace Créa-Tea-Vité : galerie, salon de thé, cours et retraites créatives.",
-        "nav": {"accueil": "Accueil", "oeuvres": "Œuvres", "artiste": "L'artiste", "parcours": "Parcours", "presse": "Presse", "espace": "L'Espace", "cours": "Cours", "evenements": "Événements privés", "retraites": "Retraites", "pip": "Painting in Paradise", "pause": "Autumn Alpine Pause", "boutique": "Boutique", "contact": "Contact"},
+        "metier": "Peintre de la lumière, de l'eau, de la roche et du temps",
+        "accroche": "Peintre de la lumière, de l'eau, de la roche et du temps",
+        "description": "Lisa Cirenza, peintre dans les Alpes françaises : la lumière, l'eau, la roche et le temps (glace, neige, brouillard, lac et montagnes), à l'encaustique, en techniques mixtes, à l'huile et à l'aquarelle.",
+        "nav": {"accueil": "Accueil", "oeuvres": "Œuvres", "artiste": "L'artiste", "parcours": "Parcours", "presse": "Presse", "espace": "L'Espace", "cours": "Cours", "evenements": "Événements privés", "retraites": "Retraites", "pip": "Painting in Paradise", "creative": "A Creative Pause", "encaustics": "Alpine Encaustics", "boutique": "Boutique", "contact": "Contact",
+                "cours_prives": "Cours privés", "studio": "Notes d'atelier", "archive": "Archive", "editions": "Éditions de collection", "recent": "Strates du temps", "declaration": "Déclaration", "bio": "Biographie"},
         "univers": {"atelier": "Atelier", "atelier_long": "Lisa Cirenza · Fine Art", "atelier_sous": "Œuvres, éditions, commandes", "espace": "Espace", "espace_long": "Espace Créa-Tea-Vité", "espace_sous": "Galerie, salon de thé, cours, retraites", "aria": "Choisir un côté de la maison"},
         "disponible": "Disponible", "non_disponible": "Non disponible à la vente", "en_pret": "En prêt", "reserve": "Réservée",
         "inventaire": "N° d'inventaire", "parue_dans": "Parue dans",
         "menu": "Menu", "fermer": "Fermer", "aller_contenu": "Aller au contenu",
         "langue_autre": "English version", "langue_autre_court": "EN",
-        "groupes_menu": {"oeuvres": "Atelier · les œuvres", "artiste": "Atelier · l'artiste", "espace": "Espace Créa-Tea-Vité", "retraites": "Espace · retraites 2027"},
+        "groupes_menu": {"oeuvres": "Atelier · l'œuvre", "artiste": "Atelier · l'artiste", "espace": "Espace Créa-Tea-Vité", "retraites": "Espace · retraites 2027"},
         "voir": "Voir", "agrandir": "Agrandir", "a_completer": "à compléter", "titre_a_completer": "Titre à compléter",
         "prix_demande": "Prix sur demande", "vendu": "Vendu", "en_cours": "En cours", "edition": "Édition",
         "photo_situation": "Photographiée en situation",
@@ -132,9 +137,6 @@ T = {
         "plan": "Plan du site",
     },
 }
-
-MANIFESTE = {"en": ["Fueled by nature,", "Perplexed by humanity,", "Finding joy, frustration and wonder in her bewilderment."],
-             "fr": ["Nourrie par la nature,", "Perplexe face à l'humanité,", "Elle trouve dans son étonnement la joie, la frustration et l'émerveillement."]}
 
 NATURE = {"en": "When we truly immerse ourselves in nature, the boundary between self and world dissolves. We sense a profound unity, an indivisible thread weaving us into the living fabric around us.",
           "fr": "Quand nous nous immergeons vraiment dans la nature, la frontière entre soi et le monde se dissout. Nous ressentons une unité profonde, un fil indivisible qui nous relie au tissu vivant qui nous entoure."}
@@ -265,35 +267,35 @@ PRESSE = [
      "texte": {"en": "Portrait in the La Clusaz lifestyle magazine: painter, trained scientist, mentor, passionate skier and nature lover. Magazine name and link to be confirmed on publication.",
                "fr": "Portrait dans le magazine art de vivre de La Clusaz : « artiste peintre, scientifique de formation, mentor, skieuse passionnée et amoureuse de la nature ». Nom exact du magazine et lien à confirmer à la parution."},
      "url": None, "image": "espace/visiteuse-contemplation", "nouveau": True, "a_paraitre": True},
-    {"titre": "Quand Art Nous Connecte", "media": "Maison et Jardin", "date": {"en": "May 2022", "fr": "mai 2022"},
-     "texte": {"en": "“When Art Connects Us”: feature interview in the French magazine Maison et Jardin.", "fr": "« Quand l'art nous connecte » : grand entretien dans le magazine Maison et Jardin."},
+    {"titre": "Quand Art Nous Connecte", "media": "Maisons et Jardins", "date": {"en": "2021", "fr": "2021"},
+     "texte": {"en": "Feature article, “When Art Connects Us”.", "fr": "Grand article, « Quand l'art nous connecte »."},
      "url": "https://www.pressreader.com/france/maison-et-jardin-magazine/20220516/289794336701817", "image": "presse/maison-et-jardin-2022"},
-    {"titre": "The App Whisperer Podcast", "media": "Apple Podcasts", "date": {"en": "March 2021", "fr": "mars 2021"},
+    {"archive": True, "titre": "The App Whisperer Podcast", "media": "Apple Podcasts", "date": {"en": "March 2021", "fr": "mars 2021"},
      "texte": {"en": "The App Whisperer Podcast interviews award winning digital artist, Lisa Cirenza: her first ventures into digital art, her techniques, workflow, her style, her favourite apps, the future of mobile art.", "fr": "Le podcast The App Whisperer reçoit Lisa Cirenza, artiste numérique primée : ses débuts dans l'art numérique, ses techniques, sa méthode, son style, ses applications préférées, l'avenir de l'art mobile."},
      "url": "https://podcasts.apple.com/gb/podcast/podcast-with-lisa-cirenza-award-winning-digital-artist/id1050995756?i=1000514228545", "image": "presse/app-whisperer-podcast"},
-    {"titre": "Lisa Cirenza, Collective Works", "media": "Art Rabbit", "date": {"en": "1 Dec 2018 – 6 Jan 2019", "fr": "1er déc. 2018 – 6 janv. 2019"},
+    {"archive": True, "titre": "Lisa Cirenza, Collective Works", "media": "Art Rabbit", "date": {"en": "1 Dec 2018 – 6 Jan 2019", "fr": "1er déc. 2018 – 6 janv. 2019"},
      "texte": {"en": "Exhibition listing.", "fr": "Annonce de l'exposition."},
      "url": "https://www.artrabbit.com/events/lisa-cirenza-collective-works", "image": "presse/art-rabbit"},
-    {"titre": "Etchr Labs Interview", "media": "Etchr Labs", "date": None, "texte": {"en": "Interview.", "fr": "Entretien."},
+    {"archive": True, "titre": "Etchr Labs Interview", "media": "Etchr Labs", "date": None, "texte": {"en": "Interview.", "fr": "Entretien."},
      "url": "https://etchrlab.com/blogs/news/cirenza", "image": "artiste/lisa-ipad-malecon-nuit-etchr"},
-    {"titre": "BBC Documentary", "media": "BBC", "date": None,
-     "texte": {"en": "The BBC documentary highlights “Dream Big”, a layered piece depicting the many layers of hope and challenges in Stockton, being transformed by Mayor Michael Tubbs (see 1:16 – 1:20).", "fr": "Le documentaire de la BBC met en avant « Dream Big », œuvre en couches sur les espoirs et les défis de Stockton, ville transformée par son maire Michael Tubbs (voir 1:16 – 1:20)."},
+    {"titre": "BBC Documentary", "media": "BBC", "date": {"en": "title and year to follow", "fr": "titre et année à venir"},
+     "texte": {"en": "BBC documentary on Stockton featuring Dream Big (see 1:16 – 1:20).", "fr": "Documentaire de la BBC sur Stockton, avec Dream Big (voir 1:16 – 1:20)."},
      "url": "http://bit.ly/DreamBigCommission", "image": "presse/bbc-documentaire"},
-    {"titre": "Best of the Rest", "media": "Financial Times", "date": {"en": "October 7th weekend edition", "fr": "édition du week-end du 7 octobre"},
-     "texte": {"en": "Review in the Financial Times.", "fr": "Critique dans le Financial Times."}, "url": None, "image": "presse/financial-times"},
-    {"titre": "Just MARVELous: Art for the Comical", "media": "Rise Art", "date": {"en": "July 2017", "fr": "juillet 2017"},
+    {"titre": "London's best satellite fairs: ‘different conversations and collegiate feel’", "media": "Financial Times · Rachel Spence", "date": {"en": "October 2017", "fr": "octobre 2017"},
+     "texte": {"en": "“…blends tradition and contemporary practice with authority.”", "fr": "« …blends tradition and contemporary practice with authority. »"}, "url": None, "image": "presse/financial-times"},
+    {"archive": True, "titre": "Just MARVELous: Art for the Comical", "media": "Rise Art", "date": {"en": "July 2017", "fr": "juillet 2017"},
      "texte": {"en": "Rise Art featured artist.", "fr": "Artiste à l'honneur sur Rise Art."},
      "url": "https://www.riseart.com/article/2017-07-12-art-collections-just-marvelous-art-for-the-comically-inclined", "image": "presse/riseart-just-marvelous"},
-    {"titre": "Cirenza: I'm Not Who You Think I Am", "media": "Made In Shoreditch", "date": {"en": "28 May 2016", "fr": "28 mai 2016"},
+    {"archive": True, "titre": "Cirenza: I'm Not Who You Think I Am", "media": "Made In Shoreditch", "date": {"en": "28 May 2016", "fr": "28 mai 2016"},
      "texte": {"en": "Website article by Inez Ali.", "fr": "Article d'Inez Ali."},
      "url": "http://madeinshoreditch.co.uk/2016/05/28/lisa-cirenza-im-not-think-i/", "image": "presse/made-in-shoreditch"},
-    {"titre": "Oil Paints to Pixels", "media": "London Visual Arts", "date": {"en": "October 2015", "fr": "octobre 2015"},
+    {"archive": True, "titre": "Oil Paints to Pixels", "media": "London Visual Arts", "date": {"en": "October 2015", "fr": "octobre 2015"},
      "texte": {"en": "“Lisa Cirenza: Oil Paints to Pixels. A talk with Lisa Cirenza on her latest work.”", "fr": "« Lisa Cirenza : de la peinture à l'huile aux pixels. » Un entretien sur ses dernières œuvres."},
      "url": "https://lovarts.co.uk/2015/10/06/lisa-cirenza-oil-paints-to-pixels/", "image": "presse/london-visual-arts"},
-    {"titre": "Stanford Arts Monthly Review", "media": "Stanford Arts", "date": {"en": "December 2014", "fr": "décembre 2014"},
+    {"archive": True, "titre": "Stanford Arts Monthly Review", "media": "Stanford Arts", "date": {"en": "December 2014", "fr": "décembre 2014"},
      "texte": {"en": "Monthly bulletin of Stanford arts news.", "fr": "Bulletin mensuel des arts de Stanford."},
      "url": "http://us5.campaign-archive2.com/?u=a8e6569da943904e9ac369cde&id=a3a3a5fafb&e=f36716c760", "image": "presse/stanford-arts-monthly-review"},
-    {"titre": "Mind the Gap!", "media": "Artslant", "date": {"en": "November 2014", "fr": "novembre 2014"},
+    {"archive": True, "titre": "Mind the Gap!", "media": "Artslant", "date": {"en": "November 2014", "fr": "novembre 2014"},
      "texte": {"en": "Art historian Dr. Aust-Wegemund reviews Cirenza’s exhibit with Artvera's Art Gallery, Geneva, Switzerland.", "fr": "L'historienne de l'art Dr Aust-Wegemund commente l'exposition de Lisa Cirenza à la galerie Artvera, à Genève."},
      "url": "https://www.artslant.com/ew/events/show/364765-mind-the-gap---lisa-cirenzas-recent-works-at-artveras-art-gallery", "image": "presse/artslant"},
 ]
@@ -517,3 +519,197 @@ BOUTIQUE = {
     "boutique_espace": {"en": "Art materials and local gifts: in store at the Espace; online selection to be completed.",
                         "fr": "Matériel d'art et cadeaux locaux : en boutique à l'Espace ; sélection en ligne à compléter."},
 }
+
+
+# ================================================================ v4 : brief de Lisa (« cirenza.com — content and design brief », novembre 2026)
+# Pour les textes d'artiste (positionnement, déclaration, bios, CV, presse, série), seul ce brief fait foi.
+POSITION = {
+    "titre": {"en": "Painter of light, water, rock and time", "fr": "Peintre de la lumière, de l'eau, de la roche et du temps"},
+    "seo": {"en": "Lisa Cirenza | Painting light, water, rock and time | French Alps", "fr": "Lisa Cirenza | Peintre de la lumière, de l'eau, de la roche et du temps | Alpes françaises"},
+    "ligne": {"en": "Lisa Cirenza is a painter in the French Alps. Shaped by her time as a young researcher on the Juneau Icefield, she paints light, water, rock and time (ice, snow, fog, lake and mountains) in encaustic, mixed media, oil and watercolour.",
+              "fr": "Lisa Cirenza est une peintre installée dans les Alpes françaises. Marquée par ses années de jeune chercheuse sur le champ de glace de Juneau, elle peint la lumière, l'eau, la roche et le temps (glace, neige, brouillard, lac et montagnes) à l'encaustique, en techniques mixtes, à l'huile et à l'aquarelle."},
+    "matieres": {"en": "Water, pigments, heat and wax.", "fr": "L'eau, les pigments, la chaleur et la cire."},
+    "citation": {"en": "Most people look up and see the Alps. I see a record of time being erased.",
+                 "fr": "La plupart des gens lèvent les yeux et voient les Alpes. Moi, j'y vois les archives du temps en train de s'effacer."},
+}
+DESCRIPTIONS = {
+    "artiste": {"en": "Lisa Cirenza is a painter in the French Alps: light, water, rock and time in encaustic, mixed media, oil and watercolour. Recent work A Record of Time, statement, CV and press.",
+                "fr": "Lisa Cirenza, peintre dans les Alpes françaises : la lumière, l'eau, la roche et le temps, à l'encaustique, en techniques mixtes, à l'huile et à l'aquarelle. Strates du temps, déclaration, parcours et presse."},
+    "espace": {"en": "Espace Créa-Tea-Vité in La Clusaz, near Lac d'Annecy: gallery, tea room, private bespoke courses, private events and three creative retreats in 2027.",
+               "fr": "L'Espace Créa-Tea-Vité à La Clusaz, près du lac d'Annecy : galerie, salon de thé, cours privés sur mesure, événements privés et trois retraites créatives en 2027."},
+}
+
+DECLARATION = {
+    "en": ["For as long as I've painted, my work has been about connection: to each other, to the natural world, and to what lies beneath the surface of what we think we see. For years I painted people: strangers sharing a carriage on the London Underground, refugees, the lives carried inside a face, and the forces that divide us. We have never been so connected on the surface, nor so disconnected underneath. My current work follows those forces into the natural world and turns to light, water, rock and time, the things that change too slowly or too quickly for a glance, and can only be seen by someone who stops to look.",
+           "Long before I painted it, I was a field researcher on glaciological expeditions across the Juneau Icefield, part of an international team of scientists measuring a landscape in motion. On the ice, as beautiful as it was hostile, where I once came close to dying of hypothermia, I learned that watching closely is a matter of survival, and an act of hope. I photographed it all, promising myself I would paint it one day. Decades later, much of what those photographs hold has melted away. Painting them now is a conversation between then and now.",
+           "My new paintings ask for the same thing the ice asked of me: a few minutes of real attention, in a world that rarely asks for more than a second."],
+    "fr": ["Depuis que je peins, mon travail parle de lien : les uns avec les autres, avec le monde naturel, et avec ce qui se cache sous la surface de ce que nous croyons voir. Pendant des années, j'ai peint des gens : des inconnus partageant un wagon du métro de Londres, des réfugiés, les vies que porte un visage, et les forces qui nous divisent. Nous n'avons jamais été aussi connectés en surface, ni aussi déconnectés en profondeur. Mon travail actuel suit ces forces jusque dans le monde naturel et se tourne vers la lumière, l'eau, la roche et le temps : ce qui change trop lentement ou trop vite pour un simple coup d'œil, et que seul voit celui qui s'arrête pour regarder.",
+           "Bien avant de le peindre, j'ai été chercheuse de terrain lors d'expéditions glaciologiques sur le champ de glace de Juneau, au sein d'une équipe internationale de scientifiques qui mesurait un paysage en mouvement. Sur la glace, aussi belle qu'hostile, où j'ai failli un jour mourir d'hypothermie, j'ai appris que regarder attentivement est une question de survie, et un acte d'espoir. J'ai tout photographié, en me promettant de le peindre un jour. Des décennies plus tard, une grande partie de ce que ces photos contiennent a fondu. Les peindre aujourd'hui, c'est faire dialoguer hier et maintenant.",
+           "Mes nouvelles peintures demandent ce que la glace m'a demandé : quelques minutes de vraie attention, dans un monde qui en demande rarement plus d'une seconde."],
+}
+# « Géologie de l'invisible » : titre et idée de la cire comme membrane géologique gardés (P.S. du brief, point 3)
+MEMBRANE = {"en": "In my work, wax functions as a geological membrane: it preserves gestures while allowing them to be reopened, scraped back, or transformed.",
+            "fr": "Dans mon travail, la cire agit comme une membrane géologique : elle conserve les gestes tout en permettant de les rouvrir, de les gratter ou de les transformer."}
+
+BIO_COURTE = {
+    "en": "Lisa Cirenza is a painter based in the French Alps. As a National Science Foundation scholar with the Juneau Icefield Research Program, she worked as a field researcher on glaciological expeditions across the Juneau Icefield, and later co-authored The Power of Ice, a children's book on glaciers and field science illustrated with her expedition photographs. She studied applied earth sciences at Stanford University and the École des Mines de Paris, and holds a master's in international policy studies from Stanford. Trained in old-masters oil technique and in sumi ink in Japan, she works with water, pigments, heat and wax. After years of painting people and the forces that divide them, from commuters on the London Underground to refugees, she now paints light, water, rock and time. Her work is held in the Stanford Hospital collection alongside works by David Hockney and Robert Rauschenberg, and in private collections in Europe, the United States and Asia. It has been praised in the Financial Times, and exhibited at the Grand Palais in Paris, in Venice during the Biennale, and in New York, Miami, London, Kyoto and Xi'an.",
+    "fr": "Lisa Cirenza est une peintre installée dans les Alpes françaises. Boursière de la National Science Foundation au sein du Juneau Icefield Research Program, elle a été chercheuse de terrain lors d'expéditions glaciologiques sur le champ de glace de Juneau, puis a cosigné The Power of Ice, un livre pour enfants sur les glaciers et les sciences de terrain, illustré de ses photographies d'expédition. Elle a étudié les sciences de la Terre appliquées à l'université Stanford et à l'École des Mines de Paris, et est titulaire d'un master en politique internationale de Stanford. Formée à la technique des maîtres anciens à l'huile et à l'encre sumi au Japon, elle travaille avec l'eau, les pigments, la chaleur et la cire. Après des années à peindre les gens et les forces qui les divisent, des voyageurs du métro de Londres aux réfugiés, elle peint aujourd'hui la lumière, l'eau, la roche et le temps. Ses œuvres figurent dans la collection de l'hôpital de Stanford, aux côtés d'œuvres de David Hockney et de Robert Rauschenberg, et dans des collections privées en Europe, aux États-Unis et en Asie. Saluée par le Financial Times, elle a exposé au Grand Palais à Paris, à Venise pendant la Biennale, ainsi qu'à New York, Miami, Londres, Kyoto et Xi'an.",
+}
+# Bio longue en couches (page L'artiste) ; chaque couche garde ses phrases, dans l'ordre du brief
+BIO_LONGUE = [
+    {"cle": "lien", "photo": "artiste/lisa-portrait-fond-glacier", "legende": {"en": "Lisa Cirenza", "fr": "Lisa Cirenza"},
+     "titre": {"en": "Beneath the surface", "fr": "Sous la surface"},
+     "texte": {"en": "Lisa Cirenza is a painter based in the French Alps whose work explores connection, and what lies beneath the surface of what we think we see.",
+               "fr": "Lisa Cirenza est une peintre installée dans les Alpes françaises, dont le travail explore le lien, et ce qui se cache sous la surface de ce que nous croyons voir."}},
+    {"cle": "juneau", "photo": "artiste/lisa-a-17-ans-juneau-icefield", "legende": {"en": "On the Juneau Icefield", "fr": "Sur le champ de glace de Juneau"},
+     "titre": {"en": "Seventeen, on the Juneau Icefield", "fr": "Dix-sept ans, sur le champ de glace de Juneau"},
+     "texte": {"en": "At seventeen and eighteen, as a National Science Foundation scholar with the Juneau Icefield Research Program, she worked as a field researcher on glaciological expeditions across the Juneau Icefield in Alaska and British Columbia, among an international team of scientists. She led trail parties from camp to camp, dug twenty-foot snow pits and sketched their layers of ice and snow to read the glacier's history, took core samples, measured the movement of glaciers and icefalls, and studied the fragile mosses and fungi that survive on the ice. She photographed it all, promising herself she would paint it one day. She later co-authored The Power of Ice (Chicago Children's Press, under her maiden name, Lisa Gitkin), a book illustrated with her expedition photographs that introduces children aged nine to twelve to glaciers and to life as a research scientist on the ice.",
+               "fr": "À dix-sept et dix-huit ans, boursière de la National Science Foundation au sein du Juneau Icefield Research Program, elle a été chercheuse de terrain lors d'expéditions glaciologiques sur le champ de glace de Juneau, en Alaska et en Colombie-Britannique, au sein d'une équipe internationale de scientifiques. Elle a mené des groupes de camp en camp, creusé des puits de neige d'une vingtaine de pieds (environ six mètres) et dessiné leurs couches de glace et de neige pour lire l'histoire du glacier, prélevé des carottes, mesuré le mouvement des glaciers et des chutes de séracs, et étudié les mousses et les champignons fragiles qui survivent sur la glace. Elle a tout photographié, en se promettant de le peindre un jour. Elle a ensuite cosigné The Power of Ice (Chicago Children's Press, sous son nom de jeune fille, Lisa Gitkin), un livre illustré de ses photographies d'expédition qui fait découvrir aux enfants de neuf à douze ans les glaciers et la vie de chercheur sur la glace."}},
+    {"cle": "stanford", "photo": "artiste/lisa-aquarelle-nuancier", "legende": {"en": "Colour studies", "fr": "Études de couleur"},
+     "titre": {"en": "Stanford, Paris, and the world of business", "fr": "Stanford, Paris, et le monde des affaires"},
+     "texte": {"en": "She went on to study applied earth sciences at Stanford University, including studies at the École des Mines de Paris, and completed a master's in international policy studies there. Told by her parents that she would never survive as an artist, she set out to learn business from the best, in oil and gas corporate finance at Goldman Sachs and as a consultant at Booz Allen Hamilton, before returning to painting on her own terms.",
+               "fr": "Elle a ensuite étudié les sciences de la Terre appliquées à l'université Stanford, notamment à l'École des Mines de Paris, et y a obtenu un master en politique internationale. Ses parents lui ayant dit qu'elle ne survivrait jamais en tant qu'artiste, elle est allée apprendre le monde des affaires auprès des meilleurs, en financement d'entreprise dans le pétrole et le gaz chez Goldman Sachs, puis comme consultante chez Booz Allen Hamilton, avant de revenir à la peinture à sa manière."}},
+    {"cle": "peindre", "photo": "artiste/lisa-peint-un-glacier", "legende": {"en": "Painting a glacier canvas", "fr": "Une toile de glacier à l'atelier"},
+     "titre": {"en": "From people to ice", "fr": "Des visages à la glace"},
+     "texte": {"en": "Trained in old-masters oil technique, she later studied sumi ink under a master in Japan, and has worked across oil, digital media, watercolour and encaustic. For years she painted people: strangers sharing a carriage on the London Underground, refugees she worked with in Milan, the lives carried inside a face, and the political forces pulling societies apart. Her work has long centred on human connection in a world that is connected on the surface and increasingly disconnected underneath. That early work left little empty space, because her life then had little: a nomadic life across three continents, in several languages and cultures, at the pace of big cities. Moving to the French Alps taught her to breathe, and brought her back to reading the landscape for its history, and to the heartbreak of watching the local glaciers disappear as the climate changes. Trained in both earth sciences and international policy, she has always watched how systems under stress break, and what lets them recompose: first human ones, now the ice. Her current work turns to light, water, rock and time, and to the icefield photographs she took decades ago, of a landscape that has since largely melted away. It is work about loss, but also about attention and hope: what we truly see, we are more likely to protect.",
+               "fr": "Formée à la technique des maîtres anciens à l'huile, elle a ensuite étudié l'encre sumi auprès d'un maître au Japon, et a travaillé l'huile, le numérique, l'aquarelle et l'encaustique. Pendant des années, elle a peint des gens : des inconnus partageant un wagon du métro de Londres, des réfugiés avec qui elle a travaillé à Milan, les vies que porte un visage, et les forces politiques qui déchirent les sociétés. Son travail s'est longtemps attaché au lien humain, dans un monde connecté en surface et de plus en plus déconnecté en profondeur. Ces premières œuvres laissaient peu de vide, parce que sa vie d'alors en laissait peu : une vie nomade sur trois continents, dans plusieurs langues et cultures, au rythme des grandes villes. S'installer dans les Alpes françaises lui a appris à respirer, et l'a ramenée à lire l'histoire du paysage, et au chagrin de voir les glaciers voisins disparaître à mesure que le climat change. Formée aux sciences de la Terre comme à la politique internationale, elle a toujours observé comment les systèmes sous tension se brisent, et ce qui leur permet de se recomposer : d'abord les systèmes humains, aujourd'hui la glace. Son travail actuel se tourne vers la lumière, l'eau, la roche et le temps, et vers les photographies du champ de glace prises il y a des décennies, d'un paysage qui a depuis en grande partie fondu. C'est un travail sur la perte, mais aussi sur l'attention et l'espoir : ce que l'on voit vraiment, on a plus de chances de le protéger."}},
+    {"cle": "collections", "photo": "expositions/salon-beaux-arts-galerie", "legende": {"en": "On the walls", "fr": "Aux cimaises"},
+     "titre": {"en": "Collections and exhibitions", "fr": "Collections et expositions"},
+     "texte": {"en": "Her work is held in the Stanford Hospital collection alongside works by David Hockney and Robert Rauschenberg, and in private collections in Europe, the United States and Asia. It has been praised in the Financial Times and exhibited at the Grand Palais in Paris, in Venice during the Biennale, at the Asian Art Biennale in Dhaka, and in New York, Miami, London, Kyoto and Xi'an. She is a Sociétaire of the Salon d'Automne.",
+               "fr": "Ses œuvres figurent dans la collection de l'hôpital de Stanford, aux côtés d'œuvres de David Hockney et de Robert Rauschenberg, et dans des collections privées en Europe, aux États-Unis et en Asie. Saluée par le Financial Times, elle a exposé au Grand Palais à Paris, à Venise pendant la Biennale, à la Biennale asiatique d'art de Dacca, ainsi qu'à New York, Miami, Londres, Kyoto et Xi'an. Elle est sociétaire du Salon d'Automne."}},
+    {"cle": "espace", "photo": "espace/facade-de-nuit", "legende": {"en": "Espace Créa-Tea-Vité, La Clusaz", "fr": "L'Espace Créa-Tea-Vité, La Clusaz"},
+     "titre": {"en": "Full circle, in La Clusaz", "fr": "La boucle bouclée, à La Clusaz"},
+     "texte": {"en": "She also founded Espace Créa-Tea-Vité, a gallery, studio and retreat space in La Clusaz. Her parents, it turns out, were wrong.",
+               "fr": "Elle a aussi fondé l'Espace Créa-Tea-Vité, galerie, atelier et lieu de retraites à La Clusaz. Ses parents, finalement, avaient tort."}},
+]
+
+# La série actuelle et son introduction (Studio notes, lettre, conférences)
+SERIE_ACTUELLE = {
+    "texte": {"en": "My current series gathers work where you can see time on the surface: layers, erosion, melt, flow, shifting light. It grows from my years as a young field researcher on the Juneau Icefield and my grief at watching Alpine glaciers disappear. Its message is hope: what we truly see, we are more likely to protect.",
+              "fr": "Ma série actuelle rassemble des œuvres où l'on voit le temps à la surface : couches, érosion, fonte, écoulement, lumière changeante. Elle naît de mes années de jeune chercheuse de terrain sur le champ de glace de Juneau, et de mon chagrin de voir disparaître les glaciers des Alpes. Son message est l'espoir : ce que l'on voit vraiment, on a plus de chances de le protéger."},
+    "sujets": {"en": "Ice, glaciers, snow, fog, lake and mountains; alpenglow; rock laid bare as a record of time.",
+               "fr": "Glace, glaciers, neige, brouillard, lac et montagnes ; lueur alpine du soir ; roche mise à nu, archive du temps."},
+    "chevalet": {"en": "On my easel: faces held beneath ice and water, gazing up towards the light. My people and my ice have finally agreed to share a canvas.",
+                 "fr": "Sur mon chevalet : des visages tenus sous la glace et l'eau, les yeux levés vers la lumière. Mes personnages et ma glace ont enfin accepté de partager une toile."},
+    "archive": {"en": "My earlier series (London Underground, refugees, digital work, Cuba) are part of my story and live in the Archive.",
+                "fr": "Mes séries plus anciennes (métro de Londres, réfugiés, travail numérique, Cuba) font partie de mon histoire et vivent dans l'Archive."},
+}
+INTRO_SERIE = {
+    "en": ["Seven years ago, on my first visit to Chamonix, I stood in the centre of town, looked up, and was stopped cold by what I saw.",
+           "At seventeen I had learned to read ice: the layers in a snow pit, the creep of a glacier, the moraines it leaves behind like a signature. So I couldn't look at those mountains the way a visitor does. Every grey tongue of rubble running down the valley walls was a place where ice had been and no longer was. And they were raw, bare, unsettled: this wasn't history. It was recent.",
+           "In the summer of 2026, after the heat waves, I could read the melt on the face of Mont Blanc from the Col des Aravis, from across the valleys. You didn't need training to see it anymore. Most people look up and see the Alps. I see a record of time being erased.",
+           "But the ice also taught me hope. On the icefield, in the most hostile place I have ever known, I studied mosses and fungi that found a way to live. Water doesn't vanish; it changes form, and returns as cloud, as rain, as the first snow of winter. Nature is resilient, if we give it the chance.",
+           "That's why I paint, and why I teach people to see like an artist. An artist looks in layers: first the big forms and how they fit together, then the details, then why they fit as they do. And finally, what drew us to look in the first place: the beauty, and what lies beneath it. Then we try to express it, and in the making, we see it again, more deeply. Seeing like this is where connection begins."],
+    "fr": ["Il y a sept ans, lors de ma première visite à Chamonix, je me suis arrêtée au centre de la ville, j'ai levé les yeux, et ce que j'ai vu m'a glacée.",
+           "À dix-sept ans, j'avais appris à lire la glace : les couches d'un puits de neige, la lente reptation d'un glacier, les moraines qu'il laisse derrière lui comme une signature. Je ne pouvais donc pas regarder ces montagnes comme un visiteur. Chaque langue de gravats gris qui dévalait les parois de la vallée marquait un endroit où la glace avait été et n'était plus. Et elles étaient à vif, nues, instables : ce n'était pas de l'histoire. C'était récent.",
+           "À l'été 2026, après les canicules, je pouvais lire la fonte sur la face du Mont-Blanc depuis le col des Aravis, de l'autre côté des vallées. Il n'était plus besoin d'être formé pour la voir. La plupart des gens lèvent les yeux et voient les Alpes. Moi, j'y vois les archives du temps en train de s'effacer.",
+           "Mais la glace m'a aussi appris l'espoir. Sur le champ de glace, l'endroit le plus hostile que j'aie jamais connu, j'ai étudié des mousses et des champignons qui avaient trouvé un moyen de vivre. L'eau ne disparaît pas : elle change de forme, et revient en nuage, en pluie, en première neige de l'hiver. La nature est résiliente, si on lui en laisse la chance.",
+           "C'est pour cela que je peins, et que j'apprends aux gens à voir en artiste. Un artiste regarde par couches : d'abord les grandes formes et la façon dont elles s'assemblent, puis les détails, puis pourquoi ils s'assemblent ainsi. Et enfin, ce qui nous a poussés à regarder : la beauté, et ce qui se cache dessous. Puis on essaie de l'exprimer, et en le faisant, on le voit à nouveau, plus profondément. C'est en voyant ainsi que le lien commence."],
+}
+
+# CV sélectif (le plus récent en premier dans chaque partie)
+CV = {
+    "formation": [
+        {"en": "Stanford University: Applied Earth Sciences, including studies at the École des Mines de Paris; co-terminal master's in International Policy Studies",
+         "fr": "Université Stanford : sciences de la Terre appliquées, dont des études à l'École des Mines de Paris ; master intégré en politique internationale (International Policy Studies)"},
+        {"en": "National Science Foundation scholar, Juneau Icefield Research Program: field researcher on glaciological expeditions, Alaska and British Columbia",
+         "fr": "Boursière de la National Science Foundation, Juneau Icefield Research Program : chercheuse de terrain lors d'expéditions glaciologiques, Alaska et Colombie-Britannique"},
+        {"en": "Art training: Royal Drawing School, London; Central Saint Martins, London; Norfolk Painting School (diploma); old masters' mediums and techniques at the atelier of Jean-Pierre Braz, Paris; sumi ink under a master in Japan",
+         "fr": "Formation artistique : Royal Drawing School, Londres ; Central Saint Martins, Londres ; Norfolk Painting School (diplôme) ; médiums et techniques des maîtres anciens à l'atelier de Jean-Pierre Braz, Paris ; encre sumi auprès d'un maître au Japon"},
+    ],
+    "collections": [
+        {"en": "Stanford Hospital Art Collection, Palo Alto, California (permanent collection, 2019)", "fr": "Collection d'art de l'hôpital de Stanford, Palo Alto, Californie (collection permanente, 2019)"},
+        {"en": "Nepal Academy of Fine Arts, Kathmandu", "fr": "Nepal Academy of Fine Arts, Katmandou"},
+        {"en": "Michael Tubbs, former Mayor of Stockton, California", "fr": "Michael Tubbs, ancien maire de Stockton, Californie"},
+        {"en": "Private collections in the UK, USA, France, Finland and Japan, including founders and partners of leading investment and family-owned groups",
+         "fr": "Collections privées au Royaume-Uni, aux États-Unis, en France, en Finlande et au Japon, dont des fondateurs et associés de grands groupes d'investissement et familiaux"},
+    ],
+    "expositions": [
+        ("2026", {"en": "Salon d'Automne, Paris, Di-Fraction (Sociétaire; regular exhibitor since 2017)", "fr": "Salon d'Automne, Paris, Di-Fraction (sociétaire ; exposante régulière depuis 2017)"}),
+        ("2026", {"en": "Mouvement, masse et lumière, EC Gallery, La Clusaz", "fr": "Mouvement, masse et lumière, EC Gallery, La Clusaz"}),
+        ("2026", {"en": "London Art in Motion, Plogix Gallery, London", "fr": "London Art in Motion, Plogix Gallery, Londres"}),
+        ("2025", {"en": "Salon des Artistes Français, Grand Palais, Paris (Cool Reflections)", "fr": "Salon des Artistes Français, Grand Palais, Paris (Cool Reflections)"}),
+        ("2025", {"en": "Group exhibition sponsored by the Nepalese Arts Council, Kathmandu; Nayabazar Gallery, Pokhara, Nepal", "fr": "Exposition collective soutenue par le Conseil des arts du Népal, Katmandou ; Nayabazar Gallery, Pokhara, Népal"}),
+        ("2022–23", {"en": "Selected, 19th Asian Art Biennale Bangladesh, 100 Countries Participation Project, National Art Gallery, Bangladesh Shilpakala Academy, Dhaka", "fr": "Sélectionnée, 19e Biennale asiatique d'art du Bangladesh, projet « 100 pays », National Art Gallery, Bangladesh Shilpakala Academy, Dacca"}),
+        ("2022", {"en": "Personal Structures – Reflections, presented by MEADOWS, European Cultural Centre, Palazzo Mora, Venice (during the 59th Venice Biennale)", "fr": "Personal Structures – Reflections, présentée par MEADOWS, European Cultural Centre, Palazzo Mora, Venise (pendant la 59e Biennale de Venise)"}),
+        ("2022", {"en": "Art Below, public art on the London Underground", "fr": "Art Below, art public dans le métro de Londres"}),
+        ("2020", {"en": "MASK ART – Creativity under Lockdown, virtual exhibition, UNESCO Beirut and MEADOWS", "fr": "MASK ART – Creativity under Lockdown, exposition virtuelle, UNESCO Beyrouth et MEADOWS"}),
+        ("2019", {"en": "Xi'an International Gallery, with a selection from the Salon d'Automne, Xi'an, China", "fr": "Xi'an International Gallery, avec une sélection du Salon d'Automne, Xi'an, Chine"}),
+        ("2018–19", {"en": "Salon National des Beaux-Arts, Carrousel du Louvre, Paris", "fr": "Salon National des Beaux-Arts, Carrousel du Louvre, Paris"}),
+        ("2018", {"en": "Solo exhibition, Bermondsey Gallery, London", "fr": "Exposition personnelle, Bermondsey Gallery, Londres"}),
+        ("2018", {"en": "Solo exhibition, Journeys and Connections, The Stanford House, Oxford", "fr": "Exposition personnelle, Journeys and Connections, The Stanford House, Oxford"}),
+        ("2017", {"en": "Transformation, Gallery MC, New York", "fr": "Transformation, Gallery MC, New York"}),
+        ("2016", {"en": "Solo exhibition, Connections, Balthazart Gallery, Seven Dials Club, London", "fr": "Exposition personnelle, Connections, Balthazart Gallery, Seven Dials Club, Londres"}),
+        ("2015", {"en": "Kyoto Museum of Art (Jarfo Gallery), Kyoto, Japan", "fr": "Musée d'art de Kyoto (Jarfo Gallery), Kyoto, Japon"}),
+    ],
+    "a_venir": {"en": "Forthcoming — Selected, 20th Asian Art Biennale Bangladesh, International Special Participation, curated by Lena Kelekian, Dhaka (postponed)",
+                "fr": "À venir — Sélectionnée, 20e Biennale asiatique d'art du Bangladesh, participation internationale spéciale, commissariat de Lena Kelekian, Dacca (reportée)"},
+    "foires": [
+        ("2024–26", {"en": "Salon Art & Déco, Annecy", "fr": "Salon Art & Déco, Annecy"}),
+        ("2019", {"en": "Art Wynwood, Miami, with Steidel Contemporary", "fr": "Art Wynwood, Miami, avec Steidel Contemporary"}),
+        ("2018", {"en": "Aqua Art Miami (Art Basel Miami Beach week), with Steidel Contemporary", "fr": "Aqua Art Miami (semaine d'Art Basel Miami Beach), avec Steidel Contemporary"}),
+        ("2014, 2017, 2018", {"en": "The Other Art Fair, London", "fr": "The Other Art Fair, Londres"}),
+    ],
+    "distinctions": [
+        ("2021", {"en": "Elected Sociétaire of the Salon d'Automne, Paris", "fr": "Élue sociétaire du Salon d'Automne, Paris"}),
+        ("2021", {"en": "Elected to the Advisory Board of the American Friends of the Musée d'Orsay (AFMO), Paris", "fr": "Élue au conseil consultatif des American Friends of the Musée d'Orsay (AFMO), Paris"}),
+        ("2021", {"en": "Coup de Cœur Prize, Grand Concours Abstract Art", "fr": "Prix Coup de cœur, Grand Concours Abstract Art"}),
+        ("2020", {"en": "Selected as Scholar/Artist in Residence, Knight-Hennessy Scholars, Stanford University (cancelled due to Covid)", "fr": "Sélectionnée comme chercheuse et artiste en résidence, Knight-Hennessy Scholars, université Stanford (annulé pour cause de Covid)"}),
+        ("2019", {"en": "Top Digital Artist Award, Adobe France / Salon d'Automne, Paris", "fr": "Prix Top Digital Artist, Adobe France / Salon d'Automne, Paris"}),
+        ("2019", {"en": "Residencies: Art Ventures Gallery, Half Moon Bay, California; Sporthotel Lorünser, Zürs, Austria", "fr": "Résidences : Art Ventures Gallery, Half Moon Bay, Californie ; Sporthotel Lorünser, Zürs, Autriche"}),
+        ("2018", {"en": "Cuban Art Residency, RoosterGNN, Havana and Trinidad, Cuba", "fr": "Résidence d'art cubain, RoosterGNN, La Havane et Trinidad, Cuba"}),
+        ("2015", {"en": "East West Art Prize Residency, Kyoto, Japan", "fr": "Résidence East West Art Prize, Kyoto, Japon"}),
+    ],
+    "presse": [
+        {"en": "Rachel Spence, “London's best satellite fairs: ‘different conversations and collegiate feel’”, Financial Times, October 2017. Pull quote: “…blends tradition and contemporary practice with authority.”",
+         "fr": "Rachel Spence, « London's best satellite fairs: ‘different conversations and collegiate feel’ », Financial Times, octobre 2017. Citation : « …blends tradition and contemporary practice with authority. »"},
+        {"en": "BBC documentary on Stockton featuring Dream Big (title and year to follow)", "fr": "Documentaire de la BBC sur Stockton, avec Dream Big (titre et année à venir)"},
+        {"en": "Maisons et Jardins, feature article, 2021", "fr": "Maisons et Jardins, grand article, 2021"},
+    ],
+    "publications": [
+        {"en": "The Power of Ice (Chicago Children's Press), co-authored as Lisa Gitkin", "fr": "The Power of Ice (Chicago Children's Press), cosigné sous le nom de Lisa Gitkin"},
+    ],
+    "conferences": [
+        ("2019", {"en": "Musée Maillol, Paris: “Disruptive Technologies, Impressionists, and the Parallels with Contemporary Digital Art Trends”", "fr": "Musée Maillol, Paris : « Disruptive Technologies, Impressionists, and the Parallels with Contemporary Digital Art Trends »"}),
+        ("2019", {"en": "Barclays headquarters, London: talks and workshops", "fr": "Siège de Barclays, Londres : conférences et ateliers"}),
+        ("2018", {"en": "Christopher Newport University, Virginia: plenary, “From Pick Axes and Pipettes to Paints and Pixels: one scientist's journey from STEM to STEAM, and back”", "fr": "Christopher Newport University, Virginie : séance plénière, « From Pick Axes and Pipettes to Paints and Pixels: one scientist's journey from STEM to STEAM, and back »"}),
+        ("2017", {"en": "Apple, Union Square, San Francisco: live digital art performance and urban sketching crawl", "fr": "Apple, Union Square, San Francisco : performance d'art numérique en direct et balade de croquis urbains"}),
+    ],
+}
+PDF_A_VENIR = {"cv": {"en": "Full CV (PDF): to come, sent separately by the artist", "fr": "CV complet (PDF) : à venir, envoyé séparément par l'artiste"},
+               "presse": {"en": "Press kit (PDF): to come", "fr": "Dossier de presse (PDF) : à venir"}}
+
+# Collectors' editions : petits blocs d'acrylique, archive numérique
+EDITIONS_COLLECTION = {
+    "titre": {"en": "Collectors' editions", "fr": "Éditions de collection"},
+    "texte": {"en": "Small 15 × 20 cm works mounted in thick acrylic blocks, from my archive of digital work. They sell quickly (one went within fifteen minutes of the Salon d'Automne opening) and bring new collectors to my work.",
+              "fr": "De petites œuvres de 15 × 20 cm montées dans d'épais blocs d'acrylique, tirées de mon archive de travail numérique. Elles partent vite (l'une a trouvé preneur dans le quart d'heure suivant l'ouverture du Salon d'Automne) et amènent de nouveaux collectionneurs à mon travail."},
+    "datation": {"en": "Each piece is dated twice: the year of the image and the year of the block (for example, “Tube series, 2017 — acrylic block, 2026”).",
+                 "fr": "Chaque pièce est datée deux fois : l'année de l'image et celle du bloc (par exemple, « Tube series, 2017 — bloc acrylique, 2026 »)."},
+    "note": {"en": "Bought directly online, with a short note on format, signature and whether each piece is unique or editioned.",
+             "fr": "Achat direct en ligne, avec une courte note sur le format, la signature, et si la pièce est unique ou éditée."},
+    "series": [
+        {"cle": "tube", "titre": {"en": "London Underground", "fr": "Métro de Londres"}, "image": "long-day"},
+        {"cle": "fleurs", "titre": {"en": "Living Outside the Lines (florals)", "fr": "Living Outside the Lines (fleurs)"}, "image": None},
+        {"cle": "noir-blanc", "titre": {"en": "A black-and-white series", "fr": "Une série en noir et blanc"}, "image": None},
+    ],
+    "a_venir": {"en": "Photographs of the blocks as objects, titles, years and prices: to come (Artwork Archive).",
+                "fr": "Photos des blocs comme objets, titres, années et prix : à venir (Artwork Archive)."},
+    "tirages": {"en": "Prints of selected works are printed on demand by creativehub (theprintspace) and shipped with Boxtal, if compatible.",
+                "fr": "Des tirages de certaines œuvres sont imprimés à la demande par creativehub (theprintspace) et expédiés avec Boxtal, si compatible."},
+}
+
+# Cours privés sur mesure (Espace) : pour hôtels, conciergeries et organisateurs d'événements ; la page Classes est masquée
+COURS_PRIVES = {
+    "titre": {"en": "Private bespoke courses", "fr": "Cours privés sur mesure"},
+    "pour": {"en": "For hotels, concierges and event planners: private, bespoke art sessions for your guests at Espace Créa-Tea-Vité, in La Clusaz.",
+             "fr": "Pour les hôtels, les conciergeries et les organisateurs d'événements : des séances d'art privées et sur mesure pour vos clients, à l'Espace Créa-Tea-Vité, à La Clusaz."},
+    "a_completer": {"en": "Durations, group sizes and rates for partners: to be completed.", "fr": "Durées, tailles de groupe et tarifs partenaires : à compléter."},
+}
+
+# Lettre d'information : la langue de la page choisit la liste Mailchimp
+LISTES_LETTRE = {"en": "You will join the English list: collectors and retreats.", "fr": "Vous rejoindrez la liste française : l'Espace et ses rendez-vous."}
+
+# Fermetures ou ouvertures exceptionnelles : un seul endroit à modifier ; affichées en haut de toutes les pages
+# pendant leurs dates. Exemple de forme : {"du": "2026-12-24", "au": "2026-12-26", "en": "Closed for Christmas", "fr": "Fermé pour Noël"}
+ANNONCES = []

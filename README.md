@@ -1,11 +1,11 @@
-# Lisa Cirenza · maquette v3 (direction « Strates »)
+# Lisa Cirenza · maquette v4 (direction « Strates », série « A Record of Time »)
 
 Site statique (HTML, CSS, JavaScript), sans étape de construction, prêt pour Vercel.
 Adresse de la maquette : https://cirenza-maquette.vercel.app
 
 - Anglais à la racine (version officielle), français sous `/fr/`.
-- 45 pages : accueil, œuvres et 9 salles, l'artiste, parcours, presse, l'Espace Créa-Tea-Vité, cours, événements privés, retraites (Painting in Paradise, Autumn Alpine Pause), boutique, contact, 404.
-- `vercel.json` : adresses propres (`cleanUrls`), noindex (`X-Robots-Tag`), en-têtes de sécurité de base, redirection des anciennes adresses Molten Magic vers Alpine Pause. Jamais de `X-Frame-Options` : la maquette s'affiche dans le module Wix « Intégrer un site ».
+- 51 pages : accueil, œuvres (A Record of Time en tête, puis l'Archive), l'artiste, notes d'atelier, parcours, presse, l'Espace Créa-Tea-Vité, cours privés sur mesure, cours (hors navigation), événements privés, retraites (A Creative Pause, Painting in Paradise, Alpine Encaustics), boutique, contact, 404.
+- `vercel.json` : adresses propres (`cleanUrls`), noindex (`X-Robots-Tag`), en-têtes de sécurité de base, redirection des anciennes adresses (Molten Magic et Alpine Pause vers Alpine Encaustics, l'ancienne salle récente vers A Record of Time). Jamais de `X-Frame-Options` : la maquette s'affiche dans le module Wix « Intégrer un site ».
 - Polices hébergées avec le site (`assets/polices`) : Fraunces et IBM Plex Mono, licence SIL OFL.
 - Formulaires, paniers et paiements simulés : rien n'est envoyé ni débité.
 
@@ -16,7 +16,7 @@ Un seul site, deux univers clairement séparés, une couleur chacun :
 | | Atelier · Lisa Cirenza Fine Art | Espace Créa-Tea-Vité |
 |---|---|---|
 | Forme | artiste-auteur, SIRET 888 534 534 00019 | SAS, SIRET 989 397 146 00014 |
-| Pages | Œuvres et salles, L'artiste, Parcours, Presse | L'Espace, Cours, Retraites, Événements privés |
+| Pages | Œuvres et salles, L'artiste, Notes d'atelier, Parcours, Presse | L'Espace, Cours privés, Retraites, Événements privés |
 | Vend | originaux, éditions limitées (impression à la demande), commandes | séances d'atelier, places de retraite, boutique (matériel, cadeaux) |
 | Paiement | compte Stripe n° 1 | compte Stripe n° 2 |
 | Couleur | ambre de cire `#8a4f0e` | bleu des murs de l'Espace `#24486a` |
@@ -48,30 +48,43 @@ Les prix ne s'affichent que si `AFFICHER_PRIX = True` dans `outils/generer.py` (
 - absentes du site et à importer avec l'export : Where the Mountains Breathe (2025, encaustique sur papier, 34 × 25,5 cm, 145 €), Light Across the Thaw (encaustique sur panneau, 30 × 30 cm, 240 €), Blissful Light (2024, 200 €), Doucement Entrelacés (2024, 80 €), The Silence of Thawing Waters, Talking to the Wild (2023), The Blues (2021), Lost in the trees, and missing the Forest (2019), Cycles, Heat Waves, Chasing the Ephemeral (240 €), UH-Huh (125 €), A moment in Havanna (150 €) ;
 - certaines de ces œuvres sont sans doute parmi les 11 œuvres récentes sans titre de la maquette, mais sans les images rien ne permet de les rapprocher : aucun titre n'a été attribué au hasard.
 
-## Sources de la v3
+## Revenir en arrière
 
-- Nouvelle page d'accueil de cirenza.com (novembre 2026) : « Painting light, water, rock and time », l'Anthropocène, « In a melting world, I paint hope as light », « I create to connect people… », photos « Me, learning to see » et « 17 year old me ».
-- Pages actuelles des retraites : Painting in Paradise (prix, jour 6, navettes, témoignages) et Autumn Alpine Pause (6 – 11 septembre 2027), qui remplace Molten Magic.
-- Wax Fusion, International Encaustic Artists, automne 2026, n° XIV, « Beyond the Surface » (p. 18 – 31), écrit par Lisa : citations, titres et techniques d'Emergence, Seaside Village and the Pink Flowers, Stand Tall and Face the Light, Rose Coloured Glasses, Dream Big ; cours en ligne Painting with Fire 6.
-- Article M2616 (La Clusaz, à paraître début décembre 2026) : L'Ourson, la cloche du Népal, le piano, Salon d'Automne 2026, citations en français.
-- Vidéo « Un petit tour de l'Espace » (Vimeo, non répertoriée) : chargée seulement au clic.
-- Dossier de photos du 5 novembre 2026 : 11 œuvres récentes (salle « Light, Water, Rock and Time »), Emergence en haute définition, détails d'atelier.
+Chaque version publiée est gardée dans une branche du dépôt : `archive/v2`, `archive/v3`. Vercel garde aussi chaque déploiement.
+- Le plus rapide : Vercel, onglet Deployments, choisir le déploiement voulu, puis « Promote to Production ».
+- Ou dans GitHub : remettre `main` sur la branche d'archive voulue.
+
+## Sources
+
+- **v4** : « cirenza.com — content and design brief », de Lisa à Charles (novembre 2026) : source unique des textes de l'artiste (positionnement, déclaration, bios, notes d'atelier, CV sélectif, presse, retraites et prix). Textes anglais repris mot pour mot.
+- **v3** : nouvelle page d'accueil de cirenza.com (novembre 2026), pages des retraites, Wax Fusion n° XIV (automne 2026, p. 18 – 31), article M2616 (à paraître), vidéo « Un petit tour de l'Espace » (Vimeo, chargée au clic), dossier de photos du 5 novembre 2026.
+
+## Réponses aux questions de Lisa (brief, « My questions for you »)
+
+- **Les éditions de collection dans la même boutique, avec leur filtre ou leur page ?** Oui. Elles sont vendues par l'atelier, donc sur le même compte Stripe que les œuvres. La maquette les montre dans la boutique (section « Collectors' editions », filtre de l'atelier) ; sur le site final, une collection « Collectors' editions » dans Wix Stores, avec sa propre page.
+- **Quel format et quel hébergement pour les vidéos ?** Des clips courts (30 à 90 s) en MP4 H.264 1080p, hébergés sur Vimeo (déjà utilisé pour la visite de l'Espace), avec les sous-titres français en fichier `.vtt` ajouté à la vidéo ; le lecteur ne se charge qu'au clic, comme dans la maquette, pour que la page reste rapide. Pour de très courtes boucles muettes de procédé (chaleur, cire, eau), un MP4 de 2 à 4 Mo servi avec le site suffit.
+- **Mettre à jour « In the studio now » soi-même en une ou deux minutes ?** Oui, sur le site final : une collection Wix CMS « À l'atelier » (une photo, une phrase, l'œuvre liée) que Lisa modifie depuis son téléphone. Dans la maquette, ce bloc se règle dans `outils/contenu.py` (`SERIE_ACTUELLE`) et `outils/catalogue.py` (groupe « On my easel »).
+- **Est-ce que cela change le devis ?** Réponse de Charles. Ajouts de la v4 par rapport au cadrage : pages Studio notes, Private bespoke courses et A Creative Pause, grille de prix par chambre, éditions de collection en boutique, annonces de fermeture, CV restructuré, deux listes de lettre d'information.
 
 ## À fournir par Lisa (à compléter)
 
-- **Artwork Archive (priorité)** : l'export de l'inventaire (Pieces, tout sélectionner, Export, CSV ou Excel), idéalement avec les images ; à défaut, des captures ou un PDF du profil public. Il donne les titres, dimensions, années et techniques des 11 œuvres récentes (affichées « titre à compléter ») et les petites encaustiques à vendre en boutique.
-- **Google Doc (priorité)** des détails de la retraite : le lien répond « connexion requise » (erreur 401) sous toutes ses formes. Le passer en « Tous les utilisateurs disposant du lien : lecteur », ou envoyer son texte ou un export PDF.
-- **Retraite de septembre** : nom définitif et équipe (le site dit « Autumn Alpine Pause » avec Lisa seule ; Wax Fusion annonce « Molten Mountains », co-animée avec Isabelle Gaborit).
-- **Entité qui vend les retraites** (pour le bon compte Stripe) : la page Painting in Paradise indique Lisa Cirenza, 74290 Talloires, SIRET de l'atelier ; la page Alpine Pause indique l'Espace (SAS).
-- **Painting in Paradise** : taille du groupe (« 10 au maximum » ou « cohorte de 6 ») ; la FAQ en PDF cite encore « le 31 août ».
-- **Boutique** : partenaire d'impression à la demande, papiers, prix de chaque édition ; transporteur (Boxtal évoqué) et tarifs ; sélection de la boutique de l'Espace à vendre en ligne ; politique de prix des originaux.
+- **Artwork Archive (priorité)** : l'export de l'inventaire (Pieces, tout sélectionner, Export, CSV ou Excel), idéalement avec les images. Il donne titres, dimensions, années, techniques et prix des œuvres récentes (affichées « titre à compléter »), des œuvres sur le chevalet et des petites encaustiques de la boutique (affichées « photo à venir »).
+- **Images annoncées dans le brief** : la montagne à facettes de l'ouverture (une œuvre récente la remplace en attendant), le visage qui se dissout dans l'eau et l'écume (déclaration), l'abstraction bleu pâle griffée et la montagne brumeuse sur l'eau sombre, Cool Reflections en entier et en détail à la lumière du jour, les photos d'expédition du champ de glace de Juneau, les blocs d'acrylique photographiés comme des objets, l'exposition des taxis de Londres.
+- **PDF** : CV complet et dossier de presse (liens « à venir » sur la page de l'artiste).
+- **A Creative Pause** : le programme jour par jour (la page annonce « programme à venir »).
+- **Alpine Encaustics** : la maquette reprend les textes de l'ancienne page Alpine Pause (pourquoi ralentir, le poulet, la sauce et les épices, six jours) : à confirmer ou à remplacer.
+- **À vérifier dans le brief** :
+  - Financial Times : le brief cite « NYC Commuters » comme image d'ouverture de l'article, la légende de l'article dit « NYC Contrasts ».
+  - Maisons et Jardins : 2021 dans le brief ; la version en ligne de l'article est datée de mai 2022.
+  - Salles de bains : la grille dit « private shower and washbasin », la petite ligne explique « Private bathroom » ; harmoniser le libellé.
+  - Wax Fusion et M2616 ne sont pas dans la liste de presse du brief ; la maquette les garde en tête, comme les plus récents.
+  - Orthographe : « Jean-Pierre Braz » (brief) ou « Brazs » (ancien site).
+  - BBC : titre et année du documentaire.
+- **Boutique** : partenaire d'impression (creativehub), papiers et prix de chaque tirage ; prix des éditions de collection ; transporteur et tarifs ; politique de prix des originaux.
+- **Cours privés** : durées, tailles de groupe et tarifs partenaires.
 - **Mentions légales, politique de confidentialité, conditions générales de vente** pour chacune des deux entités ; hébergeur ; assurances.
-- **M2616** : nom exact du magazine, page et lien à la parution.
-- **Horaires** : la version française du site actuel indique 19 h, l'anglaise 18 h 30.
-- **Prochaine exposition** à l'Espace (La Gravité de la Grâce est terminée depuis le 31 octobre 2026).
-- **Cours privé en plein air** : la page du site actuel est encore vide.
-- **Photo de Lisa à 17 ans** : l'original (la maquette utilise un recadrage du bandeau du site, en basse définition).
-- **Vidéo** : la version sous-titrée en anglais quand elle sera prête.
+- **Lettre d'information** : les deux listes Mailchimp (anglaise : collectionneurs et retraites ; française : l'Espace).
+- **Prochaine exposition** à l'Espace et horaires définitifs (19 h ou 18 h 30).
 
 ## Modifier les contenus
 
@@ -82,6 +95,8 @@ Puis, depuis le dossier du site :
 python3 -I outils/images_partage.py .
 python3 -I outils/generer.py . --liens propres
 ```
+
+Fermetures exceptionnelles : ajouter une ligne à `ANNONCES` dans `outils/contenu.py` (dates de début et de fin, texte anglais et français) ; elle s'affiche en haut de toutes les pages pendant ces dates seulement.
 
 Nouvelles images : les déposer dans un dossier `oeuvres/<id>.jpg` et `photos/<dossier>/<nom>.jpg`, les déclarer dans `outils/ajouts_v3.json` (ou un nouveau manifeste), puis `python3 -I outils/ajouter_medias.py <dossier> .`. Les œuvres ne sont jamais recadrées ni retouchées : seul le redimensionnement est appliqué.
 

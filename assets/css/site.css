@@ -1250,3 +1250,158 @@ section { position: relative; }
 @media (max-width: 900px) { .coachs--seule .coach__img { position: relative; top: auto; max-width: 320px; } }
 .champ label small { font-size: .75rem; }
 .fossile__cadre img[src*="lisa-a-17-ans"] { object-position: 50% 12%; }
+
+/* =====================================================================
+   v4 · brief de Lisa : « A Record of Time », calme, place pour respirer.
+   Neutres froids (glace, brouillard, ardoise, lac), un seul accent chaud (lueur alpine) pour liens et boutons.
+   Pas de parallaxe, pas de photo de montagne générée, rien qui concurrence la peinture.
+   ===================================================================== */
+:root { --barre: 30px; --entete: 104px; }
+
+/* en-tête : barre du haut (horaires de l'Espace, annonces), puis la rangée principale */
+.entete { display: block; height: var(--entete); padding: 0; }
+.entete__barre { height: var(--barre); display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0 var(--marge); background: var(--ardoise); color: #e9e5dc; font-family: var(--mono); font-size: .75rem; letter-spacing: .04em; }
+.entete__barre a { color: inherit; text-decoration: none; }
+.entete__barre a:hover { color: var(--ambre-clair); }
+.barre__lieu { margin: 0; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.barre__statut { margin: 0; color: #e9e5dc; white-space: nowrap; flex: none; }
+.barre__statut .statut__point { background: #b9b3a8; }
+.barre__annonce { margin: 0; padding: .15em .9em; border-radius: 999px; background: var(--ambre-clair); color: var(--granite); white-space: nowrap; }
+.barre__annonce[hidden] { display: none; }
+.entete__rangee { display: flex; align-items: center; gap: clamp(12px, 2vw, 32px); height: calc(var(--entete) - var(--barre)); padding: 0 var(--marge); }
+
+/* ouverture : nom, ligne d'accueil, une œuvre */
+.ouverture__ligne { font-size: clamp(1.05rem, .95rem + .45vw, 1.32rem); line-height: 1.55; max-width: 46ch; margin: 0 0 2rem; }
+
+/* 01 · déclaration */
+.declaration-accueil { display: grid; grid-template-columns: 1.35fr .65fr; gap: clamp(24px, 6vw, 120px); padding: 18vh var(--marge) 14vh; align-items: start; }
+.declaration-accueil__texte p { max-width: 62ch; }
+.declaration-accueil__citation, .declaration__citation { margin: 0 0 2.4rem; }
+.declaration-accueil__citation p, .declaration__citation p { font-size: clamp(1.8rem, 1rem + 3.2vw, 4.1rem); line-height: 1.08; font-weight: 340; letter-spacing: -.02em; font-variation-settings: "opsz" 144, "SOFT" 80; margin: 0; }
+.declaration-accueil__photo .fossile__cadre, .declaration__photo .fossile__cadre { aspect-ratio: 9/16; }
+
+/* 02 · géologie de l'invisible, sans photo de fond */
+.geologie { background: var(--ardoise); }
+
+/* 03 · la série en tête, puis l'Archive */
+.colonne__archive { list-style: none; display: flex; flex-wrap: wrap; align-items: baseline; gap: .4rem 1.2rem; padding: 4rem 0 1.2rem; font-family: var(--mono); font-size: .75rem; letter-spacing: .14em; text-transform: uppercase; color: var(--granite-doux); }
+.colonne__archive span { color: var(--granite); }
+.colonne__archive small { font-family: var(--serif); font-size: .95rem; letter-spacing: 0; text-transform: none; }
+.strate--tete .strate__titre { font-size: clamp(1.6rem, 1.1rem + 2vw, 3rem); }
+.strate--tete .strate__lien { min-height: clamp(92px, 12vh, 140px); }
+
+/* 04 · à l'atelier en ce moment */
+.atelier-maintenant { display: grid; grid-template-columns: 1.05fr .95fr; gap: clamp(24px, 6vw, 110px); padding: 14vh var(--marge); align-items: center; background: #ebe7e0; }
+.atelier-maintenant__images { display: grid; grid-template-columns: 1.15fr .85fr; gap: clamp(12px, 2vw, 28px); align-items: end; }
+.atelier-maintenant__a .fossile__cadre { aspect-ratio: 3/4; }
+.atelier-maintenant__b { margin: 0; }
+.atelier-maintenant__chevalet { font-size: clamp(1.35rem, 1rem + 1.5vw, 2.3rem); line-height: 1.22; font-style: italic; font-variation-settings: "opsz" 96, "SOFT" 100; max-width: 26ch; }
+.lien-fleche { font-family: var(--mono); font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: .15em; }
+
+/* 05 · éditions de collection : petits blocs d'acrylique */
+.editions-accueil { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem clamp(24px, 6vw, 110px); padding: 14vh var(--marge); align-items: center; }
+.editions-accueil__series { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(12px, 2vw, 26px); }
+.editions-accueil__note { grid-column: 1 / -1; margin: 0; }
+.edition-serie { display: grid; gap: .55em; align-content: start; }
+.edition-serie__bloc { position: relative; display: grid; place-items: center; aspect-ratio: 3/4; padding: 14%; border-radius: 6px;
+  background: linear-gradient(140deg, rgba(255,255,255,.95), rgba(219,231,236,.55) 55%, rgba(255,255,255,.9));
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.95), inset 0 0 0 9px rgba(219,231,236,.45), inset 0 0 0 10px rgba(143,179,196,.35), 0 22px 34px -22px rgba(30,26,20,.5); }
+.edition-serie__bloc img { width: 100%; height: 100%; object-fit: contain; }
+.edition-serie__bloc--vide::after { content: "15 × 20"; font-family: var(--mono); font-size: .75rem; color: var(--granite-doux); }
+.edition-serie__titre { font-size: 1.05rem; line-height: 1.25; }
+
+/* retraites : trois cartes, grille de prix */
+.retraites-cartes--trois { grid-template-columns: repeat(3, 1fr); }
+.retraites-accueil__prix { position: relative; z-index: 2; padding: 5vh var(--marge) 0; margin: 0; }
+.retraites-accueil:not(.retraites-accueil--page) .retraites-cartes { margin-top: 4vh; }
+.inclus--prix { grid-template-columns: 1fr 1fr; }
+.inclus--prix .inclus__prix { grid-column: 1 / -1; max-width: 860px; }
+.retraites-accueil--page + .inclus--prix .inclus__prix { grid-column: 1 / -1; }
+.prix { display: grid; gap: .9rem; scroll-margin-top: calc(var(--entete) + 20px); }
+.prix__grille { margin: 0; }
+.prix__ligne { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: .9rem 0; border-bottom: 1px solid var(--ligne-forte); }
+.prix__ligne dt { max-width: 46ch; }
+.prix__ligne dt small { display: block; font-family: var(--mono); font-size: .75rem; color: var(--granite-doux); margin-top: .2em; }
+.prix__ligne dd { margin: 0; font-size: clamp(1.1rem, 1rem + .4vw, 1.35rem); color: var(--ambre-texte); white-space: nowrap; }
+.prix__reduc { margin: .4rem 0 0; font-weight: 500; }
+.prix__petite-ligne { margin: 0; font-size: .92rem; font-style: italic; color: var(--granite-doux); max-width: 70ch; }
+.programme--a-venir { padding: 10vh var(--marge); }
+
+/* l'artiste : œuvre en ouverture, déclaration, matières, dossier de presse */
+.bandeau__image--oeuvre { margin: 0; justify-self: center; width: min(100%, calc(68svh * var(--ratio))); }
+.bandeau__matieres { font-family: var(--mono); font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ambre-texte); }
+.bandeau__liens { font-family: var(--mono); font-size: .8rem; letter-spacing: .04em; }
+.declaration { display: grid; grid-template-columns: 1.4fr .6fr; gap: 2rem clamp(24px, 6vw, 120px); padding: 14vh var(--marge); align-items: start; scroll-margin-top: var(--entete); }
+.declaration__tete { grid-column: 1 / -1; }
+.declaration__texte p { max-width: 66ch; font-size: clamp(1.05rem, 1rem + .25vw, 1.2rem); }
+.carottage { scroll-margin-top: var(--entete); }
+.matieres { display: grid; grid-template-columns: .9fr 1.1fr; gap: clamp(24px, 6vw, 110px); padding: 14vh var(--marge); align-items: center; }
+.matieres__photos { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.matieres__photos .fossile__cadre { aspect-ratio: 3/4; }
+.dossier { display: grid; grid-template-columns: 1.3fr .7fr; gap: clamp(24px, 6vw, 110px); padding: 12vh var(--marge); background: #ebe7e0; align-items: start; }
+.dossier__bio p { max-width: 70ch; }
+.dossier__liens .note { margin: 0 0 .6rem; }
+
+/* parcours sélectif */
+.cv-blocs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3rem clamp(24px, 6vw, 110px); padding: 12vh var(--marge) 2vh; }
+.cv-bloc h3 { font-family: var(--mono); font-size: .75rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ambre-texte); margin-bottom: .8rem; }
+.frise .fossile-txt > span:only-child { font-family: var(--serif); font-size: .98rem; color: var(--granite); line-height: 1.45; }
+.fossile-txt--foire::before { background: var(--glacier); }
+.frise__avenir { font-style: italic; max-width: 70ch; }
+
+/* notes d'atelier */
+.studio__ouverture { font-size: clamp(1.3rem, 1rem + 1.2vw, 2rem); font-style: italic; line-height: 1.3; font-variation-settings: "opsz" 96, "SOFT" 100; }
+.studio-texte { padding: 8vh var(--marge) 10vh; }
+.studio-texte__colonne { max-width: 68ch; margin: 0 auto; font-size: clamp(1.05rem, 1rem + .3vw, 1.22rem); }
+.studio-texte__colonne .declaration__citation { margin: 3rem 0; }
+.studio-chevalet { padding: 12vh var(--marge); background: #ebe7e0; }
+.studio-chevalet__tete p:not(.surtitre) { max-width: 50ch; font-size: 1.2rem; font-style: italic; }
+.studio-chevalet__oeuvres { position: relative; display: flex; gap: clamp(16px, 2.5vw, 34px); overflow-x: auto; padding: 2rem 0 1rem; align-items: end; }
+.studio-chevalet__oeuvres .oeuvre { flex: none; width: clamp(200px, 24vw, 330px); }
+.studio-recherche { padding: 12vh var(--marge); }
+
+/* boutique : photo à venir, éditions de collection */
+.produit__visuel--attente { display: grid; place-items: center; text-align: center; padding: 14%; background: repeating-linear-gradient(-20deg, #e7e1d6 0 14px, #ece7dd 14px 28px); border: 1px dashed var(--ligne-forte); font-family: var(--mono); font-size: .75rem; color: var(--granite-doux); }
+.comptoir--editions { border-top: 6px solid var(--atelier); background: #f6f4ef; }
+.editions-boutique { grid-template-columns: repeat(3, minmax(0, 240px)); }
+.edition-serie--boutique .note { margin: 0; }
+
+/* presse : FT, archive repliée */
+.ft__titre { font-size: clamp(1.3rem, 1rem + 1vw, 1.9rem); line-height: 1.2; margin-bottom: 1.2rem; font-variation-settings: "opsz" 72; }
+.presse-archive { margin-top: 6vh; border-top: 1px solid var(--ligne-forte); }
+.presse-archive summary { cursor: pointer; padding: 1.1rem 0; font-family: var(--mono); font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; }
+.presse-cartes--archive { margin: 1rem 0 2.5rem; }
+
+/* lettre d'information : liste selon la langue, sans photo de fond */
+.lettre { background: var(--ardoise); }
+.lettre__liste { flex-basis: 100%; margin: 0; font-family: var(--mono); font-size: .75rem; opacity: .85; }
+
+/* bandes de photos et panoramas : on les fait défiler soi-même */
+.carnet__fenetre, .panorama__collant { overflow-x: auto; scrollbar-width: thin; }
+.carnet__piste, .panorama__piste img, .retraites-accueil__panorama img { will-change: auto; }
+.retraites-accueil__panorama img { width: 100%; }
+
+@media (max-width: 1100px) {
+  .retraites-cartes--trois { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 900px) {
+  :root { --entete: 94px; }
+  .declaration-accueil, .atelier-maintenant, .editions-accueil, .declaration, .matieres, .dossier, .cv-blocs { grid-template-columns: 1fr; }
+  .declaration-accueil__photo, .declaration__photo { max-width: 260px; }
+  .matieres__photos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .retraites-cartes--trois { grid-template-columns: 1fr; }
+  .editions-boutique { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .barre__adresse { display: none; }
+  .entete__barre { font-size: .75rem; }
+  .prix__ligne { flex-direction: column; gap: .2rem; }
+}
+.declaration-accueil__photo, .declaration__photo { width: 100%; max-width: 300px; justify-self: end; }
+.declaration-accueil__photo .fossile__cadre, .declaration__photo .fossile__cadre { aspect-ratio: 3/4; }
+.geologie .surtitre__n { color: var(--ambre-clair); }
+.presse-accueil__tete { grid-template-columns: 1.2fr .8fr; }
+.presse-accueil__tete .surtitre { grid-column: 1 / -1; }
+.presse-accueil__ft { width: 100%; max-width: 360px; justify-self: end; }
+.retraites-cartes--trois { align-items: stretch; }
+@media (max-width: 900px) { .presse-accueil__ft { justify-self: start; max-width: 300px; } }

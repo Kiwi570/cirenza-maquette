@@ -1,6 +1,6 @@
-"""Les deux retraites 2027, d'après les pages du site (relevé du 11 novembre 2026) et la FAQ en PDF.
-
-Septembre 2027 : « Molten Magic » est devenue « Autumn Alpine Pause » (6 – 11 septembre 2027) sur le site actuel.
+"""Les trois retraites 2027 : textes des pages du site (relevé du 11 novembre 2026) et détails du brief de Lisa
+(novembre 2026), qui fait foi : A Creative Pause (mai), Painting in Paradise (juin), Alpine Encaustics (septembre).
+Toutes à l'Espace Créa-Tea-Vité, à La Clusaz ; Talloires et Annecy ne sont que des excursions.
 """
 
 PETIT_DEJ = {"en": "Breakfast at the Atelier", "fr": "Petit-déjeuner à l'atelier"}
@@ -63,12 +63,13 @@ COACH_LISA = {
 
 PIP = {
     "id": "pip",
+    "menu": {"en": "June '27 Painting in Paradise", "fr": "Juin 27 · Painting in Paradise"},
     "titre": "Painting in Paradise",
-    "accroche": {"en": "Unlock Your Creative Potential", "fr": "Libérez votre potentiel créatif"},
+    "accroche": {"en": "Maximising Your Creative Voice", "fr": "Révéler pleinement sa voix créative"},
     "cycle": {"en": "Create, See, Think, Feel, Create.", "fr": "Créer, voir, penser, ressentir, créer."},
     "debut": "2027-06-21", "fin": "2027-06-26",
     "dates": {"en": "21 – 26 June 2027", "fr": "21 – 26 juin 2027"},
-    "lieu": {"en": "La Clusaz and Talloires, Haute-Savoie", "fr": "La Clusaz et Talloires, Haute-Savoie"},
+    "lieu": {"en": "La Clusaz, Haute-Savoie, with a day on Lac d'Annecy", "fr": "La Clusaz, Haute-Savoie, avec une journée au lac d'Annecy"},
     "groupe": {"en": "Small group: maximum 10 in total, non-participating partners included. The booking text also mentions a 6-person cohort: to be confirmed.",
                "fr": "Petit groupe : 10 personnes au maximum, partenaires non participants compris. Le texte de réservation parle aussi d'une cohorte de 6 personnes : à confirmer."},
     "prix": {"en": "€2,450 – €3,295", "fr": "2 450 € – 3 295 €"}, "prix_note": {"en": "depending on options indicated on the booking form", "fr": "selon les options choisies sur le formulaire de réservation"},
@@ -138,20 +139,21 @@ PIP = {
     ],
 }
 
-PAUSE = {
-    "id": "pause",
-    "titre": "Autumn Alpine Pause",
-    "accroche": {"en": "Connect to Your Creativity in the Haute Savoie", "fr": "Se reconnecter à sa créativité en Haute-Savoie"},
-    "cycle": {"en": "A creative pause in La Clusaz to rest, paint, reconnect and learn from simply being: in the mountains, among kind company, and with your own creative self.",
-              "fr": "Une pause créative à La Clusaz pour se reposer, peindre, se reconnecter et apprendre simplement en étant là : en montagne, en bonne compagnie, et avec son propre élan créatif."},
+ENCAUSTICS = {
+    "id": "encaustics",
+    "titre": "Alpine Encaustics",
+    "menu": {"en": "Sept '27 Alpine Encaustics", "fr": "Sept. 27 · Alpine Encaustics"},
+    "adresse_site": "cirenza.com/sept2027waxretreat",
+    "accroche": {"en": "Texture, Depth & Creative Voice", "fr": "Texture, profondeur et voix créative"},
+    "cycle": {"en": "A painting retreat in the spirit of Painting in Paradise, taught in English and French, with one encaustic session included for every guest.",
+              "fr": "Une retraite de peinture dans l'esprit de Painting in Paradise, enseignée en anglais et en français, avec une séance d'encaustique comprise pour chaque participant."},
     "debut": "2027-09-06", "fin": "2027-09-11",
     "dates": {"en": "6 – 11 September 2027", "fr": "6 – 11 septembre 2027"},
     "lieu": {"en": "La Clusaz, Haute-Savoie", "fr": "La Clusaz, Haute-Savoie"},
     "groupe": {"en": "Intimate group: strictly limited to 8 participants, so everyone gets a bespoke experience.", "fr": "Groupe intime : 8 participants au maximum, pour que chacun vive une expérience sur mesure."},
     "prix": {"en": "€2,450 – €3,295", "fr": "2 450 € – 3 295 €"}, "prix_note": {"en": "depending on options indicated on the booking form", "fr": "selon les options choisies sur le formulaire de réservation"},
-    "photo": "retraites/pause-face-aux-montagnes", "decor": "cire-fondue-1x1",
-    "a_confirmer": {"en": "Wax Fusion (autumn 2026) still announces the September retreat as “Molten Mountains: Texture, Depth & Creative Voice”, co-taught with Isabelle Gaborit; the current site presents the Autumn Alpine Pause with Lisa alone. Name and teaching team to be confirmed.",
-                    "fr": "Wax Fusion (automne 2026) annonce encore la retraite de septembre sous le nom « Molten Mountains: Texture, Depth & Creative Voice », co-animée avec Isabelle Gaborit ; le site actuel présente l'Autumn Alpine Pause avec Lisa seule. Nom et équipe à confirmer."},
+    "photo": "retraites/atelier-cire-en-groupe",
+    "titre_pourquoi": {"en": "Why slow down?", "fr": "Pourquoi ralentir ?"},
     "intro": {"en": ["Five days to inspire not just your painting, but everything you create, whether you photograph, cook, write, dance, build, code or simply reflect. You’ll go home recharged, with your own Creative Recipe Book, ready to keep experimenting more authentically long after you leave the mountains."],
               "fr": ["Cinq jours pour nourrir non seulement votre peinture, mais tout ce que vous créez : photographier, cuisiner, écrire, danser, construire, coder, ou simplement réfléchir. Vous repartirez ressourcé, avec votre propre carnet de recettes créatif, prêt à continuer d'expérimenter, plus librement, bien après avoir quitté la montagne."]},
     "pourquoi": {"en": "Most of us arrive running on empty, and a racing mind can’t really see. When we slow down enough to truly look, something shifts. We notice more, judge less, and begin to trust what we see. That trust is the root of creative courage, in the studio and in every other part of life. That’s why this is a pause and not a course: the mountains, the kind company and the days steeped in nature make room for your own voice to really sing.",
@@ -225,7 +227,7 @@ PAUSE = {
          "note": {"en": "We part ways, but your Recipe Book comes home with you: a record of everything you’ve learned, and of the creative voice you let truly sing in the mountains.",
                   "fr": "Nos chemins se séparent, mais votre carnet de recettes rentre avec vous : la trace de tout ce que vous avez appris, et de la voix créative que vous avez laissée chanter en montagne."}},
     ],
-    "photos_jours": ["evenements/apero-prive", "retraites/randonnee-col-des-aravis", "atelier/encaustique-noir-et-blanc-sur-papier", "paysages/annecy-canal", "retraites/participante-peint-en-plein-air", "paysages/route-des-aravis-au-soir"],
+    "photos_jours": ["evenements/apero-prive", "retraites/randonnee-col-des-aravis", "atelier/encaustique-noir-et-blanc-sur-papier", "paysages/annecy-canal", "atelier/table-des-cires", "paysages/route-des-aravis-au-soir"],
     "decor_jour": {},
     "etapes": [
         {"nom": "La Clusaz", "lat": 45.9045, "lon": 6.4237, "jour": 1, "texte": {"en": "Espace Créa-Tea-Vité, our home base", "fr": "L'Espace Créa-Tea-Vité, notre camp de base"}},
@@ -254,3 +256,41 @@ INCLUS = {"en": ["Lodging, breakfast, lunch, coffee and juice breaks", "Intro ap
           "fr": ["Hébergement, petits-déjeuners, déjeuners, pauses café et jus de fruits", "Apéritif d'accueil", "3 dîners (avec un peu de vin)", "Sorties en montagne et dîners en excursion", "Navettes aéroport et TGV aux horaires prévus, à l'arrivée et au départ", "Matériel d'art pour les ateliers", "Aide à l'organisation avant et après le séjour, randonnées, location de vélos, golf, taxis, urgences médicales, réservations au restaurant et conseils de sorties pendant votre séjour à La Clusaz"]}
 NON_INCLUS = {"en": ["2 dinners, airfare, wine (and other alcohol) beyond the initial servings", "Fees for additional activities like boating and cycle hire, train fares, passport / visa fees", "Travel insurance", "Additional nights' lodging", "Airport transfers outside of scheduled times", "Concierge services beyond La Clusaz and beyond the dates of the retreat (hotels, taxis…)"],
               "fr": ["2 dîners, billets d'avion, vin et alcools au-delà des premiers verres", "Activités en supplément (bateau, location de vélos), billets de train, frais de passeport et de visa", "Assurance voyage", "Nuits supplémentaires", "Transferts vers l'aéroport en dehors des horaires prévus", "Services de conciergerie hors de La Clusaz et hors des dates de la retraite (hôtels, taxis…)"]}
+
+# Mai : A Creative Pause (brief de Lisa ; nouvelle page, programme détaillé à compléter)
+CREATIVE = {
+    "id": "creative",
+    "titre": "A Creative Pause",
+    "menu": {"en": "May '27 A Creative Pause", "fr": "Mai 27 · A Creative Pause"},
+    "accroche": {"en": "Finding Your Creative Voice", "fr": "Trouver sa voix créative"},
+    "cycle": {"en": "For busy professionals who need to slow down. No art experience needed; laptops away, phones away in studio hours.",
+              "fr": "Pour les professionnels très occupés qui ont besoin de ralentir. Aucune expérience artistique requise ; ordinateurs rangés, téléphones éteints pendant les heures d'atelier."},
+    "debut": "2027-05-15", "fin": "2027-05-20",
+    "dates": {"en": "Saturday 15 – Thursday 20 May 2027", "fr": "samedi 15 – jeudi 20 mai 2027"},
+    "lieu": {"en": "La Clusaz, Haute-Savoie", "fr": "La Clusaz, Haute-Savoie"},
+    "groupe": {"en": "Small group: 6 to 10 guests.", "fr": "Petit groupe : 6 à 10 participants."},
+    "prix": {"en": "€2,450 – €3,295", "fr": "2 450 € – 3 295 €"}, "prix_note": {"en": "per person, depending on the room", "fr": "par personne, selon la chambre"},
+    "photo": "retraites/pause-face-aux-montagnes",
+    "intro": {"en": ["Five nights at Espace Créa-Tea-Vité in La Clusaz, in a small group, to slow down and find your own creative voice.",
+                     "No art experience is needed. Laptops stay away, and phones are off during studio hours."],
+              "fr": ["Cinq nuits à l'Espace Créa-Tea-Vité, à La Clusaz, en petit groupe, pour ralentir et trouver sa propre voix créative.",
+                     "Aucune expérience artistique n'est nécessaire. Les ordinateurs restent rangés, et les téléphones éteints pendant les heures d'atelier."]},
+    "programme_a_completer": {"en": "Day-by-day programme, inclusions and photographs: to be completed by Lisa (new page).",
+                              "fr": "Programme jour par jour, prestations comprises et photos : à compléter par Lisa (nouvelle page)."},
+    "jours": [], "photos_jours": [], "etapes": [], "temoignages": [], "pour_qui": None, "faq": [],
+}
+
+# Prix : les mêmes pour les trois retraites, par personne (brief de Lisa) ; noms de chambres à employer partout
+PRIX_CHAMBRES = [
+    ({"en": "Shared room (with your own roommate), shared bathroom", "fr": "Chambre partagée (avec la personne de votre choix), salle de bain partagée"}, 2450, None),
+    ({"en": "Private room, shared bathroom", "fr": "Chambre individuelle, salle de bain partagée"}, 2850, None),
+    ({"en": "Private room, private shower and washbasin", "fr": "Chambre individuelle, douche et lavabo privés"}, 3295, None),
+    ({"en": "Couple, own chalet", "fr": "Couple, chalet privatif"}, 5500, {"en": "May and June only · €2,750 each", "fr": "mai et juin uniquement · 2 750 € chacun"}),
+    ({"en": "Non-painting partner", "fr": "Partenaire non peintre"}, 4795, {"en": "May and June only · private shower rate + €1,500", "fr": "mai et juin uniquement · tarif douche et lavabo privés + 1 500 €"}),
+]
+REDUCTIONS = {"en": "Early bird: €100 off until a set date. Returning guests: €150–200 off.",
+              "fr": "Inscription anticipée : 100 € de remise jusqu'à une date fixée. Participants déjà venus : 150 à 200 € de remise."}
+PETITE_LIGNE = {"en": "Bathrooms: “Private bathroom” means your own shower and washbasin. As is common in French chalets and village houses, toilets are separate and shared between rooms. Shared rooms are booked with a roommate of your choice.",
+                "fr": "Salles de bain : « salle de bain privée » signifie votre propre douche et lavabo. Comme souvent dans les chalets et maisons de village français, les toilettes sont séparées et partagées entre les chambres. Les chambres partagées se réservent avec la personne de votre choix."}
+LOGEMENT = {"en": "Five nights at Espace Créa-Tea-Vité in La Clusaz, small groups, prices per person. Each retreat has its own price range; we choose your room together on a short discovery call before you book.",
+            "fr": "Cinq nuits à l'Espace Créa-Tea-Vité, à La Clusaz, en petits groupes, prix par personne. Chaque retraite a sa fourchette de prix ; la chambre se choisit ensemble lors d'un court échange découverte, avant la réservation."}

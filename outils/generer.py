@@ -22,15 +22,16 @@ SITE = Path(sys.argv[1]).resolve()
 MODE = sys.argv[sys.argv.index("--liens") + 1] if "--liens" in sys.argv else "propres"
 APERCU = "--apercu" in sys.argv
 MED = json.loads((ICI / "medias.json").read_text())
-VERSION = "3"
+VERSION = "4"
 AUJ = DT.date.today()
 # Base maîtresse des œuvres : Artwork Archive. Son export, une fois fusionné (outils/artwork_archive.py),
 # s'applique par-dessus catalogue.py.
 AA = json.loads((ICI / "artwork_archive.json").read_text()) if (ICI / "artwork_archive.json").exists() else {}
-AFFICHER_PRIX = False  # décision de Lisa : tant que c'est False, les prix d'Artwork Archive restent « sur demande »
+AFFICHER_PRIX = True  # brief de Lisa : « prices where shown » ; les prix connus d'Artwork Archive s'affichent, les autres restent sur demande
 # Côté de la maison de chaque page : l'atelier (Lisa Cirenza Fine Art, artiste-auteur) ou l'Espace (SAS)
 UNIVERS = {"oeuvres": "atelier", "salle": "atelier", "artiste": "atelier", "parcours": "atelier", "presse": "atelier",
-           "espace": "espace", "cours": "espace", "evenements": "espace", "retraites": "espace", "pip": "espace", "pause": "espace",
+           "studio": "atelier", "espace": "espace", "cours": "espace", "cours_prives": "espace", "evenements": "espace", "retraites": "espace",
+           "pip": "espace", "creative": "espace", "encaustics": "espace",
            "accueil": "maison", "boutique": "maison", "contact": "maison", "404": "maison"}
 SITE_URL = "https://cirenza-maquette.vercel.app"
 LANGS = ("en", "fr")
@@ -55,6 +56,8 @@ def fmt(x, lang):
 # ================================================================ œuvres
 SERIES = {s["id"]: s for s in CAT.SERIES}
 ORDRE = [s["id"] for s in CAT.SERIES]
+LEAD = "record-of-time"  # la série actuelle, en tête (brief de Lisa) ; les autres vont dans l'Archive
+ARCHIVE = [sid for sid in ORDRE if SERIES[sid].get("archive")]
 OEUVRES = {}
 LISTES = {}
 
@@ -324,9 +327,10 @@ def bouton(texte, href, classe="bouton", attrs=""):
 NAV_UNIVERS = {
     "maison": ("oeuvres", "artiste", "espace", "retraites", "boutique"),
     "atelier": ("oeuvres", "artiste", "parcours", "presse", "boutique"),
-    "espace": ("espace", "cours", "retraites", "evenements", "boutique"),
+    "espace": ("espace", "retraites", "cours_prives", "evenements", "boutique"),
 }
-PARENT = {"salle": "oeuvres", "pip": "retraites", "pause": "retraites"}
+PARENT = {"salle": "oeuvres", "pip": "retraites", "creative": "retraites", "encaustics": "retraites", "studio": "artiste", "cours": "espace"}
+RETRAITES_ORDRE = ("creative", "pip", "encaustics")
 
 
 def bascule_univers(lang, cle, prof, classe=""):
@@ -354,23 +358,34 @@ def entete(lang, cle, prof, autre_href):
     def groupe(nom, items, classe=""):
         lis = "".join(f'<li><a href="{h}"><span data-lettres>{e(x)}</span>{f"<small>{e(s)}</small>" if s else ""}</a></li>' for x, h, s in items)
         return f'<div class="menu__strate {classe}"><p class="menu__groupe">{e(nom)}</p><ul>{lis}</ul></div>'
-    g_oeuvres = [(t["nav"]["oeuvres"], lien(lang, "oeuvres", prof), None)] + [(SERIES[s]["titre"][lang], lien_salle(lang, s, prof), None) for s in ORDRE]
-    g_artiste = [(t["nav"]["artiste"], lien(lang, "artiste", prof), None), (t["nav"]["parcours"], lien(lang, "parcours", prof), None), (t["nav"]["presse"], lien(lang, "presse", prof), None),
+    g_oeuvres = [(t["nav"]["oeuvres"], lien(lang, "oeuvres", prof), None), (SERIES[LEAD]["titre"][lang], lien_salle(lang, LEAD, prof), t["nav"]["recent"] if lang == "en" else "Œuvres récentes"),
+                 (t["nav"]["archive"], lien(lang, "oeuvres", prof, "#archive"), ", ".join(SERIES[x]["titre"][lang] for x in ("london-tube", "cuba", "beneath-the-surface"))),
+                 (t["nav"]["editions"], lien(lang, "boutique", prof, "#editions"), "15 × 20 cm")]
+    g_artiste = [(t["nav"]["artiste"], lien(lang, "artiste", prof), None), (t["nav"]["declaration"], lien(lang, "artiste", prof, "#declaration"), None), (t["nav"]["bio"], lien(lang, "artiste", prof, "#bio"), None),
+                 (t["nav"]["parcours"], lien(lang, "parcours", prof), None), (t["nav"]["presse"], lien(lang, "presse", prof), None),
                  (t["nav"]["boutique"], lien(lang, "boutique", prof, "#atelier"), "Lisa Cirenza Fine Art")]
-    g_espace = [(t["nav"]["espace"], lien(lang, "espace", prof), None), (t["nav"]["cours"], lien(lang, "cours", prof), None), (t["nav"]["evenements"], lien(lang, "evenements", prof), None),
+    g_espace = [(t["nav"]["espace"], lien(lang, "espace", prof), None), (t["nav"]["cours_prives"], lien(lang, "cours_prives", prof), "Hotels, concierges, event planners" if lang == "en" else "Hôtels, conciergeries, organisateurs"),
+                (t["nav"]["evenements"], lien(lang, "evenements", prof), None),
                 (t["nav"]["boutique"], lien(lang, "boutique", prof, "#espace"), "Espace Créa-Tea-Vité"), (t["nav"]["contact"], lien(lang, "contact", prof), None)]
-    g_retraites = [(t["nav"]["retraites"], lien(lang, "retraites", prof), None), ("Painting in Paradise", lien(lang, "pip", prof), L(lang, R.PIP["dates"])), (R.PAUSE["titre"], lien(lang, "pause", prof), L(lang, R.PAUSE["dates"]))]
+    g_retraites = [(t["nav"]["retraites"], lien(lang, "retraites", prof), None)] + [(L(lang, RETRAITES[k]["menu"]), lien(lang, k, prof), L(lang, RETRAITES[k]["dates"])) for k in RETRAITES_ORDRE]
     menu = (f'<div class="menu" id="menu" hidden>{bascule_univers(lang, cle, prof, "univers--menu")}<nav class="menu__grille" aria-label="{"Site" if lang == "en" else "Site"}">'
             f'{groupe(t["groupes_menu"]["oeuvres"], g_oeuvres, "menu__strate--atelier")}{groupe(t["groupes_menu"]["artiste"], g_artiste, "menu__strate--atelier")}{groupe(t["groupes_menu"]["espace"], g_espace, "menu__strate--espace")}{groupe(t["groupes_menu"]["retraites"], g_retraites, "menu__strate--espace")}</nav>'
             f'<div class="menu__bas">{statut(lang)}<p>{e(C.COORD["rue"])}, {e(C.COORD["ville"])}</p><a href="{autre_href}" hreflang="{autre}" lang="{autre}">{e(t["langue_autre"])}</a></div></div>')
+    annonces = "".join(f'<p class="barre__annonce" data-annonce data-du="{a["du"]}" data-au="{a["au"]}" hidden>{e(a[lang])}</p>' for a in C.ANNONCES)
     return f'''<header class="entete" data-entete>
+  <div class="entete__barre">
+    <p class="barre__lieu"><a href="{lien(lang, "espace", prof)}">Espace Créa-Tea-Vité</a><span class="barre__adresse"> · {e(C.COORD["rue"])}, La Clusaz</span></p>
+    {annonces}
+    {statut(lang, "barre__statut")}
+  </div>
+  <div class="entete__rangee">
   <a class="entete__marque" href="{lien(lang, "accueil", prof)}"><span class="signature" role="img" aria-label="Lisa Cirenza"></span><span class="vh"> – {e(t["nav"]["accueil"])}</span></a>
   {bascule_univers(lang, cle, prof, "univers--entete")}
   <nav class="entete__nav" aria-label="{"Main navigation" if lang == "en" else "Navigation principale"}"><ul>{nav}</ul></nav>
   <button class="entete__panier" type="button" data-panier-ouvrir hidden aria-label="{"Open the baskets" if lang == "en" else "Ouvrir les paniers"}"><span class="entete__panier-a" data-compte-panier="atelier">0</span><span class="entete__panier-e" data-compte-panier="espace">0</span></button>
-  {statut(lang, "entete__statut")}
   <a class="entete__langue" href="{autre_href}" hreflang="{autre}" lang="{autre}"><span class="vh">{e(t["langue_autre"])}</span><span aria-hidden="true">{t["langue_autre_court"]}</span></a>
   <button class="entete__menu" type="button" aria-expanded="false" aria-controls="menu"><span class="entete__menu-texte">{e(t["menu"])}</span><span class="entete__menu-traits" aria-hidden="true"><i></i><i></i><i></i></span></button>
+  </div>
 </header>
 {menu}'''
 
@@ -381,13 +396,13 @@ def pied(lang, prof, autre_href):
     autre = "fr" if lang == "en" else "en"
     hor = "".join(f"<div><dt>{e(j)}</dt><dd>{e(h)}</dd></div>" for j, h in t["horaires_lignes"])
     plan_a = "".join(f'<li><a href="{lien(lang, k, prof)}">{e(t["nav"][k])}</a></li>' for k in ("oeuvres", "artiste", "parcours", "presse"))
-    plan_e = "".join(f'<li><a href="{lien(lang, k, prof)}">{e(t["nav"][k])}</a></li>' for k in ("espace", "cours", "retraites", "evenements"))
+    plan_e = "".join(f'<li><a href="{lien(lang, k, prof)}">{e(t["nav"][k])}</a></li>' for k in ("espace", "retraites", "cours_prives", "evenements"))
     ext = ' target="_blank" rel="noopener"'
     a_completer = t["a_completer"]
     return f'''<footer class="pied">
   <div class="pied__haut">
     <span class="signature signature--complete" role="img" aria-label="Lisa Cirenza"></span>
-    <p class="pied__citation">{e(C.ACCUEIL["espoir"][lang])}</p>
+    <p class="pied__citation">{e(C.POSITION["citation"][lang])}</p>
   </div>
   <div class="pied__maisons">
     <section class="pied__maison pied__maison--atelier">
@@ -431,7 +446,8 @@ def page(lang, cle, chemin, titre_page, corps, autre_chemin, donnees_page=None, 
     prof = prof_de(chemin)
     autre = "fr" if lang == "en" else "en"
     autre_href = autre_chemin
-    titre_complet = f"{titre_page} · Lisa Cirenza" if cle != "accueil" else f"Lisa Cirenza · {t['accroche']} · La Clusaz"
+    titre_complet = f"{titre_page} · Lisa Cirenza" if cle != "accueil" else C.POSITION["seo"][lang]
+    description = C.DESCRIPTIONS["espace"][lang] if UNIVERS.get(cle) == "espace" else t["description"]
     og = image_og or asset(prof, "img/oeuvres/recente-01-1600.webp")
     partage = SITE / "assets" / "partage" / f"{chemin.replace('/', '-').replace('.html', '')}.jpg"
     if partage.exists():
@@ -452,7 +468,7 @@ def page(lang, cle, chemin, titre_page, corps, autre_chemin, donnees_page=None, 
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{e(titre_complet)}</title>
 <meta name="robots" content="noindex, nofollow">
-<meta name="description" content="{e(t["description"])}">
+<meta name="description" content="{e(description)}">
 <meta name="theme-color" content="#f2efe8">
 <link rel="alternate" hreflang="{autre}" href="{autre_href}">
 <link rel="icon" type="image/png" sizes="32x32" href="{asset(prof, "img/icones/icone-32.png")}">
@@ -460,7 +476,7 @@ def page(lang, cle, chemin, titre_page, corps, autre_chemin, donnees_page=None, 
 <link rel="apple-touch-icon" href="{asset(prof, "img/icones/apple-touch-icon.png")}">
 <meta property="og:type" content="website">
 <meta property="og:title" content="{e(titre_complet)}">
-<meta property="og:description" content="{e(t["description"])}">
+<meta property="og:description" content="{e(description)}">
 <meta property="og:image" content="{og}">
 <meta property="og:image:alt" content="{e(titre_complet)}">
 <meta name="twitter:card" content="summary_large_image">
@@ -540,25 +556,33 @@ def bandeau(lang, prof, n, sur, titre_txt, intro, image_html, strate, classe="")
 
 
 # ================================================================ accueil
-def colonne(lang, prof, compacte=False):
+def strate_li(lang, prof, sid, i, classe=""):
     t = C.T[lang]
-    lis = []
-    for i, sid in enumerate(ORDRE):
-        s = SERIES[sid]
-        ids = [x for x in LISTES[sid]][:4]
-        couleurs = [OEUVRES[x]["dominante"] for x in LISTES[sid]][:3]
-        while len(couleurs) < 3:
-            couleurs.append(couleurs[-1])
-        periode = L(lang, s["periode"]) if s.get("periode") else ""
-        vign = "".join(f'<span class="strate__mini" style="--ratio:{OEUVRES[x]["ratio"]}"><img src="{asset(prof, f"img/oeuvres/{x}-640.webp")}" alt="" loading="lazy" decoding="async" width="{OEUVRES[x]["t"]["640"][0]}" height="{OEUVRES[x]["t"]["640"][1]}"></span>' for x in ids)
-        lis.append(f'''<li class="strate" style="--c1:{couleurs[0]};--c2:{couleurs[1]};--c3:{couleurs[2]};--i:{i};--bg:{-(i * 61) % 400}px">
+    s = SERIES[sid]
+    ids = [x for x in LISTES[sid]][:4]
+    couleurs = [OEUVRES[x]["dominante"] for x in LISTES[sid]][:3]
+    while len(couleurs) < 3:
+        couleurs.append(couleurs[-1])
+    periode = L(lang, s["periode"]) if s.get("periode") else ""
+    sous = L(lang, s["sous_titre"]) if s.get("sous_titre") else ""
+    vign = "".join(f'<span class="strate__mini" style="--ratio:{OEUVRES[x]["ratio"]}"><img src="{asset(prof, f"img/oeuvres/{x}-640.webp")}" alt="" loading="lazy" decoding="async" width="{OEUVRES[x]["t"]["640"][0]}" height="{OEUVRES[x]["t"]["640"][1]}"></span>' for x in ids)
+    meta = n_oeuvres(len(LISTES[sid]), lang) + (" · " + periode if periode else "") + (" · " + sous if sous else "")
+    return f'''<li class="strate {classe}" style="--c1:{couleurs[0]};--c2:{couleurs[1]};--c3:{couleurs[2]};--i:{i};--bg:{-(i * 61) % 400}px">
   <a class="strate__lien" href="{lien_salle(lang, sid, prof)}" data-curseur="{e(t["voir"])}">
     <span class="strate__n">{i + 1:02d}</span>
     <span class="strate__titre">{e(s["titre"][lang])}</span>
-    <span class="strate__meta">{e(n_oeuvres(len(LISTES[sid]), lang))}{(" · " + e(periode)) if periode else ""}</span>
+    <span class="strate__meta">{e(meta)}</span>
     <span class="strate__minis" aria-hidden="true">{vign}</span>
   </a>
-</li>''')
+</li>'''
+
+
+def colonne(lang, prof, compacte=False):
+    """La série actuelle en tête, puis l'Archive des séries plus anciennes."""
+    t = C.T[lang]
+    lis = [strate_li(lang, prof, LEAD, 0, "strate--tete")]
+    lis.append(f'<li class="colonne__archive" id="archive-colonne"><span>{e(t["nav"]["archive"])}</span><small>{e(C.SERIE_ACTUELLE["archive"][lang])}</small></li>')
+    lis += [strate_li(lang, prof, sid, i + 1) for i, sid in enumerate(ARCHIVE)]
     return f'<ol class="colonne{" colonne--compacte" if compacte else ""}" data-colonne>{"".join(lis)}</ol>'
 
 
@@ -567,154 +591,140 @@ def page_accueil(lang):
     chemin = fichier(lang, "accueil")
     prof = prof_de(chemin)
     hero = "recente-01"
-    o = OEUVRES[hero]
     autre = href_autre(lang, "accueil", prof)
     sizes_hero = "(max-width: 900px) 70vw, 34vw"
-    A = C.ACCUEIL
-    WF = C.WAX_FUSION
+    P = C.POSITION
+    S = C.SERIE_ACTUELLE
+    E = C.EDITIONS_COLLECTION
     u = t["univers"]
-    cartes_presse = "".join(carte_presse(lang, prof, p, "(max-width: 700px) 60vw, 20vw") for p in C.PRESSE[:6])
-    wdib = OEUVRES["where-do-i-begin"]
-    portes = "".join(f'''<li class="porte porte--{p["univers"]}" data-revele data-effet="porte" style="--i:{i}">
-  <a href="{lien(lang, p["page"], prof)}" data-curseur="{e(L(lang, p["lien"]))}">
-    <span class="porte__vantaux" aria-hidden="true"><i></i><i></i></span>
-    <span class="porte__img">{img_photo(prof, p["photo"], "", "(max-width: 700px) 86vw, 24vw")}</span>
-    <span class="porte__cote">{e(u["atelier"] if p["univers"] == "atelier" else u["espace"])}</span>
-    <span class="porte__titre">{e(L(lang, p["titre"]))}</span>
-    <span class="porte__texte">{e(L(lang, p["texte"]))}</span>
-    <span class="porte__lien">{e(L(lang, p["lien"]))} →</span>
-  </a>
-</li>''' for i, p in enumerate(C.PORTES))
-    n_series = len(ORDRE)
-    nombres = {"en": ["One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten"], "fr": ["Une", "Deux", "Trois", "Quatre", "Cinq", "Six", "Sept", "Huit", "Neuf", "Dix"]}
+    fr = lang == "fr"
+    cartes_presse = "".join(carte_presse(lang, prof, p, "(max-width: 700px) 60vw, 20vw") for p in [x for x in C.PRESSE if not x.get("archive")][:5])
+    lead = SERIES[LEAD]
+    grat = "cool-reflections"
+    editions = "".join(f'<li class="edition-serie"><span class="edition-serie__bloc{" edition-serie__bloc--vide" if not x["image"] else ""}">{img_oeuvre(prof, x["image"], lang, "(max-width: 700px) 40vw, 14vw") if x["image"] else ""}</span><span class="edition-serie__titre">{e(x["titre"][lang])}</span></li>' for x in E["series"])
     corps = f'''
 <section class="ouverture" data-ouverture data-strate="{e("Lisa Cirenza")}">
   <canvas class="ouverture__gl" aria-hidden="true"></canvas>
   <div class="ouverture__strates" aria-hidden="true">{"".join(f'<i style="--k:{k}"></i>' for k in range(9))}</div>
   <div class="ouverture__grille">
     <div class="ouverture__texte">
-      <p class="surtitre" data-apparait><span class="surtitre__n">1 040 m</span><span>{e("La Clusaz · French Alps" if lang == "en" else "La Clusaz · Alpes françaises")}</span></p>
+      <p class="surtitre" data-apparait><span class="surtitre__n">1 040 m</span><span>{e(P["titre"][lang])}</span></p>
       <h1 class="ouverture__titre" id="titre-accueil"><span class="ouverture__prenom" data-lettres data-lettres-auto>Lisa</span> <span class="ouverture__nom" data-lettres data-lettres-auto>Cirenza</span></h1>
-      <p class="ouverture__accroche" data-apparait>{e(t["accroche"])}</p>
-      <p class="ouverture__actions" data-apparait>{bouton(u["atelier"] + (" · the works" if lang == "en" else " · les œuvres"), lien(lang, "oeuvres", prof), "bouton bouton--atelier")}{bouton("Espace Créa-Tea-Vité", lien(lang, "espace", prof), "bouton bouton--ligne bouton--espace")}</p>
+      <p class="ouverture__ligne" data-apparait>{e(P["ligne"][lang])}</p>
+      <p class="ouverture__actions" data-apparait>{bouton(lead["titre"][lang], lien_salle(lang, LEAD, prof), "bouton bouton--atelier")}{bouton(t["nav"]["declaration"], lien(lang, "artiste", prof, "#declaration"), "bouton bouton--ligne")}</p>
     </div>
     <figure class="ouverture__oeuvre" data-apparait>
-      {bouton_oeuvre(prof, hero, lang, "lumiere-eau-roche", sizes_hero, "ouverture__toile", "eager", True)}
-      <figcaption class="cartel cartel--clair"><span class="cartel__titre">{e(SERIES["lumiere-eau-roche"]["titre"][lang])}</span><span class="cartel__faits">{e(("Recent work · " if lang == "en" else "Œuvre récente · ") + (o["titre"] or ("title to come from Artwork Archive" if lang == "en" else "titre à venir d'Artwork Archive")))}</span></figcaption>
+      {bouton_oeuvre(prof, hero, lang, LEAD, sizes_hero, "ouverture__toile", "eager", True)}
+      <figcaption class="cartel cartel--clair"><span class="cartel__titre">{e(lead["titre"][lang])}</span><span class="cartel__faits">{e(("Recent work · " if not fr else "Œuvre récente · ") + (OEUVRES[hero]["titre"] or ("title from Artwork Archive to come" if not fr else "titre à venir d'Artwork Archive")))}</span></figcaption>
     </figure>
   </div>
-  <button class="ouverture__passer" type="button" hidden>{"Skip" if lang == "en" else "Passer"}</button>
-  <p class="ouverture__defiler" data-apparait aria-hidden="true"><span>{"Scroll down through the strata" if lang == "en" else "Descendez à travers les strates"}</span><i></i></p>
+  <button class="ouverture__passer" type="button" hidden>{"Skip" if not fr else "Passer"}</button>
+  <p class="ouverture__defiler" data-apparait aria-hidden="true"><span>{"Scroll down through the strata" if not fr else "Descendez à travers les strates"}</span><i></i></p>
 </section>
 
-<section class="temps" data-strate="{e("Reading time" if lang == "en" else "Lire le temps")}">
-  <div class="temps__texte">
-    {surtitre("Reading time in the layers" if lang == "en" else "Lire le temps dans les couches", 1)}
-    <p class="temps__lignes" data-mots>{e(A["lire_le_temps"][lang])}</p>
-    <p class="temps__espoir" data-apparait data-effet="espoir"><span class="temps__espoir-texte">{e(A["espoir"][lang])}</span></p>
+<section class="declaration-accueil" data-strate="{e(t["nav"]["declaration"])}">
+  <div class="declaration-accueil__texte">
+    {surtitre("Artist statement" if not fr else "Déclaration d'artiste", 1)}
+    <blockquote class="declaration-accueil__citation"><p>{e(P["citation"][lang])}</p></blockquote>
+    <p data-apparait>{e(C.DECLARATION[lang][0])}</p>
+    <p data-apparait>{bouton("Read the full statement" if not fr else "Lire toute la déclaration", lien(lang, "artiste", prof, "#declaration"), "bouton bouton--ligne")}</p>
   </div>
-  <ol class="temps__carottes" aria-label="{e("Three layers of a life" if lang == "en" else "Trois couches d'une vie")}">
-    <li class="temps__couche temps__couche--a" data-parallaxe="-0.1">{figure_photo(prof, "artiste/lisa-a-4-ans", "Lisa Cirenza, four years old" if lang == "en" else "Lisa Cirenza à 4 ans", A["quatre_ans"][lang], "fossile", "(max-width: 700px) 40vw, 16vw")}</li>
-    <li class="temps__couche temps__couche--b" data-parallaxe="0.06">{figure_photo(prof, "artiste/lisa-a-17-ans-juneau-icefield", "Lisa at seventeen on skis with a heavy pack, crossing the Juneau Icefield" if lang == "en" else "Lisa à dix-sept ans, à skis avec un lourd sac, sur le champ de glace de Juneau", A["dix_sept_ans"][lang], "fossile", "(max-width: 700px) 40vw, 16vw")}</li>
-    <li class="temps__couche temps__couche--c" data-parallaxe="0.14">{figure_photo(prof, "artiste/lisa-peint-un-glacier", "Lisa Cirenza painting a large glacier canvas today" if lang == "en" else "Lisa Cirenza peint aujourd'hui une grande toile de glacier", "Today, in the studio" if lang == "en" else "Aujourd'hui, à l'atelier", "fossile", "(max-width: 700px) 50vw, 22vw")}</li>
-  </ol>
-  <blockquote class="temps__nature" data-apparait><p>{e(C.NATURE[lang])}</p></blockquote>
+  {figure_photo(prof, "artiste/lisa-a-17-ans-juneau-icefield", "Lisa at seventeen on skis with a heavy pack, crossing the Juneau Icefield" if not fr else "Lisa à dix-sept ans, à skis avec un lourd sac, sur le champ de glace de Juneau", "Juneau Icefield, expedition photograph" if not fr else "Champ de glace de Juneau, photo d'expédition", "fossile declaration-accueil__photo", "(max-width: 800px) 60vw, 24vw")}
 </section>
 
-<section class="geologie" data-strate="{e(WF["titre"])}">
-  <div class="geologie__fond" aria-hidden="true">{img_decor(prof, "roche-strates-16x9", "", "100vw")}</div>
+<section class="geologie" data-strate="{e("The Geology of the Invisible" if not fr else "La géologie de l'invisible")}">
   <div class="geologie__grille">
     <div class="geologie__texte">
-      {surtitre("The Luminous Layer", 2)}
-      <h2 class="titre-section">{lettres("Beneath the surface" if lang == "en" else "Sous la surface")}</h2>
-      <p data-apparait>{e(WF["paradoxe"][lang])}</p>
-      <p data-apparait>{e(WF["antidote"][lang])}</p>
-      <p class="geologie__source" data-apparait>— Lisa Cirenza, <cite>Wax Fusion</cite>, {e("Fall 2026" if lang == "en" else "automne 2026")}</p>
-      <p data-apparait>{bouton("The artist's statement" if lang == "en" else "La démarche de l'artiste", lien(lang, "artiste", prof, "#demarche"), "bouton bouton--ligne")}</p>
+      {surtitre(lead["titre"][lang], 2)}
+      <h2 class="titre-section">{lettres("The Geology of the Invisible" if not fr else "La géologie de l'invisible")}</h2>
+      <p data-apparait>{e(C.MEMBRANE[lang])}</p>
+      <p data-apparait>{e(C.DECLARATION[lang][2])}</p>
+      <p data-apparait>{bouton(t["nav"]["artiste"], lien(lang, "artiste", prof), "bouton bouton--ligne")}</p>
     </div>
-    <div class="grattage" data-grattage style="--ratio:{OEUVRES["a-moment-in-time"]["ratio"]}">
+    <div class="grattage" data-grattage style="--ratio:{OEUVRES[grat]["ratio"]}">
       <figure class="grattage__oeuvre">
-        {bouton_oeuvre(prof, "a-moment-in-time", lang, "layered-moments", "(max-width: 800px) 86vw, 40vw")}
+        {bouton_oeuvre(prof, grat, lang, LEAD, "(max-width: 800px) 86vw, 40vw")}
         <canvas class="grattage__cire" aria-hidden="true"></canvas>
       </figure>
       <p class="grattage__aide"><span>{e(t["gratter"])}</span> <button type="button" class="lien-bouton" data-tout-reveler>{e(t["tout_reveler"])}</button></p>
-      {cartel(OEUVRES["a-moment-in-time"], lang, "p")}
+      {cartel(OEUVRES[grat], lang, "p")}
     </div>
   </div>
 </section>
 
-<section class="strates-accueil" data-strate="{e("The strata" if lang == "en" else "Les strates")}">
+<section class="strates-accueil" data-strate="{e(lead["titre"][lang])}">
   <div class="strates-accueil__tete">
-    {surtitre("The atelier, layer by layer" if lang == "en" else "L'atelier, couche après couche", 3)}
-    <h2 class="titre-section">{lettres((nombres[lang][n_series - 1] + " strata") if lang == "en" else (nombres[lang][n_series - 1] + " strates"))}</h2>
-    <p data-apparait>{e("From the melting glaciers of the Alps to the London Underground and the streets of Havana, from iPad drawings to hot wax: each series is a layer of the same search for what lies beneath the surface." if lang == "en" else "Des glaciers qui fondent au métro de Londres et aux rues de La Havane, du dessin sur iPad à la cire chaude : chaque série est une couche de la même recherche de ce qui se cache sous la surface.")}</p>
+    {surtitre("The series, layer by layer" if not fr else "Les séries, couche après couche", 3)}
+    <h2 class="titre-section">{lettres(lead["titre"][lang])}</h2>
+    <p data-apparait>{e(S["texte"][lang])}</p>
+    <p class="note" data-apparait>{e(S["sujets"][lang])}</p>
   </div>
   {colonne(lang, prof)}
 </section>
 
-<section class="portes" data-strate="{e("Ways in" if lang == "en" else "Portes d'entrée")}">
-  <div class="portes__tete">
-    {surtitre("One house, two sides" if lang == "en" else "Une maison, deux côtés", 4)}
-    <p class="portes__mission" data-mots>{e(A["mission"][lang])}</p>
-    <p class="portes__porte" data-apparait lang="fr">« {e(C.M2616["porte"]["fr"])} »{"" if lang == "fr" else ' <span class="portes__trad" lang="en">' + e("Here, everyone finds their own way in.") + "</span>"} <cite>M2616</cite></p>
+<section class="atelier-maintenant" data-strate="{e("In the studio now" if not fr else "À l'atelier en ce moment")}">
+  <div class="atelier-maintenant__images">
+    {figure_photo(prof, "atelier/glacier-sur-le-chevalet", "A glacier painting on the easel, palette and brushes in the studio" if not fr else "Une peinture de glacier sur le chevalet, palette et pinceaux à l'atelier", "", "fossile atelier-maintenant__a", "(max-width: 800px) 60vw, 26vw")}
+    <figure class="atelier-maintenant__b oeuvre" style="--ratio:{OEUVRES["en-cours-3"]["ratio"]}">{bouton_oeuvre(prof, "en-cours-3", lang, LEAD, "(max-width: 800px) 50vw, 20vw")}<figcaption class="cartel"><span class="cartel__titre">Emergence</span>{etat(OEUVRES["en-cours-3"], lang)}</figcaption></figure>
   </div>
-  <ul class="portes__liste">{portes}</ul>
+  <div class="atelier-maintenant__texte">
+    {surtitre("In the studio now" if not fr else "À l'atelier en ce moment", 4)}
+    <p class="atelier-maintenant__chevalet" data-apparait>{e(S["chevalet"][lang])}</p>
+    <p data-apparait><a class="lien-fleche" href="{lien(lang, "studio", prof)}">{e(t["nav"]["studio"])} →</a></p>
+  </div>
 </section>
 
-<section class="tirage" data-strate="Where Do I Begin?">
-  <div class="tirage__mur" data-mur-scene style="--ratio:{wdib["ratio"]}">
-    {img_decor(prof, "voir-au-mur-chalet-16x9", "", "(max-width: 900px) 100vw, 60vw", "tirage__decor")}
-    <span class="tirage__oeuvre" data-revele>{bouton_oeuvre(prof, "where-do-i-begin", lang, "hors-serie", "(max-width: 900px) 30vw, 14vw")}</span>
+<section class="editions-accueil" id="editions-accueil" data-strate="{e(E["titre"][lang])}">
+  <div class="editions-accueil__texte">
+    {surtitre(E["titre"][lang], 5)}
+    <h2 class="titre-section">{lettres("Small blocks, held in acrylic" if not fr else "De petits blocs, pris dans l'acrylique")}</h2>
+    <p data-apparait>{e(E["texte"][lang])}</p>
+    <p class="note" data-apparait>{e(E["datation"][lang])}</p>
+    <p data-apparait>{bouton(t["nav"]["editions"], lien(lang, "boutique", prof, "#editions"), "bouton bouton--atelier")}{bouton("Prints · creativehub" if not fr else "Tirages · creativehub", lien(lang, "boutique", prof, "#atelier"), "bouton bouton--ligne")}</p>
   </div>
-  <div class="tirage__texte">
-    {surtitre("Limited edition" if lang == "en" else "Édition limitée", 5)}
-    <h2 class="titre-section">{lettres("Where Do I Begin?")}</h2>
-    <p data-apparait>{e(wdib["edition"][lang])}. {e(t["prix_demande"])}.</p>
-    <p data-apparait>{bouton("In the shop" if lang == "en" else "En boutique", lien(lang, "boutique", prof, "#atelier"))}{bouton(t["demander"], lien(lang, "contact", prof) + "?oeuvre=where-do-i-begin", "bouton bouton--ligne")}</p>
-  </div>
+  <ul class="editions-accueil__series">{editions}</ul>
+  <p class="note editions-accueil__note">{e(E["a_venir"][lang])}</p>
 </section>
 
 <section class="presse-accueil" data-strate="{e(t["nav"]["presse"])}">
   <div class="presse-accueil__tete">
     {surtitre(t["nav"]["presse"], 6)}
-    <blockquote class="citation-ft"><p data-mots>“{e(C.FT_CITATION)}”</p><footer>Financial Times, 2017 · <cite>NYC Contrasts</cite></footer></blockquote>
-    {figure_photo(prof, "presse/wax-fusion-fall-2026-couverture", "Cover of Wax Fusion, Fall 2026, with Lisa Cirenza among the featured artists" if lang == "en" else "Couverture de Wax Fusion, automne 2026, où figure Lisa Cirenza", "Wax Fusion · " + ("Fall 2026" if lang == "en" else "automne 2026"), "fossile presse-accueil__ft", "(max-width: 800px) 70vw, 26vw")}
+    <blockquote class="citation-ft"><p data-mots>“{e(C.FT_CITATION)}”</p><footer>Rachel Spence, Financial Times, {"October" if not fr else "octobre"} 2017</footer></blockquote>
+    {figure_photo(prof, "presse/ft-nyc-contrasts", "The Financial Times article with Lisa Cirenza's work" if not fr else "L'article du Financial Times avec l'œuvre de Lisa Cirenza", "", "fossile presse-accueil__ft", "(max-width: 800px) 70vw, 26vw")}
   </div>
   <ul class="presse-cartes">{cartes_presse}</ul>
-  <p class="presse-accueil__tout">{bouton("All the press" if lang == "en" else "Toute la presse", lien(lang, "presse", prof), "bouton bouton--ligne")}</p>
+  <p class="presse-accueil__tout">{bouton("All the press" if not fr else "Toute la presse", lien(lang, "presse", prof), "bouton bouton--ligne")}</p>
 </section>
 
 <section class="espace-accueil" data-strate="Espace Créa-Tea-Vité">
   <div class="espace-accueil__images">
-    {figure_photo(prof, "espace/facade-de-nuit", "The Espace Créa-Tea-Vité at night, its windows lit" if lang == "en" else "L'Espace Créa-Tea-Vité de nuit, vitrines allumées", "", "fossile espace-accueil__a", "(max-width: 800px) 92vw, 46vw", ' data-parallaxe="-0.06"')}
-    {figure_photo(prof, "espace/table-vue-pistes", "A table by the window facing the ski slopes" if lang == "en" else "Une table à la fenêtre, face aux pistes", "", "fossile espace-accueil__b", "(max-width: 800px) 50vw, 22vw", ' data-parallaxe="0.12"')}
+    {figure_photo(prof, "espace/facade-de-nuit", "The Espace Créa-Tea-Vité at night, its windows lit" if not fr else "L'Espace Créa-Tea-Vité de nuit, vitrines allumées", "", "fossile espace-accueil__a", "(max-width: 800px) 92vw, 46vw")}
+    {figure_photo(prof, "espace/table-vue-pistes", "A table by the window facing the ski slopes" if not fr else "Une table à la fenêtre, face aux pistes", "", "fossile espace-accueil__b", "(max-width: 800px) 50vw, 22vw")}
   </div>
   <div class="espace-accueil__texte">
-    {surtitre(u["espace"] + (" · gallery · tea room · studio" if lang == "en" else " · galerie · salon de thé · atelier"), 7)}
+    {surtitre(u["espace"] + (" · gallery · tea room · studio" if not fr else " · galerie · salon de thé · atelier"), 7)}
     <h2 class="titre-section">{lettres("Espace Créa-Tea-Vité")}</h2>
     <p data-apparait>{e(C.ESPACE["intro"][lang])}</p>
-    <p data-apparait>{e(C.M2616["lourson"][lang])}</p>
+    <p class="note" data-apparait>{e(C.ESPACE["ecran"][lang])}</p>
     <div class="vapeur-statut" data-apparait><span class="vapeur" aria-hidden="true"><i></i><i></i><i></i></span>{statut(lang, "statut--grand")}</div>
-    <p data-apparait>{bouton(t["nav"]["espace"], lien(lang, "espace", prof), "bouton bouton--espace")}{bouton(t["nav"]["cours"], lien(lang, "cours", prof), "bouton bouton--ligne")}</p>
+    <p data-apparait>{bouton(t["nav"]["espace"], lien(lang, "espace", prof), "bouton bouton--espace")}{bouton(t["nav"]["cours_prives"], lien(lang, "cours_prives", prof), "bouton bouton--ligne")}</p>
   </div>
 </section>
 
 <section class="retraites-accueil" data-strate="{e(t["nav"]["retraites"])}">
   <div class="retraites-accueil__tete">
     {surtitre(u["espace"] + " · " + t["nav"]["retraites"].lower() + " 2027", 8)}
-    <h2 class="titre-section">{lettres("Two alpine retreats" if lang == "en" else "Deux retraites alpines")}</h2>
-    <p data-apparait>{e(WF["retraite"][lang])} <span class="note">— Wax Fusion, 2026</span></p>
+    <h2 class="titre-section">{lettres("Three retreats in 2027" if not fr else "Trois retraites en 2027")}</h2>
+    <p data-apparait>{e(R.LOGEMENT[lang])}</p>
   </div>
-  <div class="retraites-accueil__panorama" data-panorama>{img_photo(prof, "paysages/lac-annecy-talloires-panorama", "Lake Annecy at Talloires, mountains and mist" if lang == "en" else "Le lac d'Annecy à Talloires, montagnes et brume", "100vw")}</div>
-  <div class="retraites-cartes">
-    {carte_retraite(lang, prof, R.PIP, "pip", "retraites/diner-coucher-de-soleil-parapentes")}
-    {carte_retraite(lang, prof, R.PAUSE, "pause", "retraites/pause-face-aux-montagnes")}
+  <div class="retraites-cartes retraites-cartes--trois">
+    {"".join(carte_retraite(lang, prof, RETRAITES[k], k, RETRAITES[k]["photo_carte"]) for k in RETRAITES_ORDRE)}
   </div>
+  <p class="retraites-accueil__prix" data-apparait>{e(("From €2,450 to €3,295 per person, depending on the room." if not fr else "De 2 450 € à 3 295 € par personne, selon la chambre."))} <a class="lien-fleche" href="{lien(lang, "retraites", prof, "#prix")}">{e("Prices and rooms" if not fr else "Prix et chambres")} →</a></p>
 </section>
 {lettre_info(lang, prof)}
 '''
-    sizes = sizes_hero
-    pre = (asset(prof, f"img/oeuvres/{hero}-1600.webp"), srcset_oeuvre(prof, hero), sizes)
+    pre = (asset(prof, f"img/oeuvres/{hero}-1600.webp"), srcset_oeuvre(prof, hero), sizes_hero)
     ecrire(chemin, page(lang, "accueil", chemin, t["accroche"], corps, autre, {"accueil": True}, "page-accueil", preload=pre))
 
 
@@ -749,15 +759,16 @@ def carte_retraite(lang, prof, r, cle, photo):
 def lettre_info(lang, prof):
     t = C.T[lang]
     return f'''<section class="lettre" data-strate="{e("Newsletter" if lang == "en" else "Lettre d'information")}">
-  <div class="lettre__fond" aria-hidden="true">{img_decor(prof, "village-nuit-etoiles-16x9", "", "100vw")}</div>
   <div class="lettre__contenu">
     <h2 class="titre-section">{lettres("Musings, Invites, and Updates" if lang == "en" else "Pensées, invitations et nouvelles")}</h2>
-    <p data-apparait>{e("Courses, events and future programming: be the first to know." if lang == "en" else "Cours, événements et prochains rendez-vous : soyez informé en premier.")}</p>
+    <p data-apparait>{e("New work, collectors' editions and retreats: be the first to know." if lang == "en" else "L'Espace, ses cours, ses événements et ses rendez-vous : soyez informé en premier.")}</p>
     <form class="lettre__form" data-lettre novalidate>
       <label class="vh" for="lettre-email">Email</label>
       <input id="lettre-email" type="email" name="email" autocomplete="email" placeholder="{e("your@email.com" if lang == "en" else "votre@adresse.fr")}" required>
+      <input type="hidden" name="liste" value="{"en-collectionneurs-retraites" if lang == "en" else "fr-espace"}">
       <button class="bouton aimant" type="submit"><span>{e("Subscribe" if lang == "en" else "S'inscrire")}</span></button>
-      <p class="lettre__merci" hidden tabindex="-1">{e("Thanks! (Mock-up: no email is sent.)" if lang == "en" else "Merci ! (Maquette : aucune adresse n'est envoyée.)")}</p>
+      <p class="lettre__liste">{e(C.LISTES_LETTRE[lang])}</p>
+      <p class="lettre__merci" hidden tabindex="-1">{e("Thanks! (Mock-up: no email is sent; on the live site, Mailchimp.)" if lang == "en" else "Merci ! (Maquette : aucune adresse n'est envoyée ; sur le site en ligne, Mailchimp.)")}</p>
     </form>
   </div>
 </section>'''
@@ -766,26 +777,32 @@ def lettre_info(lang, prof):
 # ================================================================ œuvres
 def page_oeuvres(lang):
     t = C.T[lang]
+    fr = lang == "fr"
     chemin = fichier(lang, "oeuvres")
     prof = prof_de(chemin)
-    total = len([o for o in OEUVRES if o != "where-do-i-begin"])
-    index = []
-    for sid in ORDRE:
+
+    def index_serie(sid):
         s = SERIES[sid]
         vs = "".join(vignette(prof, oid, lang, sid) for oid in LISTES[sid])
         manque = ""
         if s.get("sans_image"):
-            manque = "".join(f'<figure class="vignette vignette--vide"><span class="oeuvre__toile vide"><span>{e("Image to be requested" if lang == "en" else "Visuel à demander")}</span></span><figcaption><span class="cartel__titre">{e(x["titre"])}</span></figcaption></figure>' for x in s["sans_image"])
-        index.append(f'<section class="index-serie" data-strate="{e(s["titre"][lang])}"><h3><a href="{lien_salle(lang, sid, prof)}">{e(s["titre"][lang])}</a> <small>{e(n_oeuvres(len(LISTES[sid]), lang))}</small></h3><div class="index-serie__grille">{vs}{manque}</div></section>')
+            manque = "".join(f'<figure class="vignette vignette--vide"><span class="oeuvre__toile vide"><span>{e("Image to be requested" if not fr else "Visuel à demander")}</span></span><figcaption><span class="cartel__titre">{e(x["titre"])}</span></figcaption></figure>' for x in s["sans_image"])
+        return f'<section class="index-serie" data-strate="{e(s["titre"][lang])}"><h3><a href="{lien_salle(lang, sid, prof)}">{e(s["titre"][lang])}</a> <small>{e(n_oeuvres(len(LISTES[sid]), lang))}</small></h3><div class="index-serie__grille">{vs}{manque}</div></section>'
+    lead = SERIES[LEAD]
+    n_archive = sum(len(LISTES[x]) for x in ARCHIVE)
     corps = f'''
-{bandeau(lang, prof, None, n_oeuvres(total, lang) + (f" · {len(ORDRE)} series" if lang == "en" else f" · {len(ORDRE)} séries"), t["nav"]["oeuvres"], ["Encaustic, oils, cold wax, mixed media on aluminium, iPad drawings and limited edition prints, from the newest layer (light, water, rock and time) down to the London Tube.", "No prices are listed on the current site: every work is price on request."] if lang == "en" else ["Encaustique, huile, cire froide, techniques mixtes sur aluminium, dessins sur iPad et tirages en édition limitée, de la couche la plus récente (lumière, eau, roche et temps) jusqu'au métro de Londres.", "Aucun prix n'est affiché sur le site actuel : chaque œuvre est sur demande."], f'<div class="bandeau__texture" aria-hidden="true">{img_decor(prof, "strates-cire-16x9", "", "50vw")}</div>', t["nav"]["oeuvres"], "bandeau--oeuvres")}
-<section class="oeuvres-colonne" data-strate="{e("Stratigraphic column" if lang == "en" else "Colonne stratigraphique")}">
+{bandeau(lang, prof, None, n_oeuvres(len(LISTES[LEAD]), lang) + " · " + lead["titre"][lang], t["nav"]["oeuvres"], [C.SERIE_ACTUELLE["texte"][lang], C.SERIE_ACTUELLE["sujets"][lang]], f'<div class="bandeau__texture">{bouton_oeuvre(prof, "recente-04", lang, LEAD, "(max-width: 900px) 80vw, 40vw")}</div>', t["nav"]["oeuvres"], "bandeau--oeuvres")}
+<section class="oeuvres-colonne" data-strate="{e("Stratigraphic column" if not fr else "Colonne stratigraphique")}">
   {colonne(lang, prof)}
 </section>
-<section class="index-oeuvres" data-strate="{e("Index" if lang == "en" else "Index")}">
-  <div class="index-oeuvres__tete">{surtitre("Every work" if lang == "en" else "Toutes les œuvres")}<h2 class="titre-section">{lettres("Index")}</h2></div>
-  {"".join(index)}
-  <p class="note index-oeuvres__base">{e("Catalogue kept in Artwork Archive, the artist's inventory: titles, sizes, years, media and availability are synchronised from it at each update. Untitled works are awaiting their Artwork Archive entry." if lang == "en" else "Catalogue tenu dans Artwork Archive, l'inventaire de l'artiste : titres, dimensions, années, techniques et disponibilités en sont repris à chaque mise à jour. Les œuvres sans titre attendent leur fiche Artwork Archive.")}</p>
+<section class="index-oeuvres" data-strate="{e(lead["titre"][lang])}">
+  <div class="index-oeuvres__tete">{surtitre(lead["titre"][lang] + (" · recent work" if not fr else " · œuvres récentes"), 1)}<h2 class="titre-section">{lettres(lead["titre"][lang])}</h2><p data-apparait>{e(C.SERIE_ACTUELLE["chevalet"][lang])}</p></div>
+  {index_serie(LEAD)}
+</section>
+<section class="index-oeuvres index-oeuvres--archive" id="archive" tabindex="-1" data-strate="{e(t["nav"]["archive"])}">
+  <div class="index-oeuvres__tete">{surtitre(t["nav"]["archive"] + " · " + n_oeuvres(n_archive, lang), 2)}<h2 class="titre-section">{lettres(t["nav"]["archive"])}</h2><p data-apparait>{e(C.SERIE_ACTUELLE["archive"][lang])}</p></div>
+  {"".join(index_serie(sid) for sid in ARCHIVE)}
+  <p class="note index-oeuvres__base">{e("Catalogue kept in Artwork Archive, the artist's inventory: titles, sizes, years, media, prices and availability come from it. Untitled works are awaiting their Artwork Archive entry." if not fr else "Catalogue tenu dans Artwork Archive, l'inventaire de l'artiste : titres, dimensions, années, techniques, prix et disponibilités en viennent. Les œuvres sans titre attendent leur fiche Artwork Archive.")}</p>
 </section>'''
     ecrire(chemin, page(lang, "oeuvres", chemin, t["nav"]["oeuvres"], corps, href_autre(lang, "oeuvres", prof), {}, "page-oeuvres"))
 
@@ -808,9 +825,6 @@ def page_salle(lang, sid):
     for x in s.get("sans_image", []):
         items.append(f'<figure class="oeuvre oeuvre--vide" style="--ratio:0.8;--s:8"><span class="oeuvre__toile vide"><span>{e("Image to be requested" if lang == "en" else "Visuel à demander")}</span></span><figcaption class="cartel"><span class="cartel__titre">{e(x["titre"])}</span><span class="cartel__faits">{e(t["a_completer"])}</span></figcaption></figure>')
     contexte = "".join(figure_photo(prof, c, "", "", "fossile salle__contexte", "(max-width: 800px) 60vw, 22vw") for c in s.get("contexte", [])[:1])
-    decor = {"london-tube": "metro-wagon-vide-16x9", "connections-and-constructions": "chantier-crepuscule-16x9"}.get(sid)
-    if decor:
-        contexte = figure_decor(prof, decor, "", "", "fossile salle__contexte salle__contexte--large", "(max-width: 800px) 70vw, 34vw") + contexte
     periode = L(lang, s["periode"]) if s.get("periode") else None
     meta = n_oeuvres(len(ids) + len(s.get("sans_image", [])), lang) + (f" · {periode}" if periode else "")
     sous = L(lang, s["sous_titre"]) if s.get("sous_titre") else ""
@@ -820,7 +834,7 @@ def page_salle(lang, sid):
   <div class="salle__collant">
     <div class="salle__piste">
       <div class="salle__entree" data-fond="{OEUVRES[ids[0]]["fond"]}">
-        {surtitre(f'{t["strate"]} {idx + 1:02d} · {meta}')}
+        {surtitre((t["nav"]["archive"] + " · " if s.get("archive") else "") + f'{t["strate"]} {idx + 1:02d} · {meta}')}
         <h1 class="salle__titre">{lettres(s["titre"][lang])}</h1>
         {f'<p class="salle__sous">{e(sous)}</p>' if sous else ""}
         <p class="salle__texte" data-apparait>{e(s["texte"][lang])}</p>
@@ -844,138 +858,131 @@ def page_salle(lang, sid):
 # ================================================================ l'artiste
 def page_artiste(lang):
     t = C.T[lang]
+    fr = lang == "fr"
     chemin = fichier(lang, "artiste")
     prof = prof_de(chemin)
-    para = C.DEMARCHE["paragraphes"][lang]
+    P = C.POSITION
     couches = []
-    for i, b in enumerate(C.BIO):
-        if b.get("decor"):
-            img = figure_decor(prof, b["decor"], "", L(lang, b.get("legende", "")), "fossile carottage__img", "(max-width: 800px) 80vw, 30vw")
-        else:
-            img = figure_photo(prof, b["photo"], L(lang, b.get("legende", "")) or "", L(lang, b.get("legende", "")), "fossile carottage__img", "(max-width: 800px) 80vw, 30vw")
-        if b.get("photo2"):
-            img += figure_photo(prof, b["photo2"], "Lisa Cirenza painting" if lang == "en" else "Lisa Cirenza peignant", "", "fossile carottage__img carottage__img--2", "(max-width: 800px) 60vw, 20vw")
+    for i, b in enumerate(C.BIO_LONGUE):
+        img = figure_photo(prof, b["photo"], L(lang, b.get("legende", "")), L(lang, b.get("legende", "")), "fossile carottage__img", "(max-width: 800px) 80vw, 30vw")
         couches.append(f'''<li class="carottage__couche" style="--i:{i}" data-strate="{e(b["titre"][lang])}">
   <div class="carottage__repere"><span class="carottage__n">{i + 1:02d}</span></div>
-  <div class="carottage__texte"><h3>{e(b["titre"][lang])}</h3><p data-apparait>{e(b["texte"][lang])}</p>{f'<p class="note">— {e(b["source"])}</p>' if b.get("source") else ""}</div>
+  <div class="carottage__texte"><h3>{e(b["titre"][lang])}</h3><p data-apparait>{e(b["texte"][lang])}</p></div>
   <div class="carottage__images">{img}</div>
 </li>''')
+    em = OEUVRES["en-cours-3"]
     corps = f'''
 <section class="bandeau bandeau--artiste" data-strate="{e(t["nav"]["artiste"])}">
   <div class="bandeau__texte">
-    {surtitre(t["metier"])}
+    {surtitre(P["titre"][lang])}
     <h1 class="bandeau__titre">{lettres("Lisa Cirenza")}</h1>
-    <div class="bandeau__intro" data-apparait><p>{e(C.MANIFESTE[lang][0])} {e(C.MANIFESTE[lang][1])} {e(C.MANIFESTE[lang][2])}</p></div>
+    <div class="bandeau__intro" data-apparait><p>{e(P["ligne"][lang])}</p><p class="bandeau__matieres">{e(P["matieres"][lang])}</p></div>
+    <p class="bandeau__liens" data-apparait><a href="#declaration">{e(t["nav"]["declaration"])}</a> · <a href="#bio">{e(t["nav"]["bio"])}</a> · <a href="{lien(lang, "parcours", prof)}">{e(t["nav"]["parcours"])}</a> · <a href="{lien(lang, "presse", prof)}">{e(t["nav"]["presse"])}</a></p>
   </div>
-  <div class="bandeau__image bandeau__image--glace" data-glace>{img_photo(prof, "artiste/lisa-portrait-fond-glacier", "Portrait of Lisa Cirenza in front of a glacier painting" if lang == "en" else "Portrait de Lisa Cirenza devant une peinture de glacier", "(max-width: 900px) 80vw, 40vw", "", "eager")}</div>
+  <figure class="bandeau__image bandeau__image--oeuvre" style="--ratio:{em["ratio"]}">{bouton_oeuvre(prof, "en-cours-3", lang, LEAD, "(max-width: 900px) 80vw, 36vw", "", "eager", True)}<figcaption class="cartel"><span class="cartel__titre">Emergence</span><span class="cartel__faits">{e(faits_courts(em, lang))}</span>{etat(em, lang)}</figcaption></figure>
 </section>
 
-<section class="demarche" id="demarche" tabindex="-1" data-strate="{e(C.DEMARCHE["titre"][lang])}">
-  <div class="demarche__fond" aria-hidden="true">{img_decor(prof, "roche-strates-16x9", "", "100vw")}</div>
-  <div class="demarche__tete">
-    {surtitre("Artist statement" if lang == "en" else "Démarche", 1)}
-    <h2 class="titre-section">{lettres(C.DEMARCHE["titre"][lang])}</h2>
+<section class="declaration" id="declaration" tabindex="-1" data-strate="{e(t["nav"]["declaration"])}">
+  <div class="declaration__tete">
+    {surtitre("Artist statement" if not fr else "Déclaration d'artiste", 1)}
+    <h2 class="titre-section">{lettres(t["nav"]["declaration"])}</h2>
+    <blockquote class="declaration__citation"><p>{e(P["citation"][lang])}</p></blockquote>
   </div>
-  <p class="demarche__chapo" data-mots>{e(para[0])}</p>
-  <div class="demarche__colonnes">
-    <div>{"".join(f'<p data-apparait>{e(x)}</p>' for x in para[1:3])}</div>
-    <div>{figure_decor(prof, "cire-fondue-1x1", "", "", "fossile demarche__cire", "(max-width: 800px) 80vw, 30vw")}{"".join(f'<p data-apparait>{e(x)}</p>' for x in para[3:])}</div>
-  </div>
+  <div class="declaration__texte">{"".join(f'<p data-apparait>{e(x)}</p>' for x in C.DECLARATION[lang])}</div>
+  {figure_photo(prof, "atelier/detail-cire-blanche", "Detail of a glacier canvas: white and grey wax worked into ridges, with a pool of blue-green beneath" if not fr else "Détail d'une toile de glacier : cire blanche et grise travaillée en crêtes, avec une poche bleu-vert dessous", "Wax as a geological membrane, detail" if not fr else "La cire comme membrane géologique, détail", "fossile declaration__photo", "(max-width: 800px) 60vw, 22vw")}
 </section>
 
-<section class="voix" data-strate="{e("In her words" if lang == "en" else "Ses mots")}">
-  <div class="voix__tete">{surtitre("In her words" if lang == "en" else "Avec ses mots", 2)}<h2 class="titre-section">{lettres("Light held in wax" if lang == "en" else "La lumière tenue dans la cire")}</h2></div>
-  <div class="voix__grille">
-    <figure class="voix__oeuvre" data-revele>{bouton_oeuvre(prof, "en-cours-3", lang, "hope-and-optimism", "(max-width: 800px) 80vw, 30vw", "cire-fond")}<figcaption class="cartel"><span class="cartel__titre">Emergence</span><span class="cartel__faits">{e(faits_courts(OEUVRES["en-cours-3"], lang))}</span>{etat(OEUVRES["en-cours-3"], lang)}</figcaption></figure>
-    <div class="voix__citations">
-      <blockquote class="voix__c voix__c--grand"><p data-mots>{e(C.WAX_FUSION["lumiere"][lang])}</p></blockquote>
-      <blockquote class="voix__c" data-apparait><p>{e(C.WAX_FUSION["cire"][lang])}</p></blockquote>
-      <blockquote class="voix__c" data-apparait><p>{e(C.WAX_FUSION["lumiere_choisie"][lang])}</p></blockquote>
-      <p class="voix__source">— Lisa Cirenza, <cite>Beyond the Surface</cite>, Wax Fusion, {e("Fall 2026" if lang == "en" else "automne 2026")}</p>
-    </div>
-  </div>
-  <div class="voix__montagne">
-    {figure_photo(prof, "artiste/lisa-cascade-avec-son-chien", "Lisa Cirenza with her dog below a waterfall" if lang == "en" else "Lisa Cirenza et son chien au pied d'une cascade", "", "fossile voix__photo", "(max-width: 800px) 70vw, 26vw", ' data-parallaxe="-0.06"')}
-    <div>
-      <blockquote class="voix__c voix__c--fr" lang="fr"><p>«&nbsp;{e(C.M2616["sanctuaire"]["fr"])}&nbsp;»</p>{"" if lang == "fr" else f'<p class="voix__trad" lang="en">{e(C.M2616["sanctuaire"]["en"])}</p>'}</blockquote>
-      <blockquote class="voix__c voix__c--fr" lang="fr" data-apparait><p>«&nbsp;{e(C.M2616["regarder"]["fr"])}&nbsp;»</p>{"" if lang == "fr" else f'<p class="voix__trad" lang="en">{e(C.M2616["regarder"]["en"])}</p>'}</blockquote>
-      <p class="voix__source">— {e("Interview in M2616, La Clusaz, December 2026 (forthcoming)" if lang == "en" else "Entretien dans M2616, La Clusaz, décembre 2026 (à paraître)")}</p>
-    </div>
-  </div>
-</section>
-
-<section class="carottage" data-strate="{e("Biography" if lang == "en" else "Biographie")}">
-  <div class="carottage__tete">{surtitre("Biography: a core sample" if lang == "en" else "Biographie, en carottage", 3)}<h2 class="titre-section">{lettres("Layers of a life" if lang == "en" else "Les couches d'une vie")}</h2></div>
+<section class="carottage" id="bio" tabindex="-1" data-strate="{e(t["nav"]["bio"])}">
+  <div class="carottage__tete">{surtitre("Long bio" if not fr else "Biographie", 2)}<h2 class="titre-section">{lettres("Layers of a life" if not fr else "Les couches d'une vie")}</h2></div>
   <ol class="carottage__liste" data-carottage>{"".join(couches)}</ol>
-  <div class="carottage__fin">
-    {"".join(f'<p data-apparait>{e(x)}</p>' for x in C.BIO_FIN[lang][:1])}
-    <blockquote class="citation"><p>{lettres(C.BIO_FIN[lang][1])}</p><footer>— L. Cirenza</footer></blockquote>
-  </div>
 </section>
 
-<section class="procede" data-strate="{e("Encaustic" if lang == "en" else "Encaustique")}">
-  <div class="procede__texte">
-    {surtitre("Process" if lang == "en" else "Le procédé", 4)}
-    <h2 class="titre-section">{lettres("Painting with fire" if lang == "en" else "Peindre avec le feu")}</h2>
-    <p data-apparait>{e(SERIES["encaustic-and-oils"]["texte"][lang])}</p>
-    {"".join(f'<p data-apparait>{e(x)}</p>' for x in C.PROCEDE[lang])}
-    <p data-apparait>{bouton("Encaustic and Oils" if lang == "en" else "Encaustique et huiles", lien_salle(lang, "encaustic-and-oils", prof), "bouton bouton--ligne")}</p>
+<section class="matieres" data-strate="{e("Water, pigments, heat and wax" if not fr else "L'eau, les pigments, la chaleur et la cire")}">
+  <div class="matieres__texte">
+    {surtitre("My materials" if not fr else "Mes matières", 3)}
+    <h2 class="titre-section">{lettres(P["matieres"][lang].rstrip("."))}</h2>
+    <p data-apparait>{e(C.MEMBRANE[lang])}</p>
+    <p class="note" data-apparait>{e("Short videos of the process, in English with French captions: to come." if not fr else "Courtes vidéos du procédé, en anglais sous-titrées en français : à venir.")}</p>
   </div>
-  <div class="procede__images">
-    {figure_photo(prof, "atelier/chalumeau-encaustique", "A blowtorch flame used for encaustic" if lang == "en" else "La flamme du chalumeau utilisé pour l'encaustique", "Encaustic = painting with fire" if lang == "en" else "Encaustique = peindre avec le feu", "fossile procede__a", "(max-width: 800px) 80vw, 30vw", ' data-parallaxe="-0.08"')}
-    {figure_photo(prof, "atelier/melange-resines-pigments-cire", "Lisa mixing resins, pigments and beeswax" if lang == "en" else "Lisa mélange résines, pigments et cire d'abeille", "Mixing resins, pigments and beeswax" if lang == "en" else "Mélange de résines, de pigments et de cire d'abeille", "fossile procede__b", "(max-width: 800px) 60vw, 22vw", ' data-parallaxe="0.1"')}
-    {figure_photo(prof, "atelier/table-des-cires", "A table of melted waxes and tools" if lang == "en" else "Une table de cires fondues et d'outils", "", "fossile procede__c", "(max-width: 800px) 60vw, 22vw")}
-  </div>
+  <ul class="matieres__photos">
+    <li>{figure_photo(prof, "atelier/chalumeau-encaustique", "The blowtorch flame fusing wax" if not fr else "La flamme du chalumeau qui fusionne la cire", "Heat" if not fr else "La chaleur", "fossile", "(max-width: 800px) 46vw, 20vw")}</li>
+    <li>{figure_photo(prof, "atelier/melange-resines-pigments-cire", "Mixing resins, pigments and beeswax" if not fr else "Mélange de résines, de pigments et de cire d'abeille", "Pigments and wax" if not fr else "Les pigments et la cire", "fossile", "(max-width: 800px) 46vw, 20vw")}</li>
+    <li>{figure_photo(prof, "atelier/detail-cire-blanche", "Close-up of a scraped white wax surface" if not fr else "Gros plan d'une surface de cire blanche grattée", "Surface" if not fr else "La surface", "fossile", "(max-width: 800px) 46vw, 20vw")}</li>
+    <li>{figure_photo(prof, "atelier/encaustique-noir-et-blanc-sur-papier", "Black and white wax on paper" if not fr else "Cire en noir et blanc sur papier", "Wax on paper" if not fr else "Cire sur papier", "fossile", "(max-width: 800px) 46vw, 20vw")}</li>
+  </ul>
 </section>
 
-<section class="passions" data-strate="{e("Other passions" if lang == "en" else "Autres passions")}">
-  {figure_photo(prof, "artiste/plongeon-eau-libre", "A swimmer diving into open water" if lang == "en" else "Un plongeon en eau libre", "", "fossile passions__img", "(max-width: 800px) 80vw, 32vw")}
-  <div class="passions__texte">{surtitre("Other passions" if lang == "en" else "Autres passions", 5)}<p data-apparait>{e(C.PASSIONS[lang])}</p>
-  <p data-apparait>{bouton(t["nav"]["parcours"], lien(lang, "parcours", prof))}{bouton(t["nav"]["presse"], lien(lang, "presse", prof), "bouton bouton--ligne")}</p></div>
+<section class="dossier" data-strate="{e("Press kit" if not fr else "Dossier de presse")}">
+  <div class="dossier__bio">
+    {surtitre("Short bio · for press and applications" if not fr else "Bio courte · pour la presse et les candidatures", 4)}
+    <p data-apparait>{e(C.BIO_COURTE[lang])}</p>
+  </div>
+  <div class="dossier__liens">
+    <p class="note">{e(C.PDF_A_VENIR["presse"][lang])}</p>
+    <p class="note">{e(C.PDF_A_VENIR["cv"][lang])}</p>
+    <p class="note">{e("High-resolution images: on request." if not fr else "Images en haute définition : sur demande.")}</p>
+    <p>{bouton(t["nav"]["parcours"], lien(lang, "parcours", prof))}{bouton(t["nav"]["presse"], lien(lang, "presse", prof), "bouton bouton--ligne")}{bouton(t["nav"]["contact"], lien(lang, "contact", prof), "bouton bouton--ligne")}</p>
+  </div>
 </section>'''
     corps = avec_carnet(corps, lang, prof, "artiste")
     ecrire(chemin, page(lang, "artiste", chemin, t["nav"]["artiste"], corps, href_autre(lang, "artiste", prof), {}, "page-artiste"))
 
 
-# ================================================================ parcours
+def an(label):
+    return int(label[:4]) if label[:4].isdigit() else 0
+
+
 def page_parcours(lang):
     t = C.T[lang]
+    fr = lang == "fr"
     chemin = fichier(lang, "parcours")
     prof = prof_de(chemin)
-    annees = sorted({a for a, *_ in C.EXPOSITIONS} | {a for a, *_ in C.CONFERENCES}, reverse=True)
+    CVd = C.CV
+    entrees = ([(a, x[lang], "solo" if x["en"].startswith("Solo") else None) for a, x in CVd["expositions"]]
+               + [(a, x[lang], "foire") for a, x in CVd["foires"]]
+               + [(a, x[lang], "residence") for a, x in CVd["distinctions"]]
+               + [(a, x[lang], "talk") for a, x in CVd["conferences"]])
+    labels = sorted({a for a, *_ in entrees}, key=lambda a: (an(a), a), reverse=True)
     couches = []
-    for i, a in enumerate(annees):
-        ex = [x for x in C.EXPOSITIONS if x[0] == a]
-        co = [x for x in C.CONFERENCES if x[0] == a]
-        lis = "".join(f'<li class="fossile-txt{" fossile-txt--" + x[4] if x[4] else ""}"><strong>{e(x[1])}</strong><span>{e(x[2] if lang == "en" else x[3])}</span></li>' for x in ex)
-        lis += "".join(f'<li class="fossile-txt fossile-txt--talk"><strong>{e(x[1])}</strong><span>{e(x[2] if lang == "en" else x[3])}</span></li>' for x in co)
-        ph = C.PHOTOS_ANNEES.get(a)
-        img = figure_photo(prof, ph, "", "", "fossile couche__img", "(max-width: 800px) 60vw, 18vw") if ph else ""
-        couches.append(f'<li class="couche" style="--i:{i}" data-strate="{a}"><p class="couche__annee">{a}</p><ul class="couche__fossiles">{lis}</ul>{img}</li>')
-    legende = ("Exhibition" if lang == "en" else "Exposition", "Residency" if lang == "en" else "Résidence", "Solo show" if lang == "en" else "Exposition personnelle", "Talk, workshop, performance" if lang == "en" else "Conférence, atelier, performance")
+    for i, a in enumerate(labels):
+        lis = "".join(f'<li class="fossile-txt{" fossile-txt--" + k if k else ""}"><span>{e(x)}</span></li>' for b, x, k in entrees if b == a)
+        ph = C.PHOTOS_ANNEES.get(an(a))
+        img = figure_photo(prof, ph, "", "", "fossile couche__img", "(max-width: 800px) 60vw, 18vw") if ph and a == str(an(a)) else ""
+        couches.append(f'<li class="couche" style="--i:{i}" data-strate="{e(a)}"><p class="couche__annee">{e(a)}</p><ul class="couche__fossiles">{lis}</ul>{img}</li>')
+    legende = ("Exhibition" if not fr else "Exposition", "Solo exhibition" if not fr else "Exposition personnelle", "Art fair" if not fr else "Foire", "Honour, prize, residency" if not fr else "Distinction, prix, résidence", "Talk" if not fr else "Conférence")
+
+    def bloc(titre_bloc, items):
+        return f'<section class="cv-bloc"><h3>{e(titre_bloc)}</h3><ul class="liste-traits">{"".join(f"<li>{e(x[lang])}</li>" for x in items)}</ul></section>'
     corps = f'''
-{bandeau(lang, prof, None, "CV highlights" if lang == "en" else "Temps forts du CV", t["nav"]["parcours"], "From Kyoto to Venice, from the Grand Palais to Kathmandu: twelve years of exhibitions, residencies and talks, read like a cliff face. The most recent layer sits on top." if lang == "en" else "De Kyoto à Venise, du Grand Palais à Katmandou : douze ans d'expositions, de résidences et de conférences, à lire comme une falaise. La couche la plus récente est en haut.", figure_photo(prof, "expositions/bermondsey-gallery-vitrine-nuit", "Bermondsey Gallery window at night, London" if lang == "en" else "La vitrine de la Bermondsey Gallery de nuit, à Londres", "Solo show, Bermondsey Gallery, London, 2018" if lang == "en" else "Exposition personnelle, Bermondsey Gallery, Londres, 2018", "fossile", "(max-width: 900px) 80vw, 40vw"), t["nav"]["parcours"])}
-<section class="frise" data-strate="{e("Stratigraphy" if lang == "en" else "Stratigraphie")}">
-  <ul class="frise__legende" aria-label="{e("Legend" if lang == "en" else "Légende")}"><li class="fossile-txt">{e(legende[0])}</li><li class="fossile-txt fossile-txt--residence">{e(legende[1])}</li><li class="fossile-txt fossile-txt--solo">{e(legende[2])}</li><li class="fossile-txt fossile-txt--talk">{e(legende[3])}</li></ul>
+{bandeau(lang, prof, None, "CV highlights · newest first" if not fr else "Parcours sélectif · le plus récent d'abord", t["nav"]["parcours"], [C.BIO_LONGUE[0]["texte"][lang]], figure_photo(prof, "expositions/salon-beaux-arts-galerie", "A Salon exhibition hang in Paris" if not fr else "L'accrochage d'un Salon à Paris", "", "fossile", "(max-width: 900px) 80vw, 40vw"), t["nav"]["parcours"])}
+<section class="cv-blocs" data-strate="{e("Education and collections" if not fr else "Formation et collections")}">
+  {bloc("Education and research" if not fr else "Formation et recherche", CVd["formation"])}
+  {bloc("Collections" if not fr else "Collections", CVd["collections"])}
+  {bloc("Press" if not fr else "Presse", CVd["presse"])}
+  {bloc("Publications" if not fr else "Publications", CVd["publications"])}
+</section>
+<section class="frise" data-strate="{e("Exhibitions, fairs, honours, talks" if not fr else "Expositions, foires, distinctions, conférences")}">
+  {surtitre("Exhibitions, art fairs, honours and talks" if not fr else "Expositions, foires, distinctions et conférences")}
+  <ul class="frise__legende" aria-label="{e("Legend" if not fr else "Légende")}"><li class="fossile-txt">{e(legende[0])}</li><li class="fossile-txt fossile-txt--solo">{e(legende[1])}</li><li class="fossile-txt fossile-txt--foire">{e(legende[2])}</li><li class="fossile-txt fossile-txt--residence">{e(legende[3])}</li><li class="fossile-txt fossile-txt--talk">{e(legende[4])}</li></ul>
+  <p class="frise__avenir">{e(CVd["a_venir"][lang])}</p>
   <ol class="frise__couches" data-frise>{"".join(couches)}</ol>
-  <p class="note">{e("Years with no line on the current site (2020, 2021, 2023) are not shown. The 2023 and 2024 PDF CVs list further shows." if lang == "en" else "Les années sans ligne sur le site actuel (2020, 2021, 2023) ne sont pas affichées. Les CV en PDF de 2023 et 2024 citent d'autres expositions.")}</p>
-  <p>{bouton("Full CV 2024 (PDF)" if lang == "en" else "CV complet 2024 (PDF)", asset(prof, "docs/cv-2024.pdf"), "bouton bouton--ligne")}</p>
+  <p class="note">{e(C.PDF_A_VENIR["cv"][lang])}</p>
 </section>'''
     corps = avec_carnet(corps, lang, prof, "parcours")
     ecrire(chemin, page(lang, "parcours", chemin, t["nav"]["parcours"], corps, href_autre(lang, "parcours", prof), {}, "page-parcours"))
 
 
-# ================================================================ presse
 def page_presse(lang):
     t = C.T[lang]
     chemin = fichier(lang, "presse")
     prof = prof_de(chemin)
-    cartes = "".join(carte_presse(lang, prof, p, "(max-width: 700px) 70vw, 24vw", True) for p in C.PRESSE)
+    cartes = "".join(carte_presse(lang, prof, p, "(max-width: 700px) 70vw, 24vw", True) for p in C.PRESSE if not p.get("archive"))
+    cartes_archive = "".join(carte_presse(lang, prof, p, "(max-width: 700px) 60vw, 18vw", True) for p in C.PRESSE if p.get("archive"))
     videos = "".join(f'<li><a href="{v["url"]}" target="_blank" rel="noopener"><strong>{e(v["titre"])}</strong><span>{e(v["auteur"])} · {e(L(lang, v["date"]))}</span></a></li>' for v in C.VIDEOS)
     WF, M = C.WAX_FUSION, C.M2616
     traduit = (lambda cle: "" if lang == "fr" else f'<p class="voix__trad" lang="en">{e(M[cle]["en"])}</p>')
     corps = f'''
-{bandeau(lang, prof, None, "Reviews, interviews, films" if lang == "en" else "Critiques, entretiens, films", t["nav"]["presse"], "From Wax Fusion to the Financial Times, from the BBC to Maison et Jardin and the App Whisperer podcast." if lang == "en" else "De Wax Fusion au Financial Times, de la BBC à Maison et Jardin et au podcast The App Whisperer.", figure_photo(prof, "presse/wax-fusion-fall-2026-article", "Opening page of Beyond the Surface by Lisa Cirenza in Wax Fusion, Fall 2026" if lang == "en" else "Première page de Beyond the Surface, de Lisa Cirenza, dans Wax Fusion, automne 2026", "Wax Fusion · " + ("Fall 2026, p. 18" if lang == "en" else "automne 2026, p. 18"), "fossile", "(max-width: 900px) 70vw, 32vw"), t["nav"]["presse"])}
+{bandeau(lang, prof, None, "Reviews, features, films" if lang == "en" else "Critiques, articles, films", t["nav"]["presse"], ["The Financial Times, the BBC and Maisons et Jardins; in 2026, a feature in Wax Fusion and a portrait in M2616.", C.PDF_A_VENIR["presse"]["en"] + "."] if lang == "en" else ["Le Financial Times, la BBC et Maisons et Jardins ; en 2026, un dossier dans Wax Fusion et un portrait dans M2616.", C.PDF_A_VENIR["presse"]["fr"] + "."], figure_photo(prof, "presse/wax-fusion-fall-2026-article", "Opening page of Beyond the Surface by Lisa Cirenza in Wax Fusion, Fall 2026" if lang == "en" else "Première page de Beyond the Surface, de Lisa Cirenza, dans Wax Fusion, automne 2026", "Wax Fusion · " + ("Fall 2026, p. 18" if lang == "en" else "automne 2026, p. 18"), "fossile", "(max-width: 900px) 70vw, 32vw"), t["nav"]["presse"])}
 <section class="wax-fusion" id="wax-fusion" tabindex="-1" data-strate="Wax Fusion">
   <div class="wax-fusion__couv">{figure_photo(prof, "presse/wax-fusion-fall-2026-couverture", "Cover of Wax Fusion, Fall 2026, issue XIV" if lang == "en" else "Couverture de Wax Fusion, automne 2026, n° XIV", "", "fossile", "(max-width: 800px) 70vw, 28vw", ' data-incline')}</div>
   <div class="wax-fusion__texte">
@@ -1001,17 +1008,18 @@ def page_presse(lang):
   {figure_photo(prof, "espace/enseigne-rue-village", "The Créa-Tea-Vité sign in the village street" if lang == "en" else "L'enseigne Créa-Tea-Vité dans la rue du village", "", "fossile m2616__img", "(max-width: 800px) 80vw, 30vw", ' data-parallaxe="-0.05"')}
 </section>
 <section class="ft" id="ft" tabindex="-1" data-strate="Financial Times">
-  {figure_photo(prof, "presse/financial-times", "Financial Times page with NYC Contrasts" if lang == "en" else "Page du Financial Times avec NYC Contrasts", "", "fossile ft__img", "(max-width: 800px) 80vw, 30vw")}
-  <div class="ft__texte">{surtitre("Financial Times · “Best of the Rest”")}<blockquote class="citation-ft"><p data-mots>“{e(C.FT_CITATION)}”</p><footer>{e("October 7th weekend edition, 2017" if lang == "en" else "Édition du week-end du 7 octobre 2017")} · <cite>NYC Contrasts</cite></footer></blockquote>
-  <p data-apparait>{e("NYC Contrasts, the print praised by the FT, is in the Beneath the Surface room." if lang == "en" else "NYC Contrasts, le tirage salué par le FT, est dans la salle Beneath the Surface.")}</p>
+  {figure_photo(prof, "presse/financial-times", "The Financial Times page with Lisa Cirenza's work" if lang == "en" else "La page du Financial Times avec l'œuvre de Lisa Cirenza", "", "fossile ft__img", "(max-width: 800px) 80vw, 30vw")}
+  <div class="ft__texte">{surtitre("Financial Times · Rachel Spence · " + ("October 2017" if lang == "en" else "octobre 2017"))}<h2 class="ft__titre">London's best satellite fairs: ‘different conversations and collegiate feel’</h2><blockquote class="citation-ft"><p data-mots>“{e(C.FT_CITATION)}”</p></blockquote>
+  <p data-apparait>{e("The work reproduced in the article is in the Beneath the Surface room of the Archive." if lang == "en" else "L'œuvre reproduite dans l'article est dans la salle Beneath the Surface de l'Archive.")}</p>
   <p data-apparait>{bouton("See the work" if lang == "en" else "Voir l'œuvre", lien_salle(lang, "beneath-the-surface", prof) + "?oeuvre=nyc-contrasts", "bouton bouton--ligne")}</p></div>
 </section>
 <section class="presse-mur" data-strate="{e("Press wall" if lang == "en" else "Revue de presse")}">
   <ul class="presse-cartes presse-cartes--mur">{cartes}</ul>
-</section>
-<section class="videos" data-strate="{e("Films" if lang == "en" else "Films")}">
-  <div>{surtitre("Films")}<ul class="videos__liste">{videos}</ul></div>
-  {figure_photo(prof, "atelier/video-encaustic-painting-process", "Lisa Cirenza at work in her encaustic studio" if lang == "en" else "Lisa Cirenza au travail dans son atelier d'encaustique", "", "fossile videos__img", "(max-width: 900px) 70vw, 26vw", ' data-parallaxe="-0.05"')}
+  <details class="presse-archive">
+    <summary>{e("Earlier press and films (archive)" if lang == "en" else "Presse et films plus anciens (archive)")}</summary>
+    <ul class="presse-cartes presse-cartes--archive">{cartes_archive}</ul>
+    <ul class="videos__liste">{videos}</ul>
+  </details>
 </section>'''
     ecrire(chemin, page(lang, "presse", chemin, t["nav"]["presse"], corps, href_autre(lang, "presse", prof), {}, "page-presse"))
 
@@ -1173,11 +1181,11 @@ def page_espace(lang):
   <ul class="offres__liste">{offres}</ul>
 </section>
 <section class="carte-boissons" id="carte" tabindex="-1" data-strate="{e("Menu" if lang == "en" else "La carte")}">
-  <div class="carte-boissons__image">{figure_decor(prof, "salon-de-the-tasses-4x5", "Two cups, a latte and a hot chocolate, by a snowy window" if lang == "en" else "Deux tasses, un latte et un chocolat chaud, devant une fenêtre enneigée", "Ambience photo" if lang == "en" else "Photo d'ambiance", "fossile", "(max-width: 800px) 80vw, 30vw")}</div>
+  <div class="carte-boissons__image">{figure_photo(prof, "espace/salon-vertical", "The lounge of the Espace, fireplace and bookshelves" if lang == "en" else "Le salon de l'Espace, la cheminée et la bibliothèque", "", "fossile", "(max-width: 800px) 80vw, 30vw")}</div>
   <div class="carte-boissons__texte">{surtitre("Tea room" if lang == "en" else "Salon de thé", 3)}<h2 class="titre-section">{lettres("The menu" if lang == "en" else "La carte")}</h2>{carte}<p class="note">{e(C.CARTE_NOTE[lang])}</p></div>
 </section>
 <section class="boutique" data-strate="{e("Boutique")}">
-  {figure_decor(prof, "materiel-art-4x5", "Art supplies: wax blocks, pastels, watercolour pans, brushes and rice paper" if lang == "en" else "Matériel d'art : blocs de cire, pastels, godets d'aquarelle, pinceaux et papier de riz", "Ambience photo" if lang == "en" else "Photo d'ambiance", "fossile boutique__a", "(max-width: 800px) 70vw, 26vw", ' data-parallaxe="-0.08"')}
+  {figure_photo(prof, "atelier/table-des-cires", "A table of melted waxes and tools" if lang == "en" else "Une table de cires fondues et d'outils", "", "fossile boutique__a", "(max-width: 800px) 70vw, 26vw")}
   <div class="boutique__texte">{surtitre("Boutique", 4)}<h2 class="titre-section">{lettres("Curated materials" if lang == "en" else "Matériel choisi")}</h2><p data-apparait>{e(C.ESPACE["offres"][2]["texte"][lang])}</p><p class="note" data-apparait>{e(C.BOUTIQUE["boutique_espace"][lang])}</p><p data-apparait>{bouton(t["nav"]["boutique"], lien(lang, "boutique", prof, "#espace"), "bouton bouton--ligne")}</p></div>
   {figure_photo(prof, "espace/atelier-rangements", "The studio's shelves of materials" if lang == "en" else "Les étagères de matériel de l'atelier", "", "fossile boutique__b", "(max-width: 800px) 70vw, 30vw", ' data-parallaxe="0.08"')}
 </section>
@@ -1194,7 +1202,7 @@ def page_espace(lang):
 <section class="agenda" data-strate="{e("Calendar" if lang == "en" else "Agenda")}">
   <div class="agenda__corps">{surtitre("Calendar" if lang == "en" else "Agenda", 6)}<h2 class="titre-section">{lettres("Classes & gatherings" if lang == "en" else "Cours et rencontres")}</h2>
   <ul class="agenda__liste">{agenda}</ul>
-  <p>{bouton(t["nav"]["cours"], lien(lang, "cours", prof))}{bouton(t["nav"]["evenements"], lien(lang, "evenements", prof), "bouton bouton--ligne")}</p></div>
+  <p>{bouton(t["nav"]["cours_prives"], lien(lang, "cours_prives", prof))}{bouton(t["nav"]["evenements"], lien(lang, "evenements", prof), "bouton bouton--ligne")}</p></div>
   {figure_photo(prof, "evenements/verres-de-vin-galerie", "Glasses raised among the paintings of the gallery" if lang == "en" else "Verres levés au milieu des tableaux de la galerie", "", "fossile agenda__img", "(max-width: 900px) 80vw, 32vw", ' data-parallaxe="-0.05"')}
 </section>
 <section class="infos" data-strate="{e(t["horaires"])}">
@@ -1240,17 +1248,87 @@ def page_cours(lang):
   <div class="en-ligne__carte en-ligne__carte--air" data-incline>
     {figure_photo(prof, "retraites/participante-peint-en-plein-air", "A participant painting outdoors in a mountain meadow" if lang == "en" else "Une participante peint en plein air, dans un pré de montagne", "", "fossile", "(max-width: 800px) 86vw, 30vw")}
     <div>{surtitre("Private, outdoors" if lang == "en" else "Privé, en plein air", 4)}<h3>{e(C.PLEIN_AIR_PRIVE["titre"][lang])}</h3><p class="note">{e(C.PLEIN_AIR_PRIVE["texte"][lang])}</p>
-    <p>{bouton("Ask about dates" if lang == "en" else "Demander des dates", lien(lang, "contact", prof) + "?objet=cours", "bouton bouton--ligne")}</p></div>
+    <p>{bouton("Ask about dates" if lang == "en" else "Demander des dates", lien(lang, "contact", prof) + "?objet=cours_prives", "bouton bouton--ligne")}</p></div>
   </div>
   <p class="en-ligne__cloche" data-apparait><span aria-hidden="true">🔔</span> {e(C.M2616["cloche"][lang])}</p>
 </section>
 <section class="cocreation" data-strate="Co-Creating Sessions">
   {figure_photo(prof, "cours/table-aquarelle", "A workshop table covered in watercolour work" if lang == "en" else "Une table d'atelier couverte d'aquarelles", "", "fossile", "(max-width: 800px) 80vw, 30vw")}
   <div>{surtitre(L(lang, co["groupe"]), 5)}<h2 class="titre-section">{lettres(co["titre"])}</h2><p data-apparait>{e(L(lang, co["texte"]))}</p><p class="prix-grand" data-apparait>{co["prix"]}{"\u00a0" if lang == "fr" else " "}€</p>
-  <p data-apparait>{bouton("Book in the shop" if lang == "en" else "Réserver en boutique", lien(lang, "boutique", prof, "#espace"))}{bouton("Ask a question" if lang == "en" else "Poser une question", lien(lang, "contact", prof) + "?objet=cours", "bouton bouton--ligne")}</p></div>
+  <p data-apparait>{bouton("Book in the shop" if lang == "en" else "Réserver en boutique", lien(lang, "boutique", prof, "#espace"))}{bouton("Ask a question" if lang == "en" else "Poser une question", lien(lang, "contact", prof) + "?objet=cours_prives", "bouton bouton--ligne")}</p></div>
 </section>'''
     corps = avec_carnet(corps, lang, prof, "cours")
     ecrire(chemin, page(lang, "cours", chemin, t["nav"]["cours"], corps, href_autre(lang, "cours", prof), {}, "page-cours"))
+
+
+# ================================================================ cours privés sur mesure (hôtels, conciergeries, organisateurs)
+def page_cours_prives(lang):
+    t = C.T[lang]
+    fr = lang == "fr"
+    chemin = fichier(lang, "cours_prives")
+    prof = prof_de(chemin)
+    K = C.COURS_PRIVES
+    at = "".join(f'<li class="atelier" style="--i:{i}">{figure_photo(prof, ph, "", "", "fossile atelier__img", "(max-width: 800px) 86vw, 26vw")}<p class="atelier__n">{i + 1:02d}</p><h3>{e(a[lang])}</h3><p>{e(b[lang])}</p></li>' for i, (a, b, ph) in enumerate(C.COURS["ateliers"]))
+    eq = "".join(f'<li><h3>{e(a[lang])}</h3><p>{e(b[lang])}</p></li>' for a, b in C.COURS["equipes"])
+    corps = f'''
+{bandeau(lang, prof, None, "Hotels · concierges · event planners" if not fr else "Hôtels · conciergeries · organisateurs d'événements", K["titre"][lang], [K["pour"][lang], C.COURS["citation"][lang]], figure_photo(prof, "cours/in-the-studio", "Guests painting in the studio" if not fr else "Des participants peignent à l'atelier", "", "fossile", "(max-width: 900px) 80vw, 36vw"), K["titre"][lang], "bandeau--cours-prives")}
+<section class="ateliers" data-strate="{e("Private Atelier Sessions" if not fr else "Séances d'atelier privées")}">
+  {surtitre("Private Atelier Sessions" if not fr else "Séances d'atelier privées", 1)}<h2 class="titre-section">{lettres("Focus on process and medium" if not fr else "Le geste et le médium")}</h2>
+  <ul class="ateliers__liste">{at}</ul>
+  <p class="note">{e(K["a_completer"][lang])}</p>
+</section>
+<section class="equipes" data-strate="{e("Groups and teams" if not fr else "Groupes et équipes")}">
+  <div class="equipes__images">{figure_photo(prof, "teambuilding/atelier-cires-jaunes", "A team workshop with yellow waxes" if not fr else "Un atelier d'équipe aux cires jaunes", "", "fossile", "(max-width: 800px) 86vw, 34vw")}</div>
+  <div class="equipes__texte">{surtitre("Institutional & Team Innovation" if not fr else "Institutions et équipes", 2)}<h2 class="titre-section">{lettres("The garden of creative thinking" if not fr else "Le jardin de la pensée créative")}</h2><p data-apparait>{e(C.COURS["equipes_intro"][lang])}</p><ul class="equipes__liste">{eq}</ul>
+  <p data-apparait>{bouton(t["nav"]["evenements"], lien(lang, "evenements", prof), "bouton bouton--ligne")}</p></div>
+</section>
+<section class="cocreation" data-strate="{e(C.PLEIN_AIR_PRIVE["titre"][lang])}">
+  {figure_photo(prof, "retraites/participante-peint-en-plein-air", "A guest painting outdoors in a mountain meadow" if not fr else "Une participante peint en plein air, dans un pré de montagne", "", "fossile", "(max-width: 800px) 80vw, 30vw")}
+  <div>{surtitre("Outdoors" if not fr else "En plein air", 3)}<h2 class="titre-section">{lettres(C.PLEIN_AIR_PRIVE["titre"][lang])}</h2><p class="note">{e(C.PLEIN_AIR_PRIVE["texte"][lang])}</p>
+  <p data-apparait>{bouton("Enquire for your guests" if not fr else "Demander pour vos clients", lien(lang, "contact", prof) + "?objet=cours_prives")}<a class="bouton bouton--ligne aimant" href="mailto:{C.COORD["courriel_espace"]}"><span>{C.COORD["courriel_espace"]}</span></a></p></div>
+</section>'''
+    corps = avec_carnet(corps, lang, prof, "cours")
+    ecrire(chemin, page(lang, "cours_prives", chemin, K["titre"][lang], corps, href_autre(lang, "cours_prives", prof), {}, "page-cours page-cours-prives"))
+
+
+# ================================================================ Studio notes : publié, hors menu (brief)
+def page_studio(lang):
+    t = C.T[lang]
+    fr = lang == "fr"
+    chemin = fichier(lang, "studio")
+    prof = prof_de(chemin)
+    intro = C.INTRO_SERIE[lang]
+    chevalet = "".join(figure_oeuvre(prof, oid, lang, LEAD, "(max-width: 700px) 70vw, 26vw") for oid in ["en-cours-3", "en-cours-1", "en-cours-4", "en-cours-5", "en-cours-6"])
+    corps = f'''
+<section class="bandeau bandeau--studio" data-strate="{e(t["nav"]["studio"])}">
+  <div class="bandeau__texte">
+    {surtitre(SERIES[LEAD]["titre"][lang] + " · " + ("works in progress and research" if not fr else "œuvres en cours et recherches"))}
+    <h1 class="bandeau__titre">{lettres(t["nav"]["studio"])}</h1>
+    <div class="bandeau__intro" data-apparait><p class="studio__ouverture">{e(intro[0])}</p></div>
+  </div>
+  <div class="bandeau__image">{figure_photo(prof, "artiste/lisa-a-17-ans-juneau-icefield", "Lisa at seventeen on the Juneau Icefield" if not fr else "Lisa à dix-sept ans sur le champ de glace de Juneau", "Juneau Icefield, expedition photograph" if not fr else "Champ de glace de Juneau, photo d'expédition", "fossile", "(max-width: 900px) 70vw, 30vw")}</div>
+</section>
+<section class="studio-texte" data-strate="{e("Reading the ice" if not fr else "Lire la glace")}">
+  <div class="studio-texte__colonne">{"".join(f'<p data-apparait>{e(x)}</p>' for x in intro[1:3])}
+    <blockquote class="declaration__citation"><p>{e(C.POSITION["citation"][lang])}</p></blockquote>
+    {"".join(f'<p data-apparait>{e(x)}</p>' for x in intro[3:])}
+  </div>
+</section>
+<section class="studio-chevalet" data-strate="{e("On my easel" if not fr else "Sur mon chevalet")}">
+  <div class="studio-chevalet__tete">{surtitre("On my easel" if not fr else "Sur mon chevalet", 1)}<p data-apparait>{e(C.SERIE_ACTUELLE["chevalet"][lang])}</p></div>
+  <div class="studio-chevalet__oeuvres">{chevalet}</div>
+</section>
+<section class="studio-recherche" data-strate="{e("Research and process" if not fr else "Recherches et procédé")}">
+  {surtitre("Research and process" if not fr else "Recherches et procédé", 2)}
+  <ul class="matieres__photos">
+    <li>{figure_photo(prof, "atelier/glacier-sur-le-chevalet", "A glacier painting on the easel" if not fr else "Une peinture de glacier sur le chevalet", "", "fossile", "(max-width: 800px) 46vw, 22vw")}</li>
+    <li>{figure_photo(prof, "atelier/seaside-village-detail", "Detail of Seaside Village and the Pink Flowers" if not fr else "Détail de Seaside Village and the Pink Flowers", "Seaside Village and the Pink Flowers, " + ("detail" if not fr else "détail"), "fossile", "(max-width: 800px) 46vw, 22vw")}</li>
+    <li>{figure_photo(prof, "atelier/video-hot-surface", "Working wax on a hot surface" if not fr else "Travail de la cire sur surface chauffante", "", "fossile", "(max-width: 800px) 46vw, 22vw")}</li>
+    <li>{figure_photo(prof, "atelier/oeuvre-en-cours-pastels-sur-cire", "Pastels worked into wax on a painting in progress" if not fr else "Des pastels travaillés dans la cire, sur une œuvre en cours", "", "fossile", "(max-width: 800px) 46vw, 22vw")}</li>
+  </ul>
+  <p class="note">{e("More to come: Juneau Icefield expedition photographs, Cool Reflections in daylight, close-ups of wax surfaces, process shots and short videos in English with French captions." if not fr else "À venir : photos d'expédition du champ de glace de Juneau, Cool Reflections à la lumière du jour, gros plans de surfaces de cire, images du procédé et courtes vidéos en anglais sous-titrées en français.")}</p>
+</section>'''
+    ecrire(chemin, page(lang, "studio", chemin, t["nav"]["studio"], corps, href_autre(lang, "studio", prof), {}, "page-studio"))
 
 
 # ================================================================ événements privés
@@ -1366,7 +1444,7 @@ IMAGES_RETRAITE = {
         "faq": ("retraites/roc-de-chere", "Sketching at the Roc de Chère above Lake Annecy", "Croquis au Roc de Chère, au-dessus du lac d'Annecy"),
         "reserver": ("paysages/fleurs-alpage-bandeau", "", ""),
     },
-    "pause": {
+    "encaustics": {
         "intro": ("retraites/ouverture-des-boites-magiques", "Participants opening their boxes of materials around the studio table", "Les participants ouvrent leurs boîtes de matériel autour de la table de l'atelier"),
         "pourquoi": ("paysages/brume-sur-la-neige", "Mist over the snow above La Clusaz", "La brume sur la neige au-dessus de La Clusaz"),
         "ingredients": ("atelier/melange-resines-pigments-cire", "Lisa Cirenza mixing resin, pigments and wax in the studio", "Lisa Cirenza mélange résine, pigments et cire à l'atelier"),
@@ -1377,7 +1455,21 @@ IMAGES_RETRAITE = {
         "reserver": ("cours/pinceaux-bandeau", "", ""),
     },
 }
-RETRAITES = {"pip": R.PIP, "pause": R.PAUSE}
+IMAGES_RETRAITE["creative"] = {
+    "intro": ("espace/salon-canape", "The lounge of the Espace, sofa and paintings", "Le salon de l'Espace, canapé et tableaux"),
+    "reserver": ("paysages/brume-sur-la-neige", "", ""),
+    "inclus": ("retraites/viennoiseries-petit-dejeuner", "Pastries for breakfast", "Des viennoiseries pour le petit-déjeuner"),
+}
+RETRAITES = {"creative": R.CREATIVE, "pip": R.PIP, "encaustics": R.ENCAUSTICS}
+for _k, _ph in (("creative", "retraites/pause-face-aux-montagnes"), ("pip", "retraites/diner-coucher-de-soleil-parapentes"), ("encaustics", "retraites/atelier-cire-en-groupe")):
+    RETRAITES[_k]["photo_carte"] = _ph
+
+
+def grille_prix(lang):
+    """Les prix par chambre, identiques pour les trois retraites, avec la petite ligne demandée par Lisa."""
+    lignes = "".join(f'<div class="prix__ligne"><dt>{e(nom[lang])}{f"<small>{e(note[lang])}</small>" if note else ""}</dt><dd>{e(prix_txt(montant, lang))}</dd></div>' for nom, montant, note in R.PRIX_CHAMBRES)
+    return (f'<div class="prix" id="prix" tabindex="-1"><dl class="prix__grille">{lignes}</dl>'
+            f'<p class="prix__reduc">{e(R.REDUCTIONS[lang])}</p><p class="prix__petite-ligne">{e(R.PETITE_LIGNE[lang])}</p><p class="note">{e(R.LOGEMENT[lang])}</p></div>')
 
 
 def fig_retraite(lang, prof, cle, quoi, classe, sizes, attrs=""):
@@ -1395,9 +1487,10 @@ def sections_pause(lang, prof, r):
     ing = "".join(f'<li class="ingredient ingredient--{k}" data-incline data-revele style="--i:{i}"><span class="ingredient__n">{i + 1}</span><h3>{e(a[lang])}</h3><p>{e(b[lang])}</p></li>'
                   for i, ((a, b), k) in enumerate(zip(r["ingredients"], ("poulet", "sauce", "epices"))))
     rec = "".join(f'<li><strong>{e(a)}</strong> — {e(b)}</li>' for a, b in r["recettes"][lang])
-    return f'''<section class="pourquoi" data-strate="{e("Why a pause?" if lang == "en" else "Pourquoi une pause ?")}">
-  {fig_retraite(lang, prof, "pause", "pourquoi", "pourquoi__img", "100vw")}
-  <div class="pourquoi__texte">{surtitre("Why" if lang == "en" else "Pourquoi", 1)}<h2 class="titre-section">{lettres("Why a pause?" if lang == "en" else "Pourquoi une pause ?")}</h2>
+    tp = L(lang, r.get("titre_pourquoi")) or ("Why a pause?" if lang == "en" else "Pourquoi une pause ?")
+    return f'''<section class="pourquoi" data-strate="{e(tp)}">
+  {fig_retraite(lang, prof, r["id"], "pourquoi", "pourquoi__img", "100vw")}
+  <div class="pourquoi__texte">{surtitre("Why" if lang == "en" else "Pourquoi", 1)}<h2 class="titre-section">{lettres(tp)}</h2>
   <p class="pourquoi__grand" data-mots>{e(r["pourquoi"][lang])}</p></div>
 </section>
 <section class="ingredients ingredients--trois" data-strate="{e("The ingredients" if lang == "en" else "Les ingrédients")}">
@@ -1409,12 +1502,13 @@ def sections_pause(lang, prof, r):
   <div class="comment__texte">{surtitre("How" if lang == "en" else "Comment", 3)}<h2 class="titre-section">{lettres("Our Creative Recipe Book" if lang == "en" else "Notre carnet de recettes créatif")}</h2>{paras(r["comment"], lang)}
   <div class="recettes"><h3>{e(r["recettes_intro"][lang])}</h3><ul class="liste-traits">{rec}</ul></div>
   <p class="note-base" data-apparait>{e(r["base"][lang])}</p></div>
-  {fig_retraite(lang, prof, "pause", "comment", "comment__img", "(max-width: 900px) 80vw, 36vw", ' data-parallaxe="-0.05"')}
+  {fig_retraite(lang, prof, r["id"], "comment", "comment__img", "(max-width: 900px) 80vw, 36vw")}
 </section>'''
 
 
 def page_retraite(lang, cle):
     t = C.T[lang]
+    fr = lang == "fr"
     r = RETRAITES[cle]
     chemin = fichier(lang, cle)
     prof = prof_de(chemin)
@@ -1422,28 +1516,65 @@ def page_retraite(lang, cle):
     for i, j in enumerate(r["jours"]):
         ph = r["photos_jours"][i]
         img = figure_photo(prof, ph, "", "", "fossile jour__img", "(max-width: 800px) 86vw, 34vw")
-        if i in r.get("decor_jour", {}):
-            img += figure_decor(prof, r["decor_jour"][i], "", "Evocation" if lang == "en" else "Évocation", "fossile jour__img jour__img--2", "(max-width: 800px) 60vw, 22vw")
         items = "".join(f"<li>{e(x)}</li>" for x in j["items"][lang])
-        jours.append(f'''<li class="jour" data-strate="{e(("Day " if lang == "en" else "Jour ") + str(i + 1))}">
-  <p class="jour__n">{"Day" if lang == "en" else "Jour"} <span>{i + 1}</span></p>
+        jours.append(f'''<li class="jour" data-strate="{e(("Day " if not fr else "Jour ") + str(i + 1))}">
+  <p class="jour__n">{"Day" if not fr else "Jour"} <span>{i + 1}</span></p>
   <div class="jour__texte"><h3>{e(j["titre"][lang])}</h3><ul class="liste-traits">{items}</ul><p class="jour__note" data-apparait>{e(j["note"][lang])}</p></div>
   <div class="jour__images">{img}</div>
 </li>''')
-    etapes = "".join(f'<li class="etape" data-etape="{i + 1}"><p class="etape__jour">{"Day" if lang == "en" else "Jour"} {et["jour"]}</p><h3>{e(L(lang, et["nom"]))}</h3><p>{e(et["texte"][lang])}</p><span class="etape__img">{img_photo(prof, r["photos_jours"][et["jour"] - 1], "", "(max-width: 900px) 60vw, 22vw")}</span></li>' for i, et in enumerate(r["etapes"]))
+    etapes = "".join(f'<li class="etape" data-etape="{i + 1}"><p class="etape__jour">{"Day" if not fr else "Jour"} {et["jour"]}</p><h3>{e(L(lang, et["nom"]))}</h3><p>{e(et["texte"][lang])}</p><span class="etape__img">{img_photo(prof, r["photos_jours"][et["jour"] - 1], "", "(max-width: 900px) 60vw, 22vw")}</span></li>' for i, et in enumerate(r["etapes"]))
     temoins = "".join(f'<li data-incline><blockquote><p>“{e(x["texte"])}”</p><footer>{e(L(lang, x["nom"]))}{(" · " + e(x["source"])) if x.get("source") else ""}</footer></blockquote></li>' for x in r["temoignages"])
     faq = "".join(f'<details class="faq__item"><summary>{e(q[lang])}</summary><p>{e(rep[lang])}</p></details>' for q, rep in r.get("faq", []))
+    a_sections = cle == "encaustics"
+    n = 1
+    def num():
+        nonlocal n
+        n += 1
+        return n - 1
+    milieu = sections_pause(lang, prof, r) if a_sections else ""
+    if a_sections:
+        n = 4
     coachs_liste = r.get("coachs") or [R.COACH_LISA]
-    titre_coach = ("Your creative coach" if lang == "en" else "Votre coach créative") if len(coachs_liste) == 1 else ("Your creative coaches" if lang == "en" else "Vos coachs créatifs")
-    coachs = (f'<section class="coachs{" coachs--seule" if len(coachs_liste) == 1 else ""}" data-strate="{e(titre_coach)}">' + surtitre(titre_coach, 4 if cle == "pause" else 2) + '<div class="coachs__grille">' + "".join(
+    titre_coach = "Your creative coach" if not fr else "Votre coach créative"
+    coachs = (f'<section class="coachs coachs--seule" data-strate="{e(titre_coach)}">' + surtitre(titre_coach, num()) + '<div class="coachs__grille">' + "".join(
         f'<article class="coach">{figure_photo(prof, c["photo"], c["nom"], "", "fossile coach__img", "(max-width: 800px) 70vw, 24vw")}<div><h3>{e(c["nom"])}</h3><p class="coach__role">{e(c["role"][lang])}</p>{paras(c["texte"], lang)}</div></article>' for c in coachs_liste) + "</div></section>")
     if cle == "pip":
-        image_bandeau = f'<div class="bandeau__image bandeau__image--plein">{img_photo(prof, r["photo"], "Lake Annecy at Talloires" if lang == "en" else "Le lac d'Annecy à Talloires", "(max-width: 900px) 100vw, 60vw", "", "eager")}</div>'
+        image_bandeau = f'<div class="bandeau__image bandeau__image--plein">{img_photo(prof, r["photo"], "Lake Annecy, the day excursion" if not fr else "Le lac d'Annecy, l'excursion de la journée", "(max-width: 900px) 100vw, 60vw", "", "eager")}</div>'
     else:
-        image_bandeau = f'<div class="bandeau__image bandeau__image--cire"><span class="bandeau__cire" aria-hidden="true">{img_decor(prof, r["decor"], "", "60vw")}</span>{img_photo(prof, r["photo"], "A walker sitting on a stone wall, facing the mountains" if lang == "en" else "Une marcheuse assise sur un muret, face aux montagnes", "(max-width: 900px) 90vw, 40vw", "bandeau__photo", "eager")}</div>'
-    a_confirmer = f'<p class="note bandeau__note" data-apparait>{e(r["a_confirmer"][lang])}</p>' if r.get("a_confirmer") else ""
-    milieu = sections_pause(lang, prof, r) if cle == "pause" else ""
-    n_tete = 5 if cle == "pause" else 3
+        image_bandeau = f'<div class="bandeau__image bandeau__image--plein">{img_photo(prof, r["photo"], ("A walker sitting on a stone wall, facing the mountains" if not fr else "Une marcheuse assise sur un muret, face aux montagnes") if cle == "creative" else ("Participants working with hot wax in the studio" if not fr else "Des participants travaillent la cire chaude à l'atelier"), "(max-width: 900px) 100vw, 50vw", "", "eager")}</div>'
+    sections_programme = ""
+    if r["etapes"]:
+        sections_programme += f'''<section class="carte-retraite-topo" data-carte data-strate="{e("The route" if not fr else "Le parcours")}">
+  <div class="carte__collant">
+    <div class="carte__svg">{carte_topo(lang, r)}</div>
+    <div class="carte__panneau">{surtitre("The route" if not fr else "Le parcours")}<ol class="etapes">{etapes}</ol><p class="note">{e("Schematic map, not to scale. Retreats are based in La Clusaz; lake days are excursions." if not fr else "Carte schématique, sans échelle. Les retraites sont basées à La Clusaz ; les journées au lac sont des excursions.")}</p></div>
+    <div class="carte__progres" aria-hidden="true"><i></i></div>
+  </div>
+</section>'''
+    if jours:
+        sections_programme += f'''<section class="programme" data-strate="{e("Agenda" if not fr else "Programme")}">
+  <div class="programme__tete">{surtitre("Agenda" if not fr else "Programme", num())}<h2 class="titre-section">{lettres("Day by day" if not fr else "Jour après jour")}</h2></div>
+  <ol class="jours">{"".join(jours)}</ol>
+</section>'''
+    else:
+        sections_programme += f'''<section class="programme programme--a-venir" data-strate="{e("Agenda" if not fr else "Programme")}">
+  {surtitre("Agenda" if not fr else "Programme", num())}<h2 class="titre-section">{lettres("Day by day" if not fr else "Jour après jour")}</h2>
+  <p class="note">{e(L(lang, r.get("programme_a_completer")) or "")}</p>
+</section>'''
+    if r.get("pour_qui"):
+        sections_programme += f'''<section class="pour-qui" data-strate="{e("Is this retreat right for me?" if not fr else "Est-ce pour moi ?")}">
+  {fig_retraite(lang, prof, cle, "pour_qui", "pour-qui__img", "(max-width: 900px) 80vw, 34vw")}
+  <div>{surtitre("Anytime, anywhere" if not fr else "N'importe quand, n'importe où")}<h2 class="titre-section">{lettres("Is this retreat right for me?" if not fr else "Cette retraite est-elle pour moi ?")}</h2>
+  <div class="pour-qui__texte">{"".join(f'<p data-apparait>{e(x)}</p>' for x in r["pour_qui"][lang])}</div></div>
+</section>'''
+    if temoins:
+        sections_programme += f'''<section class="temoignages" data-strate="{e("What people say" if not fr else "Ils en parlent")}">
+  {fig_retraite(lang, prof, cle, "temoignages", "temoignages__img", "100vw")}
+  {surtitre("What people say" if not fr else "Ce qu'ils en disent")}<ul class="temoignages__liste">{temoins}</ul>
+  <p class="note">{e("Testimonials as published on the current site, in their original language." if not fr else "Témoignages tels que publiés sur le site actuel, dans leur langue d'origine.")}</p>
+</section>'''
+    inclus = (f'<div><h2 class="titre-section">{lettres("What is included" if not fr else "Ce qui est inclus")}</h2><ul class="liste-traits liste-traits--oui">{"".join(f"<li>{e(x)}</li>" for x in R.INCLUS[lang])}</ul></div>'
+              f'<div><h2 class="titre-section">{lettres("Not included" if not fr else "Non inclus")}</h2><ul class="liste-traits liste-traits--non">{"".join(f"<li>{e(x)}</li>" for x in R.NON_INCLUS[lang])}</ul></div>') if cle != "creative" else ""
     corps = f'''
 <section class="bandeau bandeau--retraite bandeau--{cle}" data-strate="{e(r["titre"])}">
   <div class="bandeau__texte">
@@ -1451,92 +1582,84 @@ def page_retraite(lang, cle):
     <h1 class="bandeau__titre">{lettres(r["titre"])}</h1>
     <p class="bandeau__accroche" data-apparait>{e(L(lang, r["accroche"]))}</p>
     <p class="bandeau__cycle" data-apparait>{e(L(lang, r["cycle"]))}</p>
-    <div class="bandeau__compte" data-apparait>{compte(lang, r["debut"])}<a class="bouton aimant bouton--petit" href="{lien(lang, "contact", prof) + "?objet=retraite&amp;retraite=" + cle}"><span>{e("Schedule a discovery call" if lang == "en" else "Réserver un échange découverte")}</span></a></div>
-    {a_confirmer}
+    <div class="bandeau__compte" data-apparait>{compte(lang, r["debut"])}<a class="bouton aimant bouton--petit" href="{lien(lang, "contact", prof) + "?objet=retraite&amp;retraite=" + cle}"><span>{e("Schedule a discovery call" if not fr else "Réserver un échange découverte")}</span></a></div>
   </div>
   {image_bandeau}
 </section>
-<section class="retraite-intro" data-strate="{e("Welcome" if lang == "en" else "Bienvenue")}">
+<section class="retraite-intro" data-strate="{e("Welcome" if not fr else "Bienvenue")}">
   <div class="retraite-intro__texte">{"".join(f'<p data-apparait>{e(x)}</p>' for x in r["intro"][lang])}{fig_retraite(lang, prof, cle, "intro", "retraite-intro__img", "(max-width: 900px) 92vw, 52vw")}</div>
   <dl class="fiche-pratique">
-    <div><dt>{"Dates" if lang == "en" else "Dates"}</dt><dd>{e(L(lang, r["dates"]))}</dd></div>
-    <div><dt>{"Place" if lang == "en" else "Lieu"}</dt><dd>{e(L(lang, r["lieu"]))}</dd></div>
-    <div><dt>{"Group" if lang == "en" else "Groupe"}</dt><dd>{e(L(lang, r["groupe"]))}</dd></div>
-    <div><dt>{"Price" if lang == "en" else "Tarif"}</dt><dd><strong>{e(L(lang, r["prix"]))}</strong> {e(L(lang, r["prix_note"]))}</dd></div>
+    <div><dt>{"Dates" if not fr else "Dates"}</dt><dd>{e(L(lang, r["dates"]))}</dd></div>
+    <div><dt>{"Place" if not fr else "Lieu"}</dt><dd>{e(L(lang, r["lieu"]))}</dd></div>
+    <div><dt>{"Group" if not fr else "Groupe"}</dt><dd>{e(L(lang, r["groupe"]))}</dd></div>
+    <div><dt>{"Price" if not fr else "Tarif"}</dt><dd><strong>{e(L(lang, r["prix"]))}</strong> {e("per person, depending on the room" if not fr else "par personne, selon la chambre")} · <a href="#prix">{e("rooms" if not fr else "chambres")}</a></dd></div>
   </dl>
 </section>
 {milieu}
 {coachs}
-<section class="carte-retraite-topo" data-carte data-strate="{e("The route" if lang == "en" else "Le parcours")}">
-  <div class="carte__collant">
-    <div class="carte__svg">{carte_topo(lang, r)}</div>
-    <div class="carte__panneau">{surtitre("The route" if lang == "en" else "Le parcours")}<ol class="etapes">{etapes}</ol><p class="note">{e("Schematic map, not to scale." if lang == "en" else "Carte schématique, sans échelle.")}</p></div>
-    <div class="carte__progres" aria-hidden="true"><i></i></div>
-  </div>
-</section>
-<section class="programme" data-strate="{e("Agenda" if lang == "en" else "Programme")}">
-  <div class="programme__tete">{surtitre("Agenda" if lang == "en" else "Programme", n_tete)}<h2 class="titre-section">{lettres("Day by day" if lang == "en" else "Jour après jour")}</h2></div>
-  <ol class="jours">{"".join(jours)}</ol>
-</section>
-<section class="pour-qui" data-strate="{e("Is this retreat right for me?" if lang == "en" else "Est-ce pour moi ?")}">
-  {fig_retraite(lang, prof, cle, "pour_qui", "pour-qui__img", "(max-width: 900px) 80vw, 34vw", ' data-parallaxe="-0.05"')}
-  <div>{surtitre("Anytime, anywhere" if lang == "en" else "N'importe quand, n'importe où")}<h2 class="titre-section">{lettres("Is this retreat right for me?" if lang == "en" else "Cette retraite est-elle pour moi ?")}</h2>
-  <div class="pour-qui__texte">{"".join(f'<p data-apparait>{e(x)}</p>' for x in r["pour_qui"][lang])}</div></div>
-</section>
-<section class="temoignages" data-strate="{e("What people say" if lang == "en" else "Ils en parlent")}">
-  {fig_retraite(lang, prof, cle, "temoignages", "temoignages__img", "100vw")}
-  {surtitre("What people say" if lang == "en" else "Ce qu'ils en disent")}<ul class="temoignages__liste">{temoins}</ul>
-  <p class="note">{e("Testimonials as published on the current site, in their original language." if lang == "en" else "Témoignages tels que publiés sur le site actuel, dans leur langue d'origine.")}</p>
-</section>
-<section class="inclus" data-strate="{e("What's included" if lang == "en" else "Ce qui est inclus")}">
-  <div><h2 class="titre-section">{lettres("What's included" if lang == "en" else "Ce qui est inclus")}</h2><ul class="liste-traits liste-traits--oui">{"".join(f"<li>{e(x)}</li>" for x in R.INCLUS[lang])}</ul><p class="prix-grand">{e(L(lang, r["prix"]))}</p><p class="note">{e(L(lang, r["prix_note"]))}</p></div>
-  <div><h2 class="titre-section">{lettres("Not included" if lang == "en" else "Non inclus")}</h2><ul class="liste-traits liste-traits--non">{"".join(f"<li>{e(x)}</li>" for x in R.NON_INCLUS[lang])}</ul>{f'<p class="note">{e("For non-participating partners, see the FAQ below." if lang == "en" else "Pour les partenaires non participants, voir la FAQ ci-dessous.")}</p>' if faq else ""}</div>
-  {fig_retraite(lang, prof, cle, "inclus", "inclus__img", "(max-width: 1100px) 80vw, 26vw", ' data-incline')}
+{sections_programme}
+<section class="inclus inclus--prix" data-strate="{e("Prices and rooms" if not fr else "Prix et chambres")}">
+  {inclus}
+  <div class="inclus__prix">{surtitre("Prices per person · the same for all three retreats" if not fr else "Prix par personne · les mêmes pour les trois retraites")}{grille_prix(lang)}</div>
 </section>
 {f'<section class="faq" data-strate="FAQ"><div>{surtitre("FAQ")}<h2 class="titre-section">{lettres("Questions")}</h2><div class="faq__liste">{faq}</div></div>{fig_retraite(lang, prof, cle, "faq", "faq__img", "(max-width: 900px) 70vw, 30vw")}</section>' if faq else ""}
-<section class="reserver reserver--image" data-strate="{e("Book" if lang == "en" else "Réserver")}">
-  <div class="reserver__fond" aria-hidden="true" data-parallaxe="0.08">{img_photo(prof, IMAGES_RETRAITE[cle]["reserver"][0], "", "100vw")}</div>
-  <h2 class="titre-section">{lettres("Let’s see if we’re a good match" if lang == "en" else "Voyons si nos élans créatifs s'accordent")}</h2>
-  <p data-apparait>{e("Book a short, relaxed chat to talk about your needs and whether this retreat is your next creative leap." if lang == "en" else "Réservez un court échange, sans engagement, pour parler de vos envies et voir si cette retraite est votre prochain élan créatif.")}</p>
-  <p>{bouton("Schedule a discovery call" if lang == "en" else "Réserver un échange découverte", lien(lang, "contact", prof) + "?objet=retraite&amp;retraite=" + cle)}<a class="bouton bouton--ligne aimant" href="https://wa.me/{C.COORD["tel_brut"].lstrip("+")}" target="_blank" rel="noopener"><span>WhatsApp</span></a><a class="bouton bouton--ligne aimant" href="mailto:{C.COORD["courriel_espace"] if cle == "pause" else C.COORD["courriel"]}"><span>{C.COORD["courriel_espace"] if cle == "pause" else C.COORD["courriel"]}</span></a></p>
-  {f'<p class="note">{e("The current page lists the organiser as Lisa Cirenza, 74290 Talloires (SIRET 888 534 534 00019), while the Alpine Pause page lists Espace Créa-Tea-Vité (SAS): which company sells the retreats is to be confirmed, for the right Stripe account." if lang == "en" else "La page actuelle indique comme organisatrice Lisa Cirenza, 74290 Talloires (SIRET 888 534 534 00019), alors que la page Alpine Pause indique l'Espace Créa-Tea-Vité (SAS) : l'entité qui vend les retraites est à confirmer, pour le bon compte Stripe.")}</p>'}
+<section class="reserver reserver--image" data-strate="{e("Book" if not fr else "Réserver")}">
+  <div class="reserver__fond" aria-hidden="true">{img_photo(prof, IMAGES_RETRAITE[cle]["reserver"][0], "", "100vw")}</div>
+  <h2 class="titre-section">{lettres("Let’s see if we’re a good match" if not fr else "Voyons si nos élans créatifs s'accordent")}</h2>
+  <p data-apparait>{e("Book a short, relaxed chat to talk about your needs, your room and whether this retreat is your next creative leap." if not fr else "Réservez un court échange, sans engagement, pour parler de vos envies, de votre chambre et voir si cette retraite est votre prochain élan créatif.")}</p>
+  <p>{bouton("Schedule a discovery call" if not fr else "Réserver un échange découverte", lien(lang, "contact", prof) + "?objet=retraite&amp;retraite=" + cle)}<a class="bouton bouton--ligne aimant" href="https://wa.me/{C.COORD["tel_brut"].lstrip("+")}" target="_blank" rel="noopener"><span>WhatsApp</span></a><a class="bouton bouton--ligne aimant" href="mailto:{C.COORD["courriel_espace"]}"><span>{C.COORD["courriel_espace"]}</span></a></p>
 </section>'''
-    ecrire(chemin, page(lang, cle, chemin, r["titre"], corps, href_autre(lang, cle, prof), {"retraite": cle}, "page-retraite page-retraite--" + cle))
+    ecrire(chemin, page(lang, cle, chemin, r["titre"] + " · " + L(lang, r["accroche"]), corps, href_autre(lang, cle, prof), {"retraite": cle}, "page-retraite page-retraite--" + cle))
 
 
 def page_retraites(lang):
     t = C.T[lang]
+    fr = lang == "fr"
     chemin = fichier(lang, "retraites")
     prof = prof_de(chemin)
     corps = f'''
-{bandeau(lang, prof, None, "La Clusaz · Lake Annecy · 2027" if lang == "en" else "La Clusaz · lac d'Annecy · 2027", t["nav"]["retraites"], "Five days of creative thinking and activities, designed to inspire not only your painting, but everything you create—whether you photograph, cook, write, dance, code, build, or simply reflect." if lang == "en" else "Cinq jours d'activités et de réflexion créatives, pour nourrir votre peinture et tout ce que vous créez : photographier, cuisiner, écrire, danser, coder, construire, ou simplement réfléchir.", figure_photo(prof, "retraites/groupe-painters-in-paradise", "Painting in Paradise participants in front of the mountains" if lang == "en" else "Les participants de Painting in Paradise devant les montagnes", "Painters in Paradise, 2026", "fossile", "(max-width: 900px) 80vw, 36vw"), t["nav"]["retraites"])}
+{bandeau(lang, prof, None, "Espace Créa-Tea-Vité · La Clusaz · 2027", t["nav"]["retraites"], [R.LOGEMENT[lang]], figure_photo(prof, "retraites/groupe-painters-in-paradise", "Painting in Paradise participants in front of the mountains" if not fr else "Les participants de Painting in Paradise devant les montagnes", "Painters in Paradise, 2026", "fossile", "(max-width: 900px) 80vw, 36vw"), t["nav"]["retraites"])}
 <section class="retraites-accueil retraites-accueil--page" data-strate="2027">
-  <div class="retraites-cartes">
-    {carte_retraite(lang, prof, R.PIP, "pip", "retraites/diner-coucher-de-soleil-parapentes")}
-    {carte_retraite(lang, prof, R.PAUSE, "pause", "retraites/pause-face-aux-montagnes")}
+  <div class="retraites-cartes retraites-cartes--trois">
+    {"".join(carte_retraite(lang, prof, RETRAITES[k], k, RETRAITES[k]["photo_carte"]) for k in RETRAITES_ORDRE)}
   </div>
+</section>
+<section class="inclus inclus--prix" data-strate="{e("Prices and rooms" if not fr else "Prix et chambres")}">
+  <div class="inclus__prix">{surtitre("Prices per person · the same for all three retreats" if not fr else "Prix par personne · les mêmes pour les trois retraites", 1)}<h2 class="titre-section">{lettres("Rooms and prices" if not fr else "Chambres et prix")}</h2>{grille_prix(lang)}</div>
 </section>'''
     corps = avec_carnet(corps, lang, prof, "retraites")
     ecrire(chemin, page(lang, "retraites", chemin, t["nav"]["retraites"], corps, href_autre(lang, "retraites", prof), {}, "page-retraites"))
 
 
 # ================================================================ boutique (deux comptoirs, deux comptes de paiement)
+# Petites encaustiques récentes relevées dans l'index public d'Artwork Archive (prix publics) ; photos à venir.
+AA_RECENTES = [
+    {"id": "aa-where-the-mountains-breathe", "titre": "Where the Mountains Breathe", "annee": "2025", "technique": {"en": "Encaustic on paper, black archival mat and frame", "fr": "Encaustique sur papier, passe-partout et cadre noirs d'archive"}, "dims": "34 × 25.5 cm", "prix": 145},
+    {"id": "aa-light-across-the-thaw", "titre": "Light Across the Thaw", "annee": None, "technique": {"en": "Encaustics on board", "fr": "Encaustique sur panneau"}, "dims": "30 × 30 × 3.5 cm", "prix": 240},
+    {"id": "aa-blissful-light", "titre": "Blissful Light", "annee": "2024", "technique": {"en": "Encaustics on board", "fr": "Encaustique sur panneau"}, "dims": "20 × 19.5 cm", "prix": 200},
+    {"id": "aa-doucement-entrelaces", "titre": "Doucement Entrelacés", "annee": "2024", "technique": {"en": "Encaustic on paper, white archival mat and frame", "fr": "Encaustique sur papier, passe-partout et cadre blancs d'archive"}, "dims": "30 × 25.5 cm", "prix": 80},
+    {"id": "aa-the-silence-of-thawing-waters", "titre": "The Silence of Thawing Waters", "annee": None, "technique": {"en": "Encaustic and inks on paper, black archival mat and frame", "fr": "Encaustique et encres sur papier, passe-partout et cadre noirs d'archive"}, "dims": "25.5 × 34 cm", "prix": None},
+]
+
+
 def produit_oeuvre(lang, prof, oid, genre):
     t = C.T[lang]
+    fr = lang == "fr"
     o = OEUVRES[oid]
     tt = titre(o, lang)
-    if genre == "edition":
+    prix = o["prix"][0] if o.get("prix") else None
+    if genre == "tirage":
         detail = (o["edition"] or {}).get(lang) or ""
-        prix_aff = ("Price to be completed" if lang == "en" else "Prix à compléter")
-        bouton_txt = "Add to basket" if lang == "en" else "Ajouter au panier"
+        prix_aff = prix_txt(prix, lang) if prix else ("Price to be completed" if not fr else "Prix à compléter")
+        bouton_txt = "Add to basket" if not fr else "Ajouter au panier"
     else:
         detail = technique_txt(o, lang) or ""
-        prix_aff = t["prix_demande"]
-        bouton_txt = "Reserve" if lang == "en" else "Réserver"
+        prix_aff = prix_txt(prix, lang) if prix else t["prix_demande"]
+        bouton_txt = ("Add to basket" if not fr else "Ajouter au panier") if prix else ("Reserve" if not fr else "Réserver")
     dims = dims_txt(o, lang)
-    donnees = json.dumps({"id": oid, "comptoir": "atelier", "genre": genre, "titre": tt, "prix": None, "image": f"img/oeuvres/{oid}-640.webp"}, ensure_ascii=False)
+    donnees = json.dumps({"id": oid, "comptoir": "atelier", "genre": genre, "titre": tt, "prix": prix, "image": f"img/oeuvres/{oid}-640.webp"}, ensure_ascii=False)
     serie = SERIES[o["series"][0]]["titre"][lang] if o["series"][0] in SERIES else ""
-    return f'''<li class="produit produit--{genre}" data-genre="{genre}" data-incline>
+    return f'''<li class="produit produit--{genre}" data-genre="{genre}">
   <div class="produit__visuel">{bouton_oeuvre(prof, oid, lang, o["series"][0], "(max-width: 700px) 44vw, 18vw", "produit__toile")}</div>
   <div class="produit__texte">
     <p class="produit__serie">{e(serie)}</p>
@@ -1548,10 +1671,27 @@ def produit_oeuvre(lang, prof, oid, genre):
 </li>'''
 
 
+def produit_aa(lang, x):
+    fr = lang == "fr"
+    detail = x["technique"][lang] + " · " + (x["dims"].replace(".", ",") if fr else x["dims"]) + (" · " + x["annee"] if x["annee"] else "")
+    prix_aff = prix_txt(x["prix"], lang) if x["prix"] else C.T[lang]["prix_demande"]
+    donnees = json.dumps({"id": x["id"], "comptoir": "atelier", "genre": "recent", "titre": x["titre"], "prix": x["prix"], "image": "img/textures/cire-relief.webp"}, ensure_ascii=False)
+    return f'''<li class="produit produit--recent produit--aa" data-genre="recent">
+  <div class="produit__visuel produit__visuel--attente"><span>{e("Photo to come from Artwork Archive" if not fr else "Photo à venir d'Artwork Archive")}</span></div>
+  <div class="produit__texte">
+    <p class="produit__serie">{e("Encaustic · Artwork Archive" if not fr else "Encaustique · Artwork Archive")}</p>
+    <h3 class="produit__titre">{e(x["titre"])}</h3>
+    <p class="produit__detail">{e(detail)}</p>
+    <p class="produit__prix">{e(prix_aff)}</p>
+    <button class="produit__ajouter" type="button" data-ajouter='{e(donnees)}'><span>{e(("Add to basket" if not fr else "Ajouter au panier") if x["prix"] else ("Reserve" if not fr else "Réserver"))}</span></button>
+  </div>
+</li>'''
+
+
 def produit_espace(lang, prof, cle, titre_p, texte, photo, prix, prix_aff, bouton_txt, lien_detail=None, genre="service"):
     donnees = json.dumps({"id": cle, "comptoir": "espace", "genre": genre, "titre": titre_p, "prix": prix, "image": "img/photos/" + photo.replace("/", "-") + "-800.webp"}, ensure_ascii=False)
     plus = f'<a class="lien-simple" href="{lien_detail}">{e("Details" if lang == "en" else "Détails")} →</a>' if lien_detail else ""
-    return f'''<li class="produit produit--espace" data-genre="{genre}" data-incline>
+    return f'''<li class="produit produit--espace" data-genre="{genre}">
   <div class="produit__visuel produit__visuel--photo">{img_photo(prof, photo, "", "(max-width: 700px) 86vw, 26vw")}</div>
   <div class="produit__texte">
     <h3 class="produit__titre">{e(titre_p)}</h3>
@@ -1565,33 +1705,36 @@ def produit_espace(lang, prof, cle, titre_p, texte, photo, prix, prix_aff, bouto
 def page_boutique(lang):
     t = C.T[lang]
     B = C.BOUTIQUE
+    E = C.EDITIONS_COLLECTION
     c = C.COORD
+    fr = lang == "fr"
     chemin = fichier(lang, "boutique")
     prof = prof_de(chemin)
-    editions = [oid for sid in ORDRE + ["hors-serie"] for oid in LISTES.get(sid, []) if OEUVRES[oid]["edition"] and OEUVRES[oid]["statut"] not in ("vendu", "en-cours")]
-    editions = list(dict.fromkeys(editions))
-    originaux = [oid for sid in ORDRE if sid != "commissions" for oid in LISTES[sid]
-                 if not OEUVRES[oid]["edition"] and OEUVRES[oid]["statut"] not in ("vendu", "en-cours", "non-disponible", "en-pret") and OEUVRES[oid]["series"][0] == sid]
+    dispo = lambda oid: OEUVRES[oid]["statut"] not in ("vendu", "en-cours", "non-disponible", "en-pret")
+    recentes = [oid for oid in LISTES[LEAD] if dispo(oid) and not OEUVRES[oid]["edition"]]
+    tirages = list(dict.fromkeys(oid for sid in ORDRE + ["hors-serie"] for oid in LISTES.get(sid, []) if OEUVRES[oid]["edition"] and dispo(oid)))
+    archive = [oid for sid in ARCHIVE if sid != "commissions" for oid in LISTES[sid] if not OEUVRES[oid]["edition"] and dispo(oid) and OEUVRES[oid]["series"][0] == sid]
+    n_tout = len(AA_RECENTES) + len(recentes) + len(tirages) + len(archive)
+    series_ed = "".join(f'''<li class="edition-serie edition-serie--boutique"><span class="edition-serie__bloc{" edition-serie__bloc--vide" if not x["image"] else ""}">{img_oeuvre(prof, x["image"], lang, "(max-width: 700px) 40vw, 14vw") if x["image"] else ""}</span>
+  <span class="edition-serie__titre">{e(x["titre"][lang])}</span><span class="note">{e("Blocks, years and prices to come" if not fr else "Blocs, années et prix à venir")}</span></li>''' for x in E["series"])
     co = C.AGENDA[0]
-    fr = lang == "fr"
     prix_co = int(co["prix"])
-    espace_items = [
-        produit_espace(lang, prof, "co-creating", co["titre"], L(lang, co["texte"]), "cours/atelier-libre-pastel", prix_co, prix_txt(prix_co, lang), "Add to basket" if not fr else "Ajouter au panier", lien(lang, "cours", prof)),
-        produit_espace(lang, prof, "pip", "Painting in Paradise · " + L(lang, R.PIP["dates"]), L(lang, R.PIP["groupe"]).split(".")[0] + ".", "retraites/diner-coucher-de-soleil-parapentes", None, L(lang, R.PIP["prix"]),
-                       "Request a place" if not fr else "Demander une place", lien(lang, "pip", prof), "retraite"),
-        produit_espace(lang, prof, "pause", R.PAUSE["titre"] + " · " + L(lang, R.PAUSE["dates"]), L(lang, R.PAUSE["groupe"]).split(":")[0] + ".", "retraites/pause-face-aux-montagnes", None, L(lang, R.PAUSE["prix"]),
-                       "Request a place" if not fr else "Demander une place", lien(lang, "pause", prof), "retraite"),
-    ]
+    espace_items = [produit_espace(lang, prof, "co-creating", co["titre"], L(lang, co["texte"]), "cours/atelier-libre-pastel", prix_co, prix_txt(prix_co, lang), "Add to basket" if not fr else "Ajouter au panier", lien(lang, "espace", prof))]
+    espace_items += [produit_espace(lang, prof, k, RETRAITES[k]["titre"] + " · " + L(lang, RETRAITES[k]["dates"]), L(lang, RETRAITES[k]["accroche"]), RETRAITES[k]["photo_carte"], None,
+                                    L(lang, RETRAITES[k]["prix"]) + (" per person" if not fr else " par personne"), "Request a place" if not fr else "Demander une place", lien(lang, k, prof), "retraite") for k in RETRAITES_ORDRE]
+
+    def bouton_filtre(cle, libelle, n, actif=False):
+        return f'<button type="button" class="filtre" aria-pressed="{"true" if actif else "false"}" data-filtre="{cle}">{e(libelle)} <small>{n}</small></button>'
     corps = f'''
 <section class="bandeau bandeau--boutique" data-strate="{e(t["nav"]["boutique"])}">
   <div class="bandeau__texte">
     {surtitre("Two counters, one house" if not fr else "Deux comptoirs, une maison")}
     <h1 class="bandeau__titre">{lettres(t["nav"]["boutique"])}</h1>
     <div class="bandeau__intro" data-apparait><p>{e(B["intro"][lang])}</p></div>
-    <p class="comptoirs__onglets" data-apparait><a class="bouton aimant bouton--atelier" href="#atelier"><span>{e(B["atelier_titre"][lang])}</span></a><a class="bouton bouton--ligne aimant bouton--espace" href="#espace"><span>{e(B["espace_titre"][lang])}</span></a></p>
+    <p class="comptoirs__onglets" data-apparait><a class="bouton aimant bouton--atelier" href="#atelier"><span>{e(B["atelier_titre"][lang])}</span></a><a class="bouton bouton--ligne aimant" href="#editions"><span>{e(t["nav"]["editions"])}</span></a><a class="bouton bouton--ligne aimant bouton--espace" href="#espace"><span>{e(B["espace_titre"][lang])}</span></a></p>
   </div>
-  <div class="bandeau__image bandeau__image--duo" data-effet="comptoirs">
-    <span class="duo duo--atelier">{bouton_oeuvre(prof, "habanero", lang, "cuba", "(max-width: 900px) 44vw, 20vw")}</span>
+  <div class="bandeau__image bandeau__image--duo">
+    <span class="duo duo--atelier">{bouton_oeuvre(prof, "recente-09", lang, LEAD, "(max-width: 900px) 44vw, 20vw")}</span>
     <span class="duo duo--espace">{img_photo(prof, "espace/atelier-rangements", "The Espace's shelves of art materials" if not fr else "Les étagères de matériel d'art de l'Espace", "(max-width: 900px) 44vw, 20vw", "", "eager")}</span>
   </div>
 </section>
@@ -1600,20 +1743,28 @@ def page_boutique(lang):
   <div class="comptoir__tete">
     {surtitre(t["univers"]["atelier_long"] + " · " + c["forme_atelier"][lang], 1)}
     <h2 class="titre-section">{lettres(B["atelier_titre"][lang])}</h2>
-    <p data-apparait>{e(B["atelier_texte"][lang])}</p>
+    <p data-apparait>{e("Recent work and small encaustics with their prices from Artwork Archive; prints printed on demand by creativehub; earlier originals from the Archive." if not fr else "Œuvres récentes et petites encaustiques avec leurs prix d'Artwork Archive ; tirages imprimés à la demande par creativehub ; originaux plus anciens de l'Archive.")}</p>
     <div class="filtres" role="group" aria-label="{e("Filter the atelier counter" if not fr else "Filtrer le comptoir de l'atelier")}" data-filtres>
-      <button type="button" class="filtre" aria-pressed="true" data-filtre="tout">{e("Everything" if not fr else "Tout")} <small>{len(editions) + len(originaux)}</small></button>
-      <button type="button" class="filtre" aria-pressed="false" data-filtre="edition">{e("Limited editions" if not fr else "Éditions limitées")} <small>{len(editions)}</small></button>
-      <button type="button" class="filtre" aria-pressed="false" data-filtre="original">{e("Originals" if not fr else "Originaux")} <small>{len(originaux)}</small></button>
+      {bouton_filtre("tout", "Everything" if not fr else "Tout", n_tout, True)}{bouton_filtre("recent", SERIES[LEAD]["titre"][lang], len(AA_RECENTES) + len(recentes))}{bouton_filtre("tirage", "Prints · creativehub" if not fr else "Tirages · creativehub", len(tirages))}{bouton_filtre("archive", t["nav"]["archive"], len(archive))}
     </div>
   </div>
-  <ul class="produits" data-produits>{"".join(produit_oeuvre(lang, prof, oid, "edition") for oid in editions)}{"".join(produit_oeuvre(lang, prof, oid, "original") for oid in originaux)}</ul>
-  <p class="note comptoir__note">{e(B["originaux"][lang])} {e("Print-on-demand partner, paper and prices for each edition: to be completed in Wix Stores." if not fr else "Partenaire d'impression à la demande, papier et prix de chaque édition : à compléter dans Wix Stores.")}</p>
+  <ul class="produits" data-produits>{"".join(produit_aa(lang, x) for x in AA_RECENTES)}{"".join(produit_oeuvre(lang, prof, oid, "recent") for oid in recentes)}{"".join(produit_oeuvre(lang, prof, oid, "tirage") for oid in tirages)}{"".join(produit_oeuvre(lang, prof, oid, "archive") for oid in archive)}</ul>
+  <p class="note comptoir__note">{e("Prices shown come from Artwork Archive (public profile, 11 November 2026); the other works are price on request, and your basket becomes a reservation request. Print prices and papers: to be completed with creativehub." if not fr else "Les prix affichés viennent d'Artwork Archive (profil public, 11 novembre 2026) ; les autres œuvres sont sur demande, et votre panier devient alors une demande de réservation. Prix et papiers des tirages : à compléter avec creativehub.")}</p>
+</section>
+
+<section class="comptoir comptoir--editions" id="editions" tabindex="-1" data-strate="{e(E["titre"][lang])}">
+  <div class="comptoir__tete">
+    {surtitre(t["univers"]["atelier_long"] + " · " + ("archive line" if not fr else "ligne d'archive"), 2)}
+    <h2 class="titre-section">{lettres(E["titre"][lang])}</h2>
+    <div><p data-apparait>{e(E["texte"][lang])}</p><p class="note" data-apparait>{e(E["datation"][lang])} {e(E["note"][lang])}</p></div>
+  </div>
+  <ul class="editions-accueil__series editions-boutique">{series_ed}</ul>
+  <p class="note comptoir__note">{e(E["a_venir"][lang])}</p>
 </section>
 
 <section class="comptoir comptoir--espace" id="espace" tabindex="-1" data-strate="{e(B["espace_titre"][lang])}">
   <div class="comptoir__tete">
-    {surtitre(c["espace"] + " · " + c["forme_espace"][lang], 2)}
+    {surtitre(c["espace"] + " · " + c["forme_espace"][lang], 3)}
     <h2 class="titre-section">{lettres(B["espace_titre"][lang])}</h2>
     <p data-apparait>{e(B["espace_texte"][lang])}</p>
   </div>
@@ -1622,17 +1773,18 @@ def page_boutique(lang):
 </section>
 
 <section class="livraison" data-strate="{e("Delivery" if not fr else "Livraison")}">
-  {figure_photo(prof, "espace/facade-de-nuit", "The Espace Créa-Tea-Vité at night" if not fr else "L'Espace Créa-Tea-Vité de nuit", "", "fossile livraison__img", "(max-width: 800px) 80vw, 30vw", ' data-parallaxe="-0.05"')}
+  {figure_photo(prof, "espace/facade-de-nuit", "The Espace Créa-Tea-Vité at night" if not fr else "L'Espace Créa-Tea-Vité de nuit", "", "fossile livraison__img", "(max-width: 800px) 80vw, 30vw")}
   <div class="livraison__texte">
-    {surtitre("Delivery and pick-up" if not fr else "Livraison et retrait", 3)}
+    {surtitre("Delivery and pick-up" if not fr else "Livraison et retrait", 4)}
     <h2 class="titre-section">{lettres("From La Clusaz to the world" if not fr else "De La Clusaz au monde entier")}</h2>
+    <p data-apparait>{e(E["tirages"][lang])}</p>
     <p data-apparait>{e(B["livraison"][lang])}</p>
     <p data-apparait>{e(B["retrait"][lang])}</p>
     <dl class="livraison__comptes">
       <div class="livraison__compte livraison__compte--atelier"><dt>{e(t["univers"]["atelier_long"])}</dt><dd>{e("Stripe account no. 1 · SIRET " if not fr else "Compte Stripe n° 1 · SIRET ")}{e(c["siret_atelier"])}</dd></div>
       <div class="livraison__compte livraison__compte--espace"><dt>{e(c["espace"])}</dt><dd>{e("Stripe account no. 2 · SIRET " if not fr else "Compte Stripe n° 2 · SIRET ")}{e(c["siret_espace"])}</dd></div>
     </dl>
-    <p class="note">{e(B["simulation"][lang])}</p>
+    <p class="note">{e(B["simulation"][lang])} {e("On the live site, works, prices and sales are entered once in Artwork Archive." if not fr else "Sur le site en ligne, œuvres, prix et ventes se saisissent une seule fois dans Artwork Archive.")}</p>
   </div>
 </section>'''
     ecrire(chemin, page(lang, "boutique", chemin, t["nav"]["boutique"], corps, href_autre(lang, "boutique", prof), {"boutique": True}, "page-boutique"))
@@ -1669,7 +1821,7 @@ def page_contact(lang):
     chemin = fichier(lang, "contact")
     prof = prof_de(chemin)
     c = C.COORD
-    objets = [("oeuvre", "A work" if lang == "en" else "Une œuvre"), ("commande", "A commission" if lang == "en" else "Une commande"), ("cours", "A class" if lang == "en" else "Un cours"),
+    objets = [("oeuvre", "A work" if lang == "en" else "Une œuvre"), ("commande", "A commission" if lang == "en" else "Une commande"), ("cours_prives", "A private course for guests" if lang == "en" else "Un cours privé pour des clients"),
               ("evenement", "A private event" if lang == "en" else "Un événement privé"), ("retraite", "A retreat" if lang == "en" else "Une retraite"), ("autre", "Something else" if lang == "en" else "Autre chose")]
     radios = "".join(f'<label class="choix"><input type="radio" name="objet" value="{v}"{" checked" if i == 0 else ""}><span>{e(l)}</span></label>' for i, (v, l) in enumerate(objets))
     opts = "".join(f'<option value="{oid}">{e(titre(OEUVRES[oid], lang))}{"" if OEUVRES[oid]["titre"] else " (" + oid + ")"}</option>' for sid in ORDRE for oid in LISTES[sid]) + f'<option value="where-do-i-begin">Where Do I Begin?</option>'
@@ -1690,7 +1842,7 @@ def page_contact(lang):
     <form class="formulaire" data-formulaire novalidate>
       <fieldset class="champ"><legend>{"About" if lang == "en" else "À propos de"}</legend><div class="choix-groupe">{radios}</div></fieldset>
       <div class="champ" data-pour="oeuvre"><label for="f-oeuvre">{"Which work?" if lang == "en" else "Quelle œuvre ?"}</label><select id="f-oeuvre" name="oeuvre"><option value="">—</option>{opts}</select></div>
-      <div class="champ" data-pour="retraite" hidden><label for="f-retraite">{"Which retreat?" if lang == "en" else "Quelle retraite ?"}</label><select id="f-retraite" name="retraite"><option value="pip">Painting in Paradise · {e(L(lang, R.PIP["dates"]))}</option><option value="pause">{e(R.PAUSE["titre"])} · {e(L(lang, R.PAUSE["dates"]))}</option></select></div>
+      <div class="champ" data-pour="retraite" hidden><label for="f-retraite">{"Which retreat?" if lang == "en" else "Quelle retraite ?"}</label><select id="f-retraite" name="retraite">{"".join(f'<option value="{k}">{e(RETRAITES[k]["titre"])} · {e(L(lang, RETRAITES[k]["dates"]))}</option>' for k in RETRAITES_ORDRE)}</select></div>
       <div class="formulaire__deux">{champ("prenom", "First name" if lang == "en" else "Prénom", auto="given-name")}{champ("nom", "Last name" if lang == "en" else "Nom", auto="family-name")}</div>
       <div class="formulaire__deux">{champ("email", "Email" if lang == "en" else "Adresse électronique", "email", auto="email")}{champ("tel", "Phone" if lang == "en" else "Téléphone", "tel", False, "tel")}</div>
       {champ("message", "Message", "textarea")}
@@ -1720,7 +1872,7 @@ def page_404():
     ancien = MODE
     corps = f'''
 <section class="erreur" data-strate="404">
-  {figure_decor(0, "glacier-crevasse-4x5", "", "", "fossile erreur__img", "(max-width: 800px) 70vw, 30vw")}
+  {figure_photo(0, "artiste/lisa-a-17-ans-juneau-icefield", "A figure on skis crossing a vast icefield", "", "fossile erreur__img", "(max-width: 800px) 70vw, 30vw")}
   <div><p class="surtitre"><span class="surtitre__n">404</span><span>Crevasse</span></p>
   <h1 class="bandeau__titre">{lettres("You fell into a crevasse")}</h1>
   <p lang="fr">Vous êtes tombé dans une crevasse : cette page n'existe pas.</p>
@@ -1760,7 +1912,7 @@ def donnees_js(lang):
     d = {"langue": lang, "textes": t, "oeuvres": oe, "series": series, "decors": decors,
          "pageContact": C.PAGES["contact"][lang] + (".html" if MODE == "html" else ""),
          "espace": {"horaires": C.HORAIRES, "courriel": C.COORD["courriel"]},
-         "retraites": {"pip": {"debut": R.PIP["debut"], "titre": R.PIP["titre"]}, "pause": {"debut": R.PAUSE["debut"], "titre": R.PAUSE["titre"]}}}
+         "retraites": {"pip": {"debut": R.PIP["debut"], "titre": R.PIP["titre"]}, "creative": {"debut": R.CREATIVE["debut"], "titre": R.CREATIVE["titre"]}, "encaustics": {"debut": R.ENCAUSTICS["debut"], "titre": R.ENCAUSTICS["titre"]}}}
     if lang == "fr":
         def corriger(x):
             if isinstance(x, str):
@@ -1788,8 +1940,11 @@ for lang in LANGS:
     page_evenements(lang)
     page_retraites(lang)
     page_retraite(lang, "pip")
-    page_retraite(lang, "pause")
+    page_retraite(lang, "creative")
+    page_retraite(lang, "encaustics")
     page_boutique(lang)
+    page_cours_prives(lang)
+    page_studio(lang)
     page_contact(lang)
     donnees_js(lang)
 page_404()
@@ -1797,8 +1952,12 @@ page_404()
 # aucune règle Cache-Control (Vercel revérifie chaque fichier), jamais X-Frame-Options (affichage dans Wix).
 (SITE / "vercel.json").write_text(json.dumps({
     "cleanUrls": True, "trailingSlash": False,
-    "redirects": [{"source": "/retreats/molten-magic", "destination": "/retreats/alpine-pause", "permanent": False},
-                  {"source": "/fr/retraites/molten-magic", "destination": "/fr/retraites/alpine-pause", "permanent": False}],
+    "redirects": [{"source": "/retreats/molten-magic", "destination": "/retreats/alpine-encaustics", "permanent": False},
+                  {"source": "/fr/retraites/molten-magic", "destination": "/fr/retraites/alpine-encaustics", "permanent": False},
+                  {"source": "/retreats/alpine-pause", "destination": "/retreats/alpine-encaustics", "permanent": False},
+                  {"source": "/fr/retraites/alpine-pause", "destination": "/fr/retraites/alpine-encaustics", "permanent": False},
+                  {"source": "/works/light-water-rock-and-time", "destination": "/works/a-record-of-time", "permanent": False},
+                  {"source": "/fr/oeuvres/lumiere-eau-roche-et-temps", "destination": "/fr/oeuvres/strates-du-temps", "permanent": False}],
     "headers": [{"source": "/(.*)", "headers": [{"key": "X-Robots-Tag", "value": "noindex, nofollow"},
                                                 {"key": "X-Content-Type-Options", "value": "nosniff"},
                                                 {"key": "Referrer-Policy", "value": "strict-origin-when-cross-origin"}]}],

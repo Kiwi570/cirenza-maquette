@@ -1,5 +1,38 @@
 # Historique
 
+## v4 · 11 novembre 2026 · brief de Lisa (« cirenza.com — content and design brief »)
+
+Le brief de Lisa est la source unique des textes de l'artiste : textes anglais repris mot pour mot, traduits en français. La structure de la maquette est gardée (défilement en strates numérotées, fond crème, anglais officiel, horaires en haut, citation du FT, deux SIRET, comptes à rebours).
+
+**Positionnement : « A Record of Time »**
+- Titre : « Painter of light, water, rock and time » ; ligne d'accueil et description du brief ; citation : « Most people look up and see the Alps. I see a record of time being erased. »
+- Accueil réordonné : ouverture (œuvre récente, en attendant la montagne à facettes), 01 Déclaration, 02 The Geology of the Invisible (Cool Reflections à gratter), 03 la série en tête puis l'Archive, 04 À l'atelier en ce moment, 05 Éditions de collection, 06 Presse, 07 L'Espace, 08 Trois retraites, lettre d'information.
+- Calme visuel : plus de parallaxe ni de bandes qui glissent au défilement, plus de mots qui s'allument sur la citation, lettre d'information sans photo de fond.
+
+**Œuvres**
+- « A Record of Time » (`/works/a-record-of-time`, `/fr/oeuvres/strates-du-temps`) mène, en quatre groupes : sur le chevalet, glace-eau-roche, cire noir et blanc sur papier, Cool Reflections (Grand Palais 2025).
+- Les séries anciennes (Cuba, London Tube, numérique, Hope and Optimism avec Dream Big…) passent sous « Archive », sur l'accueil, la page Œuvres et la boutique.
+
+**L'artiste, parcours, presse, notes d'atelier**
+- L'artiste : Emergence en ouverture, déclaration complète (`#declaration`), biographie longue en six couches (`#bio`), « Water, pigments, heat and wax », biographie courte pour la presse, liens PDF « à venir ».
+- Parcours : CV sélectif du brief (formation, collections, expositions, à venir, foires, distinctions, presse, publications, conférences) ; « CV 2024 » et son PDF retirés.
+- Presse : titre de l'article du FT (Rachel Spence, octobre 2017) ; anciennes parutions repliées dans « Archive ».
+- Nouvelle page « Studio notes » (`/studio-notes`, `/fr/notes-d-atelier`) : le texte de Chamonix, le chevalet, recherches et procédé.
+
+**Espace, cours, retraites**
+- Nouvelle page « Private bespoke courses » (`/private-courses`, `/fr/cours-prives`) pour hôtels, conciergeries et organisateurs ; la page Cours reste en ligne mais sort de la navigation.
+- Trois retraites 2027, toutes à La Clusaz : A Creative Pause (15 – 20 mai, programme à compléter), Painting in Paradise (21 – 26 juin, une journée au lac d'Annecy), Alpine Encaustics: Texture, Depth & Creative Voice (6 – 11 septembre, remplace Alpine Pause et Molten Magic, anciennes adresses redirigées).
+- Grille de prix par chambre (2 450, 2 850, 3 295 €, chalet pour deux 5 500 €, partenaire non peintre 4 795 €), réductions, petite ligne sur les salles de bains.
+
+**Boutique**
+- Comptoir de l'atelier filtré en « A Record of Time », « Tirages · creativehub », « Archive » ; cinq petites encaustiques d'Artwork Archive avec leur prix (photo à venir).
+- Éditions de collection : blocs d'acrylique 15 × 20 cm, trois séries.
+
+**Technique**
+- Barre du haut : Espace Créa-Tea-Vité, adresse, ouvert ou fermé ; annonces de fermeture datées (`ANNONCES` dans `outils/contenu.py`), affichées seulement pendant leurs dates.
+- Lettre d'information : la langue de la page choisit la liste (anglaise ou française).
+- Version 4 (`?v=4`), 51 pages, images de partage régénérées.
+
 ## v3 · 11 novembre 2026 · retours de Lisa
 
 Construit en comparant la v2 (commit 4cbf194) et la v3, fichier par fichier.

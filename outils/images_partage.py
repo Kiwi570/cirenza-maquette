@@ -44,17 +44,20 @@ def photo(cle):
 
 SERIES = {s["id"]: s for s in CAT.SERIES}
 PAGES = {
-    "accueil": (oeuvre("recente-01"), {"en": C.T["en"]["accroche"], "fr": C.T["fr"]["accroche"]}, "maison"),
-    "oeuvres": (oeuvre("dream-big"), {"en": "Works", "fr": "Œuvres"}, "atelier"),
-    "artiste": (photo("artiste/lisa-portrait-fond-glacier"), {"en": "The artist", "fr": "L'artiste"}, "atelier"),
+    "accueil": (oeuvre("recente-01"), {"en": "Painter of light, water, rock and time", "fr": "Peintre de la lumière, de l'eau, de la roche et du temps"}, "maison"),
+    "oeuvres": (oeuvre("recente-09"), {"en": "A Record of Time", "fr": "Strates du temps"}, "atelier"),
+    "artiste": (oeuvre("en-cours-3"), {"en": "The artist · statement and bio", "fr": "L'artiste · déclaration et biographie"}, "atelier"),
     "parcours": (photo("expositions/bermondsey-gallery-vitrine-nuit"), {"en": "CV highlights", "fr": "Parcours"}, "atelier"),
     "presse": (photo("presse/wax-fusion-fall-2026-couverture"), {"en": "Press", "fr": "Presse"}, "atelier"),
     "espace": (photo("espace/visite-video-vignette"), {"en": "Espace Créa-Tea-Vité", "fr": "Espace Créa-Tea-Vité"}, "espace"),
-    "cours": (photo("cours/in-the-studio"), {"en": "Classes & workshops", "fr": "Cours et ateliers"}, "espace"),
+    "cours": (photo("cours/atelier-libre-pastel"), {"en": "Classes & workshops", "fr": "Cours et ateliers"}, "espace"),
     "evenements": (photo("evenements/table-de-diner-dans-la-galerie"), {"en": "Private events", "fr": "Événements privés"}, "espace"),
     "retraites": (photo("paysages/lac-annecy-talloires-panorama"), {"en": "Retreats 2027", "fr": "Retraites 2027"}, "espace"),
     "pip": (photo("paysages/lac-annecy-talloires-panorama"), {"en": "Painting in Paradise · " + R.PIP["dates"]["en"], "fr": "Painting in Paradise · " + R.PIP["dates"]["fr"]}, "espace"),
-    "pause": (photo("retraites/pause-face-aux-montagnes"), {"en": R.PAUSE["titre"] + " · " + R.PAUSE["dates"]["en"], "fr": R.PAUSE["titre"] + " · " + R.PAUSE["dates"]["fr"]}, "espace"),
+    "creative": (photo("retraites/pause-face-aux-montagnes"), {"en": R.CREATIVE["titre"] + " · " + R.CREATIVE["dates"]["en"], "fr": R.CREATIVE["titre"] + " · " + R.CREATIVE["dates"]["fr"]}, "espace"),
+    "encaustics": (photo("retraites/atelier-cire-en-groupe"), {"en": R.ENCAUSTICS["titre"] + " · " + R.ENCAUSTICS["dates"]["en"], "fr": R.ENCAUSTICS["titre"] + " · " + R.ENCAUSTICS["dates"]["fr"]}, "espace"),
+    "cours_prives": (photo("cours/in-the-studio"), {"en": "Private bespoke courses", "fr": "Cours privés sur mesure"}, "espace"),
+    "studio": (photo("atelier/glacier-sur-le-chevalet"), {"en": "Studio notes", "fr": "Notes d'atelier"}, "atelier"),
     "boutique": (oeuvre("habanero"), {"en": "Shop · two counters", "fr": "Boutique · deux comptoirs"}, "maison"),
     "contact": (photo("espace/facade-de-nuit"), {"en": "Let's connect", "fr": "Écrivez-moi"}, "maison"),
 }
