@@ -42,7 +42,11 @@ Artwork Archive (https://www.artworkarchive.com/pieces) est la base de référen
 3. `python3 -I outils/generer.py . --liens propres` : les données d'Artwork Archive l'emportent sur le relevé.
 
 Les prix ne s'affichent que si `AFFICHER_PRIX = True` dans `outils/generer.py` (décision de Lisa) ; sinon « prix sur demande ».
-La page Artwork Archive est derrière une connexion et une vérification anti-robot : elle n'a pas pu être lue pour cette version.
+
+**État au 11 novembre 2026.** La page privée (`/pieces`) demande la connexion de Lisa. Son profil public, https://www.artworkarchive.com/profile/lisa-cirenza (environ 40 œuvres), est protégé par une vérification anti-robot : il ne peut pas être lu par un script, et elle n'a pas été contournée. Ce que l'index d'un moteur de recherche en montre est consigné dans `outils/artwork_archive_index.json` (15 fiches, sans images) :
+- appliqué au site : « The Grunge and the Glow of Havana » est vendue (titre exact d'Artwork Archive, retirée de la boutique) ; « Bank » est de 2016 (prix connu, non affiché) ;
+- absentes du site et à importer avec l'export : Where the Mountains Breathe (2025, encaustique sur papier, 34 × 25,5 cm, 145 €), Light Across the Thaw (encaustique sur panneau, 30 × 30 cm, 240 €), Blissful Light (2024, 200 €), Doucement Entrelacés (2024, 80 €), The Silence of Thawing Waters, Talking to the Wild (2023), The Blues (2021), Lost in the trees, and missing the Forest (2019), Cycles, Heat Waves, Chasing the Ephemeral (240 €), UH-Huh (125 €), A moment in Havanna (150 €) ;
+- certaines de ces œuvres sont sans doute parmi les 11 œuvres récentes sans titre de la maquette, mais sans les images rien ne permet de les rapprocher : aucun titre n'a été attribué au hasard.
 
 ## Sources de la v3
 
@@ -55,8 +59,8 @@ La page Artwork Archive est derrière une connexion et une vérification anti-ro
 
 ## À fournir par Lisa (à compléter)
 
-- **Artwork Archive** : l'export CSV de l'inventaire, ou l'adresse d'un profil public. En particulier les titres, dimensions, années et techniques des 11 œuvres récentes (affichées « titre à compléter »).
-- **Google Doc** des détails de la retraite : le lien demande une connexion Google, il n'a pas pu être lu. Le partager en lecture publique, ou envoyer son texte.
+- **Artwork Archive (priorité)** : l'export de l'inventaire (Pieces, tout sélectionner, Export, CSV ou Excel), idéalement avec les images ; à défaut, des captures ou un PDF du profil public. Il donne les titres, dimensions, années et techniques des 11 œuvres récentes (affichées « titre à compléter ») et les petites encaustiques à vendre en boutique.
+- **Google Doc (priorité)** des détails de la retraite : le lien répond « connexion requise » (erreur 401) sous toutes ses formes. Le passer en « Tous les utilisateurs disposant du lien : lecteur », ou envoyer son texte ou un export PDF.
 - **Retraite de septembre** : nom définitif et équipe (le site dit « Autumn Alpine Pause » avec Lisa seule ; Wax Fusion annonce « Molten Mountains », co-animée avec Isabelle Gaborit).
 - **Entité qui vend les retraites** (pour le bon compte Stripe) : la page Painting in Paradise indique Lisa Cirenza, 74290 Talloires, SIRET de l'atelier ; la page Alpine Pause indique l'Espace (SAS).
 - **Painting in Paradise** : taille du groupe (« 10 au maximum » ou « cohorte de 6 ») ; la FAQ en PDF cite encore « le 31 août ».

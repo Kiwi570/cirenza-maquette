@@ -20,6 +20,7 @@ Construit en comparant la v2 (commit 4cbf194) et la v3, fichier par fichier.
 - Nouvelle salle « Light, Water, Rock and Time » : 11 œuvres récentes du dossier de photos (titres à compléter depuis Artwork Archive).
 - Titres et techniques tirés de Wax Fusion : Emergence (100 × 70 cm, nouvelle photo en haute définition, loupe), Seaside Village and the Pink Flowers (100 × 70 × 4 cm), Stand Tall and Face the Light (108 × 108 cm), Rose Coloured Glasses ; Dream Big devient « peinture numérique en couches sur Dibond ».
 - Artwork Archive comme base maîtresse : `outils/artwork_archive.py` fusionne l'export CSV (titres, dimensions, années, techniques, statuts, prix masqués par défaut).
+- Index public d'Artwork Archive (profil lisa-cirenza, lu à travers un moteur de recherche) : 15 fiches consignées dans `outils/artwork_archive_index.json` ; « The Grunge and the Glow of Havana » passe en vendue (et quitte la boutique), « Bank » datée de 2016.
 - Where Do I Begin? : image confirmée (c'est celle que Lisa affiche avec ce titre sur sa nouvelle page d'accueil), mention « image à confirmer » retirée.
 
 **L'artiste, presse, Espace, cours**
