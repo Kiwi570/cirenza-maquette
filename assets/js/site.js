@@ -1558,6 +1558,178 @@
     }
   }
 
+  /* ------------------------------------------------------------ v3 · paniers des deux comptoirs (simulés)
+     Atelier = Lisa Cirenza Fine Art (artiste-auteur, compte Stripe 1) ; Espace = Créa-Tea-Vité (SAS, compte Stripe 2).
+     Une seule source (localStorage), identique dans tous les onglets ; donnée abîmée nettoyée sans bloquer. */
+  var PANIER_CLE = 'lc-paniers-v3';
+  function lirePaniers() {
+    try {
+      var v = JSON.parse(localStorage.getItem(PANIER_CLE) || 'null');
+      if (v && Array.isArray(v.atelier) && Array.isArray(v.espace)) return { atelier: v.atelier.filter(valide), espace: v.espace.filter(valide) };
+    } catch (e) { }
+    try { localStorage.removeItem(PANIER_CLE); } catch (e) { }
+    return { atelier: [], espace: [] };
+  }
+  function valide(x) { return x && typeof x.id === 'string' && typeof x.titre === 'string'; }
+  function ecrirePaniers(pn) { try { localStorage.setItem(PANIER_CLE, JSON.stringify(pn)); } catch (e) { } }
+  function paniers() {
+    var tiroir = $('#panier'), btn = $('[data-panier-ouvrir]'), txtEl = $('[data-textes-panier]');
+    if (!tiroir || !txtEl) return;
+    var TX = {};
+    try { TX = JSON.parse(txtEl.getAttribute('data-textes-panier')); } catch (e) { }
+    var noms = { atelier: $('.panier__comptoir--atelier h3 span', tiroir).textContent, espace: $('.panier__comptoir--espace h3 span', tiroir).textContent };
+    var PN = lirePaniers();
+    var dernierFocus = null;
+    function prix(n) { return TX.fr ? n.toLocaleString('fr-FR') + ' €' : '€' + n.toLocaleString('en-GB'); }
+    function lire(b) { try { return JSON.parse(b.getAttribute('data-ajouter')); } catch (e) { return null; } }
+    function rendre() {
+      ['atelier', 'espace'].forEach(function (c) {
+        var ul = $('[data-liste="' + c + '"]', tiroir), sec = ul.closest('.panier__comptoir');
+        ul.textContent = '';
+        var total = 0, inconnus = 0, payables = 0;
+        PN[c].forEach(function (it, i) {
+          var li = document.createElement('li'); li.className = 'panier__ligne';
+          var img = document.createElement('img'); img.src = A + it.image; img.alt = ''; img.width = 52; img.height = 52; img.loading = 'lazy';
+          var d = document.createElement('div'); d.textContent = it.titre;
+          var sm = document.createElement('small');
+          if (it.prix) { total += it.prix; payables++; sm.textContent = prix(it.prix); }
+          else if (it.genre === 'edition') { inconnus++; payables++; sm.textContent = TX.a_completer; }
+          else sm.textContent = TX.sur_demande;
+          d.appendChild(sm);
+          var b = document.createElement('button'); b.type = 'button'; b.className = 'panier__retirer'; b.textContent = TX.retirer;
+          b.setAttribute('aria-label', TX.retirer + ' : ' + it.titre);
+          b.addEventListener('click', function () { PN[c].splice(i, 1); ecrirePaniers(PN); rendre(); });
+          li.appendChild(img); li.appendChild(d); li.appendChild(b); ul.appendChild(li);
+        });
+        sec.classList.toggle('a-articles', PN[c].length > 0);
+        $('[data-total="' + c + '"]', tiroir).textContent = !PN[c].length ? '—' : (payables ? (total ? prix(total) + (inconnus ? TX.plus_a_completer : '') : TX.a_completer) : TX.sur_demande);
+        var pay = $('[data-payer="' + c + '"]', tiroir);
+        pay.disabled = !PN[c].length;
+        $('span', pay).textContent = payables ? TX.payer : TX.demande;
+        pay.setAttribute('data-mode', payables ? 'payer' : 'demande');
+        var n = $('[data-compte-panier="' + c + '"]');
+        if (n) { n.textContent = PN[c].length; n.classList.toggle('est-vide', !PN[c].length); }
+      });
+      if (btn) btn.hidden = !(PN.atelier.length + PN.espace.length) && !P.boutique;
+      $$('[data-ajouter]').forEach(function (b) {
+        var d = lire(b);
+        b.classList.toggle('est-ajoute', !!(d && PN[d.comptoir] && PN[d.comptoir].some(function (x) { return x.id === d.id; })));
+      });
+    }
+    function ouvrir() {
+      dernierFocus = document.activeElement;
+      tiroir.hidden = false;
+      html.classList.add('panier-ouvert');
+      lissage.verrou++;
+      document.body.style.overflow = 'hidden';
+      var f = $('.panier__fermer', tiroir); if (f) f.focus();
+    }
+    function fermer() {
+      if (tiroir.hidden) return;
+      tiroir.hidden = true;
+      html.classList.remove('panier-ouvert');
+      lissage.verrou = Math.max(0, lissage.verrou - 1);
+      document.body.style.overflow = '';
+      $$('[data-recu]', tiroir).forEach(function (r) { r.hidden = true; });
+      if (dernierFocus && dernierFocus.focus) dernierFocus.focus();
+    }
+    if (btn) btn.addEventListener('click', ouvrir);
+    $$('[data-panier-fermer]', tiroir).forEach(function (b) { b.addEventListener('click', fermer); });
+    document.addEventListener('keydown', function (e) {
+      if (tiroir.hidden) return;
+      if (e.key === 'Escape') { fermer(); return; }
+      if (e.key === 'Tab') {
+        var f = $$('button:not([disabled]), a[href], [tabindex="-1"]:not([hidden])', tiroir).filter(function (x) { return x.offsetParent !== null; });
+        if (!f.length) return;
+        if (e.shiftKey && document.activeElement === f[0]) { e.preventDefault(); f[f.length - 1].focus(); }
+        else if (!e.shiftKey && document.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus(); }
+      }
+    });
+    var annonce = document.createElement('p');
+    annonce.className = 'annonce-panier'; annonce.setAttribute('role', 'status'); annonce.setAttribute('aria-live', 'polite');
+    document.body.appendChild(annonce);
+    var tAnnonce;
+    function annoncer(txt) { annonce.textContent = txt; annonce.classList.add('est-visible'); clearTimeout(tAnnonce); tAnnonce = setTimeout(function () { annonce.classList.remove('est-visible'); }, 2600); }
+    // l'œuvre s'envole jusqu'au panier de son comptoir
+    function envol(depuis, cible, src, fin) {
+      if (ETAT.reduit || !depuis || !cible) { fin(); return; }
+      var a = depuis.getBoundingClientRect(), b = cible.getBoundingClientRect();
+      if (!b.width || !a.width) { fin(); return; }
+      var im = document.createElement('img'); im.className = 'envol'; im.src = src; im.alt = '';
+      document.body.appendChild(im);
+      var x0 = a.left + a.width / 2 - 36, y0 = a.top + a.height / 2 - 36, x1 = b.left + b.width / 2 - 36, y1 = b.top + b.height / 2 - 36;
+      animer(820, function (e, p) {
+        var x = lerp(x0, x1, e), y = lerp(y0, y1, e) - Math.sin(p * Math.PI) * 160, s = lerp(1, 0.28, e);
+        im.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px,0) scale(' + s.toFixed(3) + ') rotate(' + (p * 14).toFixed(1) + 'deg)';
+        im.style.opacity = String(1 - Math.max(0, p - 0.85) / 0.15);
+      }, EASE.io).promesse.then(function () { im.remove(); fin(); });
+    }
+    $$('[data-ajouter]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var d = lire(b);
+        if (!d || !PN[d.comptoir]) return;
+        if (!PN[d.comptoir].some(function (x) { return x.id === d.id; })) { PN[d.comptoir].push(d); ecrirePaniers(PN); }
+        if (btn) btn.hidden = false;
+        var h = $('[data-entete]'); if (h) h.classList.remove('est-cache');
+        var cible = $('[data-compte-panier="' + d.comptoir + '"]');
+        var carte = b.closest('.produit'), visuel = carte && $('img', carte);
+        envol(visuel, cible, visuel ? (visuel.currentSrc || visuel.src) : A + d.image, function () {
+          rendre();
+          if (cible) { cible.classList.add('rebond'); setTimeout(function () { cible.classList.remove('rebond'); }, 380); }
+          annoncer(TX.ajoute.replace('{n}', noms[d.comptoir]));
+        });
+      });
+    });
+    $$('[data-payer]', tiroir).forEach(function (b) {
+      b.addEventListener('click', function () {
+        var c = b.getAttribute('data-payer');
+        if (!PN[c].length || b.disabled) return;
+        b.disabled = true;
+        var recu = $('[data-recu="' + c + '"]', tiroir);
+        recu.textContent = (b.getAttribute('data-mode') === 'demande' ? TX.recu_demande : TX.recu_paye).replace('{n}', noms[c]);
+        PN[c] = []; ecrirePaniers(PN);
+        rendre();
+        recu.hidden = false; recu.focus();
+      });
+    });
+    addEventListener('storage', function (e) { if (e.key === PANIER_CLE) { PN = lirePaniers(); rendre(); } });
+    // filtres du comptoir de l'atelier, gardés dans l'adresse
+    var filtres = $('[data-filtres]'), produits = $$('[data-produits] .produit');
+    if (filtres) {
+      var filtrer = function (f, garder) {
+        $$('.filtre', filtres).forEach(function (x) { x.setAttribute('aria-pressed', String(x.getAttribute('data-filtre') === f)); });
+        produits.forEach(function (pr) { pr.hidden = !(f === 'tout' || pr.getAttribute('data-genre') === f); });
+        if (garder) {
+          var u = new URL(location.href);
+          if (f === 'tout') u.searchParams.delete('filtre'); else u.searchParams.set('filtre', f);
+          history.replaceState(history.state, '', u);
+        }
+        toutRemesurer();
+      };
+      $$('.filtre', filtres).forEach(function (x) { x.addEventListener('click', function () { filtrer(x.getAttribute('data-filtre'), true); }); });
+      var f0 = params.get('filtre');
+      if (f0 === 'edition' || f0 === 'original') filtrer(f0, false);
+    }
+    rendre();
+  }
+
+  /* ------------------------------------------------------------ v3 · vidéo de l'Espace, chargée seulement au clic */
+  function videos() {
+    $$('[data-video]').forEach(function (v) {
+      var b = $('.video__bouton', v);
+      if (!b) return;
+      b.addEventListener('click', function () {
+        var f = document.createElement('iframe');
+        f.src = 'https://player.vimeo.com/video/' + v.getAttribute('data-video') + '?h=' + v.getAttribute('data-video-h') + '&autoplay=1&title=0&byline=0&portrait=0&dnt=1';
+        f.allow = 'autoplay; fullscreen; picture-in-picture';
+        f.setAttribute('allowfullscreen', '');
+        f.title = b.getAttribute('aria-label') || 'Vimeo';
+        b.replaceWith(f);
+        f.focus();
+      });
+    });
+  }
+
   /* ------------------------------------------------------------ démarrage */
   function demarrer() {
     lissage.init();
@@ -1577,6 +1749,8 @@
     comptes();
     formulaire();
     lettres();
+    paniers();
+    videos();
     glaces();
     grattages();
     carottage();

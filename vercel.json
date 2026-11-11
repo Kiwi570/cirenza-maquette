@@ -1,13 +1,33 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/retreats/molten-magic",
+      "destination": "/retreats/alpine-pause",
+      "permanent": false
+    },
+    {
+      "source": "/fr/retraites/molten-magic",
+      "destination": "/fr/retraites/alpine-pause",
+      "permanent": false
+    }
+  ],
   "headers": [
     {
-      "source": "/assets/img/(.*)",
+      "source": "/(.*)",
       "headers": [
         {
-          "key": "Cache-Control",
-          "value": "public, max-age=604800"
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
         }
       ]
     }

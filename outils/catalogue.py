@@ -1,4 +1,9 @@
-"""Catalogue des œuvres de Lisa Cirenza, relevé sur cirenza.com (octobre 2026).
+"""Catalogue des œuvres de Lisa Cirenza.
+
+Base maîtresse : Artwork Archive (inventaire de l'artiste). Ce fichier en est le relevé de travail :
+cirenza.com (octobre 2026), le magazine Wax Fusion (IEA, automne 2026) et le dossier de photos
+envoyé le 5 novembre 2026. L'export CSV d'Artwork Archive se fusionne par-dessus avec
+outils/artwork_archive.py (titres, dimensions, années, techniques, prix et disponibilités).
 
 Règles : aucun fait inventé. Ce qui manque reste vide (None) et s'affiche « à compléter ».
 Les textes anglais sont ceux du site (coquilles évidentes corrigées et listées dans CORRECTIONS) ;
@@ -10,6 +15,43 @@ LE10 = {"en": "Hand finished limited edition (10) print on Somerset 310 gsm pape
 
 SERIES = [
     {
+        "id": "lumiere-eau-roche",
+        "slug": {"en": "light-water-rock-and-time", "fr": "lumiere-eau-roche-et-temps"},
+        "titre": {"en": "Light, Water, Rock and Time", "fr": "Lumière, eau, roche et temps"},
+        "sous_titre": {"en": "Recent works", "fr": "Œuvres récentes"},
+        "periode": None,
+        "texte": {
+            "en": "I was trained to read time in glacial and rock layers. Now I'm interpreting the latest layer, the Anthropocene, in paint and wax. In a melting world, I paint hope as light.",
+            "fr": "J'ai appris à lire le temps dans les couches de la glace et de la roche. J'interprète aujourd'hui la plus récente, l'Anthropocène, en peinture et en cire. Dans un monde qui fond, je peins l'espoir comme une lumière.",
+        },
+        "note_base": True,
+        "contexte": ["atelier/glacier-sur-le-chevalet", "atelier/detail-cire-blanche"],
+        "oeuvres": [
+            {"id": "recente-01", "src": "../v3/oeuvres/recente-01.png", "titre": None,
+             "alt": {"en": "The white flow of a glacier tumbling into a dark blue sea, below pale turquoise ice.", "fr": "Le flot blanc d'un glacier qui se jette dans une mer bleu sombre, sous une glace turquoise pâle."}},
+            {"id": "recente-09", "src": "../v3/oeuvres/recente-09.jpeg", "titre": None,
+             "alt": {"en": "A dark glacial river cutting between two white walls of ice, in thick textured strokes.", "fr": "Une rivière glaciaire sombre qui s'ouvre un passage entre deux murs de glace blanche, en touches épaisses."}},
+            {"id": "recente-06", "src": "../v3/oeuvres/recente-06.jpeg", "titre": None,
+             "alt": {"en": "A framed abstract panel in deep blues and teal, crossed by a white streak, with rust-red hatching and drips.", "fr": "Un panneau abstrait encadré, en bleus profonds et sarcelle, traversé d'un trait blanc, avec des hachures rouille et des coulures."}},
+            {"id": "recente-10", "src": "../v3/oeuvres/recente-10.jpeg", "titre": None,
+             "alt": {"en": "A turquoise lake below dark blue hills, crossed by yellow lines under a pink and yellow sky, pale blocks of ice in the foreground.", "fr": "Un lac turquoise sous des collines bleu sombre, traversé de lignes jaunes sous un ciel rose et jaune, des blocs de glace pâles au premier plan."}},
+            {"id": "recente-07", "src": "../v3/oeuvres/recente-07.jpeg", "titre": None,
+             "alt": {"en": "A heron standing in shallow turquoise water by a golden bank, on a glossy layered surface.", "fr": "Un héron debout dans une eau turquoise peu profonde, près d'une berge dorée, sur une surface brillante en couches."}},
+            {"id": "recente-03", "src": "../v3/oeuvres/recente-03.jpeg", "titre": None,
+             "alt": {"en": "A stepped black and brown cliff rising beside a dark overhang, on a white ground.", "fr": "Une falaise en gradins, noire et brune, qui s'élève à côté d'un surplomb sombre, sur fond blanc."}},
+            {"id": "recente-04", "src": "../v3/oeuvres/recente-04.jpeg", "titre": None,
+             "alt": {"en": "Black and white: tall pale streaks like falling ice rising into a dark, scratched band.", "fr": "Noir et blanc : de hautes traînées pâles, comme de la glace qui tombe, montent vers une bande sombre et griffée."}},
+            {"id": "recente-11", "src": "../v3/oeuvres/recente-11.jpeg", "titre": None,
+             "alt": {"en": "A black and white mountain peak in bold, dry strokes on a white ground.", "fr": "Un sommet en noir et blanc, en touches franches et sèches sur fond blanc."}},
+            {"id": "recente-02", "src": "../v3/oeuvres/recente-02.jpeg", "titre": None, "photo_situation": True,
+             "alt": {"en": "A small blue and white work on paper, a waterfall of ice between rock walls, standing on a studio easel.", "fr": "Une petite œuvre sur papier, bleue et blanche : une cascade de glace entre des parois rocheuses, posée sur un chevalet de l'atelier."}},
+            {"id": "recente-05", "src": "../v3/oeuvres/recente-05.jpeg", "titre": None, "photo_situation": True,
+             "alt": {"en": "Lilac snowy peaks reflected in a still lake, on a sheet resting on a studio easel.", "fr": "Des sommets enneigés lilas qui se reflètent dans un lac calme, sur une feuille posée sur un chevalet de l'atelier."}},
+            {"id": "recente-08", "src": "../v3/oeuvres/recente-08.jpeg", "titre": None, "statut": "en-cours", "photo_situation": True,
+             "alt": {"en": "Black hills and water in ink-like washes on paper, taped to a board, still wet.", "fr": "Des collines noires et de l'eau en lavis sur papier, scotché sur une planche, encore humide."}},
+        ],
+    },
+    {
         "id": "hope-and-optimism",
         "slug": {"en": "hope-and-optimism", "fr": "hope-and-optimism"},
         "titre": {"en": "Hope and Optimism", "fr": "Hope and Optimism"},
@@ -19,14 +61,22 @@ SERIES = [
             "en": "A sneak peek at what's in process on my easels. I spend months on my encaustic works, adding and subtracting, scraping back, and fusing on top. Always working multiple pieces at once. In this series, I'm exploring hope and optimism amongst turbulent times.",
             "fr": "Un aperçu de ce qui prend forme sur mes chevalets. Je passe des mois sur mes œuvres à l'encaustique : j'ajoute, je retire, je gratte, puis je fusionne par-dessus. Je travaille toujours sur plusieurs pièces à la fois. Dans cette série, j'explore l'espoir et l'optimisme en des temps troublés.",
         },
-        "contexte": ["atelier/oeuvre-en-cours-pastels-sur-cire", "atelier/home-sur-chevalet"],
+        "contexte": ["atelier/seaside-village-detail", "atelier/oeuvre-en-cours-pastels-sur-cire"],
         "oeuvres": [
             {"id": "en-cours-1", "src": "sur-le-chevalet/sans-titre-1-craggy-peaks.jpeg", "titre": None, "statut": "en-cours",
              "alt": {"en": "Black and white mountain peaks with sharp ridges, in progress.", "fr": "Sommets en noir et blanc aux arêtes vives, œuvre en cours."}},
-            {"id": "en-cours-2", "src": "sur-le-chevalet/sans-titre-2-rising-seas.jpeg", "titre": None, "statut": "en-cours",
+            {"id": "en-cours-2", "src": "sur-le-chevalet/sans-titre-2-rising-seas.jpeg", "titre": "Seaside Village and the Pink Flowers", "statut": "en-cours", "dims": (100, 70), "profondeur": 4,
+             "technique": {"en": "Wax on cradled wood panel", "fr": "Cire sur panneau de bois à châssis"},
+             "texte": {"en": "Bright pink flowers bloom stubbornly along rocky banks above a village submerged by rising sea levels, catalyzed by a dripping, molten sun. In her landscapes, the base layer pigments are bound in vinyl, which ensures adhesion to the wax layers.",
+                       "fr": "Des fleurs d'un rose vif s'obstinent à fleurir sur des berges rocheuses, au-dessus d'un village englouti par la montée des eaux, sous un soleil qui fond et coule. Dans ses paysages, les pigments de la première couche sont liés dans du vinyle, pour assurer l'adhérence des couches de cire."},
+             "source": "Wax Fusion, automne 2026, p. 24-25",
              "alt": {"en": "A golden mountain slope above a breaking blue wave, in progress.", "fr": "Un versant doré au-dessus d'une vague bleue qui déferle, œuvre en cours."}},
-            {"id": "en-cours-3", "src": "sur-le-chevalet/sans-titre-3-emergent-hope.jpg", "titre": None, "statut": "en-cours",
-             "alt": {"en": "A face emerging from layered blue and green waters, in progress.", "fr": "Un visage qui émerge d'eaux bleues et vertes en couches, œuvre en cours."}},
+            {"id": "en-cours-3", "src": "../v3/oeuvres/en-cours-3.jpeg", "titre": "Emergence", "statut": "en-cours", "dims": (100, 70),
+             "technique": {"en": "Chalk paint, pigments, pastels, oils and hot wax, archivally applied", "fr": "Peinture à la craie, pigments, pastels, huile et cire chaude, appliqués pour durer"},
+             "texte": {"en": "A face emerges, eyes seeking the light from turbulent blue waters below. In this piece I experiment with five distinct white pigments (Lithopone, Blanc fixe, Blanc de Meudon among them) across varying wax depths to maximise depth effects, with chalk paint and cold and warm blue pigments in the underpainting.",
+                       "fr": "Un visage émerge, les yeux cherchant la lumière depuis des eaux bleues tourmentées. J'y expérimente cinq blancs différents (dont le lithopone, le blanc fixe et le blanc de Meudon) à diverses profondeurs de cire pour creuser la profondeur, sur une sous-couche de peinture à la craie et de bleus froids et chauds."},
+             "source": "Wax Fusion, automne 2026, p. 22-23",
+             "alt": {"en": "A face emerging from layered blue waters, eyes and lips just above the surface, in progress.", "fr": "Un visage qui émerge d'eaux bleues en couches, les yeux et les lèvres à fleur de surface, œuvre en cours."}},
             {"id": "en-cours-4", "src": "sur-le-chevalet/sans-titre-4-birch-and-river.jpeg", "titre": None, "statut": "en-cours",
              "alt": {"en": "Golden birch trees above a misty river, in progress.", "fr": "Des bouleaux dorés au-dessus d'une rivière brumeuse, œuvre en cours."}},
             {"id": "en-cours-5", "src": "sur-le-chevalet/sans-titre-5-waterfall.jpeg", "titre": None, "statut": "en-cours", "photo_situation": True,
@@ -35,9 +85,16 @@ SERIES = [
              "alt": {"en": "A stormy turquoise sky over a dark ridge and pale foreground, in progress.", "fr": "Un ciel turquoise orageux au-dessus d'une crête sombre, œuvre en cours."}},
             {"id": "hope-1", "src": "hope-and-optimism/sans-titre-1-seeds-of-hope.jpg", "titre": None,
              "alt": {"en": "A long triptych of sunflowers and red flames on a pale blue ground.", "fr": "Un long triptyque de tournesols et de flammes rouges sur fond bleu pâle."}},
-            {"id": "hope-2", "src": "hope-and-optimism/sans-titre-2-stand-tall.jpg", "titre": None, "photo_situation": True,
+            {"id": "hope-2", "src": "hope-and-optimism/sans-titre-2-stand-tall.jpg", "titre": "Stand Tall and Face the Light", "photo_situation": True, "dims": (108, 108),
+             "technique": {"en": "Oils and cold wax", "fr": "Huile et cire froide"},
+             "texte": {"en": "Part of a series paying homage to the resilience, optimism and courage of the Ukrainian people. Cold wax sculpted yellow petals arch toward an unseen, luminous source. Yet look closely: hidden in the earthy greens of the undergrowth lie the shapes of military tanks. The sunflowers do not ignore the violence buried in the soil; strongly rooted in the earth, they grow directly out of it, turning their faces to follow the light.",
+                       "fr": "Une série en hommage à la résilience, à l'optimisme et au courage du peuple ukrainien. Des pétales jaunes sculptés dans la cire froide se tendent vers une source lumineuse invisible. Mais regardez de près : dans les verts terreux du sous-bois se cachent des silhouettes de chars. Les tournesols n'ignorent pas la violence enfouie dans le sol ; solidement enracinés, ils en sortent et tournent leur visage vers la lumière."},
+             "source": "Wax Fusion, automne 2026, p. 20-21",
              "alt": {"en": "Three tall sunflowers on turquoise stems, framed, photographed on a wall.", "fr": "Trois grands tournesols aux tiges turquoise, encadrés, photographiés au mur."}},
-            {"id": "hope-3", "src": "hope-and-optimism/sans-titre-3-rose-colored-glasses.jpeg", "titre": None,
+            {"id": "hope-3", "src": "hope-and-optimism/sans-titre-3-rose-colored-glasses.jpeg", "titre": "Rose Coloured Glasses",
+             "texte": {"en": "In this triptych I challenge the notion that rose-coloured lenses obliterate reality. The work shows what happens when we view the world through dark glasses, reducing it to rigid black-and-white judgments that erase the joys that continue to surround us. The lens is ours to choose. Using what I learned on a Kyoto residency focused on Japanese papers, I fuse painted rice paper between the wax layers.",
+                       "fr": "Dans ce triptyque, je conteste l'idée que des lunettes roses effacent la réalité. L'œuvre montre ce qui arrive quand on regarde le monde à travers des verres sombres : on le réduit à des jugements rigides, en noir et blanc, qui effacent les joies qui continuent de nous entourer. À nous de choisir nos verres. Grâce à ma résidence à Kyoto consacrée aux papiers japonais, je fusionne du papier de riz peint entre les couches de cire."},
+             "source": "Wax Fusion, automne 2026, p. 26-27",
              "alt": {"en": "Three vertical panels of a woman's face with rose-coloured glasses, the centre one in grey.", "fr": "Trois panneaux verticaux d'un visage de femme aux lunettes roses, celui du centre en gris."}},
             {"id": "hope-4", "src": "hope-and-optimism/sans-titre-4-home.jpg", "titre": None, "photo_situation": True,
              "alt": {"en": "A head in profile filled with a house, a tree and figures, over a red and blue landscape, framed.", "fr": "Une tête de profil habitée d'une maison, d'un arbre et de silhouettes, sur un paysage rouge et bleu, encadrée."}},
@@ -163,7 +220,7 @@ SERIES = [
         "contexte": ["presse/bbc-documentaire"],
         "oeuvres": [
             {"id": "dream-big", "src": "beneath-the-surface/dream-big.jpg", "titre": "Dream Big", "dims": (105, 70),
-             "technique": {"en": "Mixed media", "fr": "Technique mixte"},
+             "technique": {"en": "Digitally layered painting on Dibond", "fr": "Peinture numérique en couches sur Dibond"},
              "alt": {"en": "A boy's face in blue over layers of words, maps and colour, with the words Dream Big.", "fr": "Un visage d'enfant en bleu sur des couches de mots, de plans et de couleurs, avec les mots Dream Big."}},
             {"id": "tic-tact-toe", "src": "beneath-the-surface/tic-tact-toe-the-refugee-and-the-immigrant.jpg", "titre": "Tic Tact Toe: The Refugee and the Immigrant", "photo_situation": True,
              "texte": {"en": "Same silhouette, one is filled with identities and has clearly delineated borders, the other is porous, empty. One shuts the other out. Adults don’t play tic tac toe, because it’s impossible to win without an unfair advantage.",
