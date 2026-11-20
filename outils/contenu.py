@@ -32,6 +32,11 @@ PAGES = {
     "inscription_encaustics": {"en": "septregistration", "fr": "fr/septregistration"},
     "conditions": {"en": "retreats/payment-and-cancellation", "fr": "fr/retraites/paiement-et-annulation"},
     "recherche": {"en": "search", "fr": "fr/recherche"},
+    # v7 · pages légales : textes de Lisa à venir (EN/FR), modifiables dans Wix sur le site final
+    "mentions": {"en": "legal-notice", "fr": "fr/mentions-legales"},
+    "confidentialite": {"en": "privacy-policy", "fr": "fr/confidentialite"},
+    "politique_cookies": {"en": "cookie-policy", "fr": "fr/politique-cookies"},
+    "conditions_site": {"en": "website-terms", "fr": "fr/conditions-d-utilisation"},
 }
 DOSSIER_SALLES = {"en": "works", "fr": "fr/oeuvres"}
 
@@ -43,6 +48,7 @@ COORD = {
     "pays": {"en": "France", "fr": "France"},
     "courriel": "art@cirenza.com",
     "courriel_espace": "atelier@cirenza.com",
+    "courriel_demande": "atelier@cirenza.com",  # v7 · « Enquire about this work » (brief de Lisa)
     "tel": "+33 7 49 09 54 92",
     "tel_brut": "+33749095492",
     "siret_atelier": "888 534 534 00019",
@@ -64,23 +70,23 @@ T = {
         "metier": "Painter of light, water, rock and time",
         "accroche": "Painting light, water, rock and time",
         "description": "Lisa Cirenza is a painter in the French Alps: light, water, rock and time (ice, snow, fog, lake and mountains) in encaustic, mixed media, oil and watercolour.",
-        "nav": {"accueil": "Home", "oeuvres": "Works", "artiste": "Bio", "parcours": "CV", "presse": "Press", "espace": "L'Espace", "cours": "Classes", "evenements": "Gather at the Espace", "retraites": "Retreats", "pip": "Painting in Paradise", "encaustics": "Alpine Creative Pause", "boutique": "Available Works", "contact": "Contact",
-                "salon_the": "Boutique & Tea Room", "cosessions": "Co-Creating Sessions", "expositions": "Exhibitions & Events", "recherche": "Search", "conditions": "Payment & cancellation", "inscription_pip": "Registration", "inscription_encaustics": "Registration",
+        "nav": {"accueil": "Home", "oeuvres": "Portfolio", "artiste": "Bio", "parcours": "CV", "presse": "Press", "espace": "L'Espace", "cours": "Classes", "evenements": "Gather at the Espace", "retraites": "Retreats", "pip": "Painting in Paradise", "encaustics": "Alpine Creative Pause", "boutique": "Commissions and Available Works", "contact": "Contact",
+                "salon_the": "Boutique & Tea Room", "cosessions": "Co-Creating Sessions", "expositions": "Exhibitions & Events", "recherche": "Search", "mentions": "Legal notice", "confidentialite": "Privacy policy", "politique_cookies": "Cookie policy", "conditions_site": "Website terms", "conditions": "Payment & cancellation", "inscription_pip": "Registration", "inscription_encaustics": "Registration",
                 "cours_prives": "Bespoke Courses & Workshops", "studio": "Studio notes", "archive": "Archive", "editions": "Collectors' editions", "recent": "A Record of Time", "declaration": "Statement", "bio": "Bio"},
         "univers": {"atelier": "Artist", "atelier_long": "Lisa Cirenza · Fine Art", "atelier_sous": "Works, editions, commissions", "espace": "Espace", "espace_long": "Espace Créa-Tea-Vité", "espace_sous": "Gallery, tea room, classes, retreats", "aria": "Choose a side of the house"},
         "disponible": "Available", "non_disponible": "Not for sale", "en_pret": "On loan", "reserve": "Reserved",
         "inventaire": "Inventory no.", "parue_dans": "Featured in",
         "menu": "Menu", "fermer": "Close", "aller_contenu": "Skip to content",
         "langue_autre": "Version française", "langue_autre_court": "FR",
-        "nav_court": {"salon_the": "Tea Room", "cosessions": "Co-Creating", "cours_prives": "Bespoke Courses", "evenements": "Gather", "expositions": "Exhibitions & Events", "boutique": "Available Works"},
+        "nav_court": {"salon_the": "Tea Room", "cosessions": "Co-Creating", "cours_prives": "Bespoke Courses", "evenements": "Gather", "expositions": "Exhibitions & Events", "boutique": "Commissions & Available Works"},
         "groupes_menu": {"oeuvres": "Artist · the work", "artiste": "Artist · the artist", "espace": "Espace Créa-Tea-Vité", "retraites": "Espace · retreats 2027", "expositions": "Exhibitions & Events"},
         "voir": "View", "agrandir": "Zoom", "a_completer": "to be completed", "titre_a_completer": "Title to be completed",
-        "prix_demande": "Price on request", "vendu": "Sold", "en_cours": "Work in progress", "edition": "Edition",
+        "prix_demande": "Price on request", "prix_a_venir": "Price to come from Artwork Archive", "vendu": "Sold", "en_cours": "Work in progress", "edition": "Edition",
         "photo_situation": "Photographed in situ",
         "image_a_confirmer": "Image to be confirmed",
         "fiche_dims": "Dimensions", "fiche_technique": "Medium", "fiche_annee": "Year", "fiche_etat": "Availability", "fiche_edition": "Edition",
         "dims_note": "as listed on the artist's site", "dims_a_verifier": "to be checked",
-        "loupe": "Magnifier", "voir_au_mur": "View on a wall", "demander": "Enquire about this work", "demander_vendu": "Ask about similar works",
+        "loupe": "Magnifier", "voir_au_mur": "View on a wall", "demander": "Enquire about this work", "histoire": "Read the story and watch the video", "demander_vendu": "Ask about similar works",
         "loupe_indispo": "The magnifier needs a high-resolution file: to be requested from the artist.",
         "loupe_aide": "Move over the work to look closely at the wax and the brush.", "loupe_aide_tactile": "Slide your finger over the work.", "loupe_chargement": "Loading the high-resolution image…",
         "precedente": "Previous work", "suivante": "Next work", "fermer_fiche": "Close", "sur": "of",
@@ -108,23 +114,23 @@ T = {
         "metier": "Peintre de la lumière, de l'eau, de la roche et du temps",
         "accroche": "Peintre de la lumière, de l'eau, de la roche et du temps",
         "description": "Lisa Cirenza, peintre dans les Alpes françaises : la lumière, l'eau, la roche et le temps (glace, neige, brouillard, lac et montagnes), à l'encaustique, en techniques mixtes, à l'huile et à l'aquarelle.",
-        "nav": {"accueil": "Accueil", "oeuvres": "Œuvres", "artiste": "Bio", "parcours": "Parcours", "presse": "Presse", "espace": "L'Espace", "cours": "Cours", "evenements": "Se réunir à l'Espace", "retraites": "Retraites", "pip": "Peindre au paradis", "encaustics": "Pause créative alpine", "boutique": "Œuvres disponibles", "contact": "Contact",
-                "salon_the": "Boutique et salon de thé", "cosessions": "Sessions de co-création", "expositions": "Expositions et événements", "recherche": "Rechercher", "conditions": "Paiement et annulation", "inscription_pip": "Inscription", "inscription_encaustics": "Inscription",
+        "nav": {"accueil": "Accueil", "oeuvres": "Portfolio", "artiste": "Bio", "parcours": "Parcours", "presse": "Presse", "espace": "L'Espace", "cours": "Cours", "evenements": "Se réunir à l'Espace", "retraites": "Retraites", "pip": "Peindre au paradis", "encaustics": "Pause créative alpine", "boutique": "Commandes et œuvres disponibles", "contact": "Contact",
+                "salon_the": "Boutique et salon de thé", "cosessions": "Sessions de co-création", "expositions": "Expositions et événements", "recherche": "Rechercher", "mentions": "Mentions légales", "confidentialite": "Politique de confidentialité", "politique_cookies": "Politique cookies", "conditions_site": "Conditions d'utilisation", "conditions": "Paiement et annulation", "inscription_pip": "Inscription", "inscription_encaustics": "Inscription",
                 "cours_prives": "Cours et ateliers sur mesure", "studio": "Notes d'atelier", "archive": "Archive", "editions": "Éditions de collection", "recent": "Strates du temps", "declaration": "Déclaration", "bio": "Biographie"},
         "univers": {"atelier": "Artiste", "atelier_long": "Lisa Cirenza · Fine Art", "atelier_sous": "Œuvres, éditions, commandes", "espace": "Espace", "espace_long": "Espace Créa-Tea-Vité", "espace_sous": "Galerie, salon de thé, cours, retraites", "aria": "Choisir un côté de la maison"},
         "disponible": "Disponible", "non_disponible": "Non disponible à la vente", "en_pret": "En prêt", "reserve": "Réservée",
         "inventaire": "N° d'inventaire", "parue_dans": "Parue dans",
         "menu": "Menu", "fermer": "Fermer", "aller_contenu": "Aller au contenu",
         "langue_autre": "English version", "langue_autre_court": "EN",
-        "nav_court": {"salon_the": "Salon de thé", "cosessions": "Co-création", "cours_prives": "Cours sur mesure", "evenements": "Se réunir", "expositions": "Expositions", "boutique": "Œuvres disponibles"},
+        "nav_court": {"salon_the": "Salon de thé", "cosessions": "Co-création", "cours_prives": "Cours sur mesure", "evenements": "Se réunir", "expositions": "Expositions", "boutique": "Commandes et œuvres dispo."},
         "groupes_menu": {"oeuvres": "Artiste · l'œuvre", "artiste": "Artiste · l'artiste", "espace": "Espace Créa-Tea-Vité", "retraites": "Espace · retraites 2027", "expositions": "Expositions et événements"},
         "voir": "Voir", "agrandir": "Agrandir", "a_completer": "à compléter", "titre_a_completer": "Titre à compléter",
-        "prix_demande": "Prix sur demande", "vendu": "Vendu", "en_cours": "En cours", "edition": "Édition",
+        "prix_demande": "Prix sur demande", "prix_a_venir": "Prix à venir d'Artwork Archive", "vendu": "Vendu", "en_cours": "En cours", "edition": "Édition",
         "photo_situation": "Photographiée en situation",
         "image_a_confirmer": "Image à confirmer",
         "fiche_dims": "Dimensions", "fiche_technique": "Technique", "fiche_annee": "Année", "fiche_etat": "Disponibilité", "fiche_edition": "Édition",
         "dims_note": "telles qu'indiquées sur le site", "dims_a_verifier": "à vérifier",
-        "loupe": "Loupe", "voir_au_mur": "Voir au mur", "demander": "Se renseigner sur cette œuvre", "demander_vendu": "Demander des œuvres proches",
+        "loupe": "Loupe", "voir_au_mur": "Voir au mur", "demander": "Se renseigner sur cette œuvre", "histoire": "Lire l'histoire et voir la vidéo", "demander_vendu": "Demander des œuvres proches",
         "loupe_indispo": "La loupe demande un fichier en haute définition, à demander à l'artiste.",
         "loupe_aide": "Survolez l'œuvre pour voir la cire et le geste de près.", "loupe_aide_tactile": "Faites glisser le doigt sur l'œuvre.", "loupe_chargement": "Chargement de l'image en haute définition…",
         "precedente": "Œuvre précédente", "suivante": "Œuvre suivante", "fermer_fiche": "Fermer", "sur": "sur",
@@ -226,6 +232,21 @@ CONFERENCES = [
 PHOTOS_ANNEES = {2016: "conferences/from-oil-paint-to-pixels-affiche", 2017: "expositions/vernissage-galerie-herrick", 2018: "expositions/the-other-art-fair-2018",
                  2019: "expositions/salon-automne-2019-paris", 2022: "expositions/art-below-affiche-regards", 2025: "expositions/salon-beaux-arts-galerie",
                  2015: "expositions/kyoto-rencontre", 2014: "expositions/bermondsey-gallery-salle", 2024: "espace/visiteuse-contemplation", 2026: "exposition-en-cours/affiche-vernissage-bnt"}
+
+# v7 · Devises affichées (EUR, GBP, USD, JPY). Le paiement reste en euros. Taux d'exemple pour la maquette ;
+# site final : taux du jour de Wix (API Currency Converter, source XE, mise à jour quotidienne).
+DEVISES = {"base": "EUR", "date": "2026-11-20", "exemple": True, "taux": {"GBP": 0.87, "USD": 1.16, "JPY": 178}}
+
+# v7 · Brief de Lisa : un seul bouton optionnel par œuvre, « Read the story and watch the video », qui ouvre l'article
+# du blog où se trouve la vidéo. Sur le site final, ce lien est le seul champ tenu côté site (collection Wix CMS
+# « Œuvres · compléments », clé : numéro d'inventaire Artwork Archive). Pas de lien, pas de bouton.
+# Exemples de la maquette : de vrais articles du blog actuel (lus le 20 novembre 2026).
+HISTOIRES = {
+    "cuban-chess": "https://www.cirenza.com/single-post/a-1-minute-video-of-cuban-inspirations",
+    "habanero": "https://www.cirenza.com/single-post/a-1-minute-video-of-cuban-inspirations",
+    "a-moment-on-the-malecon": "https://www.cirenza.com/single-post/a-1-minute-video-of-cuban-inspirations",
+    "st-pauls": "https://www.cirenza.com/single-post/2017/08/01/the-tourist-crowds-have-arrived-in-londonthe-tube-is-a-real-melting-pot-in-more-ways-than",
+}
 
 PRESSE = [
     # v5 · réunion : le podcast vient de sortir ; nom de l'émission, titre de l'épisode et lien à envoyer par Lisa

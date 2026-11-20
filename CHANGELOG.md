@@ -1,5 +1,28 @@
 # Historique
 
+## v7 · 20 novembre 2026 · deuxième liste de Lisa
+
+Réponses point par point : `REPONSES-LISA-2.md`.
+
+- **Portfolio** : nouveau nom de Works (menu Artiste). « Enquire about this work » écrit à atelier@cirenza.com, aucun prix.
+- **Commissions and Available Works** : nouveau nom de la boutique. Bloc Commandes en tête (texte et photos de Lisa à venir, trois commandes du Portfolio en attendant), bouton « Discuss a commission ». Chaque œuvre disponible affiche un prix ; « Price to come from Artwork Archive » quand il n'est pas encore public.
+- **Bouton « Read the story and watch the video »** sur la fiche et sous l'œuvre dans les salles, seulement si un lien existe. Exemples : trois œuvres de Cuba et St Paul's, vers de vrais articles du blog actuel.
+- **Devises** : sélecteur EUR, GBP, USD, JPY dans le pied de page de toutes les pages ; chaque prix en euros reçoit son équivalent (≈), le choix est gardé ; le paiement reste en euros. Taux d'exemple ; site final : convertisseur de Wix (taux XE quotidiens).
+- **Cookies** : choix gardé 6 mois puis redemandé. Chaque vidéo garde une vignette « hébergée par Vimeo / Wix » avec « Accept and play » et « Cookie settings » tant que le visiteur n'a pas accepté.
+- **Pages légales** EN/FR (mentions, confidentialité, cookies, conditions d'utilisation) liées du pied de page, avec les faits vérifiés : prestataires et données, stockage du navigateur, cookies de Vimeo (`__cf_bm`). L'ancienne adresse /website-terms-and-privacy-policy y renvoie.
+- **Recherche** : libellé « Search » à côté de la loupe sur grand écran, champ en tête du menu, lien dans le pied de page.
+- **Correctif** : sur mobile, le menu repasse en une colonne (la grille à 5 colonnes de la v6 l'écrasait).
+
+## v6.1 · 20 novembre 2026 · copie sur le site Wix headless
+
+- La maquette est en ligne à l'identique sur le site headless « Lisa Cirenza – Atelier » :
+  https://headless-znxwbqojlvv-kiwixteam-1409.wix-site-host.com (63 pages, 440 images dans la médiathèque Wix).
+  cirenza.com n'est pas modifié.
+- Version « html » des liens : la recherche et les boutons d'inscription des retraites pointent juste depuis toutes les
+  pages, y compris en français.
+- `site.js` lit l'adresse des images dans `assets/js/medias.js` quand il existe (copie Wix), sinon dans `assets/`.
+- Outil `outils/copie_wix.py` et table `connecteurs/medias-wix.tsv` (procédure dans `connecteurs/README.md`).
+
 ## v6 · 20 novembre 2026 · retours de Lisa (courriel du 20 novembre)
 
 Réponses point par point : `REPONSES-LISA.md`.

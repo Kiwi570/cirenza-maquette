@@ -61,7 +61,9 @@
       i.src = src;
     });
   }
-  function urlOeuvre(id, taille) { return A + 'img/oeuvres/' + id + '-' + taille + '.webp'; }
+  /* Copie hébergée chez Wix : les images des œuvres et les photos sont dans la médiathèque Wix (assets/js/medias.js). */
+  function M(p) { var m = window.LC_MEDIAS; return (m && m[p]) || A + p; }
+  function urlOeuvre(id, taille) { return M('img/oeuvres/' + id + '-' + taille + '.webp'); }
 
   /* ------------------------------------------------------------ boucle unique */
   var taches = [];
@@ -1114,6 +1116,7 @@
         '    <button class="fiche__action" type="button" data-action="loupe" aria-pressed="false">' + T.loupe + '</button>' +
         '    <button class="fiche__action" type="button" data-action="mur">' + T.voir_au_mur + '</button>' +
         '    <a class="fiche__action fiche__action--principale" data-action="demander" href="#"></a>' +
+        '    <a class="fiche__action fiche__action--histoire" data-action="histoire" href="#" target="_blank" rel="noopener" hidden></a>' +
         '  </div>' +
         '  <p class="fiche__aide js-apparait" aria-live="polite"></p>' +
         '</div>' +
@@ -1200,7 +1203,11 @@
       $('.fiche__prix', this.el).textContent = '';
       var dem = $('[data-action="demander"]', this.el);
       dem.textContent = T.demander;
-      dem.href = 'mailto:' + D.espace.courriel + '?subject=' + encodeURIComponent((D.langue === 'fr' ? 'Demande : ' : 'Enquiry: ') + o.titreAff);
+      dem.href = 'mailto:' + (D.demande || D.espace.courriel) + '?subject=' + encodeURIComponent((D.langue === 'fr' ? 'Demande : ' : 'Enquiry: ') + o.titreAff);
+      /* v7 · « Read the story and watch the video » : seulement quand l'œuvre a un lien vers son article */
+      var hi = $('[data-action="histoire"]', this.el);
+      hi.hidden = !o.histoire;
+      if (o.histoire) { hi.href = o.histoire; hi.textContent = T.histoire; } else hi.removeAttribute('href');
       $('[data-action="loupe"]', this.el).disabled = !o.loupe;
       $('[data-action="mur"]', this.el).disabled = !(o.h && o.l);
       this.compteur.textContent = (this.index + 1) + ' ' + T.sur + ' ' + this.liste.length;
@@ -1548,7 +1555,7 @@
       var W = this.scene.clientWidth, H = this.scene.clientHeight;
       var cle = this.decor === 'chalet' && W / H < 0.95 ? 'chaletV' : this.decor;
       var d = D.decors[cle];
-      var src = A + d.src;
+      var src = M(d.src);
       if (this.imgDecor.getAttribute('src') !== src) this.imgDecor.src = src;
       var s = Math.max(W / d.w, H / d.h);
       var ox = clamp(W / 2 - d.cx * s, W - d.w * s, 0);
@@ -1724,7 +1731,7 @@
         var total = 0, inconnus = 0, payables = 0;
         PN[c].forEach(function (it, i) {
           var li = document.createElement('li'); li.className = 'panier__ligne';
-          var img = document.createElement('img'); img.src = A + it.image; img.alt = ''; img.width = 52; img.height = 52; img.loading = 'lazy';
+          var img = document.createElement('img'); img.src = M(it.image); img.alt = ''; img.width = 52; img.height = 52; img.loading = 'lazy';
           var d = document.createElement('div'); d.textContent = it.titre;
           var sm = document.createElement('small');
           if (it.prix) { total += it.prix; payables++; sm.textContent = prix(it.prix); }
@@ -1808,7 +1815,7 @@
         var h = $('[data-entete]'); if (h) h.classList.remove('est-cache');
         var cible = $('[data-compte-panier="' + d.comptoir + '"]');
         var carte = b.closest('.produit'), visuel = carte && $('img', carte);
-        envol(visuel, cible, visuel ? (visuel.currentSrc || visuel.src) : A + d.image, function () {
+        envol(visuel, cible, visuel ? (visuel.currentSrc || visuel.src) : M(d.image), function () {
           rendre();
           if (cible) { cible.classList.add('rebond'); setTimeout(function () { cible.classList.remove('rebond'); }, 380); }
           annoncer(TX.ajoute.replace('{n}', noms[d.comptoir]));
@@ -1854,6 +1861,7 @@
       var b = $('.video__bouton', v);
       if (!b) return;
       b.addEventListener('click', function () { demanderMedias(function () {
+        var c = $('[data-consentement-video]', v); if (c) c.hidden = true;
         var f = document.createElement('iframe');
         f.src = 'https://player.vimeo.com/video/' + v.getAttribute('data-video') + '?h=' + v.getAttribute('data-video-h') + '&autoplay=1&title=0&byline=0&portrait=0&dnt=1';
         f.allow = 'autoplay; fullscreen; picture-in-picture';
@@ -1861,7 +1869,7 @@
         f.title = b.getAttribute('aria-label') || 'Vimeo';
         b.replaceWith(f);
         f.focus();
-      }); });
+      }, v); });
     });
   }
 
@@ -2022,8 +2030,16 @@
      les lecteurs de podcast peuvent poser les leurs : ils ne se chargent qu'avec l'accord du visiteur. */
   var CONSENT = {
     cle: 'lc-cookies-v1',
-    lire: function () { try { return localStorage.getItem(this.cle); } catch (e) { return null; } },
-    ecrire: function (v) { try { localStorage.setItem(this.cle, v); } catch (e) { /* rien */ } },
+    /* v7 · choix gardé 6 mois (182 jours), puis redemandé. Format : {"c": "accepte" | "refuse", "d": horodatage} */
+    duree: 182 * 864e5,
+    lire: function () {
+      try {
+        var o = JSON.parse(localStorage.getItem(this.cle) || 'null');
+        if (!o || (o.c !== 'accepte' && o.c !== 'refuse') || !(Date.now() - o.d < this.duree)) return null;
+        return o.c;
+      } catch (e) { return null; }
+    },
+    ecrire: function (v) { try { localStorage.setItem(this.cle, JSON.stringify({ c: v, d: Date.now() })); } catch (e) { /* rien */ } },
     medias: function () { return this.lire() === 'accepte'; },
     attente: []
   };
@@ -2050,21 +2066,122 @@
       bt.addEventListener('click', function () {
         CONSENT.ecrire(bt.getAttribute('data-choix'));
         fermer();
+        if (CONSENT.apres) CONSENT.apres();
         var a = CONSENT.attente.splice(0);
         if (CONSENT.medias()) a.forEach(function (f) { f(); });
       });
     });
     $$('[data-cookies-ouvrir]').forEach(function (bt) { bt.addEventListener('click', ouvrir); });
     if (!CONSENT.lire() && params.get('ouverture') !== 'non') ouvrir();
-    CONSENT.demander = function (f) {
+    CONSENT.demander = function (f, bloc) {
       if (CONSENT.medias()) { f(); return; }
+      var acc = bloc && $('[data-accepter-jouer]', bloc);
+      if (acc) { acc.focus(); acc.classList.toggle('est-signale', false); void acc.offsetWidth; acc.classList.toggle('est-signale', true); return; }
       CONSENT.attente.push(f);
       ouvrir();
       var ok = $('[data-choix="accepte"]', b);
       if (ok) ok.focus();
     };
   }
-  function demanderMedias(f) { if (CONSENT.demander) CONSENT.demander(f); else f(); }
+  function demanderMedias(f, bloc) { if (CONSENT.demander) CONSENT.demander(f, bloc); else f(); }
+
+  /* v7 · devises : le visiteur choisit EUR, GBP, USD ou JPY dans le pied de page. Chaque prix en euros reçoit
+     son équivalent indicatif (≈). Le paiement reste toujours en euros. Maquette : taux d'exemple (D.devises) ;
+     site final : taux du jour de Wix (Currency Converter, source XE). */
+  function devises() {
+    var X = D.devises, sel = $('[data-devise]');
+    if (!X || !sel) return;
+    var CLE = 'lc-devise';
+    var choix = 'EUR';
+    try { choix = localStorage.getItem(CLE) || 'EUR'; } catch (e) { /* rien */ }
+    if (choix !== 'EUR' && !X.taux[choix]) choix = 'EUR';
+    sel.value = choix;
+    var loc = D.langue === 'fr' ? 'fr-FR' : 'en-GB';
+    var NB = '\\d{1,3}(?:[,\\u00a0\\u202f ]\\d{3})+(?:[.,]\\d{1,2})?|\\d+(?:[.,]\\d{1,2})?';
+    var M = '(?:€\\s?(?:' + NB + ')|(?:' + NB + ')\\s?(?:€|Euros?\\b|EUR\\b))';
+    var RE = new RegExp(M + '(?:\\s?[-–]\\s?' + M + ')?', 'g');
+    function nombre(t) {
+      var m = t.replace(/€|Euros?|EUR/g, '').replace(/[\u00a0\u202f ]/g, '');
+      if (/,\d{1,2}$/.test(m) && m.indexOf('.') < 0) m = m.replace(',', '.'); else m = m.replace(/,/g, '');
+      return parseFloat(m);
+    }
+    function equivalent(txt, c) {
+      var f;
+      try { f = new Intl.NumberFormat(loc, { style: 'currency', currency: c, currencyDisplay: 'narrowSymbol', maximumFractionDigits: 0 }); }
+      catch (e) { f = new Intl.NumberFormat(loc, { style: 'currency', currency: c, maximumFractionDigits: 0 }); }
+      var parts = txt.split(/\s?[-–]\s?(?=€|\d)/).map(nombre).filter(function (n) { return !isNaN(n); });
+      if (!parts.length) return '';
+      return ' (≈ ' + parts.map(function (n) { return f.format(Math.round(n * X.taux[c])); }).join(' – ') + ')';
+    }
+    var EXCLUS = { SCRIPT: 1, STYLE: 1, TEXTAREA: 1, OPTION: 1, SELECT: 1, INPUT: 1, NOSCRIPT: 1 };
+    function convertir(racine, c) {
+      $$('[data-prix-devise]', racine).forEach(function (x) { x.parentNode.removeChild(x); });
+      if (c === 'EUR') return;
+      var w = document.createTreeWalker(racine, NodeFilter.SHOW_TEXT, {
+        acceptNode: function (n) {
+          var el = n.parentNode;
+          if (!el || EXCLUS[el.nodeName] || el.closest('[data-prix-devise], [data-sans-devise], .cookies')) return NodeFilter.FILTER_REJECT;
+          RE.lastIndex = 0;
+          return RE.test(n.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+        }
+      });
+      var noeuds = [];
+      while (w.nextNode()) noeuds.push(w.currentNode);
+      noeuds.forEach(function (n) {
+        var txt = n.nodeValue, frag = document.createDocumentFragment(), i = 0, m;
+        RE.lastIndex = 0;
+        while ((m = RE.exec(txt))) {
+          frag.appendChild(document.createTextNode(txt.slice(i, m.index + m[0].length)));
+          var sp = document.createElement('span');
+          sp.className = 'prix-devise';
+          sp.setAttribute('data-prix-devise', '');
+          sp.textContent = equivalent(m[0], c);
+          frag.appendChild(sp);
+          i = m.index + m[0].length;
+        }
+        frag.appendChild(document.createTextNode(txt.slice(i)));
+        n.parentNode.replaceChild(frag, n);
+      });
+    }
+    var occupe = false;
+    function tout() { occupe = true; convertir(document.body, choix); occupe = false; }
+    tout();
+    sel.addEventListener('change', function () {
+      choix = sel.value;
+      try { localStorage.setItem(CLE, choix); } catch (e) { /* rien */ }
+      tout();
+    });
+    /* le panier se redessine : on recalcule ses équivalents */
+    var panier = $('#panier');
+    if (panier && window.MutationObserver) {
+      var attente = null;
+      new MutationObserver(function () {
+        if (occupe || choix === 'EUR') return;
+        clearTimeout(attente);
+        attente = setTimeout(function () { occupe = true; convertir(panier, choix); occupe = false; }, 30);
+      }).observe(panier, { childList: true, subtree: true, characterData: true });
+    }
+  }
+
+  /* v7 · chaque vidéo garde sa vignette « hébergée par … » tant que le visiteur n'a pas accepté.
+     « Accept and play » enregistre l'accord (6 mois) et lance cette vidéo ; ensuite les vidéos se lisent directement. */
+  function consentementVideos() {
+    function maj() { var ok = CONSENT.medias(); $$('[data-consentement-video]').forEach(function (x) { x.hidden = ok; }); }
+    maj();
+    CONSENT.apres = maj;
+    document.addEventListener('click', function (ev) {
+      var b = ev.target.closest && ev.target.closest('[data-accepter-jouer]');
+      if (!b) return;
+      ev.preventDefault();
+      CONSENT.ecrire('accepte');
+      var banniere = $('.cookies');
+      if (banniere && !banniere.hidden) { banniere.hidden = true; html.classList.remove('a-cookies'); }
+      maj();
+      var bloc = b.closest('[data-video], [data-video-mp4]');
+      var jouer = bloc && $('.video__bouton, .video-procede__bouton', bloc);
+      if (jouer) jouer.click();
+    });
+  }
 
   /* ------------------------------------------------------------ v6 · vidéos du procédé (Wix Video), chargées au clic, après accord */
   function videosProcede() {
@@ -2073,6 +2190,7 @@
       if (!b) return;
       b.addEventListener('click', function () {
         demanderMedias(function () {
+          var c = $('[data-consentement-video]', li); if (c) c.hidden = true;
           var v = document.createElement('video');
           v.src = li.getAttribute('data-video-mp4');
           v.controls = true;
@@ -2082,7 +2200,7 @@
           v.setAttribute('aria-label', b.getAttribute('aria-label') || '');
           b.replaceWith(v);
           v.focus();
-        });
+        }, li);
       });
     });
   }
@@ -2240,6 +2358,8 @@
     formulaire();
     lettres();
     cookies();
+    consentementVideos();
+    devises();
     paniers();
     videos();
     videosProcede();

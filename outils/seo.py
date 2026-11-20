@@ -7,9 +7,26 @@ et les redirections passent en permanentes (301).
 """
 
 PAGES = {
+    "mentions": {
+        "titre": {"en": "Legal notice · Lisa Cirenza Fine Art and Espace Créa-Tea-Vité",
+                  "fr": "Mentions légales · Lisa Cirenza Fine Art et Espace Créa-Tea-Vité"},
+        "description": {"en": "Legal notice of cirenza.com: Lisa Cirenza Fine Art (artist-author) and Espace Créa-Tea-Vité (SAS Atelier Truffle), La Clusaz.",
+                        "fr": "Mentions légales de cirenza.com : Lisa Cirenza Fine Art (artiste-auteur) et l'Espace Créa-Tea-Vité (SAS Atelier Truffle), La Clusaz."}},
+    "confidentialite": {
+        "titre": {"en": "Privacy policy · Lisa Cirenza", "fr": "Politique de confidentialité · Lisa Cirenza"},
+        "description": {"en": "How cirenza.com handles your personal data: registrations, bookings, orders, newsletter and the providers involved.",
+                        "fr": "Comment cirenza.com traite vos données personnelles : inscriptions, réservations, commandes, lettre d'information et prestataires."}},
+    "politique_cookies": {
+        "titre": {"en": "Cookie policy · Lisa Cirenza", "fr": "Politique cookies · Lisa Cirenza"},
+        "description": {"en": "Cookies and browser storage on cirenza.com: what is stored, for how long, and how to change your choice.",
+                        "fr": "Cookies et stockage du navigateur sur cirenza.com : ce qui est enregistré, pour combien de temps, et comment changer votre choix."}},
+    "conditions_site": {
+        "titre": {"en": "Website terms · Lisa Cirenza", "fr": "Conditions d'utilisation du site · Lisa Cirenza"},
+        "description": {"en": "Terms of use of cirenza.com, the website of Lisa Cirenza Fine Art and Espace Créa-Tea-Vité.",
+                        "fr": "Conditions d'utilisation de cirenza.com, le site de Lisa Cirenza Fine Art et de l'Espace Créa-Tea-Vité."}},
     "oeuvres": {
-        "titre": {"en": "Works: A Record of Time and the Archive · Lisa Cirenza",
-                  "fr": "Œuvres : Strates du temps et l'Archive · Lisa Cirenza"},
+        "titre": {"en": "Portfolio: A Record of Time and the Archive · Lisa Cirenza",
+                  "fr": "Portfolio : Strates du temps et l'Archive · Lisa Cirenza"},
         "description": {"en": "Paintings by Lisa Cirenza in encaustic, mixed media, oil and watercolour: A Record of Time (ice, water, rock and light in the French Alps), then the Archive of earlier series.",
                         "fr": "Peintures de Lisa Cirenza à l'encaustique, en technique mixte, à l'huile et à l'aquarelle : Strates du temps (glace, eau, roche et lumière des Alpes), puis l'Archive des séries précédentes."}},
     "artiste": {
@@ -57,8 +74,8 @@ PAGES = {
         "description": {"en": "Two painting retreats with Lisa Cirenza in La Clusaz in 2027: Painting in Paradise (21 – 26 June) and Alpine Creative Pause (6 – 11 September). Small groups, from €2,450.",
                         "fr": "Deux retraites de peinture avec Lisa Cirenza à La Clusaz en 2027 : Peindre au paradis (21 – 26 juin) et Pause créative alpine (6 – 11 septembre). Petits groupes, dès 2 450 €."}},
     "boutique": {
-        "titre": {"en": "Available Works: originals, prints and collectors' editions · Lisa Cirenza",
-                  "fr": "Œuvres disponibles : originaux, tirages et éditions de collection · Lisa Cirenza"},
+        "titre": {"en": "Commissions and Available Works · Lisa Cirenza Fine Art",
+                  "fr": "Commandes et œuvres disponibles · Lisa Cirenza Fine Art"},
         "description": {"en": "Available works by Lisa Cirenza: original encaustics, archival prints printed and shipped by creativehub, and collectors' editions in acrylic.",
                         "fr": "Les œuvres disponibles de Lisa Cirenza : encaustiques originales, tirages d'art imprimés et expédiés par creativehub, et éditions de collection en acrylique."}},
     "salon_the": {
@@ -131,7 +148,7 @@ ANCIEN_SITE = {
     "/residencysupplies": "retraites", "/service-page/molten-may-invitational-residency-2027": "retraites",
     "/service-page/registration-2026": "retraites", "/service-page/registration-closed-for-2025": "retraites",
     # pages techniques et anciennes pages sans équivalent
-    "/website-terms-and-privacy-policy": "accueil", "/general-4": "accueil", "/archived-pages": "accueil", "/ubu": "accueil",
+    "/website-terms-and-privacy-policy": "conditions_site", "/general-4": "accueil", "/archived-pages": "accueil", "/ubu": "accueil",
 }
 # Ordre : les adresses précises d'abord, puis les motifs (Vercel applique la première règle qui correspond)
 MOTIFS = ("/product-page/:slug*", "/feed/:path*", "/single-post/:path*", "/service-page/:slug*")

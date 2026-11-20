@@ -25,7 +25,7 @@ Lisa Cirenza is a painter based in the French Alps. As a National Science Founda
 
 ## Pages
 
-- [Works](https://cirenza-maquette.vercel.app/works): Works: A Record of Time, then the Archive of earlier series
+- [Portfolio](https://cirenza-maquette.vercel.app/works): Works: A Record of Time, then the Archive of earlier series
 - [Bio](https://cirenza-maquette.vercel.app/artist): Artist statement, long bio and short bio
 - [Studio notes](https://cirenza-maquette.vercel.app/studio-notes): Studio notes: the story behind A Record of Time
 - [CV](https://cirenza-maquette.vercel.app/cv): Selected CV
@@ -38,7 +38,7 @@ Lisa Cirenza is a painter based in the French Alps. As a National Science Founda
 - [Exhibitions & Events](https://cirenza-maquette.vercel.app/exhibitions-events): Exhibitions & Events: La Gravité de la Grâce, December 2026 – April 2027
 - [Retreats](https://cirenza-maquette.vercel.app/retreats): Painting retreats 2027
 - [Payment & cancellation](https://cirenza-maquette.vercel.app/retreats/payment-and-cancellation): Retreat payment schedule and cancellation policy
-- [Available Works](https://cirenza-maquette.vercel.app/available-works): Available Works: originals, prints, collectors' editions
+- [Commissions and Available Works](https://cirenza-maquette.vercel.app/available-works): Commissions and Available Works: commissions, originals with prices, prints, collectors' editions
 - [Contact](https://cirenza-maquette.vercel.app/contact): Contact
 
 ## Français

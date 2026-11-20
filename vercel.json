@@ -649,12 +649,12 @@
     },
     {
       "source": "/website-terms-and-privacy-policy",
-      "destination": "/",
+      "destination": "/website-terms",
       "permanent": false
     },
     {
       "source": "/fr/website-terms-and-privacy-policy",
-      "destination": "/fr",
+      "destination": "/fr/conditions-d-utilisation",
       "permanent": false
     },
     {

@@ -1,4 +1,4 @@
-# Lisa Cirenza · maquette v6 (direction « Strates », série « A Record of Time »)
+# Lisa Cirenza · maquette v7 (direction « Strates », série « A Record of Time »)
 
 Site statique (HTML, CSS, JavaScript), sans étape de construction, prêt pour Vercel.
 Adresse de la maquette : https://cirenza-maquette.vercel.app
@@ -48,6 +48,16 @@ Les prix ne s'affichent que si `AFFICHER_PRIX = True` dans `outils/generer.py` (
 - appliqué au site : « The Grunge and the Glow of Havana » est vendue (titre exact d'Artwork Archive, retirée de la boutique) ; « Bank » est de 2016 (prix connu, non affiché) ;
 - absentes du site et à importer avec l'export : Where the Mountains Breathe (2025, encaustique sur papier, 34 × 25,5 cm, 145 €), Light Across the Thaw (encaustique sur panneau, 30 × 30 cm, 240 €), Blissful Light (2024, 200 €), Doucement Entrelacés (2024, 80 €), The Silence of Thawing Waters, Talking to the Wild (2023), The Blues (2021), Lost in the trees, and missing the Forest (2019), Cycles, Heat Waves, Chasing the Ephemeral (240 €), UH-Huh (125 €), A moment in Havanna (150 €) ;
 - certaines de ces œuvres sont sans doute parmi les 11 œuvres récentes sans titre de la maquette, mais sans les images rien ne permet de les rapprocher : aucun titre n'a été attribué au hasard.
+
+## v7 · deuxième liste de Lisa (20 novembre 2026)
+
+Voir `REPONSES-LISA-2.md` (réponses point par point, en anglais, à envoyer à Lisa).
+- **Portfolio** (ex-Works) avec « Enquire about this work » vers atelier@cirenza.com, sans prix ; **Commissions and Available Works** (ex-boutique) avec un bloc Commandes en tête et un prix sur chaque œuvre disponible.
+- **Bouton « Read the story and watch the video »** par œuvre, seulement si un lien existe (`outils/contenu.py`, `HISTOIRES`).
+- **Devises** (EUR, GBP, USD, JPY) dans le pied de page, prix indicatifs, paiement en euros (`DEVISES`).
+- **Cookies** : choix gardé 6 mois ; vignette « hébergée par Vimeo / Wix » avec « Accept and play » sur chaque vidéo.
+- **Pages légales** (EN/FR) : mentions, confidentialité, cookies, conditions d'utilisation, avec les faits vérifiés.
+- **Recherche** plus visible : libellé dans l'en-tête, champ en tête du menu, lien dans le pied de page.
 
 ## v6 · retours de Lisa du 20 novembre 2026
 
