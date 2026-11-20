@@ -14,13 +14,15 @@ Artwork Archive ──(export CSV, script)──► Wix Stores ◄──(connexi
 
 | | |
 |---|---|
-| Nom | Lisa Cirenza |
+| Nom | Lisa Cirenza – Atelier |
 | Identifiant du site (`metaSiteId`, à passer dans `WIX_SITE_ID`) | `385612fb-fc04-4da0-bcba-17cc37b81cd4` |
 | Client OAuth du site (`client_id`, public, pour les pages) | `00356f7b-4ff3-44e8-b1ee-2ddc8cf6ca6e` |
 | Tableau de bord | https://manage.wix.com/dashboard/385612fb-fc04-4da0-bcba-17cc37b81cd4/ |
 | Produits | https://manage.wix.com/dashboard/385612fb-fc04-4da0-bcba-17cc37b81cd4/wix-stores/products |
 | Commandes | https://manage.wix.com/dashboard/385612fb-fc04-4da0-bcba-17cc37b81cd4/ecom-platform/orders-list |
 | Automatisations (mail de vente) | https://manage.wix.com/dashboard/385612fb-fc04-4da0-bcba-17cc37b81cd4/triggers |
+| Adresse de la copie de la maquette | https://headless-znxwbqojlvv-kiwixteam-1409.wix-site-host.com |
+| Médiathèque | https://manage.wix.com/dashboard/385612fb-fc04-4da0-bcba-17cc37b81cd4/media-manager |
 
 - **Installé :** Wix Stores (catalogue V3), sans contenu de démonstration.
 - **Région :** euros, fuseau Europe/Paris, région France. La langue du site reste l'anglais, version officielle.
@@ -29,6 +31,26 @@ Artwork Archive ──(export CSV, script)──► Wix Stores ◄──(connexi
 - **Vérifié :** un visiteur anonyme obtient un jeton et lit le catalogue (vide pour l'instant).
 - **Le site est dans le compte Wix de P'tit Kiwi.** Pour que Lisa connecte creativehub et gère ses commandes, l'ajouter
   comme collaboratrice, ou lui transférer le site au lancement.
+
+## La maquette hébergée sur le site headless (20 novembre 2026)
+
+La maquette v6 est en ligne à l'identique sur le site headless :
+https://headless-znxwbqojlvv-kiwixteam-1409.wix-site-host.com.
+Le site en ligne de Lisa (cirenza.com, « Lisa Cirenza -Artist ») n'est jamais modifié : on y fait seulement des lectures.
+
+- **Pages :** les 63 pages en anglais et en français, en version « html » (liens relatifs en `.html`, comme dans
+  `outils/generer.py --liens html`). Toujours en noindex, comme la maquette.
+- **Images :** Wix limite les fichiers d'un site hébergé à 20 Mio. Les 440 images des œuvres et les photos sont donc dans
+  la médiathèque du site, identiques octet pour octet à celles de la maquette. `medias-wix.tsv` donne l'image Wix de
+  chaque fichier ; `assets/js/medias.js` en fait une table pour les images chargées par `site.js`.
+- **Ce qui ne vient pas de la maquette :** les redirections et en-têtes de `vercel.json`, `robots.txt` et `sitemap.xml`.
+  Un site Wix hébergé sert des fichiers, sans règles de redirection.
+
+**Mettre à jour la copie :**
+1. Copier le dépôt dans un dossier de travail, puis `python3 -I outils/generer.py <copie> --liens html`.
+2. `python3 -I outils/copie_wix.py <copie>`. Une nouvelle image doit d'abord être importée dans la médiathèque et
+   ajoutée à `medias-wix.tsv`.
+3. Zipper le contenu du dossier et l'envoyer sur le site headless (Wix CLI ou outil Wix « drop »), jamais sur cirenza.com.
 
 ## Connexion 1 · Artwork Archive (originaux)
 

@@ -1697,14 +1697,14 @@ for _k, _ph in (("pip", "retraites/diner-coucher-de-soleil-parapentes"), ("encau
     RETRAITES[_k]["photo_carte"] = _ph
 
 
-def grille_prix(lang, cle=None):
+def grille_prix(lang, cle=None, prof=0):
     """v6 · sur les pages, la fourchette seule (demande de Lisa) ; le détail des logements est dans les formulaires d'inscription."""
     fr = lang == "fr"
     cles = (cle,) if cle else RETRAITES_ORDRE
-    inscr = "".join(bouton(("Register · " if not fr else "S'inscrire · ") + nom_retraite(RETRAITES[k], lang), lien(lang, INSCRIPTION[k], 0 if MODE == "propres" else 1), "bouton" if i == 0 else "bouton bouton--ligne") for i, k in enumerate(cles))
+    inscr = "".join(bouton(("Register · " if not fr else "S'inscrire · ") + nom_retraite(RETRAITES[k], lang), lien(lang, INSCRIPTION[k], prof), "bouton" if i == 0 else "bouton bouton--ligne") for i, k in enumerate(cles))
     return (f'<div class="prix" id="prix" tabindex="-1"><p class="prix__fourchette">{e(R.LOGEMENT[lang])}</p>'
             f'<p class="prix__reduc">{e(R.REDUCTIONS[lang])}</p><p class="prix__actions">{inscr}</p>'
-            f'<p class="note"><a href="{lien(lang, "conditions", 0 if MODE == "propres" else 1)}">{e("Payment schedule and cancellation policy" if not fr else "Échéancier de paiement et conditions d'annulation")}</a></p></div>')
+            f'<p class="note"><a href="{lien(lang, "conditions", prof)}">{e("Payment schedule and cancellation policy" if not fr else "Échéancier de paiement et conditions d'annulation")}</a></p></div>')
 
 
 def fig_retraite(lang, prof, cle, quoi, classe, sizes, attrs=""):
@@ -1835,7 +1835,7 @@ def page_retraite(lang, cle):
 {sections_programme}
 <section class="inclus inclus--prix" data-strate="{e("Prices and rooms" if not fr else "Prix et chambres")}">
   {inclus}
-  <div class="inclus__prix">{surtitre("Price" if not fr else "Prix")}{grille_prix(lang, cle)}</div>
+  <div class="inclus__prix">{surtitre("Price" if not fr else "Prix")}{grille_prix(lang, cle, prof)}</div>
 </section>
 <section class="reserver reserver--image" data-strate="{e("Book" if not fr else "Réserver")}">
   <div class="reserver__fond" aria-hidden="true">{img_photo(prof, IMAGES_RETRAITE[cle]["reserver"][0], "", "100vw")}</div>
@@ -1859,7 +1859,7 @@ def page_retraites(lang):
   </div>
 </section>
 <section class="inclus inclus--prix" data-strate="{e("Price" if not fr else "Prix")}">
-  <div class="inclus__prix">{surtitre("Price" if not fr else "Prix", 1)}<h2 class="titre-section">{lettres("Registration" if not fr else "Inscription")}</h2>{grille_prix(lang)}</div>
+  <div class="inclus__prix">{surtitre("Price" if not fr else "Prix", 1)}<h2 class="titre-section">{lettres("Registration" if not fr else "Inscription")}</h2>{grille_prix(lang, None, prof)}</div>
 </section>'''
     corps = avec_carnet(corps, lang, prof, "retraites")
     ecrire(chemin, page(lang, "retraites", chemin, t["nav"]["retraites"], corps, href_autre(lang, "retraites", prof), {}, "page-retraites"))
@@ -2550,7 +2550,7 @@ def page_inscription(lang, cle):
 
 
 # ---------------------------------------------------------------- recherche sur tout le site (index généré, sans service externe)
-def index_recherche(lang):
+def index_recherche(lang, prof=0):
     t = C.T[lang]
     items = []
     for cle in C.PAGES:
@@ -2561,15 +2561,15 @@ def index_recherche(lang):
         if cle in RETRAITES:
             nom = nom_retraite(RETRAITES[cle], lang)
         desc = (seo.get("description") or {}).get(lang) if seo.get("description") else ""
-        items.append({"t": nom, "d": desc or "", "u": lien(lang, cle, 0), "g": "page"})
+        items.append({"t": nom, "d": desc or "", "u": lien(lang, cle, prof), "g": "page"})
     for sid in ORDRE:
-        items.append({"t": SERIES[sid]["titre"][lang], "d": SERIES[sid]["texte"][lang][:160], "u": lien_salle(lang, sid, 0), "g": "serie"})
+        items.append({"t": SERIES[sid]["titre"][lang], "d": SERIES[sid]["texte"][lang][:160], "u": lien_salle(lang, sid, prof), "g": "serie"})
         for oid in LISTES[sid]:
             o = OEUVRES[oid]
             if o["titre"]:
-                items.append({"t": titre(o, lang), "d": faits_courts(o, lang), "u": lien_salle(lang, sid, 0) + "?oeuvre=" + oid, "g": "oeuvre"})
+                items.append({"t": titre(o, lang), "d": faits_courts(o, lang), "u": lien_salle(lang, sid, prof) + "?oeuvre=" + oid, "g": "oeuvre"})
     for x in C.PRESSE:
-        items.append({"t": x["titre"], "d": x["media"] + " · " + (L(lang, x["date"]) or ""), "u": lien(lang, "presse", 0), "g": "presse"})
+        items.append({"t": x["titre"], "d": x["media"] + " · " + (L(lang, x["date"]) or ""), "u": lien(lang, "presse", prof), "g": "presse"})
     return items
 
 
@@ -2578,7 +2578,7 @@ def page_recherche(lang):
     fr = lang == "fr"
     chemin = fichier(lang, "recherche")
     prof = prof_de(chemin)
-    (SITE / "assets" / "data" / f"recherche-{lang}.json").write_text(json.dumps(index_recherche(lang), ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    (SITE / "assets" / "data" / f"recherche-{lang}.json").write_text(json.dumps(index_recherche(lang, prof), ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     corps = f'''
 <section class="recherche" data-strate="{e(t["nav"]["recherche"])}">
   {surtitre("Works, pages, press" if not fr else "Œuvres, pages, presse")}

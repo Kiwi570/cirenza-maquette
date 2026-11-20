@@ -61,7 +61,9 @@
       i.src = src;
     });
   }
-  function urlOeuvre(id, taille) { return A + 'img/oeuvres/' + id + '-' + taille + '.webp'; }
+  /* Copie hébergée chez Wix : les images des œuvres et les photos sont dans la médiathèque Wix (assets/js/medias.js). */
+  function M(p) { var m = window.LC_MEDIAS; return (m && m[p]) || A + p; }
+  function urlOeuvre(id, taille) { return M('img/oeuvres/' + id + '-' + taille + '.webp'); }
 
   /* ------------------------------------------------------------ boucle unique */
   var taches = [];
@@ -1548,7 +1550,7 @@
       var W = this.scene.clientWidth, H = this.scene.clientHeight;
       var cle = this.decor === 'chalet' && W / H < 0.95 ? 'chaletV' : this.decor;
       var d = D.decors[cle];
-      var src = A + d.src;
+      var src = M(d.src);
       if (this.imgDecor.getAttribute('src') !== src) this.imgDecor.src = src;
       var s = Math.max(W / d.w, H / d.h);
       var ox = clamp(W / 2 - d.cx * s, W - d.w * s, 0);
@@ -1724,7 +1726,7 @@
         var total = 0, inconnus = 0, payables = 0;
         PN[c].forEach(function (it, i) {
           var li = document.createElement('li'); li.className = 'panier__ligne';
-          var img = document.createElement('img'); img.src = A + it.image; img.alt = ''; img.width = 52; img.height = 52; img.loading = 'lazy';
+          var img = document.createElement('img'); img.src = M(it.image); img.alt = ''; img.width = 52; img.height = 52; img.loading = 'lazy';
           var d = document.createElement('div'); d.textContent = it.titre;
           var sm = document.createElement('small');
           if (it.prix) { total += it.prix; payables++; sm.textContent = prix(it.prix); }
@@ -1808,7 +1810,7 @@
         var h = $('[data-entete]'); if (h) h.classList.remove('est-cache');
         var cible = $('[data-compte-panier="' + d.comptoir + '"]');
         var carte = b.closest('.produit'), visuel = carte && $('img', carte);
-        envol(visuel, cible, visuel ? (visuel.currentSrc || visuel.src) : A + d.image, function () {
+        envol(visuel, cible, visuel ? (visuel.currentSrc || visuel.src) : M(d.image), function () {
           rendre();
           if (cible) { cible.classList.add('rebond'); setTimeout(function () { cible.classList.remove('rebond'); }, 380); }
           annoncer(TX.ajoute.replace('{n}', noms[d.comptoir]));

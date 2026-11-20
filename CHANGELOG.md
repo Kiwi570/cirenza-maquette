@@ -1,5 +1,15 @@
 # Historique
 
+## v6.1 · 20 novembre 2026 · copie sur le site Wix headless
+
+- La maquette est en ligne à l'identique sur le site headless « Lisa Cirenza – Atelier » :
+  https://headless-znxwbqojlvv-kiwixteam-1409.wix-site-host.com (63 pages, 440 images dans la médiathèque Wix).
+  cirenza.com n'est pas modifié.
+- Version « html » des liens : la recherche et les boutons d'inscription des retraites pointent juste depuis toutes les
+  pages, y compris en français.
+- `site.js` lit l'adresse des images dans `assets/js/medias.js` quand il existe (copie Wix), sinon dans `assets/`.
+- Outil `outils/copie_wix.py` et table `connecteurs/medias-wix.tsv` (procédure dans `connecteurs/README.md`).
+
 ## v6 · 20 novembre 2026 · retours de Lisa (courriel du 20 novembre)
 
 Réponses point par point : `REPONSES-LISA.md`.
