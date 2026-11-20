@@ -1,7 +1,7 @@
 # Answers to Lisa · second list · 20 November 2026
 
-The mock-up is updated (version 7): https://cirenza-maquette.vercel.app. The new Wix site shows the same version.
-"Done" means you can see it today. "Proposed" means a rule for you to confirm.
+Your new site is updated (version 7): https://headless-znxwbqojlvv-kiwixteam-1409.wix-site-host.com (a temporary Wix address; cirenza.com comes at launch).
+"Done" means you can see it on the site today. "Proposed" means a rule for you to confirm.
 
 ---
 
@@ -9,7 +9,7 @@ The mock-up is updated (version 7): https://cirenza-maquette.vercel.app. The new
 
 - **Portfolio:**
   - "Works" is now **Portfolio**, in your Artist menu.
-  - Its web address stays /works for now. We can change it at launch, with a redirect.
+  - Its web address stays "works" for now. We can change it at launch, with a redirect.
 - **"Enquire about this work":**
   - It replaces the availability on every Portfolio work.
   - It opens an email to **atelier@cirenza.com** with the work's title.
