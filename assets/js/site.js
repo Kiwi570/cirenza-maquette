@@ -987,7 +987,12 @@
         for (var q = 0; q < pl.length; q++) {
           if (k === 0 && this.enMin(pl[q][0]) <= n.min) continue;
           var h = this.heure(pl[q][0]);
-          var quand = k === 0 ? T.statut_ouvre_auj.replace('{h}', h) : T.statut_ouvre.replace('{jour}', k === 1 ? T.demain : T.jours[this.jourDe(iso)]).replace('{h}', h);
+          var jourTxt = k === 1 ? T.demain : T.jours[this.jourDe(iso)];
+          if (k > 6) {
+            var dt = new Date(Date.parse(iso + 'T12:00:00Z'));
+            jourTxt = (D.langue === 'fr' ? 'le ' : 'on ') + dt.toLocaleDateString(D.langue === 'fr' ? 'fr-FR' : 'en-GB', { day: 'numeric', month: 'long', timeZone: 'UTC' });
+          }
+          var quand = k === 0 ? T.statut_ouvre_auj.replace('{h}', h) : T.statut_ouvre.replace('{jour}', jourTxt).replace('{h}', h);
           return { ouvert: false, texte: T.statut_ferme + ' · ' + quand };
         }
       }
@@ -1186,17 +1191,16 @@
       if (o.edition) faits.push([T.fiche_edition, o.edition]);
       if (!o.technique && !o.edition) faits.push([T.fiche_technique, T.a_completer]);
       faits.push([T.fiche_annee, o.annee || T.a_completer]);
-      faits.push([T.fiche_etat, etat]);
       $('.fiche__faits', this.el).innerHTML = faits.map(function () { return '<div><dt></dt><dd></dd></div>'; }).join('');
       $$('.fiche__faits div', this.el).forEach(function (dv, i) { dv.children[0].textContent = faits[i][0]; dv.children[1].textContent = faits[i][1]; });
       $('.fiche__notes', this.el).textContent = (o.notes || []).join(' · ');
       var tx = $('.fiche__texte', this.el);
       tx.textContent = o.texte || '';
       tx.hidden = !o.texte;
-      $('.fiche__prix', this.el).textContent = etat;
+      $('.fiche__prix', this.el).textContent = '';
       var dem = $('[data-action="demander"]', this.el);
-      dem.textContent = o.statut === 'vendu' ? T.demander_vendu : T.demander;
-      dem.href = RACINE + D.pageContact + '?oeuvre=' + encodeURIComponent(id);
+      dem.textContent = T.demander;
+      dem.href = 'mailto:' + D.espace.courriel + '?subject=' + encodeURIComponent((D.langue === 'fr' ? 'Demande : ' : 'Enquiry: ') + o.titreAff);
       $('[data-action="loupe"]', this.el).disabled = !o.loupe;
       $('[data-action="mur"]', this.el).disabled = !(o.h && o.l);
       this.compteur.textContent = (this.index + 1) + ' ' + T.sur + ' ' + this.liste.length;
@@ -1849,7 +1853,7 @@
     $$('[data-video]').forEach(function (v) {
       var b = $('.video__bouton', v);
       if (!b) return;
-      b.addEventListener('click', function () {
+      b.addEventListener('click', function () { demanderMedias(function () {
         var f = document.createElement('iframe');
         f.src = 'https://player.vimeo.com/video/' + v.getAttribute('data-video') + '?h=' + v.getAttribute('data-video-h') + '&autoplay=1&title=0&byline=0&portrait=0&dnt=1';
         f.allow = 'autoplay; fullscreen; picture-in-picture';
@@ -1857,7 +1861,7 @@
         f.title = b.getAttribute('aria-label') || 'Vimeo';
         b.replaceWith(f);
         f.focus();
-      });
+      }); });
     });
   }
 
@@ -2013,6 +2017,154 @@
     });
   }
 
+  /* ------------------------------------------------------------ v6 · cookies : rien de facultatif avant l'accord, « Refuser » aussi visible qu'« Accepter »
+     Le site lui-même ne pose aucun cookie et ne mesure rien. Seuls les lecteurs vidéo (Vimeo, Wix Video) et, plus tard,
+     les lecteurs de podcast peuvent poser les leurs : ils ne se chargent qu'avec l'accord du visiteur. */
+  var CONSENT = {
+    cle: 'lc-cookies-v1',
+    lire: function () { try { return localStorage.getItem(this.cle); } catch (e) { return null; } },
+    ecrire: function (v) { try { localStorage.setItem(this.cle, v); } catch (e) { /* rien */ } },
+    medias: function () { return this.lire() === 'accepte'; },
+    attente: []
+  };
+  function cookies() {
+    var fr = D.langue === 'fr';
+    var X = fr
+      ? { titre: 'Cookies', texte: 'Ce site ne pose aucun cookie et ne mesure pas votre visite. Les vidéos (Vimeo, Wix Video) et lecteurs audio peuvent poser leurs propres cookies quand vous les lancez : nous ne les chargeons qu’avec votre accord.', ok: 'Accepter', non: 'Refuser', lien: 'Politique cookies (texte de Lisa à venir)' }
+      : { titre: 'Cookies', texte: 'This site sets no cookies and does not track your visit. Videos (Vimeo, Wix Video) and audio players may set their own cookies when you play them: we only load them with your consent.', ok: 'Accept', non: 'Refuse', lien: 'Cookie policy (Lisa’s text to come)' };
+    var b = document.createElement('div');
+    b.className = 'cookies';
+    b.setAttribute('role', 'dialog');
+    b.setAttribute('aria-labelledby', 'cookies-titre');
+    b.hidden = true;
+    b.innerHTML = '<h2 id="cookies-titre"></h2><p class="cookies__texte"></p><p class="cookies__lien"></p><div class="cookies__boutons"><button type="button" class="cookies__bouton" data-choix="refuse"></button><button type="button" class="cookies__bouton" data-choix="accepte"></button></div>';
+    $('#cookies-titre', b).textContent = X.titre;
+    $('.cookies__texte', b).textContent = X.texte;
+    $('.cookies__lien', b).textContent = X.lien;
+    $('[data-choix="refuse"]', b).textContent = X.non;
+    $('[data-choix="accepte"]', b).textContent = X.ok;
+    document.body.appendChild(b);
+    function ouvrir() { b.hidden = false; html.classList.add('a-cookies'); }
+    function fermer() { b.hidden = true; html.classList.remove('a-cookies'); }
+    $$('[data-choix]', b).forEach(function (bt) {
+      bt.addEventListener('click', function () {
+        CONSENT.ecrire(bt.getAttribute('data-choix'));
+        fermer();
+        var a = CONSENT.attente.splice(0);
+        if (CONSENT.medias()) a.forEach(function (f) { f(); });
+      });
+    });
+    $$('[data-cookies-ouvrir]').forEach(function (bt) { bt.addEventListener('click', ouvrir); });
+    if (!CONSENT.lire() && params.get('ouverture') !== 'non') ouvrir();
+    CONSENT.demander = function (f) {
+      if (CONSENT.medias()) { f(); return; }
+      CONSENT.attente.push(f);
+      ouvrir();
+      var ok = $('[data-choix="accepte"]', b);
+      if (ok) ok.focus();
+    };
+  }
+  function demanderMedias(f) { if (CONSENT.demander) CONSENT.demander(f); else f(); }
+
+  /* ------------------------------------------------------------ v6 · vidéos du procédé (Wix Video), chargées au clic, après accord */
+  function videosProcede() {
+    $$('[data-video-mp4]').forEach(function (li) {
+      var b = $('.video-procede__bouton', li);
+      if (!b) return;
+      b.addEventListener('click', function () {
+        demanderMedias(function () {
+          var v = document.createElement('video');
+          v.src = li.getAttribute('data-video-mp4');
+          v.controls = true;
+          v.autoplay = true;
+          v.playsInline = true;
+          v.preload = 'auto';
+          v.setAttribute('aria-label', b.getAttribute('aria-label') || '');
+          b.replaceWith(v);
+          v.focus();
+        });
+      });
+    });
+  }
+
+  /* ------------------------------------------------------------ v6 · formulaires d'inscription aux retraites (maquette : rien n'est envoyé)
+     Sur le site final, les réponses partent au même formulaire Wix (data-wix-form-id), puis l'acompte de 200 € est encaissé. */
+  function inscriptions() {
+    $$('[data-inscription]').forEach(function (f) {
+      var merci = f.parentNode.querySelector('.inscription__merci');
+      var resume = $('.formulaire__erreurs', f);
+      var fr = D.langue === 'fr';
+      var OBL = T.form_obligatoire || (fr ? 'Ce champ est obligatoire.' : 'This field is required.');
+      function erreur(champ, msg) {
+        var wrap = champ.closest('.champ');
+        var p = wrap && $('.champ__erreur', wrap);
+        if (wrap) wrap.classList.toggle('a-erreur', !!msg);
+        if (p) p.textContent = msg || '';
+        if (msg) champ.setAttribute('aria-invalid', 'true'); else champ.removeAttribute('aria-invalid');
+      }
+      f.addEventListener('submit', function (ev) {
+        ev.preventDefault();
+        var premier = null;
+        $$('input[required]', f).forEach(function (c) {
+          var vide = c.type === 'radio' ? !$('input[name="' + c.name + '"]:checked', f) : (c.type === 'checkbox' ? !c.checked : !(c.value || '').trim());
+          var msg = vide ? OBL : '';
+          if (!msg && c.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(c.value.trim())) msg = T.form_email_invalide || OBL;
+          erreur(c, msg);
+          if (msg && !premier) premier = c;
+        });
+        var sante = $('[data-sante]', f), allergies = f.elements.allergies;
+        if (sante && allergies && (allergies.value || '').trim() && !sante.checked) {
+          erreur(sante, OBL);
+          if (!premier) premier = sante;
+        } else if (sante) erreur(sante, '');
+        if (premier) { resume.hidden = false; premier.focus(); return; }
+        resume.hidden = true;
+        f.hidden = true;
+        if (merci) { merci.hidden = false; merci.focus(); }
+      });
+    });
+  }
+
+  /* ------------------------------------------------------------ v6 · recherche sur tout le site (index statique, sans service externe) */
+  function recherche() {
+    var f = $('[data-recherche]');
+    if (!f || !P.recherche) return;
+    var liste = $('[data-recherche-resultats]'), etat = $('.recherche__etat');
+    var fr = D.langue === 'fr';
+    var index = null;
+    var norme = function (x) { return (x || '').toString().normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(); };
+    var GROUPES = fr ? { page: 'Page', serie: 'Série', oeuvre: 'Œuvre', presse: 'Presse' } : { page: 'Page', serie: 'Series', oeuvre: 'Work', presse: 'Press' };
+    function chercher(q) {
+      var mots = norme(q).split(/\s+/).filter(Boolean);
+      liste.textContent = '';
+      if (!mots.length) { etat.textContent = ''; return; }
+      var res = index.map(function (it) {
+        var t = norme(it.t), d = norme(it.d), score = 0;
+        for (var i = 0; i < mots.length; i++) {
+          if (t.indexOf(mots[i]) > -1) score += 3; else if (d.indexOf(mots[i]) > -1) score += 1; else return null;
+        }
+        return { it: it, score: score };
+      }).filter(Boolean).sort(function (a, b) { return b.score - a.score; }).slice(0, 40);
+      etat.textContent = res.length ? (fr ? res.length + ' résultat' + (res.length > 1 ? 's' : '') : res.length + ' result' + (res.length > 1 ? 's' : '')) : (fr ? 'Aucun résultat.' : 'No results.');
+      res.forEach(function (r) {
+        var li = document.createElement('li'), a = document.createElement('a'), g = document.createElement('span'), t = document.createElement('strong'), d = document.createElement('span');
+        a.href = r.it.u;
+        g.className = 'recherche__groupe'; g.textContent = GROUPES[r.it.g] || '';
+        t.textContent = r.it.t;
+        d.className = 'recherche__desc'; d.textContent = r.it.d;
+        a.appendChild(g); a.appendChild(t); a.appendChild(d); li.appendChild(a); liste.appendChild(li);
+      });
+    }
+    fetch((html.getAttribute('data-racine') || '/') + P.recherche).then(function (r) { return r.json(); }).then(function (j) {
+      index = j;
+      var q = params.get('q') || '';
+      f.elements.q.value = q;
+      if (q) chercher(q);
+    });
+    f.addEventListener('submit', function (ev) { ev.preventDefault(); if (!index) return; var q = f.elements.q.value; history.replaceState(null, '', '?q=' + encodeURIComponent(q)); chercher(q); });
+    f.elements.q.addEventListener('input', function () { if (index) chercher(f.elements.q.value); });
+  }
+
   /* ------------------------------------------------------------ v5 · tirages creativehub : format et papier
      Chaque choix a sa référence (SKU), la même dans Wix et dans creativehub : c'est elle qui relie la vente au bon tirage. */
   function variantes() {
@@ -2087,8 +2239,12 @@
     comptes();
     formulaire();
     lettres();
+    cookies();
     paniers();
     videos();
+    videosProcede();
+    inscriptions();
+    recherche();
     glaces();
     grattages();
     carottage();

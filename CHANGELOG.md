@@ -1,5 +1,31 @@
 # Historique
 
+## v6 · 20 novembre 2026 · retours de Lisa (courriel du 20 novembre)
+
+Réponses point par point : `REPONSES-LISA.md`.
+
+**Retiré** : anciens postes en finance et en conseil (y compris dans les sources), retraite de mai 2027 (A Creative Pause), « places restantes », lien vers l'éditeur d'horaires, chalet privatif et remise pour participants déjà venus sur les pages, page modèle du cours en plein air, FAQ inventées (Lisa envoie la sienne), comptoir de l'Espace dans la boutique.
+
+**Corrigé** :
+- Alpine Creative Pause (septembre), noms des retraites et des séries en français sur les pages françaises.
+- Maisons et Jardins mai 2022.
+- Bio courte avec Dacca et le Salon d'Automne.
+- La Gravité de la Grâce de décembre 2026 à avril 2027 (texte de la page en ligne, avec Le Petit Lapin).
+- Prix en fourchette seule (phrase de Lisa) ; inscription anticipée de 100 € jusqu'au 5 décembre 2026.
+- Programme jour par jour de juin repris mot pour mot de la page en ligne.
+- Fermeture de saison jusqu'au 2 décembre dans les horaires.
+
+**Ajouté** :
+- Choix Artist | Espace ; menus de Lisa (Works avec la déclaration, Bio, CV, Press, Available Works ; L'Espace, Boutique & Tea Room, Co-Creating Sessions, Bespoke Courses & Workshops, Gather at the Espace, Contact ; Exhibitions & Events).
+- Pages Boutique & Tea Room, Co-Creating Sessions, Exhibitions & Events, échéancier et conditions d'annulation (texte de Lisa, coordonnées de la SAS).
+- Formulaires d'inscription /regjune27 et /septregistration : mêmes champs que les formulaires Wix en ligne, rattachés à leurs identifiants Wix, consentement santé, confirmation.
+- « Enquire about this work » sur les pages d'œuvres et la fiche.
+- Recherche sur tout le site.
+- Bandeau cookies (« Refuser » aussi visible qu'« Accepter », rien de facultatif avant l'accord).
+- Les trois vidéos du procédé du site actuel (chargées au clic, après accord).
+- 145 redirections couvrant les 80 adresses vues dans Search Console.
+- Les formulaires, la recherche et l'outil d'horaires restent en noindex après le lancement (`MAQUETTE = False` le jour J).
+
 ## v5 · novembre 2026 · réunion de suivi (horaires, SEO et GEO, connexions)
 
 **Horaires**

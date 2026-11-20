@@ -1489,3 +1489,103 @@ section { position: relative; }
 .produit__ch { margin: 0 0 .5rem; font-family: var(--mono); font-size: .75rem; color: var(--granite-doux); }
 .produit__ch .exemple { margin-left: .3em; }
 .faq--retraites .faq__liste + p { margin-top: 1.8rem; }
+
+/* =====================================================================
+   v6 · retours de Lisa : Artist | Espace, deux retraites, nouvelles pages, recherche, cookies
+   ===================================================================== */
+.menu__grille { grid-template-columns: repeat(5, 1fr); }
+@media (max-width: 1200px) { .menu__grille { grid-template-columns: repeat(3, 1fr); } }
+.entete__recherche { display: grid; place-items: center; min-width: 44px; min-height: 44px; border: 1px solid var(--ligne-forte); border-radius: 999px; color: var(--granite); }
+.entete__recherche:hover { background: var(--granite); color: var(--neige); }
+.retraites-cartes--deux { grid-template-columns: repeat(2, minmax(0, 520px)); justify-content: start; }
+@media (max-width: 800px) { .retraites-cartes--deux { grid-template-columns: 1fr; } }
+.prix__fourchette { font-size: clamp(1.15rem, 1rem + .5vw, 1.45rem); margin: 0; }
+.prix__actions { display: flex; flex-wrap: wrap; gap: .6rem; margin: 1rem 0 .4rem; }
+.etiquette--demande { text-decoration: none; color: var(--atelier); border-color: var(--atelier); text-transform: none; letter-spacing: .02em; }
+.etiquette--demande:hover { background: var(--atelier); color: #fff; }
+.declaration--oeuvres { padding: calc(var(--entete) + 6vh) var(--marge) 6vh; }
+.declaration--oeuvres + .bandeau, .declaration--oeuvres ~ .bandeau { min-height: 0; }
+/* L'Espace : les portes vers ses pages */
+.espace-portes { padding: 10vh var(--marge); }
+.espace-portes__liste { list-style: none; margin: 1.6rem 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 1px; background: var(--ligne); border: 1px solid var(--ligne); }
+.espace-portes__liste a { display: grid; gap: .4rem; height: 100%; padding: 1.4rem 1.5rem; background: var(--fond); text-decoration: none; transition: background .3s; }
+.espace-portes__liste a:hover { background: var(--neige); }
+.espace-portes__liste strong { font-weight: 400; font-size: 1.3rem; color: var(--espace); }
+.espace-portes__liste span { font-size: .95rem; color: var(--granite-doux); }
+/* Boutique & Tea Room */
+.salon-boutique { display: grid; grid-template-columns: .8fr 1.2fr; gap: clamp(24px, 6vw, 100px); padding: 12vh var(--marge); align-items: center; }
+.acces a { white-space: nowrap; }
+/* Co-Creating Sessions */
+.calendrier { padding: 10vh var(--marge) 4vh; }
+.calendrier__cadre { margin-top: 1.4rem; padding: 1.6rem; border: 1px dashed var(--ligne-forte); border-radius: var(--rayon); background: var(--neige); max-width: 760px; }
+.conditions-courtes { padding: 6vh var(--marge) 12vh; }
+.conditions-courtes__deux { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(20px, 4vw, 60px); margin: 1.4rem 0 2rem; max-width: 1100px; }
+.conditions-courtes h3 { font-family: var(--mono); font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; margin-bottom: .6rem; }
+.entite { margin: 1.4rem 0 0; padding-top: 1rem; border-top: 1px solid var(--ligne); font-family: var(--mono); font-size: .75rem; line-height: 1.6; color: var(--granite-doux); max-width: 80ch; }
+.entite span { color: var(--espace); }
+/* Expositions et événements */
+.bandeau--expo .bandeau__accroche .etiquette { margin-right: .4rem; }
+.expo-artistes { padding: 10vh var(--marge); }
+.expo-artistes__grille { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(20px, 4vw, 60px); margin-top: 1.6rem; align-items: start; }
+.expo-artistes__grille h3 { margin: 1rem 0 .4rem; font-weight: 400; font-size: 1.4rem; }
+.expo-artistes__absent { aspect-ratio: 4/5; display: grid; place-items: center; background: repeating-linear-gradient(135deg, #e9e4da 0 12px, #efebe3 12px 24px); border-radius: var(--rayon); font-family: var(--mono); font-size: .8rem; color: var(--granite-doux); }
+.evenements-liste { padding: 6vh var(--marge) 12vh; }
+/* Textes longs (conditions) */
+.texte-long { padding: calc(var(--entete) + 8vh) var(--marge) 12vh; }
+.texte-long__corps { max-width: 72ch; margin-top: 2rem; }
+.texte-long__corps h2 { font-size: 1.25rem; font-weight: 500; margin: 2rem 0 .5rem; }
+/* Inscription aux retraites */
+.inscription { padding: calc(var(--entete) + 6vh) var(--marge) 12vh; display: grid; grid-template-columns: .8fr 1.2fr; gap: clamp(24px, 6vw, 100px); align-items: start; }
+.inscription__tete { position: sticky; top: calc(var(--entete) + 3vh); }
+.inscription__form { max-width: 760px; }
+.inscription__form fieldset { border: 0; padding: 0; margin: 0 0 1.4rem; display: grid; gap: .5rem; }
+.inscription__form legend { font-size: 1.1rem; margin-bottom: .4rem; }
+.choix--long span { display: block; border-radius: var(--rayon); padding: .8rem 1rem; font-family: var(--serif); font-size: .98rem; line-height: 1.45; min-height: 0; }
+.choix--long input:checked + span { background: var(--espace-clair); color: var(--granite); border-color: var(--espace); }
+.inscription__acompte { margin: 1rem 0 1.4rem; padding: 1.2rem 1.4rem; border-radius: var(--rayon); background: var(--neige); border: 1px solid var(--ligne); }
+.inscription__montant { font-size: 1.4rem; color: var(--ambre-texte); margin-left: .4rem; }
+.inscription__merci { grid-column: 2; }
+/* Recherche */
+.recherche { padding: calc(var(--entete) + 8vh) var(--marge) 14vh; max-width: 1000px; }
+.recherche__form { display: flex; gap: .6rem; margin: 1.6rem 0 1rem; }
+.recherche__form input { flex: 1; min-height: 52px; padding: 0 1rem; font: inherit; font-size: 1.1rem; border: 1px solid var(--ligne-forte); border-radius: var(--rayon); background: var(--neige); }
+.recherche__etat { font-family: var(--mono); font-size: .8rem; color: var(--granite-doux); }
+.recherche__resultats { list-style: none; margin: 0; padding: 0; display: grid; gap: 1px; background: var(--ligne); }
+.recherche__resultats a { display: grid; gap: .2rem; padding: 1rem 0; background: var(--fond); text-decoration: none; }
+.recherche__resultats strong { font-weight: 400; font-size: 1.2rem; }
+.recherche__groupe { font-family: var(--mono); font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ambre-texte); }
+.recherche__desc { font-size: .92rem; color: var(--granite-doux); }
+/* Cookies : deux boutons de même poids */
+.cookies { position: fixed; z-index: 140; left: 16px; right: 16px; bottom: 16px; max-width: 560px; margin: 0 auto; padding: 1.4rem 1.5rem; background: var(--neige); border: 1px solid var(--ligne-forte); border-radius: var(--rayon); box-shadow: 0 24px 60px -24px rgba(30,26,20,.55); }
+.cookies[hidden] { display: none; }
+.cookies h2 { font-size: 1.2rem; margin: 0 0 .4rem; font-weight: 500; }
+.cookies p { margin: 0 0 .6rem; font-size: .95rem; }
+.cookies__lien { font-family: var(--mono); font-size: .75rem !important; color: var(--granite-doux); }
+.cookies__boutons { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; margin-top: .8rem; }
+.cookies__bouton { min-height: 48px; border-radius: 999px; border: 1px solid var(--granite); background: var(--granite); color: var(--neige); font-family: var(--mono); font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; }
+.pied__cookies { background: none; border: 0; padding: 0; color: inherit; font: inherit; text-decoration: underline; cursor: pointer; min-height: 44px; }
+/* Vidéos du procédé */
+.videos-procede { margin-top: 2rem; }
+.videos-procede__liste { list-style: none; margin: .8rem 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(12px, 2vw, 24px); }
+.video-procede p { margin: .5rem 0 0; font-size: .95rem; }
+.video-procede__bouton { position: relative; display: block; width: 100%; padding: 0; border: 0; background: #222; aspect-ratio: 1; overflow: hidden; border-radius: var(--rayon); cursor: pointer; }
+.video-procede__bouton img { width: 100%; height: 100%; object-fit: cover; opacity: .9; }
+.video-procede__duree { position: absolute; right: .6rem; bottom: .6rem; padding: .1rem .5rem; border-radius: 999px; background: rgba(0,0,0,.6); color: #fff; font-family: var(--mono); font-size: .75rem; }
+.video-procede video { width: 100%; aspect-ratio: 1; background: #000; border-radius: var(--rayon); }
+@media (max-width: 900px) {
+  .salon-boutique, .inscription, .expo-artistes__grille, .conditions-courtes__deux { grid-template-columns: 1fr; }
+  .inscription__tete { position: static; }
+  .inscription__merci { grid-column: auto; }
+}
+@media (max-width: 600px) { .videos-procede__liste { grid-template-columns: 1fr; } .recherche__form { flex-direction: column; } }
+.barre__annonce { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+@media (max-width: 1100px) { .a-annonce .barre__statut { display: none; } }
+@media (max-width: 700px) { .a-annonce .barre__lieu { display: none; } .a-annonce .entete__barre { justify-content: center; } }
+.univers--entete { flex: none; }
+.declaration--oeuvres { padding: 4vh var(--marge) 8vh; }
+@media (max-width: 1400px) {
+  .entete__nav ul { gap: clamp(10px, 1.3vw, 24px); }
+  .entete__nav a { letter-spacing: .05em; }
+  .entete__rangee { gap: clamp(10px, 1.4vw, 24px); }
+}
+@media (max-width: 1240px) { .univers-espace .entete__nav { display: none; } }

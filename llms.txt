@@ -4,7 +4,7 @@
 
 ## About
 
-Lisa Cirenza is a painter based in the French Alps. As a National Science Foundation scholar with the Juneau Icefield Research Program, she worked as a field researcher on glaciological expeditions across the Juneau Icefield, and later co-authored The Power of Ice, a children's book on glaciers and field science illustrated with her expedition photographs. She studied applied earth sciences at Stanford University and the École des Mines de Paris, and holds a master's in international policy studies from Stanford. Trained in old-masters oil technique and in sumi ink in Japan, she works with water, pigments, heat and wax. After years of painting people and the forces that divide them, from commuters on the London Underground to refugees, she now paints light, water, rock and time. Her work is held in the Stanford Hospital collection alongside works by David Hockney and Robert Rauschenberg, and in private collections in Europe, the United States and Asia. It has been praised in the Financial Times, and exhibited at the Grand Palais in Paris, in Venice during the Biennale, and in New York, Miami, London, Kyoto and Xi'an.
+Lisa Cirenza is a painter based in the French Alps. As a National Science Foundation scholar with the Juneau Icefield Research Program, she worked as a field researcher on glaciological expeditions across the Juneau Icefield, and later co-authored The Power of Ice, a children's book on glaciers and field science illustrated with her expedition photographs. She studied applied earth sciences at Stanford University and the École des Mines de Paris, and holds a master's in international policy studies from Stanford. Trained in old-masters oil technique and in sumi ink in Japan, she works with water, pigments, heat and wax. After years of painting people and the forces that divide them, from commuters on the London Underground to refugees, she now paints light, water, rock and time. Her work is held in the Stanford Hospital collection alongside works by David Hockney and Robert Rauschenberg, and in private collections in Europe, the United States and Asia. It has been praised in the Financial Times, and exhibited at the Grand Palais in Paris, in Venice during the Biennale, at the Asian Art Biennale in Dhaka, and in New York, Miami, London, Kyoto and Xi'an. She is a Sociétaire of the Salon d'Automne in Paris.
 
 - Current series: A Record of Time. Earlier series (London Underground, refugees, digital work, Cuba) are in the Archive.
 - Statement, in her words: "Most people look up and see the Alps. I see a record of time being erased."
@@ -20,22 +20,25 @@ Lisa Cirenza is a painter based in the French Alps. As a National Science Founda
 
 ## Retreats 2027 (all based in La Clusaz)
 
-- [A Creative Pause](https://cirenza-maquette.vercel.app/retreats/creative-pause): Finding Your Creative Voice. Saturday 15 – Thursday 20 May 2027, La Clusaz. €2,450 – €3,295 per person, depending on the room.
-- [Painting in Paradise](https://cirenza-maquette.vercel.app/retreats/painting-in-paradise): Maximising Your Creative Voice. 21 – 26 June 2027, La Clusaz. €2,450 – €3,295 per person, depending on the room.
-- [Alpine Encaustics](https://cirenza-maquette.vercel.app/retreats/alpine-encaustics): Texture, Depth & Creative Voice. 6 – 11 September 2027, La Clusaz. €2,450 – €3,295 per person, depending on the room.
+- [Painting in Paradise](https://cirenza-maquette.vercel.app/retreats/painting-in-paradise): Maximising Your Creative Voice. 21 – 26 June 2027, La Clusaz. €2,450 – €3,295, depending on options indicated on the booking form.
+- [Alpine Creative Pause](https://cirenza-maquette.vercel.app/retreats/alpine-creative-pause): A creative pause in La Clusaz to rest, paint, reconnect and learn from simply being: in the mountains, among kind company, and with your own creative self.. 6 – 11 September 2027, La Clusaz. €2,450 – €3,295, depending on options indicated on the booking form.
 
 ## Pages
 
 - [Works](https://cirenza-maquette.vercel.app/works): Works: A Record of Time, then the Archive of earlier series
-- [The Artist](https://cirenza-maquette.vercel.app/artist): Artist statement, long bio and short bio
+- [Bio](https://cirenza-maquette.vercel.app/artist): Artist statement, long bio and short bio
 - [Studio notes](https://cirenza-maquette.vercel.app/studio-notes): Studio notes: the story behind A Record of Time
 - [CV](https://cirenza-maquette.vercel.app/cv): Selected CV
 - [Press](https://cirenza-maquette.vercel.app/press): Press
 - [L'Espace](https://cirenza-maquette.vercel.app/espace): Espace Créa-Tea-Vité: gallery, tea room and studio
-- [Private courses](https://cirenza-maquette.vercel.app/private-courses): Private bespoke courses for hotels and concierges
-- [Private events](https://cirenza-maquette.vercel.app/private-events): Private events and team workshops
+- [Boutique & Tea Room](https://cirenza-maquette.vercel.app/boutique-tea-room): Boutique & Tea Room: visit in person, tea menu, hours, map
+- [Co-Creating Sessions](https://cirenza-maquette.vercel.app/co-creating-sessions): Co-Creating Sessions: open studio with guidance, €30
+- [Bespoke Courses & Workshops](https://cirenza-maquette.vercel.app/bespoke-courses): Bespoke courses and workshops for individuals, families, groups, teams and event planners
+- [Gather at the Espace](https://cirenza-maquette.vercel.app/gather): Gather at the Espace: private venue hire
+- [Exhibitions & Events](https://cirenza-maquette.vercel.app/exhibitions-events): Exhibitions & Events: La Gravité de la Grâce, December 2026 – April 2027
 - [Retreats](https://cirenza-maquette.vercel.app/retreats): Painting retreats 2027
-- [Shop](https://cirenza-maquette.vercel.app/shop): Shop: originals, prints, collectors' editions
+- [Payment & cancellation](https://cirenza-maquette.vercel.app/retreats/payment-and-cancellation): Retreat payment schedule and cancellation policy
+- [Available Works](https://cirenza-maquette.vercel.app/available-works): Available Works: originals, prints, collectors' editions
 - [Contact](https://cirenza-maquette.vercel.app/contact): Contact
 
 ## Français
@@ -50,4 +53,4 @@ Lisa Cirenza is a painter based in the French Alps. As a National Science Founda
 ## Contact
 
 - Artist and works (Lisa Cirenza Fine Art): art@cirenza.com
-- Espace, classes, retreats and events (Espace Créa-Tea-Vité, SAS): atelier@cirenza.com
+- Espace, sessions, courses, retreats and events (Espace Créa-Tea-Vité, SAS Atelier Truffle): atelier@cirenza.com
