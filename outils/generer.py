@@ -25,7 +25,7 @@ SITE = Path(sys.argv[1]).resolve()
 MODE = sys.argv[sys.argv.index("--liens") + 1] if "--liens" in sys.argv else "propres"
 APERCU = "--apercu" in sys.argv
 MED = json.loads((ICI / "medias.json").read_text())
-VERSION = "6"
+VERSION = "7"
 AUJ = DT.date.today()
 # Horaires de l'Espace : une seule source, assets/data/horaires.json (futures collections Wix « Horaires » et « Exceptions »)
 HEURES = HOR.charger(SITE)
@@ -288,11 +288,20 @@ def cartel(o, lang, balise="figcaption"):
             f'<span class="cartel__faits">{e(faits_courts(o, lang))}</span>{demande_oeuvre(o, lang)}</{balise}>')
 
 
+def histoire_oeuvre(o, lang):
+    """v7 · bouton « Read the story and watch the video » : seulement si un lien existe (C.HISTOIRES, côté site)."""
+    u = C.HISTOIRES.get(o["id"])
+    if not u:
+        return ""
+    return f'<a class="etiquette etiquette--histoire" href="{e(u)}" target="_blank" rel="noopener">{e(C.T[lang]["histoire"])}</a>'
+
+
 def demande_oeuvre(o, lang):
-    """Brief de Lisa (v6) : sur les pages d'œuvres, « Enquire about this work » vers son courriel ; la vente est dans Available Works."""
+    """Brief de Lisa (v6, v7) : sur le Portfolio, « Enquire about this work » vers atelier@cirenza.com, sans prix ; la vente est dans Commissions and Available Works."""
     t = C.T[lang]
     sujet = quote(("Enquiry: " if lang == "en" else "Demande : ") + titre(o, lang))
-    return f'<a class="etiquette etiquette--demande" href="mailto:{C.COORD["courriel"]}?subject={sujet}">{e(t["demander"])}</a>'
+    lien_h = histoire_oeuvre(o, lang)
+    return f'<a class="etiquette etiquette--demande" href="mailto:{C.COORD["courriel_demande"]}?subject={sujet}">{e(t["demander"])}</a>{lien_h}'
 
 
 def figure_oeuvre(prof, oid, lang, liste, sizes="(max-width: 700px) 80vw, 40vw"):
@@ -395,7 +404,10 @@ def entete(lang, cle, prof, autre_href):
                 (t["nav"]["evenements"], lien(lang, "evenements", prof), None), (t["nav"]["contact"], lien(lang, "contact", prof), None)]
     g_retraites = [(t["nav"]["retraites"], lien(lang, "retraites", prof), None)] + [(L(lang, RETRAITES[k]["menu"]), lien(lang, k, prof), L(lang, RETRAITES[k]["dates"])) for k in RETRAITES_ORDRE] + [(t["nav"]["conditions"], lien(lang, "conditions", prof), None)]
     g_expos = [(t["nav"]["expositions"], lien(lang, "expositions", prof), C.EXPO["titre"]), (t["nav"]["recherche"], lien(lang, "recherche", prof), None)]
-    menu = (f'<div class="menu" id="menu" hidden>{bascule_univers(lang, cle, prof, "univers--menu")}<nav class="menu__grille" aria-label="{"Site" if lang == "en" else "Site"}">'
+    champ_menu = (f'<form class="menu__recherche" role="search" action="{lien(lang, "recherche", prof)}"><label class="vh" for="menu-q">{e(t["nav"]["recherche"])}</label>'
+                  f'<input id="menu-q" name="q" type="search" autocomplete="off" placeholder="{e("A work, a retreat, a course…" if lang == "en" else "Une œuvre, une retraite, un cours…")}">'
+                  f'<button class="bouton" type="submit"><span>{e(t["nav"]["recherche"])}</span></button></form>')
+    menu = (f'<div class="menu" id="menu" hidden>{bascule_univers(lang, cle, prof, "univers--menu")}{champ_menu}<nav class="menu__grille" aria-label="{"Site" if lang == "en" else "Site"}">'
             f'{groupe(t["groupes_menu"]["oeuvres"], g_oeuvres, "menu__strate--atelier")}{groupe(t["groupes_menu"]["artiste"], g_artiste, "menu__strate--atelier")}{groupe(t["groupes_menu"]["espace"], g_espace, "menu__strate--espace")}{groupe(t["groupes_menu"]["retraites"], g_retraites, "menu__strate--espace")}{groupe(t["groupes_menu"]["expositions"], g_expos, "menu__strate--expos")}</nav>'
             f'<div class="menu__bas">{statut(lang)}<p>{e(C.COORD["rue"])}, {e(C.COORD["ville"])}</p><a href="{autre_href}" hreflang="{autre}" lang="{autre}">{e(t["langue_autre"])}</a></div></div>')
     annonces = '<p class="barre__annonce" data-annonce hidden></p>'
@@ -410,7 +422,7 @@ def entete(lang, cle, prof, autre_href):
   {bascule_univers(lang, cle, prof, "univers--entete")}
   <nav class="entete__nav" aria-label="{"Main navigation" if lang == "en" else "Navigation principale"}"><ul>{nav}</ul></nav>
   <button class="entete__panier" type="button" data-panier-ouvrir hidden aria-label="{"Open the baskets" if lang == "en" else "Ouvrir les paniers"}"><span class="entete__panier-a" data-compte-panier="atelier">0</span><span class="entete__panier-e" data-compte-panier="espace">0</span></button>
-  <a class="entete__recherche" href="{lien(lang, "recherche", prof)}" aria-label="{e(t["nav"]["recherche"])}"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></a>
+  <a class="entete__recherche" href="{lien(lang, "recherche", prof)}" aria-label="{e(t["nav"]["recherche"])}"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span class="entete__recherche-texte">{e(t["nav"]["recherche"])}</span></a>
   <a class="entete__langue" href="{autre_href}" hreflang="{autre}" lang="{autre}"><span class="vh">{e(t["langue_autre"])}</span><span aria-hidden="true">{t["langue_autre_court"]}</span></a>
   <button class="entete__menu" type="button" aria-expanded="false" aria-controls="menu"><span class="entete__menu-texte">{e(t["menu"])}</span><span class="entete__menu-traits" aria-hidden="true"><i></i><i></i><i></i></span></button>
   </div>
@@ -455,8 +467,31 @@ def pied(lang, prof, autre_href):
       <p><a href="tel:{c["tel_brut"]}">{e(c["tel"])}</a> · <a href="https://wa.me/{c["tel_brut"].lstrip("+")}"{ext}>WhatsApp</a> · <a href="{lien(lang, "contact", prof)}">{e(t["nav"]["contact"])}</a></p>
     </section>
   </div>
-  <p class="pied__bas"><span>{e(t["pied_droits"])}</span><span>{e("Legal notice · Privacy policy · Cookie policy · Website terms: Lisa's texts to come" if lang == "en" else "Mentions légales · Politique de confidentialité · Cookies · Conditions d'utilisation : textes de Lisa à venir")}</span><button class="pied__cookies" type="button" data-cookies-ouvrir>{e("Cookie settings" if lang == "en" else "Réglages des cookies")}</button><span>{e(t["traduction"])}</span><span>{e(t["pied_maquette"])}</span><a href="{autre_href}" hreflang="{autre}" lang="{autre}">{e(t["langue_autre"])}</a></p>
+  <p class="pied__bas"><span>{e(t["pied_droits"])}</span><span class="pied__legal">{" · ".join(f'<a href="{lien(lang, k, prof)}">{e(t["nav"][k])}</a>' for k in LEGAL)}</span><a href="{lien(lang, "recherche", prof)}">{e(t["nav"]["recherche"])}</a>{selecteur_devise(lang)}<button class="pied__cookies" type="button" data-cookies-ouvrir>{e("Cookie settings" if lang == "en" else "Réglages des cookies")}</button><span>{e(t["traduction"])}</span><span>{e(t["pied_maquette"])}</span><a href="{autre_href}" hreflang="{autre}" lang="{autre}">{e(t["langue_autre"])}</a></p>
 </footer>'''
+
+
+LEGAL = ("mentions", "confidentialite", "politique_cookies", "conditions_site")
+
+
+def selecteur_devise(lang):
+    """v7 · devise d'affichage, tout le site (pied de page). Le paiement reste en euros."""
+    fr = lang == "fr"
+    opts = "".join(f'<option value="{c}">{c} {s}</option>' for c, s in (("EUR", "€"), ("GBP", "£"), ("USD", "$"), ("JPY", "¥")))
+    return (f'<span class="pied__devise"><label for="devise">{e("Currency" if not fr else "Devise")}</label><select id="devise" data-devise aria-describedby="devise-note">{opts}</select>'
+            f'<small id="devise-note">{e("Indicative prices · you always pay in euros" if not fr else "Prix indicatifs · le paiement se fait toujours en euros")}</small></span>')
+
+
+def consentement_video(lang, hote):
+    """v7 · vignette de consentement : visible tant que le visiteur n'a pas accepté les cookies facultatifs."""
+    fr = lang == "fr"
+    if hote == "vimeo":
+        msg = "This video is hosted by Vimeo and needs cookies to play." if not fr else "Cette vidéo est hébergée par Vimeo et a besoin de cookies pour être lue."
+    else:
+        msg = "This video is hosted by Wix and plays once you accept optional cookies." if not fr else "Cette vidéo est hébergée par Wix et se lit après votre accord pour les cookies facultatifs."
+    return (f'<p class="video__consentement" data-consentement-video><span>{e(msg)}</span> '
+            f'<button type="button" class="video__accepter" data-accepter-jouer>{e("Accept and play" if not fr else "Accepter et lire")}</button> '
+            f'<button type="button" class="lien-bouton" data-cookies-ouvrir>{e("Cookie settings" if not fr else "Réglages des cookies")}</button></p>')
 
 
 def polices():
@@ -1391,6 +1426,7 @@ def page_espace(lang):
       <span class="video__jouer" aria-hidden="true"><i></i></span>
       <span class="video__duree">{e("Tour of the Espace" if lang == "en" else "Visite de l'Espace")}</span>
     </button>
+    {consentement_video(lang, "vimeo")}
     <p class="video__legende">{e(V["legende"][lang])} <span class="note">Vimeo</span></p>
   </div>
   <div class="histoire-espace__texte">
@@ -1916,7 +1952,7 @@ def produit_oeuvre(lang, prof, oid, genre):
                      f'<p class="produit__ch">{"Printed and shipped by creativehub" if not fr else "Imprimé et expédié par creativehub"} <span class="exemple">{"example prices" if not fr else "prix d'exemple"}</span></p>')
     else:
         detail = technique_txt(o, lang) or ""
-        prix_aff = prix_txt(prix, lang) if prix else t["prix_demande"]
+        prix_aff = prix_txt(prix, lang) if prix else t["prix_a_venir"]
         bouton_txt = ("Add to basket" if not fr else "Ajouter au panier") if prix else ("Reserve" if not fr else "Réserver")
     dims = dims_txt(o, lang)
     donnees = {"id": oid, "comptoir": "atelier", "genre": genre, "titre": tt, "prix": prix, "image": f"img/oeuvres/{oid}-640.webp"}
@@ -1931,7 +1967,7 @@ def produit_oeuvre(lang, prof, oid, genre):
     <p class="produit__serie">{e(serie)}</p>
     <h3 class="produit__titre{" cartel__titre--vide" if not o["titre"] else ""}">{e(tt)}</h3>
     <p class="produit__detail">{e(detail)}{(" · " + e(dims)) if dims else ""}</p>
-    <p class="produit__prix">{e(prix_aff)}</p>
+    <p class="produit__prix{"" if prix else " produit__prix--a-venir"}">{e(prix_aff)}</p>
     {variantes}
     <button class="produit__ajouter" type="button" data-ajouter='{e(donnees)}'><span>{e(bouton_txt)}</span></button>
   </div>
@@ -1941,7 +1977,7 @@ def produit_oeuvre(lang, prof, oid, genre):
 def produit_aa(lang, x):
     fr = lang == "fr"
     detail = x["technique"][lang] + " · " + (x["dims"].replace(".", ",") if fr else x["dims"]) + (" · " + x["annee"] if x["annee"] else "")
-    prix_aff = prix_txt(x["prix"], lang) if x["prix"] else C.T[lang]["prix_demande"]
+    prix_aff = prix_txt(x["prix"], lang) if x["prix"] else C.T[lang]["prix_a_venir"]
     donnees = json.dumps({"id": x["id"], "comptoir": "atelier", "genre": "recent", "titre": x["titre"], "prix": x["prix"], "image": "img/textures/cire-relief.webp"}, ensure_ascii=False)
     return f'''<li class="produit produit--recent produit--aa" data-genre="recent">
   <div class="produit__visuel produit__visuel--attente"><span>{e("Photo to come from Artwork Archive" if not fr else "Photo à venir d'Artwork Archive")}</span></div>
@@ -1997,8 +2033,8 @@ def page_boutique(lang):
   <div class="bandeau__texte">
     {surtitre("Lisa Cirenza Fine Art · artist-author" if not fr else "Lisa Cirenza Fine Art · artiste-auteur")}
     <h1 class="bandeau__titre">{lettres(t["nav"]["boutique"])}</h1>
-    <div class="bandeau__intro" data-apparait><p>{e("Original works, collectors' editions and prints, sold by Lisa Cirenza Fine Art (artist-author, not VAT-registered). The checkout opens once the artist's payment account is ready; until then, your basket becomes a request." if not fr else "Œuvres originales, éditions de collection et tirages, vendus par Lisa Cirenza Fine Art (artiste-auteur, non assujettie à la TVA). Le paiement ouvrira quand le compte de paiement de l'artiste sera prêt ; d'ici là, votre panier devient une demande.")}</p></div>
-    <p class="comptoirs__onglets" data-apparait><a class="bouton aimant bouton--atelier" href="#atelier"><span>{e(B["atelier_titre"][lang])}</span></a><a class="bouton bouton--ligne aimant" href="#editions"><span>{e(t["nav"]["editions"])}</span></a></p>
+    <div class="bandeau__intro" data-apparait><p>{e("Commissions, original works with their prices, collectors' editions and prints, from Lisa Cirenza Fine Art (artist-author, not VAT-registered). The checkout opens once the artist's payment account is ready; until then, your basket becomes a request." if not fr else "Commandes, œuvres originales avec leur prix, éditions de collection et tirages, par Lisa Cirenza Fine Art (artiste-auteur, non assujettie à la TVA). Le paiement ouvrira quand le compte de paiement de l'artiste sera prêt ; d'ici là, votre panier devient une demande.")}</p></div>
+    <p class="comptoirs__onglets" data-apparait><a class="bouton aimant bouton--atelier" href="#commandes"><span>{e("Commissions" if not fr else "Commandes")}</span></a><a class="bouton bouton--ligne aimant" href="#atelier"><span>{e("Available works" if not fr else "Œuvres disponibles")}</span></a><a class="bouton bouton--ligne aimant" href="#editions"><span>{e(t["nav"]["editions"])}</span></a></p>
   </div>
   <div class="bandeau__image bandeau__image--duo">
     <span class="duo duo--atelier">{bouton_oeuvre(prof, "recente-09", lang, LEAD, "(max-width: 900px) 44vw, 20vw")}</span>
@@ -2006,9 +2042,20 @@ def page_boutique(lang):
   </div>
 </section>
 
+<section class="commandes" id="commandes" tabindex="-1" data-strate="{e("Commissions" if not fr else "Commandes")}">
+  <div class="commandes__texte">
+    {surtitre(("Commissions · " if not fr else "Commandes · ") + t["univers"]["atelier_long"], 1)}
+    <h2 class="titre-section">{lettres("Commissions" if not fr else "Commandes")}</h2>
+    <p class="a-venir" data-apparait>{e("Lisa's text to come: how commissions are priced, how she loves to work with a client, from the first conversation to the finished piece." if not fr else "Texte de Lisa à venir : le prix d'une commande, sa façon de travailler avec chaque client, de la première conversation à l'œuvre terminée.")}</p>
+    <p data-apparait>{bouton("Discuss a commission" if not fr else "Parler d'une commande", lien(lang, "contact", prof) + "?objet=commande")}<a class="bouton bouton--ligne aimant" href="{lien_salle(lang, "commissions", prof)}"><span>{e("Past commissions in the Portfolio" if not fr else "Commandes passées dans le Portfolio")}</span></a></p>
+  </div>
+  <div class="commandes__photos">{"".join(f'<span class="commandes__photo">{bouton_oeuvre(prof, oid, lang, "commissions", "(max-width: 700px) 44vw, 16vw")}</span>' for oid in ("b-family-commission", "ski-chalet-commission", "b-if-commission"))}
+    <p class="note">{e("Lisa's photos to come. Meanwhile: three commissions from the Portfolio." if not fr else "Photos de Lisa à venir. En attendant : trois commandes du Portfolio.")}</p></div>
+</section>
+
 <section class="comptoir comptoir--atelier" id="atelier" tabindex="-1" data-strate="{e(B["atelier_titre"][lang])}">
   <div class="comptoir__tete">
-    {surtitre(t["univers"]["atelier_long"] + " · " + c["forme_atelier"][lang], 1)}
+    {surtitre(t["univers"]["atelier_long"] + " · " + c["forme_atelier"][lang], 2)}
     <h2 class="titre-section">{lettres(B["atelier_titre"][lang])}</h2>
     <p data-apparait>{e("Recent work and small encaustics with their prices from Artwork Archive; prints printed on demand by creativehub; earlier originals from the Archive." if not fr else "Œuvres récentes et petites encaustiques avec leurs prix d'Artwork Archive ; tirages imprimés à la demande par creativehub ; originaux plus anciens de l'Archive.")}</p>
     <div class="filtres" role="group" aria-label="{e("Filter the atelier counter" if not fr else "Filtrer le comptoir de l'atelier")}" data-filtres>
@@ -2016,12 +2063,12 @@ def page_boutique(lang):
     </div>
   </div>
   <ul class="produits" data-produits>{"".join(produit_aa(lang, x) for x in AA_RECENTES)}{"".join(produit_oeuvre(lang, prof, oid, "recent") for oid in recentes)}{"".join(produit_oeuvre(lang, prof, oid, "tirage") for oid in tirages)}{"".join(produit_oeuvre(lang, prof, oid, "archive") for oid in archive)}</ul>
-  <p class="note comptoir__note">{e("Prices shown come from Artwork Archive (public profile, 11 November 2026); the other works are price on request, and your basket becomes a reservation request. Prints: choose the size and paper; each choice has its own reference, printed and shipped by creativehub (example prices until creativehub access is set up)." if not fr else "Les prix affichés viennent d'Artwork Archive (profil public, 11 novembre 2026) ; les autres œuvres sont sur demande, et votre panier devient alors une demande de réservation. Tirages : choisissez le format et le papier ; chaque choix a sa référence, imprimée et expédiée par creativehub (prix d'exemple en attendant l'accès à creativehub).")}</p>
+  <p class="note comptoir__note">{e("Every available work shows its price from Artwork Archive. Prices shown here come from Lisa's public profile (11 November 2026); \"price to come\" marks works whose price is not public yet. Prints: choose the size and paper; each choice has its own reference, printed and shipped by creativehub (example prices until creativehub access is set up)." if not fr else "Chaque œuvre disponible affiche son prix d'Artwork Archive. Les prix affichés ici viennent du profil public de Lisa (11 novembre 2026) ; « prix à venir » signale les œuvres dont le prix n'est pas encore public. Tirages : choisissez le format et le papier ; chaque choix a sa référence, imprimée et expédiée par creativehub (prix d'exemple en attendant l'accès à creativehub).")}</p>
 </section>
 
 <section class="comptoir comptoir--editions" id="editions" tabindex="-1" data-strate="{e(E["titre"][lang])}">
   <div class="comptoir__tete">
-    {surtitre(t["univers"]["atelier_long"] + " · " + ("archive line" if not fr else "ligne d'archive"), 2)}
+    {surtitre(t["univers"]["atelier_long"] + " · " + ("archive line" if not fr else "ligne d'archive"), 3)}
     <h2 class="titre-section">{lettres(E["titre"][lang])}</h2>
     <div><p data-apparait>{e(E["texte"][lang])}</p><p class="note" data-apparait>{e(E["datation"][lang])} {e(E["note"][lang])}</p></div>
   </div>
@@ -2176,7 +2223,7 @@ def donnees_js(lang):
             "titre": o["titre"], "titreAff": titre(o, lang), "dims": dims_txt(o, lang), "h": o["hcm"], "l": o["lcm"],
             "technique": (o["technique"] or {}).get(lang), "edition": (o["edition"] or {}).get(lang), "annee": o["annee"],
             "statut": o["statut"], "texte": (o["texte"] or {}).get(lang), "ratio": o["ratio"], "t": o["t"], "loupe": o["loupe"],
-            "fond": o["fond"], "alt": o["alt"][lang], "series": o["series"], "notes": notes,
+            "fond": o["fond"], "alt": o["alt"][lang], "series": o["series"], "notes": notes, "histoire": C.HISTOIRES.get(o["id"]),
         }
     series = {sid: {"titre": SERIES[sid]["titre"][lang], "oeuvres": LISTES[sid]} for sid in ORDRE}
     series["hors-serie"] = {"titre": "", "oeuvres": LISTES["hors-serie"]}
@@ -2187,7 +2234,7 @@ def donnees_js(lang):
     }
     d = {"langue": lang, "textes": t, "oeuvres": oe, "series": series, "decors": decors,
          "pageContact": C.PAGES["contact"][lang] + (".html" if MODE == "html" else ""),
-         "espace": {"horaires": HEURES, "courriel": C.COORD["courriel"]},
+         "espace": {"horaires": HEURES, "courriel": C.COORD["courriel"]}, "demande": C.COORD["courriel_demande"], "devises": C.DEVISES,
          "retraites": {"pip": {"debut": R.PIP["debut"], "titre": R.PIP["titre"]}, "encaustics": {"debut": R.ENCAUSTICS["debut"], "titre": R.ENCAUSTICS["titre"]}}}
     if lang == "fr":
         def corriger(x):
@@ -2281,7 +2328,7 @@ def videos_procede(lang):
         nom = v["fr"] if fr else v["titre"]
         items += (f'<li class="video-procede" data-video-mp4="{src}"><button class="video-procede__bouton" type="button" aria-label="{e(("Play: " if not fr else "Lire : ") + nom)}">'
                   f'<img src="{affiche}" alt="" width="640" height="640" loading="lazy" decoding="async"><span class="video__jouer" aria-hidden="true"><i></i></span>'
-                  f'<span class="video-procede__duree">{v["duree"]}</span></button><p>{e(nom)}</p></li>')
+                  f'<span class="video-procede__duree">{v["duree"]}</span></button>{consentement_video(lang, "wix")}<p>{e(nom)}</p></li>')
     return (f'<div class="videos-procede"><p class="surtitre"><span>{e("Wax process videos" if not fr else "Vidéos du procédé à la cire")}</span></p><ul class="videos-procede__liste">{items}</ul>'
             f'<p class="note">{e("The three videos already online on cirenza.com (Processes page), hosted by Wix. They load only when you play them." if not fr else "Les trois vidéos déjà en ligne sur cirenza.com (page Processes), hébergées par Wix. Elles ne se chargent que si vous les lancez.")}</p></div>')
 
@@ -2573,6 +2620,73 @@ def index_recherche(lang, prof=0):
     return items
 
 
+# ---------------------------------------------------------------- v7 · pages légales (textes de Lisa à venir)
+# Sur le site final, chaque texte vit dans une collection Wix CMS « Pages légales » (champ texte riche, EN et FR) :
+# Lisa le modifie dans son tableau de bord, le site l'affiche tel quel.
+def ligne_fait(cle, val, a_venir=False):
+    cls = ' class="a-venir"' if a_venir else ""
+    return f'<div{cls}><dt>{e(cle)}</dt><dd>{e(val)}</dd></div>'
+
+
+def faits_legaux(lang, cle):
+    fr = lang == "fr"
+    c = C.COORD
+    A = "to come" if not fr else "à venir"
+    if cle == "mentions":
+        lignes = [ligne_fait("Lisa Cirenza Fine Art", f'Lisa Cirenza · {c["forme_atelier"][lang]} · SIRET {c["siret_atelier"]} · {c["courriel"]}'),
+                  ligne_fait(c["espace"], f'{c["forme_espace"][lang]} · SIRET {c["siret_espace"]} · {c["rue"]}, {c["ville"]}, {c["pays"][lang]} · {c["courriel_espace"]} · {c["tel"]}'),
+                  ligne_fait("VAT number (SAS)" if not fr else "Numéro de TVA (SAS)", A, True),
+                  ligne_fait("Consumer mediator" if not fr else "Médiateur de la consommation", A, True),
+                  ligne_fait("Atout France registration (retreats)" if not fr else "Immatriculation Atout France (retraites)", A, True),
+                  ligne_fait("Website host" if not fr else "Hébergeur du site", "Chosen at launch. This mock-up: Vercel Inc.; its copy on Wix: Wix.com Ltd." if not fr else "Choisi au lancement. Cette maquette : Vercel Inc. ; sa copie chez Wix : Wix.com Ltd.")]
+    elif cle == "confidentialite":
+        P = [("Wix", "Registration forms (including any health information you choose to give), contact messages, bookings, orders and customer details: Wix is the back office of both businesses.",
+              "Formulaires d'inscription (y compris les informations de santé que vous choisissez de donner), messages, réservations, commandes et coordonnées : Wix est le back-office des deux entreprises."),
+             ("Stripe", "Card payments, through the Wix checkout: card details, name, email and billing address. Card details never pass through our pages.",
+              "Paiements par carte, via le paiement Wix : carte, nom, courriel et adresse de facturation. La carte ne passe jamais par nos pages."),
+             ("Mailchimp", "Email address and newsletter language, only if you subscribe.", "Courriel et langue de la lettre, seulement si vous vous inscrivez."),
+             ("Boxtal", "Name, delivery address, phone and email, to ship an original work.", "Nom, adresse de livraison, téléphone et courriel, pour expédier une œuvre originale."),
+             ("creativehub", "Name, delivery address and email for a print order, which creativehub prints and ships.", "Nom, adresse de livraison et courriel d'une commande de tirage, que creativehub imprime et expédie."),
+             ("Vimeo", "Only if you play a Vimeo video after accepting cookies: IP address, device data and Vimeo's cookies.", "Seulement si vous lancez une vidéo Vimeo après avoir accepté les cookies : adresse IP, appareil et cookies de Vimeo."),
+             ("Website host" if not fr else "Hébergeur", "IP address and technical logs of each visit.", "Adresse IP et journaux techniques de chaque visite."),
+             ("Artwork Archive", "Nothing from visitors. Works and prices go from Artwork Archive to the site, never back.", "Rien venant des visiteurs. Les œuvres et les prix vont d'Artwork Archive vers le site, jamais l'inverse.")]
+        lignes = [ligne_fait(n, fr_ if fr else en) for n, en, fr_ in P]
+    elif cle == "politique_cookies":
+        S = [("Cookies set by the site" if not fr else "Cookies posés par le site", "None. No analytics, no advertising, no tracking pixel. Fonts are hosted on the site itself." if not fr else "Aucun. Pas de mesure d'audience, pas de publicité, pas de pixel. Les polices sont hébergées sur le site."),
+             ("lc-cookies-v1", "Browser storage, not a cookie: your cookie choice and its date. Kept 6 months, then asked again." if not fr else "Stockage du navigateur, pas un cookie : votre choix et sa date. Gardé 6 mois, puis redemandé."),
+             ("lc-paniers-v3", "Browser storage: your baskets, until you empty them." if not fr else "Stockage du navigateur : vos paniers, jusqu'à ce que vous les vidiez."),
+             ("lc-devise", "Browser storage: the currency you chose for prices, until you change it." if not fr else "Stockage du navigateur : la devise choisie pour les prix, jusqu'à ce que vous la changiez."),
+             ("lc-langue-vue", "Browser storage: the language suggestion has been shown once." if not fr else "Stockage du navigateur : la suggestion de langue a déjà été montrée."),
+             ("Images (Wix)" if not fr else "Images (Wix)", "Images and video posters come from Wix's image service (static.wixstatic.com), which sets no cookies." if not fr else "Les images et les affiches des vidéos viennent du service d'images de Wix (static.wixstatic.com), qui ne pose aucun cookie."),
+             ("Vimeo", "Optional, only after you accept: Vimeo's player sets its own cookies (for example __cf_bm, even in “do not track” mode)." if not fr else "Facultatif, seulement après votre accord : le lecteur Vimeo pose ses propres cookies (par exemple __cf_bm, même en mode « ne pas suivre »)."),
+             ("Wix video" if not fr else "Vidéos Wix", "Optional, only after you accept: the process videos, hosted by Wix." if not fr else "Facultatif, seulement après votre accord : les vidéos du procédé, hébergées par Wix."),
+             ("Checkout (live site)" if not fr else "Paiement (site final)", "The Wix checkout pages and Stripe set their own cookies during payment, for the basket session and fraud prevention." if not fr else "Les pages de paiement Wix et Stripe posent leurs propres cookies pendant le paiement, pour la session du panier et la lutte contre la fraude.")]
+        lignes = [ligne_fait(n, v) for n, v in S]
+    else:
+        return ""
+    titre_faits = ("Facts for Lisa's text, from our check of the site (20 November 2026)" if not fr else "Faits pour le texte de Lisa, d'après notre vérification du site (20 novembre 2026)")
+    bouton_c = f'<p><button class="bouton" type="button" data-cookies-ouvrir><span>{e("Cookie settings" if not fr else "Réglages des cookies")}</span></button></p>' if cle == "politique_cookies" else ""
+    return f'<section class="legal__faits"><h2>{e(titre_faits)}</h2><dl class="legal__liste">{"".join(lignes)}</dl>{bouton_c}</section>'
+
+
+def page_legale(lang, cle):
+    t = C.T[lang]
+    fr = lang == "fr"
+    chemin = fichier(lang, cle)
+    prof = prof_de(chemin)
+    corps = f'''
+<section class="texte-long legal" data-strate="{e(t["nav"][cle])}">
+  {surtitre("Lisa Cirenza Fine Art · " + C.COORD["espace"])}
+  <h1 class="bandeau__titre">{lettres(t["nav"][cle])}</h1>
+  <div class="texte-long__corps">
+    <p class="a-venir">{e("Lisa's text to come, in English and French, published as written." if not fr else "Texte de Lisa à venir, en anglais et en français, publié tel quel.")}</p>
+    <p class="note">{e("On the live site, this text is edited by Lisa in her Wix dashboard (CMS, “Legal pages” collection); the site shows it as written." if not fr else "Sur le site final, Lisa modifie ce texte dans son tableau de bord Wix (CMS, collection « Pages légales ») ; le site l'affiche tel quel.")}</p>
+    {faits_legaux(lang, cle)}
+  </div>
+</section>'''
+    ecrire(chemin, page(lang, cle, chemin, t["nav"][cle], corps, href_autre(lang, cle, prof), {}, "page-legale"))
+
+
 def page_recherche(lang):
     t = C.T[lang]
     fr = lang == "fr"
@@ -2630,7 +2744,7 @@ def ecrire_llms():
                 ("espace", "Espace Créa-Tea-Vité: gallery, tea room and studio"), ("salon_the", "Boutique & Tea Room: visit in person, tea menu, hours, map"),
                 ("cosessions", "Co-Creating Sessions: open studio with guidance, €30"), ("cours_prives", "Bespoke courses and workshops for individuals, families, groups, teams and event planners"),
                 ("evenements", "Gather at the Espace: private venue hire"), ("expositions", "Exhibitions & Events: La Gravité de la Grâce, December 2026 – April 2027"),
-                ("retraites", "Painting retreats 2027"), ("conditions", "Retreat payment schedule and cancellation policy"), ("boutique", "Available Works: originals, prints, collectors' editions"),
+                ("retraites", "Painting retreats 2027"), ("conditions", "Retreat payment schedule and cancellation policy"), ("boutique", "Commissions and Available Works: commissions, originals with prices, prints, collectors' editions"),
                 ("contact", "Contact")]
     pages_fr = [("accueil", "Accueil"), ("oeuvres", "Œuvres"), ("artiste", "L'artiste"), ("espace", "L'Espace Créa-Tea-Vité"), ("retraites", "Retraites 2027"), ("contact", "Contact")]
     c = C.COORD
@@ -2718,6 +2832,8 @@ for lang in LANGS:
     for _r in RETRAITES_ORDRE:
         page_inscription(lang, _r)
     page_recherche(lang)
+    for _k in LEGAL:
+        page_legale(lang, _k)
     donnees_js(lang)
 page_404()
 # Maquette : pas d'indexation (le site actuel garde son référencement), en-têtes de sécurité de base,

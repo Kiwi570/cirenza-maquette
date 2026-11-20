@@ -60,7 +60,7 @@ PAGES = {
     "expositions": (photo("exposition-en-cours/bnt-designs-soudure"), {"en": "La Gravité de la Grâce · Dec 2026 – Apr 2027", "fr": "La Gravité de la Grâce · déc. 2026 – avr. 2027"}, "espace"),
     "conditions": (photo("retraites/groupe-painters-in-paradise"), {"en": "Retreats · payment and cancellation", "fr": "Retraites · paiement et annulation"}, "espace"),
     "studio": (photo("atelier/glacier-sur-le-chevalet"), {"en": "Studio notes", "fr": "Notes d'atelier"}, "atelier"),
-    "boutique": (oeuvre("recente-01"), {"en": "Available Works", "fr": "Œuvres disponibles"}, "atelier"),
+    "boutique": (oeuvre("recente-01"), {"en": "Commissions and Available Works", "fr": "Commandes et œuvres disponibles"}, "atelier"),
     "contact": (photo("espace/facade-de-nuit"), {"en": "Let's connect", "fr": "Écrivez-moi"}, "maison"),
 }
 
