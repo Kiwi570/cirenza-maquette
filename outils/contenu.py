@@ -15,17 +15,23 @@ PAGES = {
     "parcours": {"en": "cv", "fr": "fr/parcours"},
     "presse": {"en": "press", "fr": "fr/presse"},
     "espace": {"en": "espace", "fr": "fr/espace"},
-    "cours": {"en": "classes", "fr": "fr/cours"},
-    "evenements": {"en": "private-events", "fr": "fr/evenements-prives"},
+    "evenements": {"en": "gather", "fr": "fr/se-reunir-a-l-espace"},
     "retraites": {"en": "retreats", "fr": "fr/retraites"},
     "pip": {"en": "retreats/painting-in-paradise", "fr": "fr/retraites/painting-in-paradise"},
-    "creative": {"en": "retreats/creative-pause", "fr": "fr/retraites/creative-pause"},
-    "encaustics": {"en": "retreats/alpine-encaustics", "fr": "fr/retraites/alpine-encaustics"},
-    "cours_prives": {"en": "private-courses", "fr": "fr/cours-prives"},
+    "encaustics": {"en": "retreats/alpine-creative-pause", "fr": "fr/retraites/pause-creative-alpine"},
+    "cours_prives": {"en": "bespoke-courses", "fr": "fr/cours-sur-mesure"},
     "studio": {"en": "studio-notes", "fr": "fr/notes-d-atelier"},
-    "boutique": {"en": "shop", "fr": "fr/boutique"},
+    "boutique": {"en": "available-works", "fr": "fr/oeuvres-disponibles"},
     "contact": {"en": "contact", "fr": "fr/contact"},
     "horaires": {"en": "manage/opening-hours", "fr": "fr/gestion/horaires"},
+    # v6
+    "salon_the": {"en": "boutique-tea-room", "fr": "fr/boutique-salon-de-the"},
+    "cosessions": {"en": "co-creating-sessions", "fr": "fr/sessions-de-co-creation"},
+    "expositions": {"en": "exhibitions-events", "fr": "fr/expositions-evenements"},
+    "inscription_pip": {"en": "regjune27", "fr": "fr/regjune27"},
+    "inscription_encaustics": {"en": "septregistration", "fr": "fr/septregistration"},
+    "conditions": {"en": "retreats/payment-and-cancellation", "fr": "fr/retraites/paiement-et-annulation"},
+    "recherche": {"en": "search", "fr": "fr/recherche"},
 }
 DOSSIER_SALLES = {"en": "works", "fr": "fr/oeuvres"}
 
@@ -41,8 +47,9 @@ COORD = {
     "tel_brut": "+33749095492",
     "siret_atelier": "888 534 534 00019",
     "siret_espace": "989 397 146 00014",
-    "forme_atelier": {"en": "artist-author (artiste-auteur)", "fr": "artiste-auteur"},
-    "forme_espace": {"en": "SAS (simplified joint-stock company)", "fr": "SAS"},
+    "forme_atelier": {"en": "artist-author (artiste-auteur), not VAT-registered", "fr": "artiste-auteur, non assujettie à la TVA"},
+    "forme_espace": {"en": "SAS Atelier Truffle, VAT-registered", "fr": "SAS Atelier Truffle, assujettie à la TVA"},
+    "societe_espace": "SAS Atelier Truffle",
     "instagram_espace": "https://www.instagram.com/espacecreateavite/",
     "instagram": "https://www.instagram.com/art.lc/",
     "linkedin": "https://fr.linkedin.com/in/lisa-cirenza-3baa4913/fr",
@@ -57,14 +64,16 @@ T = {
         "metier": "Painter of light, water, rock and time",
         "accroche": "Painting light, water, rock and time",
         "description": "Lisa Cirenza is a painter in the French Alps: light, water, rock and time (ice, snow, fog, lake and mountains) in encaustic, mixed media, oil and watercolour.",
-        "nav": {"accueil": "Home", "oeuvres": "Works", "artiste": "The Artist", "parcours": "CV", "presse": "Press", "espace": "L'Espace", "cours": "Classes", "evenements": "Private events", "retraites": "Retreats", "pip": "Painting in Paradise", "creative": "A Creative Pause", "encaustics": "Alpine Encaustics", "boutique": "Shop", "contact": "Contact",
-                "cours_prives": "Private courses", "studio": "Studio notes", "archive": "Archive", "editions": "Collectors' editions", "recent": "A Record of Time", "declaration": "Statement", "bio": "Bio"},
-        "univers": {"atelier": "Atelier", "atelier_long": "Lisa Cirenza · Fine Art", "atelier_sous": "Works, editions, commissions", "espace": "Espace", "espace_long": "Espace Créa-Tea-Vité", "espace_sous": "Gallery, tea room, classes, retreats", "aria": "Choose a side of the house"},
+        "nav": {"accueil": "Home", "oeuvres": "Works", "artiste": "Bio", "parcours": "CV", "presse": "Press", "espace": "L'Espace", "cours": "Classes", "evenements": "Gather at the Espace", "retraites": "Retreats", "pip": "Painting in Paradise", "encaustics": "Alpine Creative Pause", "boutique": "Available Works", "contact": "Contact",
+                "salon_the": "Boutique & Tea Room", "cosessions": "Co-Creating Sessions", "expositions": "Exhibitions & Events", "recherche": "Search", "conditions": "Payment & cancellation", "inscription_pip": "Registration", "inscription_encaustics": "Registration",
+                "cours_prives": "Bespoke Courses & Workshops", "studio": "Studio notes", "archive": "Archive", "editions": "Collectors' editions", "recent": "A Record of Time", "declaration": "Statement", "bio": "Bio"},
+        "univers": {"atelier": "Artist", "atelier_long": "Lisa Cirenza · Fine Art", "atelier_sous": "Works, editions, commissions", "espace": "Espace", "espace_long": "Espace Créa-Tea-Vité", "espace_sous": "Gallery, tea room, classes, retreats", "aria": "Choose a side of the house"},
         "disponible": "Available", "non_disponible": "Not for sale", "en_pret": "On loan", "reserve": "Reserved",
         "inventaire": "Inventory no.", "parue_dans": "Featured in",
         "menu": "Menu", "fermer": "Close", "aller_contenu": "Skip to content",
         "langue_autre": "Version française", "langue_autre_court": "FR",
-        "groupes_menu": {"oeuvres": "Atelier · the work", "artiste": "Atelier · the artist", "espace": "Espace Créa-Tea-Vité", "retraites": "Espace · retreats 2027"},
+        "nav_court": {"salon_the": "Tea Room", "cosessions": "Co-Creating", "cours_prives": "Bespoke Courses", "evenements": "Gather", "expositions": "Exhibitions & Events", "boutique": "Available Works"},
+        "groupes_menu": {"oeuvres": "Artist · the work", "artiste": "Artist · the artist", "espace": "Espace Créa-Tea-Vité", "retraites": "Espace · retreats 2027", "expositions": "Exhibitions & Events"},
         "voir": "View", "agrandir": "Zoom", "a_completer": "to be completed", "titre_a_completer": "Title to be completed",
         "prix_demande": "Price on request", "vendu": "Sold", "en_cours": "Work in progress", "edition": "Edition",
         "photo_situation": "Photographed in situ",
@@ -88,7 +97,7 @@ T = {
         "form_obligatoire": "This field is required.", "form_email_invalide": "Please check this email address.",
         "pied_droits": "All texts, images and works © Lisa Cirenza Fine Art",
         "pied_atelier": "Works, editions and commissions are sold by Lisa Cirenza Fine Art, artist-author.",
-        "pied_espace": "Classes, retreats, events, tea room and boutique are run by Espace Créa-Tea-Vité, SAS.",
+        "pied_espace": "Retreats, studio sessions, courses, events, tea room and boutique are run by Espace Créa-Tea-Vité (SAS Atelier Truffle).",
         "mentions": "Legal notice", "confidentialite": "Privacy policy",
         "pied_maquette": "Design mock-up — not the live site",
         "traduction": "The official text is the English version of the site.",
@@ -99,14 +108,16 @@ T = {
         "metier": "Peintre de la lumière, de l'eau, de la roche et du temps",
         "accroche": "Peintre de la lumière, de l'eau, de la roche et du temps",
         "description": "Lisa Cirenza, peintre dans les Alpes françaises : la lumière, l'eau, la roche et le temps (glace, neige, brouillard, lac et montagnes), à l'encaustique, en techniques mixtes, à l'huile et à l'aquarelle.",
-        "nav": {"accueil": "Accueil", "oeuvres": "Œuvres", "artiste": "L'artiste", "parcours": "Parcours", "presse": "Presse", "espace": "L'Espace", "cours": "Cours", "evenements": "Événements privés", "retraites": "Retraites", "pip": "Painting in Paradise", "creative": "A Creative Pause", "encaustics": "Alpine Encaustics", "boutique": "Boutique", "contact": "Contact",
-                "cours_prives": "Cours privés", "studio": "Notes d'atelier", "archive": "Archive", "editions": "Éditions de collection", "recent": "Strates du temps", "declaration": "Déclaration", "bio": "Biographie"},
-        "univers": {"atelier": "Atelier", "atelier_long": "Lisa Cirenza · Fine Art", "atelier_sous": "Œuvres, éditions, commandes", "espace": "Espace", "espace_long": "Espace Créa-Tea-Vité", "espace_sous": "Galerie, salon de thé, cours, retraites", "aria": "Choisir un côté de la maison"},
+        "nav": {"accueil": "Accueil", "oeuvres": "Œuvres", "artiste": "Bio", "parcours": "Parcours", "presse": "Presse", "espace": "L'Espace", "cours": "Cours", "evenements": "Se réunir à l'Espace", "retraites": "Retraites", "pip": "Peindre au paradis", "encaustics": "Pause créative alpine", "boutique": "Œuvres disponibles", "contact": "Contact",
+                "salon_the": "Boutique et salon de thé", "cosessions": "Sessions de co-création", "expositions": "Expositions et événements", "recherche": "Rechercher", "conditions": "Paiement et annulation", "inscription_pip": "Inscription", "inscription_encaustics": "Inscription",
+                "cours_prives": "Cours et ateliers sur mesure", "studio": "Notes d'atelier", "archive": "Archive", "editions": "Éditions de collection", "recent": "Strates du temps", "declaration": "Déclaration", "bio": "Biographie"},
+        "univers": {"atelier": "Artiste", "atelier_long": "Lisa Cirenza · Fine Art", "atelier_sous": "Œuvres, éditions, commandes", "espace": "Espace", "espace_long": "Espace Créa-Tea-Vité", "espace_sous": "Galerie, salon de thé, cours, retraites", "aria": "Choisir un côté de la maison"},
         "disponible": "Disponible", "non_disponible": "Non disponible à la vente", "en_pret": "En prêt", "reserve": "Réservée",
         "inventaire": "N° d'inventaire", "parue_dans": "Parue dans",
         "menu": "Menu", "fermer": "Fermer", "aller_contenu": "Aller au contenu",
         "langue_autre": "English version", "langue_autre_court": "EN",
-        "groupes_menu": {"oeuvres": "Atelier · l'œuvre", "artiste": "Atelier · l'artiste", "espace": "Espace Créa-Tea-Vité", "retraites": "Espace · retraites 2027"},
+        "nav_court": {"salon_the": "Salon de thé", "cosessions": "Co-création", "cours_prives": "Cours sur mesure", "evenements": "Se réunir", "expositions": "Expositions", "boutique": "Œuvres disponibles"},
+        "groupes_menu": {"oeuvres": "Artiste · l'œuvre", "artiste": "Artiste · l'artiste", "espace": "Espace Créa-Tea-Vité", "retraites": "Espace · retraites 2027", "expositions": "Expositions et événements"},
         "voir": "Voir", "agrandir": "Agrandir", "a_completer": "à compléter", "titre_a_completer": "Titre à compléter",
         "prix_demande": "Prix sur demande", "vendu": "Vendu", "en_cours": "En cours", "edition": "Édition",
         "photo_situation": "Photographiée en situation",
@@ -130,7 +141,7 @@ T = {
         "form_obligatoire": "Ce champ est obligatoire.", "form_email_invalide": "Vérifiez cette adresse électronique.",
         "pied_droits": "Textes, images et œuvres © Lisa Cirenza Fine Art",
         "pied_atelier": "Les œuvres, éditions et commandes sont vendues par Lisa Cirenza Fine Art, artiste-auteur.",
-        "pied_espace": "Cours, retraites, événements, salon de thé et boutique relèvent de l'Espace Créa-Tea-Vité, SAS.",
+        "pied_espace": "Retraites, sessions d'atelier, cours, événements, salon de thé et boutique relèvent de l'Espace Créa-Tea-Vité (SAS Atelier Truffle).",
         "mentions": "Mentions légales", "confidentialite": "Politique de confidentialité",
         "pied_maquette": "Maquette de travail, pas le site en ligne",
         "traduction": "Le texte officiel est la version anglaise du site.",
@@ -171,51 +182,8 @@ PROCEDE = {
 }
 
 # Biographie en couches (texte du site, découpé ; chaque couche garde ses phrases)
-BIO = [
-    {"cle": "debut", "photo": "artiste/lisa-a-4-ans", "legende": {"en": "Lisa at four", "fr": "Lisa à 4 ans"},
-     "titre": {"en": "Art and nature, early on", "fr": "L'art et la nature, très tôt"},
-     "texte": {"en": "Lisa's passions for art and nature started early in life. She started oil painting at the age of 7, but was encouraged to devote her academic studies to \"something more practical\".",
-               "fr": "La passion de Lisa pour l'art et la nature commence très tôt. Elle peint à l'huile dès 7 ans, mais on l'encourage à consacrer ses études à « quelque chose de plus concret »."}},
-    {"cle": "alaska", "photo": "artiste/lisa-a-17-ans-juneau-icefield", "legende": {"en": "Lisa at 17, on the ice", "fr": "Lisa à 17 ans, sur la glace"},
-     "titre": {"en": "Age 17, the Juneau Icefield", "fr": "17 ans, le champ de glace de Juneau"},
-     "texte": {"en": "At the age of 17, she was selected for a National Science Foundation scholarship to be part of a glaciological research expedition on the Juneau Icefields in Alaska. She spent two summers traversing the glaciers, drawing and researching the geological, and climatological histories embedded in their flows. Her photographs and accounts of these experiences were published in “The Power of Ice”, a book published by Chicago Children’s Press that she co-authored to encourage other youngsters to pursue field sciences.",
-               "fr": "À 17 ans, elle obtient une bourse de la National Science Foundation pour participer à une expédition de recherche glaciologique sur le Juneau Icefield, en Alaska. Pendant deux étés, elle traverse les glaciers, dessine et étudie les histoires géologiques et climatiques inscrites dans leur écoulement. Ses photographies et ses récits sont publiés dans « The Power of Ice », un livre des éditions Chicago Children's Press qu'elle cosigne pour donner envie à d'autres jeunes de se lancer dans les sciences de terrain."}},
-    {"cle": "stanford", "decor": "carnet-de-terrain-4x5", "legende": {"en": "Evocation", "fr": "Évocation"},
-     "titre": {"en": "Stanford, Paris, New York", "fr": "Stanford, Paris, New York"},
-     "texte": {"en": "At Stanford University, she pressed hard to be accepted into their Paris based studies program, knowing she might be able to combine her dream of studying art, whilst still pursuing her work in the earth sciences. She spent 8 months studying coursework at L’Ecole des Mines de Paris, and Sciences Po—but spent much of her time in the museums, and doing short courses in painting. She continued this pattern of short course work throughout her time as a master’s student at Stanford, and as a financial analyst, and later a management consultant in NYC; always with hopes of filling her toolbox with artistic skills, for the moment she could become the artist she’d dreamed of becoming.",
-               "fr": "À Stanford, elle se bat pour intégrer le programme d'études à Paris, sachant qu'elle pourra y concilier son rêve d'étudier l'art et ses travaux en sciences de la Terre. Elle passe 8 mois à suivre des cours à l'École des Mines de Paris et à Sciences Po, mais passe une grande partie de son temps dans les musées et dans de courts stages de peinture. Elle garde cette habitude pendant son master à Stanford, puis comme analyste financière et consultante en management à New York : toujours remplir sa boîte à outils artistique, pour le jour où elle pourrait devenir l'artiste dont elle rêvait."}},
-    {"cle": "formations", "decor": "sumi-e-nature-morte-4x5", "photo2": "artiste/lisa-peint-au-chevalet", "legende": {"en": "Evocation", "fr": "Évocation"},
-     "titre": {"en": "Learning everywhere", "fr": "Apprendre partout"},
-     "texte": {"en": "Whilst raising her 4 children in New Jersey, London, Tokyo, and Quebec, she studied constantly. Her schooling includes studies with a Master of Sumi-e in Tokyo, painting and drawing at Central St. Martins, and the Royal Drawing School in London, and the study of traditional oil techniques with the Jean Pierre Brazs Atelier in Paris, and the Norfolk Painting School. She acquired her love for, and many of her foundational techniques in encaustic art through Mulranny Arts in Ireland.",
-               "fr": "En élevant ses quatre enfants dans le New Jersey, à Londres, à Tokyo et au Québec, elle ne cesse d'étudier : auprès d'un maître de sumi-e à Tokyo, en peinture et en dessin à Central Saint Martins et à la Royal Drawing School de Londres, en techniques traditionnelles de l'huile à l'atelier Jean-Pierre Brazs à Paris et à la Norfolk Painting School. C'est à Mulranny Arts, en Irlande, qu'elle découvre l'encaustique et en acquiert bien des techniques fondatrices."}},
-    {"cle": "cinquante", "photo": "artiste/lisa-aquarelle-nuancier", "legende": {"en": "Colour studies on the road", "fr": "Études de couleur en chemin"},
-     "titre": {"en": "At 50, the professional leap", "fr": "À 50 ans, le grand saut"},
-     "texte": {"en": "“When my youngest child entered high school, I finally dared to pursue a formal art degree. At 50, I launched my professional career, working seven days a week to catch up with younger peers. Success followed with international exhibitions from Miami Basel to the Venice Biennale and museums in Kyoto and Paris.”",
-               "fr": "« Quand mon plus jeune enfant est entré au lycée, j'ai enfin osé suivre une formation artistique diplômante. À 50 ans, j'ai lancé ma carrière professionnelle, sept jours sur sept, pour rattraper des artistes plus jeunes. Le succès a suivi, avec des expositions internationales de Miami Basel à la Biennale de Venise, et des musées à Kyoto et à Paris. »"},
-     "source": "Wax Fusion, 2026"},
-    {"cle": "residences", "photo": "artiste/lisa-photographie-cuba",
-     "titre": {"en": "Residencies", "fr": "Résidences"},
-     "texte": {"en": "Artist residencies include time (and focuses) in Cuba (people, and colour), California (environment, and the sea), Kyoto (calligraphy and substrates), and the Tyrolean Alps (light and atmosphere in the Alps). Her works are united by her love of the environment, and her bewilderment at human behaviours. Humor is important, as is moving beyond the surface and mining the layers of moments and experiences for the truths hidden within.",
-               "fr": "Ses résidences d'artiste l'ont menée à Cuba (les gens, la couleur), en Californie (l'environnement, la mer), à Kyoto (la calligraphie, les supports) et dans les Alpes tyroliennes (la lumière et l'atmosphère des Alpes). Ses œuvres sont unies par son amour de l'environnement et son étonnement devant les comportements humains. L'humour compte, tout comme le fait d'aller au-delà de la surface et de creuser les couches des moments et des expériences pour en extraire les vérités cachées."}},
-    {"cle": "engagement", "photo": "conferences/atelier-blouses-blanches",
-     "titre": {"en": "Creativity for everyone", "fr": "La créativité pour tous"},
-     "texte": {"en": "She is passionate about the role of creativity in solving so many of the problems we humans face, and has run workshops on maximising creativity with many corporate and private entities. Having grown up in an environment without easy access, nor appreciation for the arts, she has and continues to do similar pro-bono work with disenfranchised communities including refugees, homeless mothers and children, and schools without the resources to include art in their curriculums.",
-               "fr": "Convaincue que la créativité aide à résoudre bien des problèmes humains, elle anime des ateliers pour la stimuler auprès de nombreuses entreprises et structures privées. Ayant grandi dans un milieu où l'art était peu accessible et peu considéré, elle mène bénévolement le même travail auprès de communautés défavorisées : réfugiés, mères et enfants sans abri, écoles sans moyens pour enseigner l'art."}},
-    {"cle": "alpes", "photo": "espace/enseigne-rue-village",
-     "titre": {"en": "Full circle, in the French Alps", "fr": "La boucle bouclée, dans les Alpes"},
-     "texte": {"en": "Having recently realised her dream of moving to the French Alps, Lisa has now come full circle and is combining her love for the earth with her responses to humanity. Her earth science degree, her Master's in International Policy Studies, her toolbox full of art techniques, and bewilderment at human behaviours are all to be found in the moments of pause, joy, tension, and light, in the many layers of her work.",
-               "fr": "Après avoir réalisé son rêve de s'installer dans les Alpes françaises, Lisa boucle la boucle : elle réunit son amour de la Terre et son regard sur l'humanité. Son diplôme en sciences de la Terre, son master en politique internationale, sa boîte à outils pleine de techniques et son étonnement devant les comportements humains se retrouvent dans les moments de pause, de joie, de tension et de lumière, au fil des nombreuses couches de son travail."}},
-]
-BIO_FIN = {
-    "en": ["She has exhibited widely in London, Paris, NY, Silicon Valley, Edinburgh, Xian, Dhaka, and Kyoto; in exhibitions including Miami Basel, Venice Biennale, Asian Biennale, and the historical Parisian Salons. Her works are held in corporate, state, and private collections in Japan, France, Sweden, China, Austria, the UK, Canada, and throughout the USA.",
-           "Art needs to reflect the age and society it is created in and for, and will hopefully serve as a temporal testimony for future generations."],
-    "fr": ["Elle a beaucoup exposé, à Londres, Paris, New York, dans la Silicon Valley, à Édimbourg, Xi'an, Dacca et Kyoto, notamment à Miami Basel, à la Biennale de Venise, à la Biennale asiatique et dans les Salons historiques parisiens. Ses œuvres figurent dans des collections d'entreprises, publiques et privées au Japon, en France, en Suède, en Chine, en Autriche, au Royaume-Uni, au Canada et dans tous les États-Unis.",
-           "L'art doit refléter l'époque et la société pour lesquelles il est créé, et servir, je l'espère, de témoignage aux générations futures."],
-}
-PASSIONS = {"en": "Certified Canadian Ski Instructor, bilingual English/French, basic level Japanese, I love open water swimming, hiking, travel, my better half, my 4 adult kids, their spouses and kids, nerding out on all things art, and seizing life’s challenges and opportunities far and wide!",
-            "fr": "Monitrice de ski certifiée au Canada, bilingue anglais-français, quelques bases de japonais. J'aime la nage en eau libre, la randonnée, les voyages, ma moitié, mes quatre enfants adultes, leurs conjoints et leurs enfants, me passionner pour tout ce qui touche à l'art, et saisir les défis et les occasions de la vie, partout où ils se présentent !"}
+# v6 : l'ancienne biographie de cirenza.com (BIO, BIO_FIN, PASSIONS), plus utilisée, est retirée : elle citait des postes en finance et en conseil.
 
-# Parcours : expositions et résidences (page CV Highlights du site)
 EXPOSITIONS = [
     (2014, "The Other Art Fair", "London, UK", "Londres, Royaume-Uni", None),
     (2015, "Kyoto Museum of Art", "Kyoto, Japan", "Kyoto, Japon", None),
@@ -240,7 +208,7 @@ EXPOSITIONS = [
     (2026, "London Art in Motion, Public Art PLogix Gallery", "London, UK", "Londres, Royaume-Uni", None),
     (2026, "Mouvement, Masse, et Lumière, EC Gallery", "La Clusaz, France", "La Clusaz", None),
     (2026, "Salon d'Automne, sociétaire", "Paris, France", "Paris", None),
-    (2026, "La Gravité de la Grâce, with BNT Designs, Espace Créa-Tea-Vité", "La Clusaz, France", "La Clusaz", None),
+    (2026, "La Gravité de la Grâce, with BNT Designs and Le Petit Lapin, Espace Créa-Tea-Vité (December 2026 – April 2027)", "La Clusaz, France", "La Clusaz", None),
 ]
 CONFERENCES = [
     (2016, "Burgh House Museum, workshop", "London, UK", "Londres"),
@@ -273,7 +241,7 @@ PRESSE = [
      "texte": {"en": "Portrait in the La Clusaz lifestyle magazine: painter, trained scientist, mentor, passionate skier and nature lover. Magazine name and link to be confirmed on publication.",
                "fr": "Portrait dans le magazine art de vivre de La Clusaz : « artiste peintre, scientifique de formation, mentor, skieuse passionnée et amoureuse de la nature ». Nom exact du magazine et lien à confirmer à la parution."},
      "url": None, "image": "espace/visiteuse-contemplation", "nouveau": True, "a_paraitre": True},
-    {"titre": "Quand Art Nous Connecte", "media": "Maisons et Jardins", "date": {"en": "2021", "fr": "2021"},
+    {"titre": "Quand Art Nous Connecte", "media": "Maisons et Jardins", "date": {"en": "May 2022", "fr": "mai 2022"},
      "texte": {"en": "Feature article, “When Art Connects Us”.", "fr": "Grand article, « Quand l'art nous connecte »."},
      "url": "https://www.pressreader.com/france/maison-et-jardin-magazine/20220516/289794336701817", "image": "presse/maison-et-jardin-2022"},
     {"archive": True, "titre": "The App Whisperer Podcast", "media": "Apple Podcasts", "date": {"en": "March 2021", "fr": "mars 2021"},
@@ -357,14 +325,16 @@ CARTE_NOTE = {"en": "All our coffees (except decaf) are organic Malongo, artisan
               "fr": "Tous nos cafés (sauf les décaféinés) sont des cafés bio Malongo, torréfiés artisanalement en France."}
 
 EXPO = {
-    "titre": "La Gravité de la Grâce", "debut": "2026-07-01", "fin": "2026-10-31",
-    "dates": {"en": "July – October 2026", "fr": "Juillet – octobre 2026"},
-    "intro": {"en": "Gravité de la grâce captures the beautiful tension between weight and weightlessness. This exhibition unites two local artists who find soaring joy in seemingly opposing realms: BNT Designs, through fluid metal sculptures of local flight and motion, and Lisa Cirenza, through vibrant visual celebrations of human resilience in Cuba. Together, these metals, pigments, and pixels reveal grace as an active agent of transformation—proving that lightness can be found in the heaviest of mediums and circumstances.",
-              "fr": "« La Gravité de la Grâce » saisit la belle tension entre le poids et l'apesanteur. L'exposition réunit deux artistes du pays qui trouvent une joie qui s'envole dans des mondes en apparence opposés : BNT Designs, avec des sculptures de métal fluides sur le vol et le mouvement, et Lisa Cirenza, avec des célébrations éclatantes de la résilience humaine à Cuba. Métaux, pigments et pixels y révèlent la grâce comme force de transformation, et montrent que la légèreté se trouve jusque dans les matières et les circonstances les plus lourdes."},
+    "titre": "La Gravité de la Grâce", "debut": "2026-12-03", "fin": "2027-04-30",
+    "dates": {"en": "December 2026 – April 2027", "fr": "Décembre 2026 – avril 2027"},
+    "intro": {"en": "La Gravité de la Grâce explores the beautiful tension between weight and weightlessness. This winter the conversation deepens. Lisa Cirenza’s new series meets the photographs of Le Petit Lapin, an anonymous presence whose mountain landscapes are shaped by time, accumulation and erasure. BNT Designs’ steel sculptures of flight and motion stay on from the summer. Together, metal, pigment, wax and light show that grace can be found in the heaviest of materials and circumstances.",
+              "fr": "« La Gravité de la Grâce » explore la belle tension entre le poids et l'apesanteur. Cet hiver, la conversation s'approfondit : la nouvelle série de Lisa Cirenza rencontre les photographies du Petit Lapin, une présence anonyme dont les paysages de montagne sont façonnés par le temps, l'accumulation et l'effacement. Les sculptures d'acier de BNT Designs, sur le vol et le mouvement, restent depuis l'été. Ensemble, le métal, le pigment, la cire et la lumière montrent que la grâce peut se trouver dans les matériaux et les circonstances les plus lourds."},
     "bnt": {"en": "BNT Designs transforms heavy, rigid industrial metal into fluid, weightless expressions of motion. Focusing on dynamic local subjects—from paragliders and cyclists to soaring montgolfières—these sculpted steel works actively defy physical gravity. By trapping high-energy movement in iron and steel, BNT Designs captures the fleeting, soaring grace of joy found in pure action and continuous transformation.",
             "fr": "BNT Designs transforme un métal industriel lourd et rigide en expressions fluides et légères du mouvement. Parapentistes, cyclistes, montgolfières : ces aciers sculptés défient la gravité. En figeant dans le fer et l'acier un mouvement plein d'énergie, BNT Designs saisit la grâce fugace de la joie que procurent l'action pure et la transformation continue."},
-    "lisa": {"en": "Lisa Cirenza works across materials—waxes, pigments, aluminium, acrylics, inks, rice papers—building and breaking down images to reveal histories embedded within matter itself. Through this deeply tactile process, her work investigates an indomitable joy that persists despite the complex socio-political circumstances in Cuba. By layering texture and color, Cirenza transforms emotional and historical gravity into a vibrant visual celebration of human resilience and active grace.",
-             "fr": "Lisa Cirenza travaille avec de nombreux matériaux (cires, pigments, aluminium, acryliques, encres, papiers de riz) : elle construit puis défait ses images pour révéler les histoires inscrites dans la matière. Par ce processus très tactile, elle explore une joie indomptable qui persiste malgré la situation sociopolitique complexe de Cuba. En superposant textures et couleurs, elle transforme le poids émotionnel et historique en une célébration éclatante de la résilience humaine et de la grâce."},
+    "lisa": {"en": "Lisa Cirenza works across waxes, pigments, watercolours, acrylics, inks and rice papers. Her new body of work emerges from four forces: light, rock, water and time. An earth scientist by training, she paints the way landscapes are made: adding and subtracting, layer after layer, in an iterative process that mirrors the land itself. Le Petit Lapin lets nature create the forms through time and patience; Cirenza uses her tools to recreate those forces in the studio, compressing and excavating centuries in layers of wax and pigment.",
+             "fr": "Lisa Cirenza travaille les cires, les pigments, les aquarelles, les acryliques, les encres et les papiers de riz. Sa nouvelle série naît de quatre forces : la lumière, la roche, l'eau et le temps. Scientifique de la Terre de formation, elle peint comme se forment les paysages : en ajoutant et en retranchant, couche après couche, dans un processus itératif qui reproduit celui de la terre elle-même. Le Petit Lapin laisse la nature créer les formes avec le temps et la patience ; Lisa Cirenza recrée ces forces à l'atelier avec ses outils, comprimant et excavant des siècles dans des couches de cire et de pigment."},
+    "lapin": {"en": "Le Petit Lapin is not a person, but a presence. Anonymous and deliberately absent from public view, he lets his images speak for themselves. His photographs don’t document; they observe. They bear witness to landscapes shaped by time, accumulation and erasure, where something remains without ever imposing itself. True to his nature, Le Petit Lapin will be observing from a distance.",
+              "fr": "Le Petit Lapin n'est pas une personne, mais une présence. Anonyme et délibérément absent du regard public, il laisse ses images parler pour lui. Ses photographies ne documentent pas : elles observent. Elles témoignent de paysages façonnés par le temps, l'accumulation et l'effacement, où quelque chose demeure sans jamais s'imposer. Fidèle à sa nature, Le Petit Lapin observera de loin."},
 }
 
 AGENDA = [
@@ -558,8 +528,8 @@ MEMBRANE = {"en": "In my work, wax functions as a geological membrane: it preser
             "fr": "Dans mon travail, la cire agit comme une membrane géologique : elle conserve les gestes tout en permettant de les rouvrir, de les gratter ou de les transformer."}
 
 BIO_COURTE = {
-    "en": "Lisa Cirenza is a painter based in the French Alps. As a National Science Foundation scholar with the Juneau Icefield Research Program, she worked as a field researcher on glaciological expeditions across the Juneau Icefield, and later co-authored The Power of Ice, a children's book on glaciers and field science illustrated with her expedition photographs. She studied applied earth sciences at Stanford University and the École des Mines de Paris, and holds a master's in international policy studies from Stanford. Trained in old-masters oil technique and in sumi ink in Japan, she works with water, pigments, heat and wax. After years of painting people and the forces that divide them, from commuters on the London Underground to refugees, she now paints light, water, rock and time. Her work is held in the Stanford Hospital collection alongside works by David Hockney and Robert Rauschenberg, and in private collections in Europe, the United States and Asia. It has been praised in the Financial Times, and exhibited at the Grand Palais in Paris, in Venice during the Biennale, and in New York, Miami, London, Kyoto and Xi'an.",
-    "fr": "Lisa Cirenza est une peintre installée dans les Alpes françaises. Boursière de la National Science Foundation au sein du Juneau Icefield Research Program, elle a été chercheuse de terrain lors d'expéditions glaciologiques sur le champ de glace de Juneau, puis a cosigné The Power of Ice, un livre pour enfants sur les glaciers et les sciences de terrain, illustré de ses photographies d'expédition. Elle a étudié les sciences de la Terre appliquées à l'université Stanford et à l'École des Mines de Paris, et est titulaire d'un master en politique internationale de Stanford. Formée à la technique des maîtres anciens à l'huile et à l'encre sumi au Japon, elle travaille avec l'eau, les pigments, la chaleur et la cire. Après des années à peindre les gens et les forces qui les divisent, des voyageurs du métro de Londres aux réfugiés, elle peint aujourd'hui la lumière, l'eau, la roche et le temps. Ses œuvres figurent dans la collection de l'hôpital de Stanford, aux côtés d'œuvres de David Hockney et de Robert Rauschenberg, et dans des collections privées en Europe, aux États-Unis et en Asie. Saluée par le Financial Times, elle a exposé au Grand Palais à Paris, à Venise pendant la Biennale, ainsi qu'à New York, Miami, Londres, Kyoto et Xi'an.",
+    "en": "Lisa Cirenza is a painter based in the French Alps. As a National Science Foundation scholar with the Juneau Icefield Research Program, she worked as a field researcher on glaciological expeditions across the Juneau Icefield, and later co-authored The Power of Ice, a children's book on glaciers and field science illustrated with her expedition photographs. She studied applied earth sciences at Stanford University and the École des Mines de Paris, and holds a master's in international policy studies from Stanford. Trained in old-masters oil technique and in sumi ink in Japan, she works with water, pigments, heat and wax. After years of painting people and the forces that divide them, from commuters on the London Underground to refugees, she now paints light, water, rock and time. Her work is held in the Stanford Hospital collection alongside works by David Hockney and Robert Rauschenberg, and in private collections in Europe, the United States and Asia. It has been praised in the Financial Times, and exhibited at the Grand Palais in Paris, in Venice during the Biennale, at the Asian Art Biennale in Dhaka, and in New York, Miami, London, Kyoto and Xi'an. She is a Sociétaire of the Salon d'Automne in Paris.",
+    "fr": "Lisa Cirenza est une peintre installée dans les Alpes françaises. Boursière de la National Science Foundation au sein du Juneau Icefield Research Program, elle a été chercheuse de terrain lors d'expéditions glaciologiques sur le champ de glace de Juneau, puis a cosigné The Power of Ice, un livre pour enfants sur les glaciers et les sciences de terrain, illustré de ses photographies d'expédition. Elle a étudié les sciences de la Terre appliquées à l'université Stanford et à l'École des Mines de Paris, et est titulaire d'un master en politique internationale de Stanford. Formée à la technique des maîtres anciens à l'huile et à l'encre sumi au Japon, elle travaille avec l'eau, les pigments, la chaleur et la cire. Après des années à peindre les gens et les forces qui les divisent, des voyageurs du métro de Londres aux réfugiés, elle peint aujourd'hui la lumière, l'eau, la roche et le temps. Ses œuvres figurent dans la collection de l'hôpital de Stanford, aux côtés d'œuvres de David Hockney et de Robert Rauschenberg, et dans des collections privées en Europe, aux États-Unis et en Asie. Saluée par le Financial Times, elle a exposé au Grand Palais à Paris, à Venise pendant la Biennale, à la Biennale asiatique d'art de Dacca, ainsi qu'à New York, Miami, Londres, Kyoto et Xi'an. Elle est sociétaire du Salon d'Automne, à Paris.",
 }
 # Bio longue en couches (page L'artiste) ; chaque couche garde ses phrases, dans l'ordre du brief
 BIO_LONGUE = [
@@ -572,9 +542,9 @@ BIO_LONGUE = [
      "texte": {"en": "At seventeen and eighteen, as a National Science Foundation scholar with the Juneau Icefield Research Program, she worked as a field researcher on glaciological expeditions across the Juneau Icefield in Alaska and British Columbia, among an international team of scientists. She led trail parties from camp to camp, dug twenty-foot snow pits and sketched their layers of ice and snow to read the glacier's history, took core samples, measured the movement of glaciers and icefalls, and studied the fragile mosses and fungi that survive on the ice. She photographed it all, promising herself she would paint it one day. She later co-authored The Power of Ice (Chicago Children's Press, under her maiden name, Lisa Gitkin), a book illustrated with her expedition photographs that introduces children aged nine to twelve to glaciers and to life as a research scientist on the ice.",
                "fr": "À dix-sept et dix-huit ans, boursière de la National Science Foundation au sein du Juneau Icefield Research Program, elle a été chercheuse de terrain lors d'expéditions glaciologiques sur le champ de glace de Juneau, en Alaska et en Colombie-Britannique, au sein d'une équipe internationale de scientifiques. Elle a mené des groupes de camp en camp, creusé des puits de neige d'une vingtaine de pieds (environ six mètres) et dessiné leurs couches de glace et de neige pour lire l'histoire du glacier, prélevé des carottes, mesuré le mouvement des glaciers et des chutes de séracs, et étudié les mousses et les champignons fragiles qui survivent sur la glace. Elle a tout photographié, en se promettant de le peindre un jour. Elle a ensuite cosigné The Power of Ice (Chicago Children's Press, sous son nom de jeune fille, Lisa Gitkin), un livre illustré de ses photographies d'expédition qui fait découvrir aux enfants de neuf à douze ans les glaciers et la vie de chercheur sur la glace."}},
     {"cle": "stanford", "photo": "artiste/lisa-aquarelle-nuancier", "legende": {"en": "Colour studies", "fr": "Études de couleur"},
-     "titre": {"en": "Stanford, Paris, and the world of business", "fr": "Stanford, Paris, et le monde des affaires"},
-     "texte": {"en": "She went on to study applied earth sciences at Stanford University, including studies at the École des Mines de Paris, and completed a master's in international policy studies there. Told by her parents that she would never survive as an artist, she set out to learn business from the best, in oil and gas corporate finance at Goldman Sachs and as a consultant at Booz Allen Hamilton, before returning to painting on her own terms.",
-               "fr": "Elle a ensuite étudié les sciences de la Terre appliquées à l'université Stanford, notamment à l'École des Mines de Paris, et y a obtenu un master en politique internationale. Ses parents lui ayant dit qu'elle ne survivrait jamais en tant qu'artiste, elle est allée apprendre le monde des affaires auprès des meilleurs, en financement d'entreprise dans le pétrole et le gaz chez Goldman Sachs, puis comme consultante chez Booz Allen Hamilton, avant de revenir à la peinture à sa manière."}},
+     "titre": {"en": "Stanford and Paris", "fr": "Stanford et Paris"},
+     "texte": {"en": "She went on to study applied earth sciences at Stanford University, including studies at the École des Mines de Paris, and completed a master's in international policy studies there.",
+               "fr": "Elle a ensuite étudié les sciences de la Terre appliquées à l'université Stanford, notamment à l'École des Mines de Paris, et y a obtenu un master en politique internationale."}},
     {"cle": "peindre", "photo": "artiste/lisa-peint-un-glacier", "legende": {"en": "Painting a glacier canvas", "fr": "Une toile de glacier à l'atelier"},
      "titre": {"en": "From people to ice", "fr": "Des visages à la glace"},
      "texte": {"en": "Trained in old-masters oil technique, she later studied sumi ink under a master in Japan, and has worked across oil, digital media, watercolour and encaustic. For years she painted people: strangers sharing a carriage on the London Underground, refugees she worked with in Milan, the lives carried inside a face, and the political forces pulling societies apart. Her work has long centred on human connection in a world that is connected on the surface and increasingly disconnected underneath. That early work left little empty space, because her life then had little: a nomadic life across three continents, in several languages and cultures, at the pace of big cities. Moving to the French Alps taught her to breathe, and brought her back to reading the landscape for its history, and to the heartbreak of watching the local glaciers disappear as the climate changes. Trained in both earth sciences and international policy, she has always watched how systems under stress break, and what lets them recompose: first human ones, now the ice. Her current work turns to light, water, rock and time, and to the icefield photographs she took decades ago, of a landscape that has since largely melted away. It is work about loss, but also about attention and hope: what we truly see, we are more likely to protect.",
@@ -585,7 +555,7 @@ BIO_LONGUE = [
                "fr": "Ses œuvres figurent dans la collection de l'hôpital de Stanford, aux côtés d'œuvres de David Hockney et de Robert Rauschenberg, et dans des collections privées en Europe, aux États-Unis et en Asie. Saluée par le Financial Times, elle a exposé au Grand Palais à Paris, à Venise pendant la Biennale, à la Biennale asiatique d'art de Dacca, ainsi qu'à New York, Miami, Londres, Kyoto et Xi'an. Elle est sociétaire du Salon d'Automne."}},
     {"cle": "espace", "photo": "espace/facade-de-nuit", "legende": {"en": "Espace Créa-Tea-Vité, La Clusaz", "fr": "L'Espace Créa-Tea-Vité, La Clusaz"},
      "titre": {"en": "Full circle, in La Clusaz", "fr": "La boucle bouclée, à La Clusaz"},
-     "texte": {"en": "She also founded Espace Créa-Tea-Vité, a gallery, studio and retreat space in La Clusaz. Her parents, it turns out, were wrong.",
+     "texte": {"en": "She also founded Espace Créa-Tea-Vité, a gallery, studio and retreat space in La Clusaz.",
                "fr": "Elle a aussi fondé l'Espace Créa-Tea-Vité, galerie, atelier et lieu de retraites à La Clusaz. Ses parents, finalement, avaient tort."}},
 ]
 
@@ -670,7 +640,7 @@ CV = {
         {"en": "Rachel Spence, “London's best satellite fairs: ‘different conversations and collegiate feel’”, Financial Times, October 2017. Pull quote: “…blends tradition and contemporary practice with authority.”",
          "fr": "Rachel Spence, « London's best satellite fairs: ‘different conversations and collegiate feel’ », Financial Times, octobre 2017. Citation : « …blends tradition and contemporary practice with authority. »"},
         {"en": "BBC documentary on Stockton featuring Dream Big (title and year to follow)", "fr": "Documentaire de la BBC sur Stockton, avec Dream Big (titre et année à venir)"},
-        {"en": "Maisons et Jardins, feature article, 2021", "fr": "Maisons et Jardins, grand article, 2021"},
+        {"en": "Maisons et Jardins, feature article, May 2022", "fr": "Maisons et Jardins, grand article, mai 2022"},
     ],
     "publications": [
         {"en": "The Power of Ice (Chicago Children's Press), co-authored as Lisa Gitkin", "fr": "The Power of Ice (Chicago Children's Press), cosigné sous le nom de Lisa Gitkin"},
@@ -707,10 +677,10 @@ EDITIONS_COLLECTION = {
 
 # Cours privés sur mesure (Espace) : pour hôtels, conciergeries et organisateurs d'événements ; la page Classes est masquée
 COURS_PRIVES = {
-    "titre": {"en": "Private bespoke courses", "fr": "Cours privés sur mesure"},
-    "pour": {"en": "For hotels, concierges and event planners: private, bespoke art sessions for your guests at Espace Créa-Tea-Vité, in La Clusaz.",
-             "fr": "Pour les hôtels, les conciergeries et les organisateurs d'événements : des séances d'art privées et sur mesure pour vos clients, à l'Espace Créa-Tea-Vité, à La Clusaz."},
-    "a_completer": {"en": "Durations, group sizes and rates for partners: to be completed.", "fr": "Durées, tailles de groupe et tarifs partenaires : à compléter."},
+    "titre": {"en": "Bespoke Courses & Workshops", "fr": "Cours et ateliers sur mesure"},
+    "pour": {"en": "Bespoke art sessions at Espace Créa-Tea-Vité, in La Clusaz, for individuals, families, groups, teams and event planners.",
+             "fr": "Des séances d'art sur mesure à l'Espace Créa-Tea-Vité, à La Clusaz, pour les particuliers, les familles, les groupes, les équipes et les organisateurs d'événements."},
+    "a_completer": {"en": "Lengths, group sizes and rates: to come from Lisa.", "fr": "Durées, tailles de groupe et tarifs : à venir de Lisa."},
 }
 
 # Lettre d'information : la langue de la page choisit la liste Mailchimp
@@ -732,14 +702,6 @@ OFFRE_COURS_PRIVES = [
          {"ref": 3, "duree": {"en": "2 h 30", "fr": "2 h 30"}, "groupe": {"en": "1 to 6 guests", "fr": "1 à 6 personnes"}, "prix": {"en": "from €130 per person", "fr": "à partir de 130 € par personne"}},
          {"ref": 4, "duree": {"en": "2 h", "fr": "2 h"}, "groupe": {"en": "1 to 4 guests", "fr": "1 à 4 personnes"}, "prix": {"en": "from €150 per person", "fr": "à partir de 150 € par personne"}},
      ]},
-    {"cle": "plein_air", "titre": {"en": "Outdoors", "fr": "En plein air"},
-     "intro": {"en": "Painting outside, around La Clusaz.", "fr": "Peindre dehors, autour de La Clusaz."},
-     "experiences": [
-         {"titre": {"en": "Private plein-air course", "fr": "Cours privé en plein air"},
-          "texte": {"en": "A private painting session outdoors, in the meadows and forests around La Clusaz.", "fr": "Une séance de peinture privée en plein air, dans les alpages et les forêts autour de La Clusaz."},
-          "photo": "retraites/participante-peint-en-plein-air",
-          "duree": {"en": "Half day (3 h)", "fr": "Demi-journée (3 h)"}, "groupe": {"en": "1 to 4 guests", "fr": "1 à 4 personnes"}, "prix": {"en": "from €180 per person", "fr": "à partir de 180 € par personne"}},
-     ]},
     {"cle": "equipes", "titre": {"en": "Teams and institutions", "fr": "Équipes et institutions"},
      "intro": {"en": "I don't teach teams how to replicate a process; I teach them how to cultivate the garden of creative thinking.", "fr": "Je n'apprends pas aux équipes à reproduire une méthode : je leur apprends à cultiver le jardin de la pensée créative."},
      "experiences": [
@@ -748,8 +710,8 @@ OFFRE_COURS_PRIVES = [
      ]},
 ]
 ETAPES_COURS_PRIVES = [
-    ({"en": "Send the request", "fr": "Envoyez la demande"}, {"en": "Date, group size and the session your guests would like, by the form, email or WhatsApp.", "fr": "La date, la taille du groupe et la séance souhaitée, par le formulaire, courriel ou WhatsApp."}),
+    ({"en": "Send the request", "fr": "Envoyez la demande"}, {"en": "Date, group size and the session you would like, by the form, email or WhatsApp.", "fr": "La date, la taille du groupe et la séance souhaitée, par le formulaire, courriel ou WhatsApp."}),
     ({"en": "Receive a quote", "fr": "Recevez un devis"}, {"en": "Lisa confirms the date and sends a quote within 24 hours.", "fr": "Lisa confirme la date et envoie un devis sous 24 heures."}),
     ({"en": "Your guests paint", "fr": "Vos clients peignent"}, {"en": "Materials and aprons are included; tea and coffee are served at the Espace.", "fr": "Matériel et tabliers compris ; thé et café servis à l'Espace."}),
 ]
-PARTENAIRES_COURS_PRIVES = {"en": "Partner rates for hotels and concierges: on request.", "fr": "Tarifs partenaires pour les hôtels et conciergeries : sur demande."}
+PARTENAIRES_COURS_PRIVES = {"en": "Rates for groups, teams and event planners: on request.", "fr": "Tarifs pour les groupes, les équipes et les organisateurs : sur demande."}

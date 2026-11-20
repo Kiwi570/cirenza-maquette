@@ -4,22 +4,22 @@
   "redirects": [
     {
       "source": "/retreats/molten-magic",
-      "destination": "/retreats/alpine-encaustics",
-      "permanent": false
-    },
-    {
-      "source": "/fr/retraites/molten-magic",
-      "destination": "/fr/retraites/alpine-encaustics",
+      "destination": "/retreats/alpine-creative-pause",
       "permanent": false
     },
     {
       "source": "/retreats/alpine-pause",
-      "destination": "/retreats/alpine-encaustics",
+      "destination": "/retreats/alpine-creative-pause",
       "permanent": false
     },
     {
-      "source": "/fr/retraites/alpine-pause",
-      "destination": "/fr/retraites/alpine-encaustics",
+      "source": "/retreats/alpine-encaustics",
+      "destination": "/retreats/alpine-creative-pause",
+      "permanent": false
+    },
+    {
+      "source": "/retreats/creative-pause",
+      "destination": "/retreats",
       "permanent": false
     },
     {
@@ -28,8 +28,68 @@
       "permanent": false
     },
     {
+      "source": "/private-courses",
+      "destination": "/bespoke-courses",
+      "permanent": false
+    },
+    {
+      "source": "/private-events",
+      "destination": "/gather",
+      "permanent": false
+    },
+    {
+      "source": "/shop",
+      "destination": "/available-works",
+      "permanent": false
+    },
+    {
+      "source": "/classes",
+      "destination": "/co-creating-sessions",
+      "permanent": false
+    },
+    {
+      "source": "/fr/retraites/molten-magic",
+      "destination": "/fr/retraites/pause-creative-alpine",
+      "permanent": false
+    },
+    {
+      "source": "/fr/retraites/alpine-pause",
+      "destination": "/fr/retraites/pause-creative-alpine",
+      "permanent": false
+    },
+    {
+      "source": "/fr/retraites/alpine-encaustics",
+      "destination": "/fr/retraites/pause-creative-alpine",
+      "permanent": false
+    },
+    {
+      "source": "/fr/retraites/creative-pause",
+      "destination": "/fr/retraites",
+      "permanent": false
+    },
+    {
       "source": "/fr/oeuvres/lumiere-eau-roche-et-temps",
       "destination": "/fr/oeuvres/strates-du-temps",
+      "permanent": false
+    },
+    {
+      "source": "/fr/cours-prives",
+      "destination": "/fr/cours-sur-mesure",
+      "permanent": false
+    },
+    {
+      "source": "/fr/evenements-prives",
+      "destination": "/fr/se-reunir-a-l-espace",
+      "permanent": false
+    },
+    {
+      "source": "/fr/boutique",
+      "destination": "/fr/oeuvres-disponibles",
+      "permanent": false
+    },
+    {
+      "source": "/fr/cours",
+      "destination": "/fr/sessions-de-co-creation",
       "permanent": false
     },
     {
@@ -39,16 +99,6 @@
     },
     {
       "source": "/fr/bio",
-      "destination": "/fr/artiste",
-      "permanent": false
-    },
-    {
-      "source": "/about-3",
-      "destination": "/artist",
-      "permanent": false
-    },
-    {
-      "source": "/fr/about-3",
       "destination": "/fr/artiste",
       "permanent": false
     },
@@ -63,12 +113,12 @@
       "permanent": false
     },
     {
-      "source": "/exhibitions",
+      "source": "/about-9",
       "destination": "/cv",
       "permanent": false
     },
     {
-      "source": "/fr/exhibitions",
+      "source": "/fr/about-9",
       "destination": "/fr/parcours",
       "permanent": false
     },
@@ -118,6 +168,56 @@
       "permanent": false
     },
     {
+      "source": "/salon",
+      "destination": "/studio-notes",
+      "permanent": false
+    },
+    {
+      "source": "/fr/salon",
+      "destination": "/fr/notes-d-atelier",
+      "permanent": false
+    },
+    {
+      "source": "/shop-1",
+      "destination": "/available-works",
+      "permanent": false
+    },
+    {
+      "source": "/fr/shop-1",
+      "destination": "/fr/oeuvres-disponibles",
+      "permanent": false
+    },
+    {
+      "source": "/art-collection-and-care",
+      "destination": "/studio-notes",
+      "permanent": false
+    },
+    {
+      "source": "/fr/art-collection-and-care",
+      "destination": "/fr/notes-d-atelier",
+      "permanent": false
+    },
+    {
+      "source": "/art-tech",
+      "destination": "/studio-notes",
+      "permanent": false
+    },
+    {
+      "source": "/fr/art-tech",
+      "destination": "/fr/notes-d-atelier",
+      "permanent": false
+    },
+    {
+      "source": "/feed",
+      "destination": "/studio-notes",
+      "permanent": false
+    },
+    {
+      "source": "/fr/feed",
+      "destination": "/fr/notes-d-atelier",
+      "permanent": false
+    },
+    {
       "source": "/espace-crea-tea-vite",
       "destination": "/espace",
       "permanent": false
@@ -128,63 +228,233 @@
       "permanent": false
     },
     {
-      "source": "/salon",
-      "destination": "/espace",
+      "source": "/salon-de-crea-tea-vite",
+      "destination": "/boutique-tea-room",
       "permanent": false
     },
     {
-      "source": "/fr/salon",
-      "destination": "/fr/espace",
+      "source": "/fr/salon-de-crea-tea-vite",
+      "destination": "/fr/boutique-salon-de-the",
+      "permanent": false
+    },
+    {
+      "source": "/espace-crea-tea-vite/wineandart",
+      "destination": "/gather",
+      "permanent": false
+    },
+    {
+      "source": "/fr/espace-crea-tea-vite/wineandart",
+      "destination": "/fr/se-reunir-a-l-espace",
       "permanent": false
     },
     {
       "source": "/privateclasses",
-      "destination": "/private-courses",
+      "destination": "/bespoke-courses",
       "permanent": false
     },
     {
       "source": "/fr/privateclasses",
-      "destination": "/fr/cours-prives",
+      "destination": "/fr/cours-sur-mesure",
+      "permanent": false
+    },
+    {
+      "source": "/privatecourses",
+      "destination": "/bespoke-courses",
+      "permanent": false
+    },
+    {
+      "source": "/fr/privatecourses",
+      "destination": "/fr/cours-sur-mesure",
+      "permanent": false
+    },
+    {
+      "source": "/single-project",
+      "destination": "/bespoke-courses",
+      "permanent": false
+    },
+    {
+      "source": "/fr/single-project",
+      "destination": "/fr/cours-sur-mesure",
       "permanent": false
     },
     {
       "source": "/privatehire",
-      "destination": "/private-events",
+      "destination": "/gather",
       "permanent": false
     },
     {
       "source": "/fr/privatehire",
-      "destination": "/fr/evenements-prives",
+      "destination": "/fr/se-reunir-a-l-espace",
       "permanent": false
     },
     {
       "source": "/service-page/co-creating-sessions",
-      "destination": "/private-events",
+      "destination": "/co-creating-sessions",
       "permanent": false
     },
     {
       "source": "/fr/service-page/co-creating-sessions",
-      "destination": "/fr/evenements-prives",
+      "destination": "/fr/sessions-de-co-creation",
+      "permanent": false
+    },
+    {
+      "source": "/booking-calendar/co-creating-sessions",
+      "destination": "/co-creating-sessions",
+      "permanent": false
+    },
+    {
+      "source": "/fr/booking-calendar/co-creating-sessions",
+      "destination": "/fr/sessions-de-co-creation",
+      "permanent": false
+    },
+    {
+      "source": "/book-online",
+      "destination": "/co-creating-sessions",
+      "permanent": false
+    },
+    {
+      "source": "/fr/book-online",
+      "destination": "/fr/sessions-de-co-creation",
+      "permanent": false
+    },
+    {
+      "source": "/pricing-plans/plans-pricing",
+      "destination": "/co-creating-sessions",
+      "permanent": false
+    },
+    {
+      "source": "/fr/pricing-plans/plans-pricing",
+      "destination": "/fr/sessions-de-co-creation",
+      "permanent": false
+    },
+    {
+      "source": "/thebasicscourse",
+      "destination": "/co-creating-sessions",
+      "permanent": false
+    },
+    {
+      "source": "/fr/thebasicscourse",
+      "destination": "/fr/sessions-de-co-creation",
+      "permanent": false
+    },
+    {
+      "source": "/sansfrontiere",
+      "destination": "/co-creating-sessions",
+      "permanent": false
+    },
+    {
+      "source": "/fr/sansfrontiere",
+      "destination": "/fr/sessions-de-co-creation",
+      "permanent": false
+    },
+    {
+      "source": "/creativitesansfrontieres",
+      "destination": "/co-creating-sessions",
+      "permanent": false
+    },
+    {
+      "source": "/fr/creativitesansfrontieres",
+      "destination": "/fr/sessions-de-co-creation",
+      "permanent": false
+    },
+    {
+      "source": "/boundlesscreativity",
+      "destination": "/co-creating-sessions",
+      "permanent": false
+    },
+    {
+      "source": "/fr/boundlesscreativity",
+      "destination": "/fr/sessions-de-co-creation",
       "permanent": false
     },
     {
       "source": "/service-page/wine-tasting-art",
-      "destination": "/private-events",
+      "destination": "/gather",
       "permanent": false
     },
     {
       "source": "/fr/service-page/wine-tasting-art",
-      "destination": "/fr/evenements-prives",
+      "destination": "/fr/se-reunir-a-l-espace",
+      "permanent": false
+    },
+    {
+      "source": "/service-page/regardscuban",
+      "destination": "/exhibitions-events",
+      "permanent": false
+    },
+    {
+      "source": "/fr/service-page/regardscuban",
+      "destination": "/fr/expositions-evenements",
+      "permanent": false
+    },
+    {
+      "source": "/cubasoir%C3%A9e",
+      "destination": "/exhibitions-events",
+      "permanent": false
+    },
+    {
+      "source": "/fr/cubasoir%C3%A9e",
+      "destination": "/fr/expositions-evenements",
       "permanent": false
     },
     {
       "source": "/service-page/randonnez-observez-peignez",
-      "destination": "/classes",
+      "destination": "/bespoke-courses",
       "permanent": false
     },
     {
       "source": "/fr/service-page/randonnez-observez-peignez",
-      "destination": "/fr/cours",
+      "destination": "/fr/cours-sur-mesure",
+      "permanent": false
+    },
+    {
+      "source": "/exhibitions",
+      "destination": "/exhibitions-events",
+      "permanent": false
+    },
+    {
+      "source": "/fr/exhibitions",
+      "destination": "/fr/expositions-evenements",
+      "permanent": false
+    },
+    {
+      "source": "/about-3",
+      "destination": "/exhibitions-events",
+      "permanent": false
+    },
+    {
+      "source": "/fr/about-3",
+      "destination": "/fr/expositions-evenements",
+      "permanent": false
+    },
+    {
+      "source": "/connect",
+      "destination": "/contact",
+      "permanent": false
+    },
+    {
+      "source": "/fr/connect",
+      "destination": "/fr/contact",
+      "permanent": false
+    },
+    {
+      "source": "/inquiry-services-page",
+      "destination": "/contact",
+      "permanent": false
+    },
+    {
+      "source": "/fr/inquiry-services-page",
+      "destination": "/fr/contact",
+      "permanent": false
+    },
+    {
+      "source": "/payment-request-page",
+      "destination": "/contact",
+      "permanent": false
+    },
+    {
+      "source": "/fr/payment-request-page",
+      "destination": "/fr/contact",
       "permanent": false
     },
     {
@@ -204,6 +474,16 @@
     },
     {
       "source": "/fr/service-page/juneregistration2027",
+      "destination": "/fr/retraites/painting-in-paradise",
+      "permanent": false
+    },
+    {
+      "source": "/service-page/painting-in-paradise-2027-june",
+      "destination": "/retreats/painting-in-paradise",
+      "permanent": false
+    },
+    {
+      "source": "/fr/service-page/painting-in-paradise-2027-june",
       "destination": "/fr/retraites/painting-in-paradise",
       "permanent": false
     },
@@ -229,62 +509,222 @@
     },
     {
       "source": "/sept2027alpinepause",
-      "destination": "/retreats/alpine-encaustics",
+      "destination": "/retreats/alpine-creative-pause",
       "permanent": false
     },
     {
       "source": "/fr/sept2027alpinepause",
-      "destination": "/fr/retraites/alpine-encaustics",
+      "destination": "/fr/retraites/pause-creative-alpine",
       "permanent": false
     },
     {
       "source": "/sept2027waxretreat",
-      "destination": "/retreats/alpine-encaustics",
+      "destination": "/retreats/alpine-creative-pause",
       "permanent": false
     },
     {
       "source": "/fr/sept2027waxretreat",
-      "destination": "/fr/retraites/alpine-encaustics",
+      "destination": "/fr/retraites/pause-creative-alpine",
       "permanent": false
     },
     {
       "source": "/service-page/registrationsept2027",
-      "destination": "/retreats/alpine-encaustics",
+      "destination": "/retreats/alpine-creative-pause",
       "permanent": false
     },
     {
       "source": "/fr/service-page/registrationsept2027",
-      "destination": "/fr/retraites/alpine-encaustics",
+      "destination": "/fr/retraites/pause-creative-alpine",
       "permanent": false
     },
     {
       "source": "/event-details/autumn-alpine-pause",
-      "destination": "/retreats/alpine-encaustics",
+      "destination": "/retreats/alpine-creative-pause",
       "permanent": false
     },
     {
       "source": "/fr/event-details/autumn-alpine-pause",
-      "destination": "/fr/retraites/alpine-encaustics",
+      "destination": "/fr/retraites/pause-creative-alpine",
       "permanent": false
     },
     {
-      "source": "/connect",
-      "destination": "/contact",
+      "source": "/service-page/molten-magic-september-2027",
+      "destination": "/retreats/alpine-creative-pause",
       "permanent": false
     },
     {
-      "source": "/fr/connect",
-      "destination": "/fr/contact",
+      "source": "/fr/service-page/molten-magic-september-2027",
+      "destination": "/fr/retraites/pause-creative-alpine",
       "permanent": false
     },
     {
-      "source": "/product-page/:slug",
-      "destination": "/shop",
+      "source": "/copy-of-website-terms-and-privacy-policy",
+      "destination": "/retreats/payment-and-cancellation",
       "permanent": false
     },
     {
-      "source": "/fr/product-page/:slug",
-      "destination": "/fr/boutique",
+      "source": "/fr/copy-of-website-terms-and-privacy-policy",
+      "destination": "/fr/retraites/paiement-et-annulation",
+      "permanent": false
+    },
+    {
+      "source": "/retreat",
+      "destination": "/retreats",
+      "permanent": false
+    },
+    {
+      "source": "/fr/retreat",
+      "destination": "/fr/retraites",
+      "permanent": false
+    },
+    {
+      "source": "/retreat1",
+      "destination": "/retreats",
+      "permanent": false
+    },
+    {
+      "source": "/fr/retreat1",
+      "destination": "/fr/retraites",
+      "permanent": false
+    },
+    {
+      "source": "/aug2026retreat",
+      "destination": "/retreats",
+      "permanent": false
+    },
+    {
+      "source": "/fr/aug2026retreat",
+      "destination": "/fr/retraites",
+      "permanent": false
+    },
+    {
+      "source": "/retreatlodging",
+      "destination": "/retreats",
+      "permanent": false
+    },
+    {
+      "source": "/fr/retreatlodging",
+      "destination": "/fr/retraites",
+      "permanent": false
+    },
+    {
+      "source": "/residencysupplies",
+      "destination": "/retreats",
+      "permanent": false
+    },
+    {
+      "source": "/fr/residencysupplies",
+      "destination": "/fr/retraites",
+      "permanent": false
+    },
+    {
+      "source": "/service-page/molten-may-invitational-residency-2027",
+      "destination": "/retreats",
+      "permanent": false
+    },
+    {
+      "source": "/fr/service-page/molten-may-invitational-residency-2027",
+      "destination": "/fr/retraites",
+      "permanent": false
+    },
+    {
+      "source": "/service-page/registration-2026",
+      "destination": "/retreats",
+      "permanent": false
+    },
+    {
+      "source": "/fr/service-page/registration-2026",
+      "destination": "/fr/retraites",
+      "permanent": false
+    },
+    {
+      "source": "/service-page/registration-closed-for-2025",
+      "destination": "/retreats",
+      "permanent": false
+    },
+    {
+      "source": "/fr/service-page/registration-closed-for-2025",
+      "destination": "/fr/retraites",
+      "permanent": false
+    },
+    {
+      "source": "/website-terms-and-privacy-policy",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/fr/website-terms-and-privacy-policy",
+      "destination": "/fr",
+      "permanent": false
+    },
+    {
+      "source": "/general-4",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/fr/general-4",
+      "destination": "/fr",
+      "permanent": false
+    },
+    {
+      "source": "/archived-pages",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/fr/archived-pages",
+      "destination": "/fr",
+      "permanent": false
+    },
+    {
+      "source": "/ubu",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/fr/ubu",
+      "destination": "/fr",
+      "permanent": false
+    },
+    {
+      "source": "/product-page/:slug*",
+      "destination": "/available-works",
+      "permanent": false
+    },
+    {
+      "source": "/fr/product-page/:slug*",
+      "destination": "/fr/oeuvres-disponibles",
+      "permanent": false
+    },
+    {
+      "source": "/feed/:path*",
+      "destination": "/studio-notes",
+      "permanent": false
+    },
+    {
+      "source": "/fr/feed/:path*",
+      "destination": "/fr/notes-d-atelier",
+      "permanent": false
+    },
+    {
+      "source": "/single-post/:path*",
+      "destination": "/studio-notes",
+      "permanent": false
+    },
+    {
+      "source": "/fr/single-post/:path*",
+      "destination": "/fr/notes-d-atelier",
+      "permanent": false
+    },
+    {
+      "source": "/service-page/:slug*",
+      "destination": "/co-creating-sessions",
+      "permanent": false
+    },
+    {
+      "source": "/fr/service-page/:slug*",
+      "destination": "/fr/sessions-de-co-creation",
       "permanent": false
     }
   ],

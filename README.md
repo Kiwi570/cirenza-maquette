@@ -1,4 +1,4 @@
-# Lisa Cirenza · maquette v5 (direction « Strates », série « A Record of Time »)
+# Lisa Cirenza · maquette v6 (direction « Strates », série « A Record of Time »)
 
 Site statique (HTML, CSS, JavaScript), sans étape de construction, prêt pour Vercel.
 Adresse de la maquette : https://cirenza-maquette.vercel.app
@@ -48,6 +48,12 @@ Les prix ne s'affichent que si `AFFICHER_PRIX = True` dans `outils/generer.py` (
 - appliqué au site : « The Grunge and the Glow of Havana » est vendue (titre exact d'Artwork Archive, retirée de la boutique) ; « Bank » est de 2016 (prix connu, non affiché) ;
 - absentes du site et à importer avec l'export : Where the Mountains Breathe (2025, encaustique sur papier, 34 × 25,5 cm, 145 €), Light Across the Thaw (encaustique sur panneau, 30 × 30 cm, 240 €), Blissful Light (2024, 200 €), Doucement Entrelacés (2024, 80 €), The Silence of Thawing Waters, Talking to the Wild (2023), The Blues (2021), Lost in the trees, and missing the Forest (2019), Cycles, Heat Waves, Chasing the Ephemeral (240 €), UH-Huh (125 €), A moment in Havanna (150 €) ;
 - certaines de ces œuvres sont sans doute parmi les 11 œuvres récentes sans titre de la maquette, mais sans les images rien ne permet de les rapprocher : aucun titre n'a été attribué au hasard.
+
+## v6 · retours de Lisa du 20 novembre 2026
+
+Voir `REPONSES-LISA.md` (réponses point par point, à envoyer à Lisa) et `CHANGELOG.md`. Architecture retenue : un seul site (ce code), deux coulisses Wix.
+- **Espace (SAS Atelier Truffle)** : le site Wix actuel de cirenza.com, avec ses formulaires d'inscription (juin `2ba9da25-…`, septembre `a0aeff52-…`), Wix Payments (compte Stripe de la SAS), Bookings, contacts, automatisations, blog (35 articles) et traductions.
+- **Artiste (Lisa Cirenza, artiste-auteur)** : le site Wix headless créé le 20 novembre (`385612fb-…`, Wix Stores), pour Available Works, tirages creativehub et éditions, avec le second compte Stripe.
 
 ## v5 · ce qui a été ajouté après la réunion de suivi (novembre 2026)
 

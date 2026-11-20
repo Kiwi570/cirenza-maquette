@@ -25,7 +25,7 @@ SITE = Path(sys.argv[1]).resolve()
 MODE = sys.argv[sys.argv.index("--liens") + 1] if "--liens" in sys.argv else "propres"
 APERCU = "--apercu" in sys.argv
 MED = json.loads((ICI / "medias.json").read_text())
-VERSION = "5"
+VERSION = "6"
 AUJ = DT.date.today()
 # Horaires de l'Espace : une seule source, assets/data/horaires.json (futures collections Wix « Horaires » et « Exceptions »)
 HEURES = HOR.charger(SITE)
@@ -35,11 +35,13 @@ for _l in ("en", "fr"):
 # Base maîtresse des œuvres : Artwork Archive. Son export, une fois fusionné (outils/artwork_archive.py),
 # s'applique par-dessus catalogue.py.
 AA = json.loads((ICI / "artwork_archive.json").read_text()) if (ICI / "artwork_archive.json").exists() else {}
+MAQUETTE = True  # au lancement : False (et retirer X-Robots-Tag de vercel.json)
 AFFICHER_PRIX = True  # brief de Lisa : « prices where shown » ; les prix connus d'Artwork Archive s'affichent, les autres restent sur demande
 # Côté de la maison de chaque page : l'atelier (Lisa Cirenza Fine Art, artiste-auteur) ou l'Espace (SAS)
 UNIVERS = {"oeuvres": "atelier", "salle": "atelier", "artiste": "atelier", "parcours": "atelier", "presse": "atelier",
            "studio": "atelier", "espace": "espace", "cours": "espace", "cours_prives": "espace", "horaires": "espace", "evenements": "espace", "retraites": "espace",
-           "pip": "espace", "creative": "espace", "encaustics": "espace",
+           "pip": "espace", "encaustics": "espace", "salon_the": "espace", "cosessions": "espace", "expositions": "espace",
+           "inscription_pip": "espace", "inscription_encaustics": "espace", "conditions": "espace", "recherche": "maison",
            "accueil": "maison", "boutique": "maison", "contact": "maison", "404": "maison"}
 SITE_URL = "https://cirenza-maquette.vercel.app"
 LANGS = ("en", "fr")
@@ -283,7 +285,14 @@ def cartel(o, lang, balise="figcaption"):
     tt = titre(o, lang)
     cls = "cartel__titre" + (" cartel__titre--vide" if not o["titre"] else "")
     return (f'<{balise} class="cartel"><span class="{cls}">{e(tt)}</span>'
-            f'<span class="cartel__faits">{e(faits_courts(o, lang))}</span>{etat(o, lang)}</{balise}>')
+            f'<span class="cartel__faits">{e(faits_courts(o, lang))}</span>{demande_oeuvre(o, lang)}</{balise}>')
+
+
+def demande_oeuvre(o, lang):
+    """Brief de Lisa (v6) : sur les pages d'œuvres, « Enquire about this work » vers son courriel ; la vente est dans Available Works."""
+    t = C.T[lang]
+    sujet = quote(("Enquiry: " if lang == "en" else "Demande : ") + titre(o, lang))
+    return f'<a class="etiquette etiquette--demande" href="mailto:{C.COORD["courriel"]}?subject={sujet}">{e(t["demander"])}</a>'
 
 
 def figure_oeuvre(prof, oid, lang, liste, sizes="(max-width: 700px) 80vw, 40vw"):
@@ -333,12 +342,22 @@ def bouton(texte, href, classe="bouton", attrs=""):
 
 # ================================================================ gabarit
 NAV_UNIVERS = {
-    "maison": ("oeuvres", "artiste", "espace", "retraites", "boutique"),
+    "maison": ("oeuvres", "artiste", "espace", "retraites", "expositions"),
     "atelier": ("oeuvres", "artiste", "parcours", "presse", "boutique"),
-    "espace": ("espace", "retraites", "cours_prives", "evenements", "boutique"),
+    "espace": ("espace", "salon_the", "cosessions", "cours_prives", "evenements", "retraites"),
 }
-PARENT = {"salle": "oeuvres", "pip": "retraites", "creative": "retraites", "encaustics": "retraites", "studio": "artiste", "cours": "espace"}
-RETRAITES_ORDRE = ("creative", "pip", "encaustics")
+PARENT = {"salle": "oeuvres", "pip": "retraites", "encaustics": "retraites", "studio": "artiste", "salon_the": "espace", "cosessions": "espace",
+          "inscription_pip": "pip", "inscription_encaustics": "encaustics", "conditions": "retraites"}
+RETRAITES_ORDRE = ("pip", "encaustics")
+INSCRIPTION = {"pip": "inscription_pip", "encaustics": "inscription_encaustics"}
+# Formulaires Wix du site actuel (cirenza.com), lus le 20 novembre 2026 : les nouvelles pages enverront leurs réponses à ces mêmes formulaires
+FORMULAIRES_WIX = {"pip": "2ba9da25-399e-45bb-bda7-4c2943805064", "encaustics": "a0aeff52-97e8-42de-abac-6993aecc8c4f"}
+NOINDEX_TOUJOURS = {"inscription_pip", "inscription_encaustics", "horaires", "recherche"}
+
+
+def nom_retraite(r, lang):
+    """Nom de la retraite dans la langue de la page (demande de Lisa : noms en français sur les pages françaises)."""
+    return r.get("titre_fr") if lang == "fr" and r.get("titre_fr") else r["titre"]
 
 
 def bascule_univers(lang, cle, prof, classe=""):
@@ -361,23 +380,23 @@ def entete(lang, cle, prof, autre_href):
     actif = PARENT.get(cle, cle)
     for k in NAV_UNIVERS[UNIVERS.get(cle, "maison")]:
         cur = ' aria-current="page"' if k == actif else ""
-        nav += f'<li><a href="{lien(lang, k, prof)}"{cur}>{e(t["nav"][k])}</a></li>'
+        nav += f'<li><a href="{lien(lang, k, prof)}"{cur}>{e(t.get("nav_court", {}).get(k, t["nav"][k]))}</a></li>'
 
     def groupe(nom, items, classe=""):
         lis = "".join(f'<li><a href="{h}"><span data-lettres>{e(x)}</span>{f"<small>{e(s)}</small>" if s else ""}</a></li>' for x, h, s in items)
         return f'<div class="menu__strate {classe}"><p class="menu__groupe">{e(nom)}</p><ul>{lis}</ul></div>'
-    g_oeuvres = [(t["nav"]["oeuvres"], lien(lang, "oeuvres", prof), None), (SERIES[LEAD]["titre"][lang], lien_salle(lang, LEAD, prof), t["nav"]["recent"] if lang == "en" else "Œuvres récentes"),
+    g_oeuvres = [(t["nav"]["oeuvres"], lien(lang, "oeuvres", prof), "Statement" if lang == "en" else "Déclaration"), (SERIES[LEAD]["titre"][lang], lien_salle(lang, LEAD, prof), t["nav"]["recent"] if lang == "en" else "Œuvres récentes"),
                  (t["nav"]["archive"], lien(lang, "oeuvres", prof, "#archive"), ", ".join(SERIES[x]["titre"][lang] for x in ("london-tube", "cuba", "beneath-the-surface"))),
-                 (t["nav"]["editions"], lien(lang, "boutique", prof, "#editions"), "15 × 20 cm")]
-    g_artiste = [(t["nav"]["artiste"], lien(lang, "artiste", prof), None), (t["nav"]["declaration"], lien(lang, "artiste", prof, "#declaration"), None), (t["nav"]["bio"], lien(lang, "artiste", prof, "#bio"), None),
-                 (t["nav"]["parcours"], lien(lang, "parcours", prof), None), (t["nav"]["presse"], lien(lang, "presse", prof), None),
-                 (t["nav"]["boutique"], lien(lang, "boutique", prof, "#atelier"), "Lisa Cirenza Fine Art")]
-    g_espace = [(t["nav"]["espace"], lien(lang, "espace", prof), None), (t["nav"]["cours_prives"], lien(lang, "cours_prives", prof), "Hotels, concierges, event planners" if lang == "en" else "Hôtels, conciergeries, organisateurs"),
-                (t["nav"]["evenements"], lien(lang, "evenements", prof), None),
-                (t["nav"]["boutique"], lien(lang, "boutique", prof, "#espace"), "Espace Créa-Tea-Vité"), (t["nav"]["contact"], lien(lang, "contact", prof), None)]
-    g_retraites = [(t["nav"]["retraites"], lien(lang, "retraites", prof), None)] + [(L(lang, RETRAITES[k]["menu"]), lien(lang, k, prof), L(lang, RETRAITES[k]["dates"])) for k in RETRAITES_ORDRE]
+                 (t["nav"]["boutique"], lien(lang, "boutique", prof), "Lisa Cirenza Fine Art"), (t["nav"]["editions"], lien(lang, "boutique", prof, "#editions"), "15 × 20 cm")]
+    g_artiste = [(t["nav"]["artiste"], lien(lang, "artiste", prof), None), (t["nav"]["parcours"], lien(lang, "parcours", prof), None), (t["nav"]["presse"], lien(lang, "presse", prof), None),
+                 (t["nav"]["studio"], lien(lang, "studio", prof), None)]
+    g_espace = [(t["nav"]["espace"], lien(lang, "espace", prof), None), (t["nav"]["salon_the"], lien(lang, "salon_the", prof), "Visit in person" if lang == "en" else "Sur place"),
+                (t["nav"]["cosessions"], lien(lang, "cosessions", prof), None), (t["nav"]["cours_prives"], lien(lang, "cours_prives", prof), None),
+                (t["nav"]["evenements"], lien(lang, "evenements", prof), None), (t["nav"]["contact"], lien(lang, "contact", prof), None)]
+    g_retraites = [(t["nav"]["retraites"], lien(lang, "retraites", prof), None)] + [(L(lang, RETRAITES[k]["menu"]), lien(lang, k, prof), L(lang, RETRAITES[k]["dates"])) for k in RETRAITES_ORDRE] + [(t["nav"]["conditions"], lien(lang, "conditions", prof), None)]
+    g_expos = [(t["nav"]["expositions"], lien(lang, "expositions", prof), C.EXPO["titre"]), (t["nav"]["recherche"], lien(lang, "recherche", prof), None)]
     menu = (f'<div class="menu" id="menu" hidden>{bascule_univers(lang, cle, prof, "univers--menu")}<nav class="menu__grille" aria-label="{"Site" if lang == "en" else "Site"}">'
-            f'{groupe(t["groupes_menu"]["oeuvres"], g_oeuvres, "menu__strate--atelier")}{groupe(t["groupes_menu"]["artiste"], g_artiste, "menu__strate--atelier")}{groupe(t["groupes_menu"]["espace"], g_espace, "menu__strate--espace")}{groupe(t["groupes_menu"]["retraites"], g_retraites, "menu__strate--espace")}</nav>'
+            f'{groupe(t["groupes_menu"]["oeuvres"], g_oeuvres, "menu__strate--atelier")}{groupe(t["groupes_menu"]["artiste"], g_artiste, "menu__strate--atelier")}{groupe(t["groupes_menu"]["espace"], g_espace, "menu__strate--espace")}{groupe(t["groupes_menu"]["retraites"], g_retraites, "menu__strate--espace")}{groupe(t["groupes_menu"]["expositions"], g_expos, "menu__strate--expos")}</nav>'
             f'<div class="menu__bas">{statut(lang)}<p>{e(C.COORD["rue"])}, {e(C.COORD["ville"])}</p><a href="{autre_href}" hreflang="{autre}" lang="{autre}">{e(t["langue_autre"])}</a></div></div>')
     annonces = '<p class="barre__annonce" data-annonce hidden></p>'
     return f'''<header class="entete" data-entete>
@@ -391,6 +410,7 @@ def entete(lang, cle, prof, autre_href):
   {bascule_univers(lang, cle, prof, "univers--entete")}
   <nav class="entete__nav" aria-label="{"Main navigation" if lang == "en" else "Navigation principale"}"><ul>{nav}</ul></nav>
   <button class="entete__panier" type="button" data-panier-ouvrir hidden aria-label="{"Open the baskets" if lang == "en" else "Ouvrir les paniers"}"><span class="entete__panier-a" data-compte-panier="atelier">0</span><span class="entete__panier-e" data-compte-panier="espace">0</span></button>
+  <a class="entete__recherche" href="{lien(lang, "recherche", prof)}" aria-label="{e(t["nav"]["recherche"])}"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></a>
   <a class="entete__langue" href="{autre_href}" hreflang="{autre}" lang="{autre}"><span class="vh">{e(t["langue_autre"])}</span><span aria-hidden="true">{t["langue_autre_court"]}</span></a>
   <button class="entete__menu" type="button" aria-expanded="false" aria-controls="menu"><span class="entete__menu-texte">{e(t["menu"])}</span><span class="entete__menu-traits" aria-hidden="true"><i></i><i></i><i></i></span></button>
   </div>
@@ -404,7 +424,7 @@ def pied(lang, prof, autre_href):
     autre = "fr" if lang == "en" else "en"
     hor = "".join(f"<div><dt>{e(j)}</dt><dd>{e(h)}</dd></div>" for j, h in t["horaires_lignes"])
     plan_a = "".join(f'<li><a href="{lien(lang, k, prof)}">{e(t["nav"][k])}</a></li>' for k in ("oeuvres", "artiste", "parcours", "presse"))
-    plan_e = "".join(f'<li><a href="{lien(lang, k, prof)}">{e(t["nav"][k])}</a></li>' for k in ("espace", "retraites", "cours_prives", "evenements"))
+    plan_e = "".join(f'<li><a href="{lien(lang, k, prof)}">{e(t["nav"][k])}</a></li>' for k in ("espace", "salon_the", "cosessions", "cours_prives", "evenements", "retraites", "expositions"))
     ext = ' target="_blank" rel="noopener"'
     a_completer = t["a_completer"]
     return f'''<footer class="pied">
@@ -425,7 +445,7 @@ def pied(lang, prof, autre_href):
       <h2>{e(c["espace"])}</h2>
       <p class="pied__forme">{e(c["forme_espace"][lang])} · SIRET {e(c["siret_espace"])}</p>
       <p>{e(t["pied_espace"])}</p>
-      <ul class="pied__plan">{plan_e}<li><a href="{lien(lang, "boutique", prof, "#espace")}">{e(t["nav"]["boutique"])}</a></li></ul>
+      <ul class="pied__plan">{plan_e}</ul>
       <p><a class="courriel" href="mailto:{c["courriel_espace"]}">{c["courriel_espace"]}</a></p>
       <p class="pied__reseaux"><a href="{c["instagram_espace"]}"{ext}>Instagram espacecreateavite</a></p>
     </section>
@@ -435,7 +455,7 @@ def pied(lang, prof, autre_href):
       <p><a href="tel:{c["tel_brut"]}">{e(c["tel"])}</a> · <a href="https://wa.me/{c["tel_brut"].lstrip("+")}"{ext}>WhatsApp</a> · <a href="{lien(lang, "contact", prof)}">{e(t["nav"]["contact"])}</a></p>
     </section>
   </div>
-  <p class="pied__bas"><span>{e(t["pied_droits"])}</span><span>{e(t["mentions"])}{"\u00a0:" if lang == "fr" else ":"} {e(a_completer)}</span><span>{e(t["confidentialite"])}{"\u00a0:" if lang == "fr" else ":"} {e(a_completer)}</span><span>{e(t["traduction"])}</span><span>{e(t["pied_maquette"])} · <a href="{lien(lang, "horaires", prof)}">{"Hours editor" if lang == "en" else "Éditeur d'horaires"}</a></span><a href="{autre_href}" hreflang="{autre}" lang="{autre}">{e(t["langue_autre"])}</a></p>
+  <p class="pied__bas"><span>{e(t["pied_droits"])}</span><span>{e("Legal notice · Privacy policy · Cookie policy · Website terms: Lisa's texts to come" if lang == "en" else "Mentions légales · Politique de confidentialité · Cookies · Conditions d'utilisation : textes de Lisa à venir")}</span><button class="pied__cookies" type="button" data-cookies-ouvrir>{e("Cookie settings" if lang == "en" else "Réglages des cookies")}</button><span>{e(t["traduction"])}</span><span>{e(t["pied_maquette"])}</span><a href="{autre_href}" hreflang="{autre}" lang="{autre}">{e(t["langue_autre"])}</a></p>
 </footer>'''
 
 
@@ -505,7 +525,7 @@ def schema_retraite(lang, cle):
     r = RETRAITES[cle]
     prix = [p for _, p, note in R.PRIX_CHAMBRES if not note]
     photo = r["photo"]
-    return {"@type": "Event", "name": f'{r["titre"]}: {L(lang, r["accroche"])}', "startDate": r["debut"], "endDate": r["fin"],
+    return {"@type": "Event", "name": nom_retraite(r, lang), "startDate": r["debut"], "endDate": r["fin"],
             "eventStatus": "https://schema.org/EventScheduled", "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
             "description": L(lang, r["groupe"]) + " " + R.LOGEMENT[lang],
             "image": img_abs(f'img/photos/{photo.replace("/", "-")}-800.webp') if isinstance(photo, str) else None,
@@ -567,7 +587,6 @@ def schema_page(lang, cle, titre_page, donnees_page):
         g.append(schema_espace(lang))
     elif cle == "retraites":
         g.append({"@type": "ItemList", "itemListElement": [{"@type": "ListItem", "position": i + 1, "item": schema_retraite(lang, k)} for i, k in enumerate(RETRAITES_ORDRE)]})
-        g.append(schema_faq(R.FAQ_RETRAITES, lang))
     elif cle in RETRAITES:
         g.append(schema_retraite(lang, cle))
         if RETRAITES[cle].get("faq"):
@@ -575,7 +594,7 @@ def schema_page(lang, cle, titre_page, donnees_page):
     elif cle == "salle" and d.get("salle"):
         g.append(schema_oeuvres(lang, d["salle"]))
     if cle != "accueil" and (cle in C.PAGES or cle == "salle"):
-        court = SERIES[d["salle"]]["titre"][lang] if cle == "salle" and d.get("salle") else (RETRAITES[cle]["titre"] if cle in RETRAITES else C.T[lang]["nav"].get(cle, titre_page))
+        court = SERIES[d["salle"]]["titre"][lang] if cle == "salle" and d.get("salle") else (nom_retraite(RETRAITES[cle], lang) if cle in RETRAITES else C.T[lang]["nav"].get(cle, titre_page))
         g.append(schema_fil(lang, cle, court, d.get("salle")))
     if not g:
         return ""
@@ -596,7 +615,7 @@ def page(lang, cle, chemin, titre_page, corps, autre_chemin, donnees_page=None, 
     elif cle == "salle":
         titre_complet = f"{titre_page} · {SEO.SUFFIXE_SALLE[lang]}"
     elif cle in RETRAITES:
-        titre_complet = f"{RETRAITES[cle]['titre']} {RETRAITES[cle]['debut'][:4]} · {SEO.SUFFIXE_RETRAITE[lang]}"
+        titre_complet = f"{nom_retraite(RETRAITES[cle], lang)} {RETRAITES[cle]['debut'][:4]} · {SEO.SUFFIXE_RETRAITE[lang]}"
     elif seo.get("titre"):
         titre_complet = seo["titre"][lang]
     else:
@@ -606,7 +625,7 @@ def page(lang, cle, chemin, titre_page, corps, autre_chemin, donnees_page=None, 
             description = SERIES[d_page["salle"]]["texte"][lang]
         elif cle in RETRAITES:
             r_ = RETRAITES[cle]
-            description = f'{r_["titre"]}: {L(lang, r_["accroche"])}. {L(lang, r_["dates"])}, La Clusaz, {L(lang, r_["prix"])} {"per person" if lang == "en" else "par personne"}. {L(lang, r_["groupe"])}'
+            description = f'{nom_retraite(r_, lang)}: {L(lang, r_["dates"])}, La Clusaz. {L(lang, r_["prix"])}. {L(lang, r_["accroche"])}'
         elif seo.get("description"):
             description = seo["description"][lang]
         else:
@@ -640,7 +659,7 @@ def page(lang, cle, chemin, titre_page, corps, autre_chemin, donnees_page=None, 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{e(titre_complet)}</title>
-<meta name="robots" content="noindex, nofollow">
+<meta name="robots" content="{"noindex, nofollow" if MAQUETTE or cle in NOINDEX_TOUJOURS else "index, follow"}">
 <meta name="description" content="{e(description)}">
 <meta name="theme-color" content="#f2efe8">
 {alternes if alternes else f'<link rel="alternate" hreflang="{autre}" href="{autre_href}">'}
@@ -890,13 +909,13 @@ def page_accueil(lang):
 <section class="retraites-accueil" data-strate="{e(t["nav"]["retraites"])}">
   <div class="retraites-accueil__tete">
     {surtitre(u["espace"] + " · " + t["nav"]["retraites"].lower() + " 2027", 8)}
-    <h2 class="titre-section">{lettres("Three retreats in 2027" if not fr else "Trois retraites en 2027")}</h2>
+    <h2 class="titre-section">{lettres("Two retreats in 2027" if not fr else "Deux retraites en 2027")}</h2>
     <p data-apparait>{e(R.LOGEMENT[lang])}</p>
   </div>
-  <div class="retraites-cartes retraites-cartes--trois">
+  <div class="retraites-cartes retraites-cartes--deux">
     {"".join(carte_retraite(lang, prof, RETRAITES[k], k, RETRAITES[k]["photo_carte"]) for k in RETRAITES_ORDRE)}
   </div>
-  <p class="retraites-accueil__prix" data-apparait>{e(("From €2,450 to €3,295 per person, depending on the room." if not fr else "De 2 450 € à 3 295 € par personne, selon la chambre."))} <a class="lien-fleche" href="{lien(lang, "retraites", prof, "#prix")}">{e("Prices and rooms" if not fr else "Prix et chambres")} →</a></p>
+  <p class="retraites-accueil__prix" data-apparait>{e(R.REDUCTIONS[lang])} <a class="lien-fleche" href="{lien(lang, "conditions", prof)}">{e("Payment and cancellation" if not fr else "Paiement et annulation")} →</a></p>
 </section>
 {lettre_info(lang, prof)}
 '''
@@ -948,10 +967,9 @@ def carte_retraite(lang, prof, r, cle, photo):
   <a href="{lien(lang, cle, prof)}">
     <span class="carte-retraite__img">{img_photo(prof, photo, "", "(max-width: 800px) 92vw, 40vw")}</span>
     <span class="carte-retraite__haut">{compte(lang, r["debut"])}{bientot}</span>
-    <span class="carte-retraite__titre">{e(r["titre"])}</span>
+    <span class="carte-retraite__titre">{e(nom_retraite(r, lang))}</span>
     <span class="carte-retraite__dates">{e(L(lang, r["dates"]))} · {e(L(lang, r["lieu"]))}</span>
     <span class="carte-retraite__prix">{e(L(lang, r["prix"]))}</span>
-    {places(lang, cle)}
   </a>
 </article>'''
 
@@ -992,6 +1010,10 @@ def page_oeuvres(lang):
     n_archive = sum(len(LISTES[x]) for x in ARCHIVE)
     corps = f'''
 {bandeau(lang, prof, None, n_oeuvres(len(LISTES[LEAD]), lang) + " · " + lead["titre"][lang], t["nav"]["oeuvres"], [C.SERIE_ACTUELLE["texte"][lang], C.SERIE_ACTUELLE["sujets"][lang]], f'<div class="bandeau__texture">{bouton_oeuvre(prof, "recente-04", lang, LEAD, "(max-width: 900px) 80vw, 40vw")}</div>', t["nav"]["oeuvres"], "bandeau--oeuvres")}
+<section class="declaration declaration--oeuvres" data-strate="{e(t["nav"]["declaration"])}">
+  <div class="declaration__tete">{surtitre("Artist statement" if not fr else "Déclaration d'artiste")}<blockquote class="declaration__citation"><p>{e(C.POSITION["citation"][lang])}</p></blockquote></div>
+  <div class="declaration__texte"><p data-apparait>{e(C.DECLARATION[lang][0])}</p><p><a class="lien-fleche" href="{lien(lang, "artiste", prof, "#declaration")}">{e("Read the full statement" if not fr else "Lire toute la déclaration")} →</a></p></div>
+</section>
 <section class="oeuvres-colonne" data-strate="{e("Stratigraphic column" if not fr else "Colonne stratigraphique")}">
   {colonne(lang, prof)}
 </section>
@@ -1102,7 +1124,8 @@ def page_artiste(lang):
     {surtitre("My materials" if not fr else "Mes matières", 3)}
     <h2 class="titre-section">{lettres(P["matieres"][lang].rstrip("."))}</h2>
     <p data-apparait>{e(C.MEMBRANE[lang])}</p>
-    <p class="note" data-apparait>{e("Short videos of the process, in English with French captions: to come." if not fr else "Courtes vidéos du procédé, en anglais sous-titrées en français : à venir.")}</p>
+    {videos_procede(lang)}
+    <p class="note" data-apparait hidden>{e("Short videos of the process, in English with French captions: to come." if not fr else "Courtes vidéos du procédé, en anglais sous-titrées en français : à venir.")}</p>
   </div>
   <ul class="matieres__photos">
     <li>{figure_photo(prof, "atelier/chalumeau-encaustique", "The blowtorch flame fusing wax" if not fr else "La flamme du chalumeau qui fusionne la cire", "Heat" if not fr else "La chaleur", "fossile", "(max-width: 800px) 46vw, 20vw")}</li>
@@ -1388,36 +1411,16 @@ def page_espace(lang):
   <div class="offres__tete">{surtitre("Create, connect, be inspired" if lang == "en" else "Créer, se rencontrer, s'inspirer", 2)}<h2 class="titre-section">{lettres(C.ESPACE["reve"][lang][0])}</h2><p data-apparait>{e(C.ESPACE["reve"][lang][1])}</p></div>
   <ul class="offres__liste">{offres}</ul>
 </section>
-<section class="carte-boissons" id="carte" tabindex="-1" data-strate="{e("Menu" if lang == "en" else "La carte")}">
-  <div class="carte-boissons__image">{figure_photo(prof, "espace/salon-vertical", "The lounge of the Espace, fireplace and bookshelves" if lang == "en" else "Le salon de l'Espace, la cheminée et la bibliothèque", "", "fossile", "(max-width: 800px) 80vw, 30vw")}</div>
-  <div class="carte-boissons__texte">{surtitre("Tea room" if lang == "en" else "Salon de thé", 3)}<h2 class="titre-section">{lettres("The menu" if lang == "en" else "La carte")}</h2>{carte}<p class="note">{e(C.CARTE_NOTE[lang])}</p></div>
-</section>
-<section class="boutique" data-strate="{e("Boutique")}">
-  {figure_photo(prof, "atelier/table-des-cires", "A table of melted waxes and tools" if lang == "en" else "Une table de cires fondues et d'outils", "", "fossile boutique__a", "(max-width: 800px) 70vw, 26vw")}
-  <div class="boutique__texte">{surtitre("Boutique", 4)}<h2 class="titre-section">{lettres("Curated materials" if lang == "en" else "Matériel choisi")}</h2><p data-apparait>{e(C.ESPACE["offres"][2]["texte"][lang])}</p><p class="note" data-apparait>{e(C.BOUTIQUE["boutique_espace"][lang])}</p><p data-apparait>{bouton(t["nav"]["boutique"], lien(lang, "boutique", prof, "#espace"), "bouton bouton--ligne")}</p></div>
-  {figure_photo(prof, "espace/atelier-rangements", "The studio's shelves of materials" if lang == "en" else "Les étagères de matériel de l'atelier", "", "fossile boutique__b", "(max-width: 800px) 70vw, 30vw", ' data-parallaxe="0.08"')}
-</section>
-<section class="expo" data-expo="{ex["fin"]}" data-strate="{e(ex["titre"])}">
-  <div class="expo__tete">{surtitre((("Latest exhibition" if lang == "en" else "Dernière exposition") if expo_finie else ("Current exhibition" if lang == "en" else "Exposition en cours")), 5)}<p class="expo__etat"><span class="etiquette{" etiquette--passe" if expo_finie else ""}" data-expo-etat data-en-cours="{e("On now" if lang == "en" else "En cours")}" data-terminee="{e("Ended" if lang == "en" else "Terminée")}">{e(("Ended" if lang == "en" else "Terminée") if expo_finie else ("On now" if lang == "en" else "En cours"))}</span> {e(ex["dates"][lang])}</p>
-  <h2 class="titre-section">{lettres(ex["titre"])}</h2><p data-apparait>{e(ex["intro"][lang])}</p>
-  {f'<p class="note">{e("Next exhibition at the Espace: to be completed." if lang == "en" else "Prochaine exposition à l'Espace : à compléter.")}</p>' if expo_finie else ""}</div>
-  <div class="expo__duo">
-    <article>{figure_photo(prof, "exposition-en-cours/bnt-designs-soudure", "BNT Designs welding a steel sphere" if lang == "en" else "BNT Designs soude une sphère d'acier", "", "fossile", "(max-width: 800px) 80vw, 30vw")}<h3>BNT Designs</h3><p data-apparait>{e(ex["bnt"][lang])}</p></article>
-    <article>{figure_photo(prof, "exposition-en-cours/collage-cuba", "Three of Lisa Cirenza's Cuba works" if lang == "en" else "Trois œuvres cubaines de Lisa Cirenza", "", "fossile", "(max-width: 800px) 80vw, 30vw")}<h3>Lisa Cirenza</h3><p data-apparait>{e(ex["lisa"][lang])}</p><p>{bouton("The Cuba room" if lang == "en" else "La salle Cuba", lien_salle(lang, "cuba", prof), "bouton bouton--ligne")}</p></article>
-  </div>
-  {figure_photo(prof, "exposition-en-cours/affiche-vernissage-bnt", "Opening poster for BNT Designs" if lang == "en" else "Affiche du vernissage de BNT Designs", "", "fossile expo__affiche", "(max-width: 800px) 60vw, 20vw")}
-</section>
-<section class="agenda" data-strate="{e("Calendar" if lang == "en" else "Agenda")}">
-  <div class="agenda__corps">{surtitre("Calendar" if lang == "en" else "Agenda", 6)}<h2 class="titre-section">{lettres("Classes & gatherings" if lang == "en" else "Cours et rencontres")}</h2>
-  <ul class="agenda__liste">{agenda}</ul>
-  <p>{bouton(t["nav"]["cours_prives"], lien(lang, "cours_prives", prof))}{bouton(t["nav"]["evenements"], lien(lang, "evenements", prof), "bouton bouton--ligne")}</p></div>
-  {figure_photo(prof, "evenements/verres-de-vin-galerie", "Glasses raised among the paintings of the gallery" if lang == "en" else "Verres levés au milieu des tableaux de la galerie", "", "fossile agenda__img", "(max-width: 900px) 80vw, 32vw", ' data-parallaxe="-0.05"')}
-</section>
-<section class="infos" data-strate="{e(t["horaires"])}">
-  {figure_photo(prof, "espace/enseigne-rue-village", "The Créa-Tea-Vité sign in the village street" if lang == "en" else "L'enseigne Créa-Tea-Vité dans la rue du village", "", "fossile infos__img", "(max-width: 800px) 80vw, 30vw")}
-  <div class="infos__texte">{surtitre(t["horaires"], 7)}<dl class="horaires horaires--grand" data-horaires-liste>{"".join(f"<div><dt>{e(j)}</dt><dd>{e(h)}</dd></div>" for j, h in t["horaires_lignes"])}</dl>{statut(lang, "statut--grand")}
-  <p class="note">{e("The French version of the current site says 2:30 – 7 pm: to be confirmed. Exceptional closures are listed on Google Maps." if lang == "en" else "La version française du site actuel indique 14 h 30 – 19 h : à confirmer. Les fermetures exceptionnelles sont signalées sur Google Maps.")}</p>
-  <address>{e(C.COORD["espace"])}<br>{e(C.COORD["rue"])}<br>{e(C.COORD["ville"])}</address><p><a href="mailto:{C.COORD["courriel_espace"]}">{C.COORD["courriel_espace"]}</a></p></div>
+<section class="espace-portes" data-strate="{e("At the Espace" if lang == "en" else "À l'Espace")}">
+  {surtitre("At the Espace" if lang == "en" else "À l'Espace", 3)}
+  <ul class="espace-portes__liste">
+    <li><a href="{lien(lang, "salon_the", prof)}"><strong>{e(t["nav"]["salon_the"])}</strong><span>{e("Visit in person: the boutique, the tea menu, hours, map and parking." if lang == "en" else "Sur place : la boutique, la carte du salon de thé, les horaires, le plan et le stationnement.")}</span></a></li>
+    <li><a href="{lien(lang, "cosessions", prof)}"><strong>{e(t["nav"]["cosessions"])}</strong><span>{e("Work on your own creative projects with personalised guidance, €30." if lang == "en" else "Avancez sur vos projets créatifs avec un accompagnement personnalisé, 30 €.")}</span></a></li>
+    <li><a href="{lien(lang, "cours_prives", prof)}"><strong>{e(t["nav"]["cours_prives"])}</strong><span>{e(C.COURS_PRIVES["pour"][lang])}</span></a></li>
+    <li><a href="{lien(lang, "evenements", prof)}"><strong>{e(t["nav"]["evenements"])}</strong><span>{e(C.EVENEMENTS["titre"][lang])}</span></a></li>
+    <li><a href="{lien(lang, "expositions", prof)}"><strong>{e(t["nav"]["expositions"])}</strong><span>{e(C.EXPO["titre"] + " · " + C.EXPO["dates"][lang])}</span></a></li>
+    <li><a href="{lien(lang, "retraites", prof)}"><strong>{e(t["nav"]["retraites"])}</strong><span>{e(" · ".join(nom_retraite(RETRAITES[k], lang) for k in RETRAITES_ORDRE))}</span></a></li>
+  </ul>
 </section>
 {lettre_info(lang, prof)}'''
     corps = avec_carnet(corps, lang, prof, "espace")
@@ -1559,6 +1562,7 @@ def page_studio(lang):
     <li>{figure_photo(prof, "atelier/video-hot-surface", "Working wax on a hot surface" if not fr else "Travail de la cire sur surface chauffante", "", "fossile", "(max-width: 800px) 46vw, 22vw")}</li>
     <li>{figure_photo(prof, "atelier/oeuvre-en-cours-pastels-sur-cire", "Pastels worked into wax on a painting in progress" if not fr else "Des pastels travaillés dans la cire, sur une œuvre en cours", "", "fossile", "(max-width: 800px) 46vw, 22vw")}</li>
   </ul>
+  {videos_procede(lang)}
   <p class="note">{e("More to come: Juneau Icefield expedition photographs, Cool Reflections in daylight, close-ups of wax surfaces, process shots and short videos in English with French captions." if not fr else "À venir : photos d'expédition du champ de glace de Juneau, Cool Reflections à la lumière du jour, gros plans de surfaces de cire, images du procédé et courtes vidéos en anglais sous-titrées en français.")}</p>
 </section>'''
     ecrire(chemin, page(lang, "studio", chemin, t["nav"]["studio"], corps, href_autre(lang, "studio", prof), {}, "page-studio"))
@@ -1572,7 +1576,7 @@ def page_evenements(lang):
     ev = C.EVENEMENTS
     themes = "".join(f'<li data-incline><h3>{e(a[lang])}</h3><p>{e(b[lang])}</p></li>' for a, b in ev["themes"])
     corps = f'''
-{bandeau(lang, prof, None, "Private, institutional or corporate gatherings" if lang == "en" else "Rencontres privées, institutionnelles ou d'entreprise", t["nav"]["evenements"], [ev["titre"][lang], ev["intro"][lang]], figure_photo(prof, "evenements/table-de-diner-dans-la-galerie", "A long dinner table set in the gallery" if lang == "en" else "Une longue table de dîner dressée dans la galerie", "", "fossile", "(max-width: 900px) 80vw, 36vw"), t["nav"]["evenements"])}
+{bandeau(lang, prof, None, "Private, institutional or corporate gatherings · venue hire" if lang == "en" else "Rencontres privées, institutionnelles ou d'entreprise · location du lieu", t["nav"]["evenements"], [ev["titre"][lang], ev["intro"][lang]], figure_photo(prof, "evenements/table-de-diner-dans-la-galerie", "A long dinner table set in the gallery" if lang == "en" else "Une longue table de dîner dressée dans la galerie", "", "fossile", "(max-width: 900px) 80vw, 36vw"), t["nav"]["evenements"])}
 <section class="jauges" data-strate="{e("Capacity" if lang == "en" else "Capacité")}">
   {figure_photo(prof, "espace/salon-canape", "The lounge of the gallery, with sofa and paintings" if lang == "en" else "Le salon de la galerie, canapé et tableaux", "", "fossile jauges__img", "(max-width: 900px) 80vw, 34vw", ' data-parallaxe="-0.05"')}
   <div>{surtitre("The venue" if lang == "en" else "Le lieu", 1)}
@@ -1688,21 +1692,19 @@ IMAGES_RETRAITE = {
         "reserver": ("cours/pinceaux-bandeau", "", ""),
     },
 }
-IMAGES_RETRAITE["creative"] = {
-    "intro": ("espace/salon-canape", "The lounge of the Espace, sofa and paintings", "Le salon de l'Espace, canapé et tableaux"),
-    "reserver": ("paysages/brume-sur-la-neige", "", ""),
-    "inclus": ("retraites/viennoiseries-petit-dejeuner", "Pastries for breakfast", "Des viennoiseries pour le petit-déjeuner"),
-}
-RETRAITES = {"creative": R.CREATIVE, "pip": R.PIP, "encaustics": R.ENCAUSTICS}
-for _k, _ph in (("creative", "retraites/pause-face-aux-montagnes"), ("pip", "retraites/diner-coucher-de-soleil-parapentes"), ("encaustics", "retraites/atelier-cire-en-groupe")):
+RETRAITES = {"pip": R.PIP, "encaustics": R.ENCAUSTICS}
+for _k, _ph in (("pip", "retraites/diner-coucher-de-soleil-parapentes"), ("encaustics", "retraites/atelier-cire-en-groupe")):
     RETRAITES[_k]["photo_carte"] = _ph
 
 
-def grille_prix(lang):
-    """Les prix par chambre, identiques pour les trois retraites, avec la petite ligne demandée par Lisa."""
-    lignes = "".join(f'<div class="prix__ligne"><dt>{e(nom[lang])}{f"<small>{e(note[lang])}</small>" if note else ""}</dt><dd>{e(prix_txt(montant, lang))}</dd></div>' for nom, montant, note in R.PRIX_CHAMBRES)
-    return (f'<div class="prix" id="prix" tabindex="-1"><dl class="prix__grille">{lignes}</dl>'
-            f'<p class="prix__reduc">{e(R.REDUCTIONS[lang])}</p><p class="prix__petite-ligne">{e(R.PETITE_LIGNE[lang])}</p><p class="note">{e(R.LOGEMENT[lang])}</p></div>')
+def grille_prix(lang, cle=None):
+    """v6 · sur les pages, la fourchette seule (demande de Lisa) ; le détail des logements est dans les formulaires d'inscription."""
+    fr = lang == "fr"
+    cles = (cle,) if cle else RETRAITES_ORDRE
+    inscr = "".join(bouton(("Register · " if not fr else "S'inscrire · ") + nom_retraite(RETRAITES[k], lang), lien(lang, INSCRIPTION[k], 0 if MODE == "propres" else 1), "bouton" if i == 0 else "bouton bouton--ligne") for i, k in enumerate(cles))
+    return (f'<div class="prix" id="prix" tabindex="-1"><p class="prix__fourchette">{e(R.LOGEMENT[lang])}</p>'
+            f'<p class="prix__reduc">{e(R.REDUCTIONS[lang])}</p><p class="prix__actions">{inscr}</p>'
+            f'<p class="note"><a href="{lien(lang, "conditions", 0 if MODE == "propres" else 1)}">{e("Payment schedule and cancellation policy" if not fr else "Échéancier de paiement et conditions d'annulation")}</a></p></div>')
 
 
 def fig_retraite(lang, prof, cle, quoi, classe, sizes, attrs=""):
@@ -1774,7 +1776,7 @@ def page_retraite(lang, cle):
     if cle == "pip":
         image_bandeau = f'<div class="bandeau__image bandeau__image--plein">{img_photo(prof, r["photo"], "Lake Annecy, the day excursion" if not fr else "Le lac d'Annecy, l'excursion de la journée", "(max-width: 900px) 100vw, 60vw", "", "eager")}</div>'
     else:
-        image_bandeau = f'<div class="bandeau__image bandeau__image--plein">{img_photo(prof, r["photo"], ("A walker sitting on a stone wall, facing the mountains" if not fr else "Une marcheuse assise sur un muret, face aux montagnes") if cle == "creative" else ("Participants working with hot wax in the studio" if not fr else "Des participants travaillent la cire chaude à l'atelier"), "(max-width: 900px) 100vw, 50vw", "", "eager")}</div>'
+        image_bandeau = f'<div class="bandeau__image bandeau__image--plein">{img_photo(prof, r["photo"], ("Participants working with hot wax in the studio" if not fr else "Des participants travaillent la cire chaude à l'atelier"), "(max-width: 900px) 100vw, 50vw", "", "eager")}</div>'
     sections_programme = ""
     if r["etapes"]:
         sections_programme += f'''<section class="carte-retraite-topo" data-carte data-strate="{e("The route" if not fr else "Le parcours")}">
@@ -1807,12 +1809,12 @@ def page_retraite(lang, cle):
   <p class="note">{e("Testimonials as published on the current site, in their original language." if not fr else "Témoignages tels que publiés sur le site actuel, dans leur langue d'origine.")}</p>
 </section>'''
     inclus = (f'<div><h2 class="titre-section">{lettres("What is included" if not fr else "Ce qui est inclus")}</h2><ul class="liste-traits liste-traits--oui">{"".join(f"<li>{e(x)}</li>" for x in R.INCLUS[lang])}</ul></div>'
-              f'<div><h2 class="titre-section">{lettres("Not included" if not fr else "Non inclus")}</h2><ul class="liste-traits liste-traits--non">{"".join(f"<li>{e(x)}</li>" for x in R.NON_INCLUS[lang])}</ul></div>') if cle != "creative" else ""
+              f'<div><h2 class="titre-section">{lettres("Not included" if not fr else "Non inclus")}</h2><ul class="liste-traits liste-traits--non">{"".join(f"<li>{e(x)}</li>" for x in R.NON_INCLUS[lang])}</ul></div>')
     corps = f'''
-<section class="bandeau bandeau--retraite bandeau--{cle}" data-strate="{e(r["titre"])}">
+<section class="bandeau bandeau--retraite bandeau--{cle}" data-strate="{e(nom_retraite(r, lang))}">
   <div class="bandeau__texte">
     {surtitre(L(lang, r["dates"]) + " · " + L(lang, r["lieu"]))}
-    <h1 class="bandeau__titre">{lettres(r["titre"])}</h1>
+    <h1 class="bandeau__titre">{lettres(nom_retraite(r, lang))}</h1>
     <p class="bandeau__accroche" data-apparait>{e(L(lang, r["accroche"]))}</p>
     <p class="bandeau__cycle" data-apparait>{e(L(lang, r["cycle"]))}</p>
     <div class="bandeau__compte" data-apparait>{compte(lang, r["debut"])}<a class="bouton aimant bouton--petit" href="{lien(lang, "contact", prof) + "?objet=retraite&amp;retraite=" + cle}"><span>{e("Schedule a discovery call" if not fr else "Réserver un échange découverte")}</span></a></div>
@@ -1824,8 +1826,8 @@ def page_retraite(lang, cle):
   <dl class="fiche-pratique">
     <div><dt>{"Dates" if not fr else "Dates"}</dt><dd>{e(L(lang, r["dates"]))}</dd></div>
     <div><dt>{"Place" if not fr else "Lieu"}</dt><dd>{e(L(lang, r["lieu"]))}</dd></div>
-    <div><dt>{"Group" if not fr else "Groupe"}</dt><dd>{e(L(lang, r["groupe"]))}{places(lang, cle, "places--fiche")}</dd></div>
-    <div><dt>{"Price" if not fr else "Tarif"}</dt><dd><strong>{e(L(lang, r["prix"]))}</strong> {e("per person, depending on the room" if not fr else "par personne, selon la chambre")} · <a href="#prix">{e("rooms" if not fr else "chambres")}</a></dd></div>
+    <div><dt>{"Group" if not fr else "Groupe"}</dt><dd>{e(L(lang, r["groupe"]))}</dd></div>
+    <div><dt>{"Price" if not fr else "Tarif"}</dt><dd><strong>{e(L(lang, r["prix"]))}</strong> {e("depending on options indicated on the booking form" if not fr else "selon les options choisies sur le formulaire d'inscription")} · <a href="{lien(lang, INSCRIPTION[cle], prof)}">{e("registration form" if not fr else "formulaire d'inscription")}</a></dd></div>
   </dl>
 </section>
 {milieu}
@@ -1833,16 +1835,15 @@ def page_retraite(lang, cle):
 {sections_programme}
 <section class="inclus inclus--prix" data-strate="{e("Prices and rooms" if not fr else "Prix et chambres")}">
   {inclus}
-  <div class="inclus__prix">{surtitre("Prices per person · the same for all three retreats" if not fr else "Prix par personne · les mêmes pour les trois retraites")}{grille_prix(lang)}</div>
+  <div class="inclus__prix">{surtitre("Price" if not fr else "Prix")}{grille_prix(lang, cle)}</div>
 </section>
-{f'<section class="faq" data-strate="FAQ"><div>{surtitre("FAQ")}<h2 class="titre-section">{lettres("Questions")}</h2><div class="faq__liste">{faq}</div></div>{fig_retraite(lang, prof, cle, "faq", "faq__img", "(max-width: 900px) 70vw, 30vw")}</section>' if faq else ""}
 <section class="reserver reserver--image" data-strate="{e("Book" if not fr else "Réserver")}">
   <div class="reserver__fond" aria-hidden="true">{img_photo(prof, IMAGES_RETRAITE[cle]["reserver"][0], "", "100vw")}</div>
   <h2 class="titre-section">{lettres("Let’s see if we’re a good match" if not fr else "Voyons si nos élans créatifs s'accordent")}</h2>
   <p data-apparait>{e("Book a short, relaxed chat to talk about your needs, your room and whether this retreat is your next creative leap." if not fr else "Réservez un court échange, sans engagement, pour parler de vos envies, de votre chambre et voir si cette retraite est votre prochain élan créatif.")}</p>
-  <p>{bouton("Schedule a discovery call" if not fr else "Réserver un échange découverte", lien(lang, "contact", prof) + "?objet=retraite&amp;retraite=" + cle)}<a class="bouton bouton--ligne aimant" href="https://wa.me/{C.COORD["tel_brut"].lstrip("+")}" target="_blank" rel="noopener"><span>WhatsApp</span></a><a class="bouton bouton--ligne aimant" href="mailto:{C.COORD["courriel_espace"]}"><span>{C.COORD["courriel_espace"]}</span></a></p>
+  <p>{bouton("Schedule a discovery call" if not fr else "Réserver un échange découverte", lien(lang, "contact", prof) + "?objet=retraite&amp;retraite=" + cle)}{bouton("Register" if not fr else "S'inscrire", lien(lang, INSCRIPTION[cle], prof), "bouton bouton--ligne")}<a class="bouton bouton--ligne aimant" href="https://wa.me/{C.COORD["tel_brut"].lstrip("+")}" target="_blank" rel="noopener"><span>WhatsApp</span></a><a class="bouton bouton--ligne aimant" href="mailto:{C.COORD["courriel_espace"]}"><span>{C.COORD["courriel_espace"]}</span></a></p>
 </section>'''
-    ecrire(chemin, page(lang, cle, chemin, r["titre"] + " · " + L(lang, r["accroche"]), corps, href_autre(lang, cle, prof), {"retraite": cle}, "page-retraite page-retraite--" + cle))
+    ecrire(chemin, page(lang, cle, chemin, nom_retraite(r, lang), corps, href_autre(lang, cle, prof), {"retraite": cle}, "page-retraite page-retraite--" + cle))
 
 
 def page_retraites(lang):
@@ -1853,17 +1854,12 @@ def page_retraites(lang):
     corps = f'''
 {bandeau(lang, prof, None, "Espace Créa-Tea-Vité · La Clusaz · 2027", t["nav"]["retraites"], [R.LOGEMENT[lang]], figure_photo(prof, "retraites/groupe-painters-in-paradise", "Painting in Paradise participants in front of the mountains" if not fr else "Les participants de Painting in Paradise devant les montagnes", "Painters in Paradise, 2026", "fossile", "(max-width: 900px) 80vw, 36vw"), t["nav"]["retraites"])}
 <section class="retraites-accueil retraites-accueil--page" data-strate="2027">
-  <div class="retraites-cartes retraites-cartes--trois">
+  <div class="retraites-cartes retraites-cartes--deux">
     {"".join(carte_retraite(lang, prof, RETRAITES[k], k, RETRAITES[k]["photo_carte"]) for k in RETRAITES_ORDRE)}
   </div>
 </section>
-<section class="inclus inclus--prix" data-strate="{e("Prices and rooms" if not fr else "Prix et chambres")}">
-  <div class="inclus__prix">{surtitre("Prices per person · the same for all three retreats" if not fr else "Prix par personne · les mêmes pour les trois retraites", 1)}<h2 class="titre-section">{lettres("Rooms and prices" if not fr else "Chambres et prix")}</h2>{grille_prix(lang)}</div>
-</section>
-<section class="faq faq--retraites" data-strate="FAQ"><div>{surtitre("Questions", 2)}<h2 class="titre-section">{lettres("Before you book" if not fr else "Avant de réserver")}</h2>
-  <div class="faq__liste">{"".join(f'<details class="faq__item"><summary>{e(q[lang])}</summary><p>{e(rep_[lang])}</p></details>' for q, rep_ in R.FAQ_RETRAITES)}</div>
-  <p>{bouton("Schedule a discovery call" if not fr else "Réserver un échange découverte", lien(lang, "contact", prof) + "?objet=retraite")}</p></div>
-  {figure_photo(prof, "retraites/roc-de-chere", "Sketching at the Roc de Chère above Lake Annecy" if not fr else "Croquis au Roc de Chère, au-dessus du lac d'Annecy", "", "fossile faq__img", "(max-width: 900px) 70vw, 30vw")}
+<section class="inclus inclus--prix" data-strate="{e("Price" if not fr else "Prix")}">
+  <div class="inclus__prix">{surtitre("Price" if not fr else "Prix", 1)}<h2 class="titre-section">{lettres("Registration" if not fr else "Inscription")}</h2>{grille_prix(lang)}</div>
 </section>'''
     corps = avec_carnet(corps, lang, prof, "retraites")
     ecrire(chemin, page(lang, "retraites", chemin, t["nav"]["retraites"], corps, href_autre(lang, "retraites", prof), {}, "page-retraites"))
@@ -1999,14 +1995,14 @@ def page_boutique(lang):
     corps = f'''
 <section class="bandeau bandeau--boutique" data-strate="{e(t["nav"]["boutique"])}">
   <div class="bandeau__texte">
-    {surtitre("Two counters, one house" if not fr else "Deux comptoirs, une maison")}
+    {surtitre("Lisa Cirenza Fine Art · artist-author" if not fr else "Lisa Cirenza Fine Art · artiste-auteur")}
     <h1 class="bandeau__titre">{lettres(t["nav"]["boutique"])}</h1>
-    <div class="bandeau__intro" data-apparait><p>{e(B["intro"][lang])}</p></div>
-    <p class="comptoirs__onglets" data-apparait><a class="bouton aimant bouton--atelier" href="#atelier"><span>{e(B["atelier_titre"][lang])}</span></a><a class="bouton bouton--ligne aimant" href="#editions"><span>{e(t["nav"]["editions"])}</span></a><a class="bouton bouton--ligne aimant bouton--espace" href="#espace"><span>{e(B["espace_titre"][lang])}</span></a></p>
+    <div class="bandeau__intro" data-apparait><p>{e("Original works, collectors' editions and prints, sold by Lisa Cirenza Fine Art (artist-author, not VAT-registered). The checkout opens once the artist's payment account is ready; until then, your basket becomes a request." if not fr else "Œuvres originales, éditions de collection et tirages, vendus par Lisa Cirenza Fine Art (artiste-auteur, non assujettie à la TVA). Le paiement ouvrira quand le compte de paiement de l'artiste sera prêt ; d'ici là, votre panier devient une demande.")}</p></div>
+    <p class="comptoirs__onglets" data-apparait><a class="bouton aimant bouton--atelier" href="#atelier"><span>{e(B["atelier_titre"][lang])}</span></a><a class="bouton bouton--ligne aimant" href="#editions"><span>{e(t["nav"]["editions"])}</span></a></p>
   </div>
   <div class="bandeau__image bandeau__image--duo">
     <span class="duo duo--atelier">{bouton_oeuvre(prof, "recente-09", lang, LEAD, "(max-width: 900px) 44vw, 20vw")}</span>
-    <span class="duo duo--espace">{img_photo(prof, "espace/atelier-rangements", "The Espace's shelves of art materials" if not fr else "Les étagères de matériel d'art de l'Espace", "(max-width: 900px) 44vw, 20vw", "", "eager")}</span>
+    <span class="duo duo--espace">{bouton_oeuvre(prof, "recente-01", lang, LEAD, "(max-width: 900px) 44vw, 20vw")}</span>
   </div>
 </section>
 
@@ -2031,16 +2027,6 @@ def page_boutique(lang):
   </div>
   <ul class="editions-accueil__series editions-boutique">{series_ed}</ul>
   <p class="note comptoir__note">{e(E["a_venir"][lang])}</p>
-</section>
-
-<section class="comptoir comptoir--espace" id="espace" tabindex="-1" data-strate="{e(B["espace_titre"][lang])}">
-  <div class="comptoir__tete">
-    {surtitre(c["espace"] + " · " + c["forme_espace"][lang], 3)}
-    <h2 class="titre-section">{lettres(B["espace_titre"][lang])}</h2>
-    <p data-apparait>{e(B["espace_texte"][lang])}</p>
-  </div>
-  <ul class="produits produits--espace">{"".join(espace_items)}</ul>
-  <p class="note comptoir__note">{e(B["boutique_espace"][lang])}</p>
 </section>
 
 <section class="livraison" data-strate="{e("Delivery" if not fr else "Livraison")}">
@@ -2092,7 +2078,7 @@ def page_contact(lang):
     chemin = fichier(lang, "contact")
     prof = prof_de(chemin)
     c = C.COORD
-    objets = [("oeuvre", "A work" if lang == "en" else "Une œuvre"), ("commande", "A commission" if lang == "en" else "Une commande"), ("cours_prives", "A private course for guests" if lang == "en" else "Un cours privé pour des clients"),
+    objets = [("oeuvre", "A work" if lang == "en" else "Une œuvre"), ("commande", "A commission" if lang == "en" else "Une commande"), ("cours_prives", "A bespoke course or workshop" if lang == "en" else "Un cours ou un atelier sur mesure"),
               ("evenement", "A private event" if lang == "en" else "Un événement privé"), ("retraite", "A retreat" if lang == "en" else "Une retraite"), ("autre", "Something else" if lang == "en" else "Autre chose")]
     maison = {"oeuvre": c["courriel"], "commande": c["courriel"], "autre": c["courriel"]}
     radios = "".join(f'<label class="choix"><input type="radio" name="objet" value="{v}" data-courriel="{maison.get(v, c["courriel_espace"])}"{" checked" if i == 0 else ""}><span>{e(l)}</span></label>' for i, (v, l) in enumerate(objets))
@@ -2104,11 +2090,10 @@ def page_contact(lang):
 
     def ent(nom, label, typ="text", attrs=""):
         return f'<div class="champ"><label for="f-{nom}">{e(label)} <small>({"optional" if not fr else "facultatif"})</small></label><input id="f-{nom}" name="{nom}" type="{typ}"{attrs}></div>'
-    chambres = [("", "—")] + [(x["en"], f'{x[lang]} · {prix_txt(px, lang)}') for x, px, _ in R.PRIX_CHAMBRES]
-    seances = [("", "—")] + [(a["en"], a[lang]) for a, b, ph in C.COURS["ateliers"]] + [(C.PLEIN_AIR_PRIVE["titre"]["en"], C.PLEIN_AIR_PRIVE["titre"][lang]), ("To define together", "To define together" if not fr else "À définir ensemble")]
-    bloc_retraite = (f'<div class="formulaire__deux">{sel("chambre", "Preferred room" if not fr else "Chambre souhaitée", chambres)}{ent("personnes", "Number of people" if not fr else "Nombre de personnes", "number", " min=\"1\" max=\"10\" inputmode=\"numeric\"")}</div>'
+    seances = [("", "—")] + [(a["en"], a[lang]) for a, b, ph in C.COURS["ateliers"]] + [(a["en"], a[lang]) for a, b in C.COURS["equipes"]] + [("To define together", "To define together" if not fr else "À définir ensemble")]
+    bloc_retraite = (f'<div class="formulaire__deux">{ent("personnes", "Number of people" if not fr else "Nombre de personnes", "number", " min=\"1\" max=\"10\" inputmode=\"numeric\"")}</div>'
                      f'{sel("appel", "Best time for a discovery call (French time)" if not fr else "Moment préféré pour l'échange découverte (heure française)", [("", "—"), ("Morning", "Morning" if not fr else "Matin"), ("Afternoon", "Afternoon" if not fr else "Après-midi"), ("Evening", "Evening" if not fr else "Soir")])}')
-    bloc_cours = (f'<div class="formulaire__deux">{sel("organisation", "You are" if not fr else "Vous êtes", [("Hotel", "A hotel" if not fr else "Un hôtel"), ("Concierge", "A concierge service" if not fr else "Une conciergerie"), ("Event planner", "An event planner" if not fr else "Un organisateur d'événements"), ("Private guest", "A private guest" if not fr else "Un particulier")])}{ent("etablissement", "Name of the hotel or company" if not fr else "Nom de l'hôtel ou de la société", "text", " autocomplete=\"organization\"")}</div>'
+    bloc_cours = (f'<div class="formulaire__deux">{sel("organisation", "You are" if not fr else "Vous êtes", [("Individual", "An individual" if not fr else "Un particulier"), ("Family", "A family" if not fr else "Une famille"), ("Group", "A group" if not fr else "Un groupe"), ("Team", "A team" if not fr else "Une équipe"), ("Event planner", "An event planner" if not fr else "Un organisateur d'événements")])}{ent("etablissement", "Company or organisation" if not fr else "Société ou organisme", "text", " autocomplete=\"organization\"")}</div>'
                   f'<div class="formulaire__deux">{ent("date_souhaitee", "Preferred date" if not fr else "Date souhaitée", "date")}{ent("groupe", "Group size" if not fr else "Taille du groupe", "number", " min=\"1\" max=\"40\" inputmode=\"numeric\"")}</div>'
                   f'<div class="formulaire__deux">{sel("seance", "Session" if not fr else "Séance", seances)}{ent("budget", "Budget per person or per group" if not fr else "Budget par personne ou par groupe")}</div>')
     bloc_evenement = (f'<div class="formulaire__deux">{sel("type_evenement", "Type of event" if not fr else "Type d'événement", [("Private hire", "Private hire of the Espace" if not fr else "Privatisation de l'Espace"), ("Aperitif in the gallery", "Aperitif in the gallery" if not fr else "Apéritif dans la galerie"), ("Team workshop", "Team workshop" if not fr else "Atelier d'équipe"), ("Other", "Other" if not fr else "Autre")])}{ent("date_evenement", "Preferred date" if not fr else "Date souhaitée", "date")}</div>'
@@ -2203,7 +2188,7 @@ def donnees_js(lang):
     d = {"langue": lang, "textes": t, "oeuvres": oe, "series": series, "decors": decors,
          "pageContact": C.PAGES["contact"][lang] + (".html" if MODE == "html" else ""),
          "espace": {"horaires": HEURES, "courriel": C.COORD["courriel"]},
-         "retraites": {"pip": {"debut": R.PIP["debut"], "titre": R.PIP["titre"]}, "creative": {"debut": R.CREATIVE["debut"], "titre": R.CREATIVE["titre"]}, "encaustics": {"debut": R.ENCAUSTICS["debut"], "titre": R.ENCAUSTICS["titre"]}}}
+         "retraites": {"pip": {"debut": R.PIP["debut"], "titre": R.PIP["titre"]}, "encaustics": {"debut": R.ENCAUSTICS["debut"], "titre": R.ENCAUSTICS["titre"]}}}
     if lang == "fr":
         def corriger(x):
             if isinstance(x, str):
@@ -2277,6 +2262,338 @@ def page_horaires(lang):
 
 
 
+
+# ================================================================ v6 · pages demandées par Lisa (20 novembre 2026)
+# Les vidéos du procédé, en ligne sur la page /salon du site actuel (Wix Video) : chargées seulement au clic, après accord.
+VIDEOS_PROCEDE = [
+    {"titre": "Encaustic Painting Process", "fr": "Le procédé de la peinture à l'encaustique", "id": "47a93e_bc67f82a443c442e8b080df19df4092d", "q": "720p", "duree": "1:07"},
+    {"titre": "Hot Surface Direct Encaustic Painting", "fr": "Peindre directement sur une surface chaude", "id": "47a93e_a7f40a63c3834beb9907c41a8561cfcd", "q": "360p", "duree": "1:00"},
+    {"titre": "Rose Coloured Glasses Process", "fr": "Le procédé de Rose Coloured Glasses", "id": "47a93e_55a610a4583a4ea3a0d05110def02376", "q": "720p", "duree": "1:03"},
+]
+
+
+def videos_procede(lang):
+    fr = lang == "fr"
+    items = ""
+    for v in VIDEOS_PROCEDE:
+        affiche = f"https://static.wixstatic.com/media/{v['id']}f002.jpg/v1/fill/w_640,h_640,enc_auto/file.jpeg"
+        src = f"https://video.wixstatic.com/video/{v['id']}/{v['q']}/mp4/file.mp4"
+        nom = v["fr"] if fr else v["titre"]
+        items += (f'<li class="video-procede" data-video-mp4="{src}"><button class="video-procede__bouton" type="button" aria-label="{e(("Play: " if not fr else "Lire : ") + nom)}">'
+                  f'<img src="{affiche}" alt="" width="640" height="640" loading="lazy" decoding="async"><span class="video__jouer" aria-hidden="true"><i></i></span>'
+                  f'<span class="video-procede__duree">{v["duree"]}</span></button><p>{e(nom)}</p></li>')
+    return (f'<div class="videos-procede"><p class="surtitre"><span>{e("Wax process videos" if not fr else "Vidéos du procédé à la cire")}</span></p><ul class="videos-procede__liste">{items}</ul>'
+            f'<p class="note">{e("The three videos already online on cirenza.com (Processes page), hosted by Wix. They load only when you play them." if not fr else "Les trois vidéos déjà en ligne sur cirenza.com (page Processes), hébergées par Wix. Elles ne se chargent que si vous les lancez.")}</p></div>')
+
+
+ENTITE_ESPACE = {"en": "Espace Créa-Tea-Vité · SAS Atelier Truffle · SIRET 989 397 146 00014 · VAT-registered (VAT number to come) · 27 Passage du Mont Blanc, 74220 La Clusaz, France · atelier@cirenza.com",
+                 "fr": "Espace Créa-Tea-Vité · SAS Atelier Truffle · SIRET 989 397 146 00014 · assujettie à la TVA (numéro de TVA à venir) · 27 Passage du Mont Blanc, 74220 La Clusaz, France · atelier@cirenza.com"}
+
+
+def bloc_entite(lang):
+    return f'<p class="entite"><span>{e("Organised and invoiced by" if lang == "en" else "Organisé et facturé par")}</span> {e(ENTITE_ESPACE[lang])}</p>'
+
+
+# ---------------------------------------------------------------- Boutique & Tea Room : sur place, rien n'est vendu en ligne
+def page_salon_the(lang):
+    t = C.T[lang]
+    fr = lang == "fr"
+    chemin = fichier(lang, "salon_the")
+    prof = prof_de(chemin)
+    carte = ""
+    for g in C.CARTE:
+        lis = ""
+        for nom, prix, desc in g["items"]:
+            lis += f'<li><span class="boisson__nom">{e(L(lang, nom))}</span><span class="boisson__points" aria-hidden="true"></span><span class="boisson__prix">{e(prix if lang == "fr" else prix.replace(",", "."))} €</span>{f"<span class=boisson__desc>{e(L(lang, desc))}</span>" if desc else ""}</li>'
+        carte += f'<div class="carte-boissons__groupe"><h3>{e(g["titre"][lang])}</h3><ul>{lis}</ul></div>'
+    adresse = quote(f'{C.COORD["espace"]}, {C.COORD["rue"]}, {C.COORD["ville"]}, France')
+    corps = f'''
+{bandeau(lang, prof, None, "Visit in person · nothing is sold online" if not fr else "Sur place · rien n'est vendu en ligne", t["nav"]["salon_the"], [C.ESPACE["intro"][lang], C.ESPACE["ecran"][lang]], figure_photo(prof, "espace/salon-vertical", "The lounge of the Espace, fireplace and bookshelves" if not fr else "Le salon de l'Espace, la cheminée et la bibliothèque", "", "fossile", "(max-width: 900px) 80vw, 34vw"), t["nav"]["salon_the"])}
+<section class="salon-boutique" data-strate="Boutique">
+  {figure_photo(prof, "espace/atelier-rangements", "The shelves of art materials at the Espace" if not fr else "Les étagères de matériel d'art de l'Espace", "", "fossile salon-boutique__img", "(max-width: 800px) 80vw, 30vw")}
+  <div>{surtitre("In the boutique" if not fr else "Dans la boutique", 1)}<h2 class="titre-section">{lettres("Boutique" if not fr else "La boutique")}</h2>
+  <ul class="liste-traits">
+    <li>{e("Gallery & Tea Room: Local artists & artisans, warm and cold signature beverages, and space to ponder." if not fr else "Galerie et salon de thé : artistes et artisans du pays, boissons signature chaudes et froides, et de l'espace pour rêver.")}</li>
+    <li>{e("Creative Corner: Hands-on workshops and open studio time." if not fr else "Coin créatif : ateliers pratiques et temps d'atelier libre.")}</li>
+    <li>{e("Boutique: Curated art materials and unique local gifts." if not fr else "Boutique : matériel d'art choisi et cadeaux locaux uniques.")}</li>
+  </ul>
+  <p class="note"><span class="exemple">{"to come" if not fr else "à venir"}</span> {e("The detailed list of what is in the boutique (brands of materials, kits, local makers and gifts): Lisa's list to come." if not fr else "La liste détaillée de la boutique (marques de matériel, kits, créateurs du pays et cadeaux) : liste de Lisa à venir.")}</p></div>
+</section>
+<section class="carte-boissons" id="carte" tabindex="-1" data-strate="{e("Menu" if not fr else "La carte")}">
+  <div class="carte-boissons__image">{figure_photo(prof, "espace/salon-canape", "The lounge of the Espace, sofa and paintings" if not fr else "Le salon de l'Espace, canapé et tableaux", "", "fossile", "(max-width: 800px) 80vw, 30vw")}</div>
+  <div class="carte-boissons__texte">{surtitre("Tea room" if not fr else "Salon de thé", 2)}<h2 class="titre-section">{lettres("The menu" if not fr else "La carte")}</h2>{carte}<p class="note">{e(C.CARTE_NOTE[lang])}</p></div>
+</section>
+<section class="infos" id="horaires" tabindex="-1" data-strate="{e(t["horaires"])}">
+  {figure_photo(prof, "espace/enseigne-rue-village", "The Créa-Tea-Vité sign in the village street" if not fr else "L'enseigne Créa-Tea-Vité dans la rue du village", "", "fossile infos__img", "(max-width: 800px) 80vw, 30vw")}
+  <div class="infos__texte">{surtitre(t["horaires"], 3)}<dl class="horaires horaires--grand" data-horaires-liste>{"".join(f"<div><dt>{e(j)}</dt><dd>{e(h)}</dd></div>" for j, h in t["horaires_lignes"])}</dl>{statut(lang, "statut--grand")}
+  <address>{e(C.COORD["espace"])}<br>{e(C.COORD["rue"])}<br>{e(C.COORD["ville"])}, France</address>
+  <p class="acces">{e("Map:" if not fr else "Plan :")} <a href="https://www.google.com/maps/search/?api=1&amp;query={adresse}" target="_blank" rel="noopener">Google Maps</a> · <a href="https://maps.apple.com/?q={adresse}" target="_blank" rel="noopener">Apple Plans</a> · <a href="https://www.openstreetmap.org/search?query={adresse}" target="_blank" rel="noopener">OpenStreetMap</a></p>
+  <p class="note"><span class="exemple">{"to come" if not fr else "à venir"}</span> {e("Parking: where to park in the village, and how far it is on foot. Lisa's details to come." if not fr else "Stationnement : où se garer dans le village, et à combien de minutes à pied. Précisions de Lisa à venir.")}</p>
+  <p><a href="mailto:{C.COORD["courriel_espace"]}">{C.COORD["courriel_espace"]}</a> · <a href="tel:{C.COORD["tel_brut"]}">{e(C.COORD["tel"])}</a></p></div>
+</section>'''
+    ecrire(chemin, page(lang, "salon_the", chemin, t["nav"]["salon_the"], corps, href_autre(lang, "salon_the", prof), {}, "page-salon-the"))
+
+
+# ---------------------------------------------------------------- Co-Creating Sessions : texte de la page de réservation actuelle, mot pour mot
+COSESSIONS = {
+    "accroche": {"en": "A place to work on, and get advice on your personal creative projects ...", "fr": "Un lieu pour avancer sur vos projets créatifs personnels, et recevoir des conseils..."},
+    "description": {"en": "Come paint, draw, write... Sip a warm drink (included) and enjoy personalised guidance from the artist to help refine  your next spark of inspiration. Bring your own materials, use some of our basics, or buy one of our kits. If you don't have a specific project, be inspired by our library of books and images. Water, table easels, and other accessories will be available to borrow.",
+                    "fr": "Venez peindre, dessiner, écrire... Une boisson chaude (comprise) à la main, profitez de conseils personnalisés de l'artiste pour affiner votre prochaine étincelle d'inspiration. Apportez votre matériel, utilisez nos fournitures de base ou achetez l'un de nos kits. Sans projet précis, laissez-vous inspirer par notre bibliothèque de livres et d'images. Eau, chevalets de table et autres accessoires à emprunter sur place."},
+    "annulation_en": "No refunds are available once the session has started. Any cancellation request must be submitted in writing to atelier@cirenza.com, at least 72 hours before the course begins. If your space can be filled after cancellation, 90% of your total payment will be refunded. If the space cannot be filled, the fee is non-refundable.",
+    "annulation_fr": "Aucun remboursement n’est possible après le début du cours, ni en cas d’absence à une séance. Toute demande d’annulation doit être adressée par écrit à atelier@cirenza.com, au moins 72 heures avant le début du cours. Si votre place peut être comblée après une annulation, 90 % du montant total payé vous seront remboursés. Dans le cas contraire, les frais restent dus et ne sont pas remboursables.",
+}
+
+
+def page_cosessions(lang):
+    t = C.T[lang]
+    fr = lang == "fr"
+    chemin = fichier(lang, "cosessions")
+    prof = prof_de(chemin)
+    K = COSESSIONS
+    corps = f'''
+{bandeau(lang, prof, None, "Open studio · €30" if not fr else "Atelier ouvert · 30 €", t["nav"]["cosessions"], [K["accroche"][lang], K["description"][lang]], figure_photo(prof, "cours/atelier-libre-pastel", "A participant working in the studio" if not fr else "Une participante au travail à l'atelier", "", "fossile", "(max-width: 900px) 80vw, 34vw"), t["nav"]["cosessions"])}
+<section class="calendrier" data-strate="{e("Upcoming sessions" if not fr else "Prochaines séances")}">
+  {surtitre("Upcoming sessions" if not fr else "Prochaines séances", 1)}<h2 class="titre-section">{lettres("Calendar" if not fr else "Calendrier")}</h2>
+  <div class="calendrier__cadre"><p>{e("On the final site, this calendar shows the sessions from Wix Bookings on your current site (the same service, prices and bookings), and visitors book and pay here." if not fr else "Sur le site final, ce calendrier affiche les séances de Wix Bookings de votre site actuel (même service, mêmes prix, mêmes réservations), et les visiteurs réservent et paient ici.")}</p>
+  <p>{bouton("Ask for the next dates" if not fr else "Demander les prochaines dates", lien(lang, "contact", prof) + "?objet=autre")}</p></div>
+</section>
+<section class="conditions-courtes" data-strate="{e("Cancellation policy" if not fr else "Conditions d'annulation")}">
+  {surtitre("Cancellation policy" if not fr else "Conditions d'annulation", 2)}
+  <div class="conditions-courtes__deux"><div lang="en"><h3>Cancellation Policy</h3><p>{e(K["annulation_en"])}</p></div><div lang="fr"><h3>Conditions d’annulation</h3><p>{e(K["annulation_fr"])}</p></div></div>
+  {bloc_entite(lang)}
+</section>'''
+    ecrire(chemin, page(lang, "cosessions", chemin, t["nav"]["cosessions"], corps, href_autre(lang, "cosessions", prof), {}, "page-cosessions"))
+
+
+# ---------------------------------------------------------------- Expositions et événements : l'exposition en cours, puis la suite
+def page_expositions(lang):
+    t = C.T[lang]
+    fr = lang == "fr"
+    chemin = fichier(lang, "expositions")
+    prof = prof_de(chemin)
+    ex = C.EXPO
+    commence = DT.date.fromisoformat(ex["debut"]) <= AUJ
+    etat_txt = ("On now" if not fr else "En cours") if commence else (("Opens " if not fr else "Ouverture le ") + ("3 December 2026" if not fr else "3 décembre 2026"))
+    av = (C.CV.get("a_venir") or {}).get(lang)
+    a_venir = "".join(f'<li>{e(x)}</li>' for x in ([av] if isinstance(av, str) else (av or [])))
+    corps = f'''
+<section class="bandeau bandeau--expo" data-strate="{e(ex["titre"])}">
+  <div class="bandeau__texte">
+    {surtitre(("Current exhibition" if commence else "Upcoming exhibition") if not fr else ("Exposition en cours" if commence else "Exposition à venir"))}
+    <h1 class="bandeau__titre">{lettres(ex["titre"])}</h1>
+    <p class="bandeau__accroche"><span class="etiquette">{e(etat_txt)}</span> {e(ex["dates"][lang])} · Espace Créa-Tea-Vité, La Clusaz</p>
+    <div class="bandeau__intro" data-apparait><p>{e(ex["intro"][lang])}</p></div>
+  </div>
+  <div class="bandeau__image">{figure_photo(prof, "exposition-en-cours/bnt-designs-soudure", "BNT Designs welding a steel sphere" if not fr else "BNT Designs soude une sphère d'acier", "BNT Designs", "fossile", "(max-width: 900px) 80vw, 34vw")}</div>
+</section>
+<section class="expo-artistes" data-strate="{e("The artists" if not fr else "Les artistes")}">
+  {surtitre("The artists" if not fr else "Les artistes", 1)}
+  <div class="expo-artistes__grille">
+    <article>{figure_photo(prof, "exposition-en-cours/bnt-designs-soudure", "", "", "fossile", "(max-width: 800px) 80vw, 26vw")}<h3>BNT Designs</h3><p>{e(ex["bnt"][lang])}</p></article>
+    <article><figure class="oeuvre" style="--ratio:{OEUVRES["recente-01"]["ratio"]}">{bouton_oeuvre(prof, "recente-01", lang, LEAD, "(max-width: 800px) 80vw, 26vw")}</figure><h3>Lisa Cirenza</h3><p>{e(ex["lisa"][lang])}</p><p>{bouton(SERIES[LEAD]["titre"][lang], lien_salle(lang, LEAD, prof), "bouton bouton--ligne")}</p></article>
+    <article><div class="expo-artistes__absent" aria-hidden="true"><span>Le Petit Lapin</span></div><h3>Le Petit Lapin</h3><p>{e(ex["lapin"][lang])}</p></article>
+  </div>
+</section>
+<section class="evenements-liste" data-strate="{e("Events" if not fr else "Événements")}">
+  {surtitre("Events" if not fr else "Événements", 2)}<h2 class="titre-section">{lettres("Coming up" if not fr else "À venir")}</h2>
+  <ul class="liste-traits">{a_venir or "<li>" + e("Opening, talks and other events: dates to come from Lisa." if not fr else "Vernissage, rencontres et autres événements : dates à venir de Lisa.") + "</li>"}</ul>
+  <p>{bouton(t["nav"]["evenements"], lien(lang, "evenements", prof), "bouton bouton--ligne")}{bouton(t["nav"]["cosessions"], lien(lang, "cosessions", prof), "bouton bouton--ligne")}</p>
+</section>'''
+    ecrire(chemin, page(lang, "expositions", chemin, t["nav"]["expositions"], corps, href_autre(lang, "expositions", prof), {"expoFin": ex["fin"]}, "page-expositions"))
+
+
+# ---------------------------------------------------------------- échéancier et conditions d'annulation (texte de Lisa, coordonnées de la SAS)
+CONDITIONS = {
+    "en": [
+        ("", "Think of this as the recipe card for the practical side: short, clear and no hidden ingredients. If anything is unclear, just write to me. I’d much rather answer a question than have you wonder."),
+        ("1. Securing your place", "A deposit of €200 secures your place on the retreat. It is deducted from your first payment."),
+        ("2. Payment schedule", "50% of the retreat fee is due six months before the retreat begins. The remaining 50% is due three months before the retreat begins. We’ll send you each payment request by email in good time. Any early-bird, returner or other reduction is taken off your final payment."),
+        ("3. Right of withdrawal", "In accordance with Article L221-28 of the French Consumer Code, the 14-day right of withdrawal does not apply to accommodation and leisure services provided on a specific date or for a specific period. Your booking is therefore final once your deposit is paid."),
+        ("4. If you cancel", "Our retreats are small and planned around each group, so most of our costs (lodging, materials and excursions) are committed well in advance. Please let us know in writing (by email) if you need to cancel. The following cancellation fees apply: More than six months before the retreat: the €200 deposit is retained. Between six and three months before the retreat: 50% of the retreat fee is retained. Less than three months before the retreat: 100% of the retreat fee is retained. If you cancel, you won’t be asked for any payment that isn’t yet due."),
+        ("5. Transferring your place", "You may transfer your place to another person who meets the conditions of the retreat, provided you let us know in writing at least seven days before the retreat begins. If we find a replacement from our waiting list, the same applies. In either case, we’ll refund everything you’ve paid, less the actual costs of the transfer, up to a maximum of 5% of the amount paid. You and the person taking your place remain jointly responsible for any balance due and for these costs."),
+        ("6. Exceptional circumstances", "If exceptional and unavoidable circumstances at or near the retreat location (for example a natural disaster or a public health emergency) significantly affect the retreat or your travel to it, you may cancel without any cancellation fee and receive a full refund."),
+        ("7. If we cancel", "If we have to cancel the retreat for any reason, you’ll receive a full refund of everything you’ve paid, within 14 days."),
+        ("8. Travel insurance", "We strongly recommend comprehensive travel insurance that covers cancellation. Past guests who had to cancel were very glad to have been fully insured."),
+        ("Questions?", "Write to me at Atelier@cirenza.com"),
+        ("", "Pack your curiosity and a sense of humour; I’ll handle the small print."),
+    ],
+    "fr": [
+        ("", "Voyez ceci comme la fiche recette du côté pratique : courte, claire, sans ingrédient caché. Si quelque chose n'est pas clair, écrivez-moi. Je préfère de loin répondre à une question que vous laisser dans le doute."),
+        ("1. Réserver votre place", "Un acompte de 200 € réserve votre place. Il est déduit de votre premier paiement."),
+        ("2. Échéancier", "50 % du prix de la retraite sont dus six mois avant son début. Les 50 % restants sont dus trois mois avant son début. Nous vous envoyons chaque demande de paiement par courriel, en temps utile. Toute remise (inscription anticipée, participant déjà venu ou autre) est déduite de votre dernier paiement."),
+        ("3. Droit de rétractation", "Conformément à l'article L221-28 du Code de la consommation, le délai de rétractation de 14 jours ne s'applique pas aux prestations d'hébergement et de loisirs fournies à une date ou pour une période déterminée. Votre réservation est donc ferme dès le paiement de l'acompte."),
+        ("4. Si vous annulez", "Nos retraites sont petites et organisées autour de chaque groupe : la plupart de nos frais (logement, matériel, excursions) sont engagés longtemps à l'avance. Prévenez-nous par écrit (par courriel) si vous devez annuler. Les frais d'annulation sont les suivants : plus de six mois avant la retraite, l'acompte de 200 € est conservé ; entre six et trois mois avant, 50 % du prix de la retraite sont conservés ; moins de trois mois avant, 100 % du prix sont conservés. En cas d'annulation, aucun paiement non encore exigible ne vous sera demandé."),
+        ("5. Céder votre place", "Vous pouvez céder votre place à une personne qui remplit les conditions de la retraite, à condition de nous prévenir par écrit au moins sept jours avant son début. Il en va de même si nous trouvons un remplaçant sur notre liste d'attente. Dans les deux cas, nous vous remboursons tout ce que vous avez payé, moins les frais réels de la cession, dans la limite de 5 % du montant payé. Vous et la personne qui prend votre place restez solidairement responsables du solde dû et de ces frais."),
+        ("6. Circonstances exceptionnelles", "Si des circonstances exceptionnelles et inévitables sur le lieu de la retraite ou à proximité (par exemple une catastrophe naturelle ou une urgence de santé publique) affectent de façon importante la retraite ou votre voyage, vous pouvez annuler sans frais et être intégralement remboursé."),
+        ("7. Si nous annulons", "Si nous devons annuler la retraite, pour quelque raison que ce soit, vous êtes intégralement remboursé de tout ce que vous avez payé, sous 14 jours."),
+        ("8. Assurance voyage", "Nous recommandons vivement une assurance voyage complète couvrant l'annulation. Les participants qui ont dû annuler par le passé ont été bien contents d'être entièrement assurés."),
+        ("Des questions ?", "Écrivez-moi à atelier@cirenza.com"),
+        ("", "Emportez votre curiosité et votre sens de l'humour ; je m'occupe des petites lignes."),
+    ],
+}
+
+
+def page_conditions(lang):
+    t = C.T[lang]
+    fr = lang == "fr"
+    chemin = fichier(lang, "conditions")
+    prof = prof_de(chemin)
+    blocs = "".join((f'<h2>{e(h)}</h2>' if h else "") + f'<p>{e(x)}</p>' for h, x in CONDITIONS[lang])
+    corps = f'''
+<section class="texte-long" data-strate="{e(t["nav"]["conditions"])}">
+  {surtitre(("2027 retreats: " if not fr else "Retraites 2027 : ") + " · ".join(nom_retraite(RETRAITES[k], lang) for k in RETRAITES_ORDRE))}
+  <h1 class="bandeau__titre">{lettres("Retreat Payment Schedule and Cancellation Policy" if not fr else "Échéancier de paiement et conditions d'annulation des retraites")}</h1>
+  <div class="texte-long__corps">{blocs}<p class="note">{e("Last updated: November 2026" if not fr else "Dernière mise à jour : novembre 2026")}</p>
+  {'' if not fr else '<p class="note">Traduction de la version anglaise, qui fait foi ; à relire par Lisa.</p>'}</div>
+  {bloc_entite(lang)}
+</section>'''
+    ecrire(chemin, page(lang, "conditions", chemin, t["nav"]["conditions"], corps, href_autre(lang, "conditions", prof), {}, "page-conditions"))
+
+
+# ---------------------------------------------------------------- formulaires d'inscription : mêmes adresses, mêmes champs, mêmes formulaires Wix
+LOGEMENTS = {
+    "en": [
+        "Exquisitely designed ensuite lodging in a 4-star apartment across from the Atelier, featuring a contemporary shared kitchen, sophisticated living area, and a serene outdoor terrace – private bedroom with sink & shower €3,295.00 per artist.",
+        "Same as above– private bedroom, shared sink,shower room- €2850 per artist",
+        "Same as above-- shared bedroom (separate single beds), shared sink/shower room, based on 2 artists that know each other ahead of time that book simultaneously, €2450 per artist",
+        "Elegant couple’s accommodation for 2 artists, offering a private ensuite, a modern shared kitchen, and a sophisticated living area in the heart of the village, just 5 minutes from the Atelier. Limited to 2 couples; exclusive non-sharing upgrades available on request – €5500 per couple",
+        "Elegant couple’s accommodation for one artist and a non-participating partner, offering a private ensuite, a modern shared kitchen, and a sophisticated living area in the heart of the village, just 5 minutes from the Atelier. Limited to 2 couples; exclusive non-sharing upgrades available on request – €4795 per couple",
+    ],
+    "fr": [
+        "Logement raffiné avec salle d'eau dans un appartement 4 étoiles face à l'atelier, avec cuisine partagée contemporaine, salon élégant et terrasse paisible : chambre individuelle avec lavabo et douche, 3 295 € par artiste.",
+        "Même logement : chambre individuelle, lavabo et douche partagés, 2 850 € par artiste",
+        "Même logement : chambre partagée (lits simples séparés), lavabo et douche partagés, pour 2 artistes qui se connaissent et s'inscrivent en même temps, 2 450 € par artiste",
+        "Logement élégant pour un couple de 2 artistes, avec salle d'eau privée, cuisine partagée moderne et salon élégant au cœur du village, à 5 minutes de l'atelier. Limité à 2 couples ; formules privatives sur demande, 5 500 € par couple",
+        "Logement élégant pour un artiste et un partenaire non participant, avec salle d'eau privée, cuisine partagée moderne et salon élégant au cœur du village, à 5 minutes de l'atelier. Limité à 2 couples ; formules privatives sur demande, 4 795 € par couple",
+    ],
+}
+NIVEAUX = {
+    "en": ["Eager beaver, the last time I did anything creative was age 5, and it didn’t end well, but I’m ready to reconnect and have fun!",
+           "Dabbler, I enjoy creating things, but find it hard to make the time, so this is me finally carving some out!",
+           "Committed hobbyist, I make time to create regularly, take the odd class, and I’m ready to stretch beyond my comfort zone.",
+           "Practising artist, I’ve built a real practice in one medium (and maybe show or sell my work), and I’m curious to explore others.",
+           "Professional artist, I’m trained across many mediums, exhibit and/or teach, and I’m looking to refresh my eye and push my creative voice further.",
+           "Unclassifiable, my creativity comes out in other ways (cooking, writing, gardening, spreadsheets…), and I’m eager to see where paint might take it."],
+    "fr": ["Grand débutant : la dernière fois que j'ai créé quelque chose, j'avais 5 ans, et ça s'est mal fini, mais je suis prêt à renouer avec la création et à m'amuser !",
+           "Touche-à-tout : j'aime créer, mais j'ai du mal à en trouver le temps ; cette fois, je le prends enfin !",
+           "Amateur assidu : je crée régulièrement, je prends un cours de temps en temps, et je suis prêt à sortir de ma zone de confort.",
+           "Artiste pratiquant : j'ai une vraie pratique dans un médium (j'expose ou je vends peut-être), et j'ai envie d'en explorer d'autres.",
+           "Artiste professionnel : formé à de nombreux médiums, j'expose et/ou j'enseigne, et je veux rafraîchir mon regard et pousser ma voix créative plus loin.",
+           "Inclassable : ma créativité passe par d'autres chemins (cuisine, écriture, jardin, tableurs…), et je suis curieux de voir où la peinture peut la mener."],
+}
+ACTIVITES = {
+    "en": ["None, I plan to be in the studio as much as possible", "Yoga", "Hiking", "Massage/Spa visit", "Swimming in Lake Annecy", "Paddleboard or kayak in Lake Annecy",
+           "Swimming in outdoor heated pool with spa facilities and gym in La Clusaz (with views to die for)"],
+    "fr": ["Aucune, je compte passer le plus de temps possible à l'atelier", "Yoga", "Randonnée", "Massage ou spa", "Baignade dans le lac d'Annecy", "Paddle ou kayak sur le lac d'Annecy",
+           "Piscine extérieure chauffée avec spa et salle de sport à La Clusaz (avec une vue à couper le souffle)"],
+}
+
+
+def page_inscription(lang, cle):
+    t = C.T[lang]
+    fr = lang == "fr"
+    page_cle = INSCRIPTION[cle]
+    chemin = fichier(lang, page_cle)
+    prof = prof_de(chemin)
+    r = RETRAITES[cle]
+    # demande de Lisa : chambres de couple et partenaire non participant sur le formulaire de septembre seulement
+    logements = LOGEMENTS[lang][:3] if cle == "pip" else LOGEMENTS[lang]
+    titre_f = ("Painting in Paradise Registration" if cle == "pip" else "Alpine Creative Pause Registration") if not fr else f"Inscription · {nom_retraite(r, lang)}"
+    sous = ("Register to Paint in Paradise" if cle == "pip" else "Alpine Creative Pause") if not fr else nom_retraite(r, lang)
+
+    def champ(nom, lib, typ="text", requis=False, auto=""):
+        a = f' autocomplete="{auto}"' if auto else ""
+        etoile = ' <span aria-hidden="true">*</span>' if requis else ""
+        return (f'<div class="champ"><label for="i-{nom}">{e(lib)}{etoile}</label>'
+                f'<input id="i-{nom}" name="{nom}" type="{typ}"{a}{" required" if requis else ""}><p class="champ__erreur" aria-live="polite"></p></div>')
+    opts = "".join(f'<label class="choix choix--long"><input type="radio" name="logement" value="{i + 1}" required><span>{e(x)}</span></label>' for i, x in enumerate(logements))
+    niveaux = "".join(f'<label class="choix choix--long"><input type="radio" name="niveau" value="{i + 1}"><span>{e(x)}</span></label>' for i, x in enumerate(NIVEAUX[lang]))
+    activites = "".join(f'<label class="choix choix--long"><input type="checkbox" name="activites" value="{i + 1}"><span>{e(x)}</span></label>' for i, x in enumerate(ACTIVITES[lang]))
+    corps = f'''
+<section class="inscription" data-strate="{e(titre_f)}">
+  <div class="inscription__tete">
+    {surtitre(L(lang, r["dates"]) + " · La Clusaz")}
+    <h1 class="bandeau__titre">{lettres(titre_f)}</h1>
+    <p class="bandeau__accroche">{e(sous)}</p>
+    {bloc_entite(lang)}
+  </div>
+  <form class="formulaire inscription__form" data-inscription data-wix-form-id="{FORMULAIRES_WIX[cle]}" novalidate>
+    <div class="formulaire__deux">{champ("prenom", "First name" if not fr else "Prénom", "text", True, "given-name")}{champ("nom", "Last name" if not fr else "Nom", "text", True, "family-name")}</div>
+    <div class="formulaire__deux">{champ("email", "Email" if not fr else "Courriel", "email", True, "email")}{champ("tel", "Phone" if not fr else "Téléphone", "tel", False, "tel")}</div>
+    <fieldset class="champ"><legend>{e("Address" if not fr else "Adresse")} <span aria-hidden="true">*</span></legend>
+      <div class="formulaire__deux">{champ("pays", "Country/Region" if not fr else "Pays ou région", "text", True, "country-name")}{champ("adresse", "Address" if not fr else "Adresse", "text", True, "street-address")}</div>
+      <div class="formulaire__deux">{champ("ville", "City" if not fr else "Ville", "text", True, "address-level2")}{champ("cp", "Zip / Postal code" if not fr else "Code postal", "text", True, "postal-code")}</div>
+    </fieldset>
+    <fieldset class="champ"><legend>{e("Preferred Lodging (first come first served)" if not fr else "Logement souhaité (premier arrivé, premier servi)")} <span aria-hidden="true">*</span></legend>
+      <p class="note">{e("Please choose one" if not fr else "Choisissez une option")}</p>{opts}
+      <p class="note">{e("If none of these options suit your needs please feel free to discuss, and we'll do our best to find suitable accommodations" if not fr else "Si aucune de ces options ne vous convient, parlons-en : nous ferons de notre mieux pour trouver un hébergement adapté")}</p><p class="champ__erreur" aria-live="polite"></p>
+    </fieldset>
+    <div class="champ"><label for="i-allergies">{e("Any Allergies, Medical Constraints, Food Restrictions? (NB, the village is located at 1100 meters/3500', and we may be going up to 1600meters/5400' for an activity.)" if not fr else "Allergies, contraintes médicales, régime alimentaire ? (NB : le village est à 1 100 mètres d'altitude, et nous pourrons monter jusqu'à 1 600 mètres pour une activité.)")}</label><textarea id="i-allergies" name="allergies" rows="4"></textarea></div>
+    <div class="champ champ--case"><label><input type="checkbox" name="consentement_sante" data-sante> <span>[{e("Consent wording for health information: to come from Lisa" if not fr else "Texte de consentement pour les informations de santé : à venir de Lisa")}]</span></label><p class="note">{e("Required if you write anything in the box above: allergies and medical information are health data." if not fr else "Obligatoire si vous remplissez la case ci-dessus : allergies et informations médicales sont des données de santé.")}</p><p class="champ__erreur" aria-live="polite"></p></div>
+    <fieldset class="champ"><legend>{e("Self assessed creative level:" if not fr else "Votre niveau créatif, selon vous :")}</legend>{niveaux}</fieldset>
+    <fieldset class="champ"><legend>{e("Optional Interests/Activities" if not fr else "Activités facultatives")}</legend>
+      <p class="note">{e("If there is a critical mass, I will do my best to arrange group alternatives to open guided studio times. (Costs not included) Please pick your TOP 3" if not fr else "S'il y a assez d'intéressés, je ferai de mon mieux pour organiser ces activités en groupe, en alternative aux temps d'atelier encadré. (Frais non compris) Choisissez vos 3 préférées")}</p>{activites}</fieldset>
+    <div class="inscription__acompte"><p class="surtitre"><span>{e("Deposit" if not fr else "Acompte")}</span></p><p><strong>{e("Save my space with this deposit" if not fr else "Je réserve ma place avec cet acompte")}</strong> <span class="inscription__montant">{e(prix_txt(200, lang))}</span></p></div>
+    <div class="champ champ--case"><label><input type="checkbox" name="conditions" required> <span>{e("I have read and agree with the terms and conditions." if not fr else "J'ai lu et j'accepte les conditions.")}</span></label>
+      <p class="note">{e("Please do take the time to read the payment schedule and cancellation policy," if not fr else "Prenez le temps de lire l'échéancier de paiement et les conditions d'annulation,")} <a href="{lien(lang, "conditions", prof)}">{e("by clicking this link." if not fr else "en suivant ce lien.")}</a> {e("And don't hesitate to ask me questions." if not fr else "Et n'hésitez pas à me poser vos questions.")}</p><p class="champ__erreur" aria-live="polite"></p></div>
+    <p class="formulaire__erreurs" hidden role="alert">{e("Please check the highlighted fields." if not fr else "Vérifiez les champs signalés.")}</p>
+    <p class="note">{e("Mock-up: nothing is sent or charged. On the final site, this form sends your answers to the same Wix form as today, then takes the €200 deposit." if not fr else "Maquette : rien n'est envoyé ni débité. Sur le site final, ce formulaire envoie vos réponses au même formulaire Wix qu'aujourd'hui, puis encaisse l'acompte de 200 €.")}</p>
+    <button class="bouton aimant" type="submit"><span>{e("Submit" if not fr else "Envoyer")}</span></button>
+  </form>
+  <div class="formulaire__merci inscription__merci" hidden tabindex="-1">
+    <h2>{e("Thank you, your place is on its way!" if not fr else "Merci, votre place est en route !")}</h2>
+    <p>{e("We have received your registration. You'll receive a confirmation email with your deposit receipt and the next steps." if not fr else "Nous avons bien reçu votre inscription. Vous allez recevoir un courriel de confirmation avec le reçu de votre acompte et les prochaines étapes.")}</p>
+    <p class="note">{e("Confirmation wording to be confirmed by Lisa." if not fr else "Formulation à confirmer par Lisa.")}</p>
+  </div>
+</section>'''
+    ecrire(chemin, page(lang, page_cle, chemin, titre_f, corps, href_autre(lang, page_cle, prof), {}, "page-inscription"))
+
+
+# ---------------------------------------------------------------- recherche sur tout le site (index généré, sans service externe)
+def index_recherche(lang):
+    t = C.T[lang]
+    items = []
+    for cle in C.PAGES:
+        if cle in ("horaires", "recherche", "accueil") or cle.startswith("inscription_"):
+            continue
+        seo = SEO.PAGES.get(cle) or {}
+        nom = t["nav"].get(cle) or cle
+        if cle in RETRAITES:
+            nom = nom_retraite(RETRAITES[cle], lang)
+        desc = (seo.get("description") or {}).get(lang) if seo.get("description") else ""
+        items.append({"t": nom, "d": desc or "", "u": lien(lang, cle, 0), "g": "page"})
+    for sid in ORDRE:
+        items.append({"t": SERIES[sid]["titre"][lang], "d": SERIES[sid]["texte"][lang][:160], "u": lien_salle(lang, sid, 0), "g": "serie"})
+        for oid in LISTES[sid]:
+            o = OEUVRES[oid]
+            if o["titre"]:
+                items.append({"t": titre(o, lang), "d": faits_courts(o, lang), "u": lien_salle(lang, sid, 0) + "?oeuvre=" + oid, "g": "oeuvre"})
+    for x in C.PRESSE:
+        items.append({"t": x["titre"], "d": x["media"] + " · " + (L(lang, x["date"]) or ""), "u": lien(lang, "presse", 0), "g": "presse"})
+    return items
+
+
+def page_recherche(lang):
+    t = C.T[lang]
+    fr = lang == "fr"
+    chemin = fichier(lang, "recherche")
+    prof = prof_de(chemin)
+    (SITE / "assets" / "data" / f"recherche-{lang}.json").write_text(json.dumps(index_recherche(lang), ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    corps = f'''
+<section class="recherche" data-strate="{e(t["nav"]["recherche"])}">
+  {surtitre("Works, pages, press" if not fr else "Œuvres, pages, presse")}
+  <h1 class="bandeau__titre">{lettres(t["nav"]["recherche"])}</h1>
+  <form class="recherche__form" role="search" data-recherche action="">
+    <label class="vh" for="q">{e(t["nav"]["recherche"])}</label>
+    <input id="q" name="q" type="search" autocomplete="off" placeholder="{e("A work, a series, a retreat…" if not fr else "Une œuvre, une série, une retraite…")}">
+    <button class="bouton" type="submit"><span>{e(t["nav"]["recherche"])}</span></button>
+  </form>
+  <p class="recherche__etat" role="status" aria-live="polite"></p>
+  <ol class="recherche__resultats" data-recherche-resultats></ol>
+</section>'''
+    ecrire(chemin, page(lang, "recherche", chemin, t["nav"]["recherche"], corps, href_autre(lang, "recherche", prof), {"recherche": f"assets/data/recherche-{lang}.json"}, "page-recherche"))
+
+
 # ================================================================ v5 · plan du site, robots, llms.txt (GEO), redirections de l'ancien site
 def pages_publiques():
     """(cle, salle) de chaque page publique, dans les deux langues."""
@@ -2306,12 +2623,14 @@ def ecrire_llms():
     """llms.txt : résumé factuel pour les moteurs de réponse (ChatGPT, Perplexity, Gemini, Claude…)."""
     t = C.T["en"]
     lignes_h = "; ".join(f"{j}: {h}" for j, h in HOR.lignes(HEURES, "en"))
-    retraites = "\n".join(f'- [{RETRAITES[k]["titre"]}]({url_page("en", k)}): {L("en", RETRAITES[k]["accroche"])}. {L("en", RETRAITES[k]["dates"])}, La Clusaz. {L("en", RETRAITES[k]["prix"])} per person, depending on the room.'
+    retraites = "\n".join(f'- [{RETRAITES[k]["titre"]}]({url_page("en", k)}): {L("en", RETRAITES[k]["accroche"])}. {L("en", RETRAITES[k]["dates"])}, La Clusaz. {L("en", RETRAITES[k]["prix"])}, depending on options indicated on the booking form.'
                           for k in RETRAITES_ORDRE)
     pages_en = [("oeuvres", "Works: A Record of Time, then the Archive of earlier series"), ("artiste", "Artist statement, long bio and short bio"),
                 ("studio", "Studio notes: the story behind A Record of Time"), ("parcours", "Selected CV"), ("presse", "Press"),
-                ("espace", "Espace Créa-Tea-Vité: gallery, tea room and studio"), ("cours_prives", "Private bespoke courses for hotels and concierges"),
-                ("evenements", "Private events and team workshops"), ("retraites", "Painting retreats 2027"), ("boutique", "Shop: originals, prints, collectors' editions"),
+                ("espace", "Espace Créa-Tea-Vité: gallery, tea room and studio"), ("salon_the", "Boutique & Tea Room: visit in person, tea menu, hours, map"),
+                ("cosessions", "Co-Creating Sessions: open studio with guidance, €30"), ("cours_prives", "Bespoke courses and workshops for individuals, families, groups, teams and event planners"),
+                ("evenements", "Gather at the Espace: private venue hire"), ("expositions", "Exhibitions & Events: La Gravité de la Grâce, December 2026 – April 2027"),
+                ("retraites", "Painting retreats 2027"), ("conditions", "Retreat payment schedule and cancellation policy"), ("boutique", "Available Works: originals, prints, collectors' editions"),
                 ("contact", "Contact")]
     pages_fr = [("accueil", "Accueil"), ("oeuvres", "Œuvres"), ("artiste", "L'artiste"), ("espace", "L'Espace Créa-Tea-Vité"), ("retraites", "Retraites 2027"), ("contact", "Contact")]
     c = C.COORD
@@ -2350,24 +2669,27 @@ def ecrire_llms():
 ## Contact
 
 - Artist and works (Lisa Cirenza Fine Art): {c["courriel"]}
-- Espace, classes, retreats and events (Espace Créa-Tea-Vité, SAS): {c["courriel_espace"]}
+- Espace, sessions, courses, retreats and events (Espace Créa-Tea-Vité, SAS Atelier Truffle): {c["courriel_espace"]}
 """
     (SITE / "llms.txt").write_text(txt, encoding="utf-8")
 
 
 def redirections():
-    """Anciennes adresses de la maquette, puis celles de l'ancien site Wix (anglais et /fr)."""
-    r = [{"source": "/retreats/molten-magic", "destination": "/retreats/alpine-encaustics", "permanent": False},
-         {"source": "/fr/retraites/molten-magic", "destination": "/fr/retraites/alpine-encaustics", "permanent": False},
-         {"source": "/retreats/alpine-pause", "destination": "/retreats/alpine-encaustics", "permanent": False},
-         {"source": "/fr/retraites/alpine-pause", "destination": "/fr/retraites/alpine-encaustics", "permanent": False},
-         {"source": "/works/light-water-rock-and-time", "destination": "/works/a-record-of-time", "permanent": False},
-         {"source": "/fr/oeuvres/lumiere-eau-roche-et-temps", "destination": "/fr/oeuvres/strates-du-temps", "permanent": False}]
-    for ancien, cible in SEO.ANCIEN_SITE.items():
+    """Anciennes adresses de la maquette, puis celles de l'ancien site Wix (anglais et /fr), précises d'abord, motifs ensuite."""
+    def dest(lg, cible):
+        return lien_salle(lg, cible[1], 0) if isinstance(cible, tuple) else lien(lg, cible, 0)
+    r = []
+    for ancien, cible in SEO.ANCIENNES_MAQUETTE.items():
+        r.append({"source": ancien, "destination": dest("en", cible), "permanent": False})
+    for ancien, cible in SEO.ANCIENNES_MAQUETTE_FR.items():
+        r.append({"source": ancien, "destination": dest("fr", cible), "permanent": False})
+    exacts = [(a, c) for a, c in SEO.ANCIEN_SITE.items() if a not in SEO.MOTIFS]
+    motifs = [(a, SEO.ANCIEN_SITE[a]) for a in SEO.MOTIFS]
+    for ancien, cible in exacts + motifs:
         for lg, pre in (("en", ""), ("fr", "/fr")):
-            dest = lien_salle(lg, cible[1], 0) if isinstance(cible, tuple) else lien(lg, cible, 0)
-            if pre + ancien != dest:  # ex. /press existe déjà sous le même nom
-                r.append({"source": pre + ancien, "destination": dest, "permanent": False})
+            d = dest(lg, cible)
+            if pre + ancien != d:  # ex. /press existe déjà sous le même nom
+                r.append({"source": pre + ancien, "destination": d, "permanent": False})
     return r
 
 # ================================================================ tout
@@ -2380,17 +2702,22 @@ for lang in LANGS:
     page_parcours(lang)
     page_presse(lang)
     page_espace(lang)
-    page_cours(lang)
     page_evenements(lang)
     page_retraites(lang)
     page_retraite(lang, "pip")
-    page_retraite(lang, "creative")
     page_retraite(lang, "encaustics")
     page_boutique(lang)
     page_cours_prives(lang)
     page_studio(lang)
     page_contact(lang)
     page_horaires(lang)
+    page_salon_the(lang)
+    page_cosessions(lang)
+    page_expositions(lang)
+    page_conditions(lang)
+    for _r in RETRAITES_ORDRE:
+        page_inscription(lang, _r)
+    page_recherche(lang)
     donnees_js(lang)
 page_404()
 # Maquette : pas d'indexation (le site actuel garde son référencement), en-têtes de sécurité de base,

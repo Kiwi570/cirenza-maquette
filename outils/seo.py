@@ -30,7 +30,7 @@ PAGES = {
     "presse": {
         "titre": {"en": "Press: Financial Times, Wax Fusion, M2616 · Lisa Cirenza",
                   "fr": "Presse : Financial Times, Wax Fusion, M2616 · Lisa Cirenza"},
-        "description": {"en": "Lisa Cirenza in the press: Rachel Spence in the Financial Times, Wax Fusion (International Encaustic Artists), M2616, Maisons et Jardins, a BBC documentary and a podcast.",
+        "description": {"en": "Lisa Cirenza in the press: Rachel Spence in the Financial Times, Wax Fusion (International Encaustic Artists), M2616, Maisons et Jardins (May 2022), a BBC documentary and a podcast.",
                         "fr": "Lisa Cirenza dans la presse : Rachel Spence dans le Financial Times, Wax Fusion (International Encaustic Artists), M2616, Maisons et Jardins, un documentaire de la BBC et un podcast."}},
     "espace": {
         "titre": {"en": "Espace Créa-Tea-Vité: gallery, tea room and studio in La Clusaz",
@@ -42,25 +42,51 @@ PAGES = {
         "description": {"en": "Watercolour, encaustic and mixed-media classes and open studio sessions with Lisa Cirenza at Espace Créa-Tea-Vité, La Clusaz, French Alps.",
                         "fr": "Cours d'aquarelle, d'encaustique et de techniques mixtes, et séances d'atelier ouvert avec Lisa Cirenza à l'Espace Créa-Tea-Vité, à La Clusaz."}},
     "cours_prives": {
-        "titre": {"en": "Private art courses for hotels and concierges in La Clusaz",
-                  "fr": "Cours d'art privés pour hôtels et conciergeries à La Clusaz"},
-        "description": {"en": "Bespoke private art sessions for hotel guests, concierges and event planners in La Clusaz: wax and mixed media, monoprinting, the artist's eye, abstraction, iPad art, outdoors.",
-                        "fr": "Séances d'art privées sur mesure pour les clients d'hôtels, conciergeries et organisateurs à La Clusaz : cire et techniques mixtes, monotype, regard d'artiste, abstraction, iPad, plein air."}},
+        "titre": {"en": "Bespoke art courses and workshops in La Clusaz · Espace Créa-Tea-Vité",
+                  "fr": "Cours et ateliers d'art sur mesure à La Clusaz · Espace Créa-Tea-Vité"},
+        "description": {"en": "Bespoke art sessions with Lisa Cirenza for individuals, families, groups, teams and event planners in La Clusaz: wax and mixed media, monoprinting, the artist's eye, abstraction, iPad art.",
+                        "fr": "Séances d'art sur mesure avec Lisa Cirenza pour particuliers, familles, groupes, équipes et organisateurs à La Clusaz : cire et techniques mixtes, monotype, regard d'artiste, abstraction, iPad."}},
     "evenements": {
-        "titre": {"en": "Private events and team workshops · Espace Créa-Tea-Vité, La Clusaz",
-                  "fr": "Événements privés et ateliers d'équipe · Espace Créa-Tea-Vité, La Clusaz"},
-        "description": {"en": "Hire Espace Créa-Tea-Vité in La Clusaz for private events, aperitifs in the gallery and creative team workshops led by Lisa Cirenza.",
-                        "fr": "Privatisez l'Espace Créa-Tea-Vité à La Clusaz : événements privés, apéritifs dans la galerie et ateliers créatifs d'équipe animés par Lisa Cirenza."}},
+        "titre": {"en": "Gather at the Espace: private venue hire in La Clusaz",
+                  "fr": "Se réunir à l'Espace : location d'un lieu privé à La Clusaz"},
+        "description": {"en": "Hire Espace Créa-Tea-Vité in La Clusaz for private events, dinners, receptions and art-thinking team building: up to 18 guests seated, 40 standing.",
+                        "fr": "Privatisez l'Espace Créa-Tea-Vité à La Clusaz pour vos événements, dîners, réceptions et ateliers d'équipe : jusqu'à 18 personnes assises, 40 debout."}},
     "retraites": {
         "titre": {"en": "Painting retreats 2027 in La Clusaz, French Alps",
                   "fr": "Retraites de peinture 2027 à La Clusaz, dans les Alpes"},
-        "description": {"en": "Three five-night painting retreats with Lisa Cirenza in La Clusaz in 2027: A Creative Pause (May), Painting in Paradise (June), Alpine Encaustics (September). Small groups, from €2,450.",
-                        "fr": "Trois retraites de peinture de cinq nuits avec Lisa Cirenza à La Clusaz en 2027 : A Creative Pause (mai), Painting in Paradise (juin), Alpine Encaustics (septembre). Petits groupes, dès 2 450 €."}},
+        "description": {"en": "Two painting retreats with Lisa Cirenza in La Clusaz in 2027: Painting in Paradise (21 – 26 June) and Alpine Creative Pause (6 – 11 September). Small groups, from €2,450.",
+                        "fr": "Deux retraites de peinture avec Lisa Cirenza à La Clusaz en 2027 : Peindre au paradis (21 – 26 juin) et Pause créative alpine (6 – 11 septembre). Petits groupes, dès 2 450 €."}},
     "boutique": {
-        "titre": {"en": "Shop: original works, prints and collectors' editions · Lisa Cirenza",
-                  "fr": "Boutique : œuvres originales, tirages et éditions de collection · Lisa Cirenza"},
-        "description": {"en": "Buy original encaustics, archival prints (printed and shipped by creativehub) and collectors' editions in acrylic by Lisa Cirenza, plus studio sessions at Espace Créa-Tea-Vité.",
-                        "fr": "Œuvres originales à l'encaustique, tirages d'art (imprimés et expédiés par creativehub) et éditions de collection en acrylique de Lisa Cirenza, et séances d'atelier à l'Espace Créa-Tea-Vité."}},
+        "titre": {"en": "Available Works: originals, prints and collectors' editions · Lisa Cirenza",
+                  "fr": "Œuvres disponibles : originaux, tirages et éditions de collection · Lisa Cirenza"},
+        "description": {"en": "Available works by Lisa Cirenza: original encaustics, archival prints printed and shipped by creativehub, and collectors' editions in acrylic.",
+                        "fr": "Les œuvres disponibles de Lisa Cirenza : encaustiques originales, tirages d'art imprimés et expédiés par creativehub, et éditions de collection en acrylique."}},
+    "salon_the": {
+        "titre": {"en": "Boutique & Tea Room · Espace Créa-Tea-Vité, La Clusaz",
+                  "fr": "Boutique et salon de thé · Espace Créa-Tea-Vité, La Clusaz"},
+        "description": {"en": "Visit the Espace Créa-Tea-Vité boutique and tea room in La Clusaz: art materials and local gifts, signature lattes, hot cocoa and teas. Opening hours, map and parking.",
+                        "fr": "La boutique et le salon de thé de l'Espace Créa-Tea-Vité à La Clusaz : matériel d'art et cadeaux locaux, lattes signature, chocolat chaud et thés. Horaires, plan et stationnement."}},
+    "cosessions": {
+        "titre": {"en": "Co-Creating Sessions: open studio in La Clusaz · Espace Créa-Tea-Vité",
+                  "fr": "Sessions de co-création : atelier ouvert à La Clusaz · Espace Créa-Tea-Vité"},
+        "description": {"en": "Work on your own creative projects with personalised guidance from Lisa Cirenza, a warm drink included, at Espace Créa-Tea-Vité in La Clusaz. €30 per session.",
+                        "fr": "Avancez sur vos projets créatifs avec les conseils personnalisés de Lisa Cirenza, boisson chaude comprise, à l'Espace Créa-Tea-Vité à La Clusaz. 30 € la séance."}},
+    "expositions": {
+        "titre": {"en": "Exhibitions & Events: La Gravité de la Grâce · Espace Créa-Tea-Vité",
+                  "fr": "Expositions et événements : La Gravité de la Grâce · Espace Créa-Tea-Vité"},
+        "description": {"en": "La Gravité de la Grâce, December 2026 – April 2027 at Espace Créa-Tea-Vité, La Clusaz: Lisa Cirenza's new series, photographs by Le Petit Lapin and steel sculptures by BNT Designs.",
+                        "fr": "La Gravité de la Grâce, décembre 2026 – avril 2027 à l'Espace Créa-Tea-Vité, La Clusaz : la nouvelle série de Lisa Cirenza, les photographies du Petit Lapin et les sculptures d'acier de BNT Designs."}},
+    "conditions": {
+        "titre": {"en": "Retreat payment schedule and cancellation policy · Espace Créa-Tea-Vité",
+                  "fr": "Échéancier de paiement et conditions d'annulation des retraites · Espace Créa-Tea-Vité"},
+        "description": {"en": "The €200 deposit, the payment schedule, cancellation fees, transfers and travel insurance for the 2027 painting retreats in La Clusaz.",
+                        "fr": "L'acompte de 200 €, l'échéancier, les frais d'annulation, la cession de place et l'assurance voyage des retraites de peinture 2027 à La Clusaz."}},
+    "inscription_pip": {"titre": {"en": "Painting in Paradise Registration", "fr": "Inscription · Peindre au paradis"},
+                        "description": {"en": "Registration form for Painting in Paradise 2027.", "fr": "Formulaire d'inscription à Peindre au paradis 2027."}},
+    "inscription_encaustics": {"titre": {"en": "Alpine Creative Pause Registration", "fr": "Inscription · Pause créative alpine"},
+                               "description": {"en": "Registration form for Alpine Creative Pause 2027.", "fr": "Formulaire d'inscription à la Pause créative alpine 2027."}},
+    "recherche": {"titre": {"en": "Search · Lisa Cirenza", "fr": "Rechercher · Lisa Cirenza"},
+                  "description": {"en": "Search the works, pages and press of Lisa Cirenza and Espace Créa-Tea-Vité.", "fr": "Rechercher dans les œuvres, les pages et la presse de Lisa Cirenza et de l'Espace Créa-Tea-Vité."}},
     "contact": {
         "titre": {"en": "Contact Lisa Cirenza and Espace Créa-Tea-Vité, La Clusaz",
                   "fr": "Contacter Lisa Cirenza et l'Espace Créa-Tea-Vité, La Clusaz"},
@@ -74,29 +100,52 @@ PAGES = {
 SUFFIXE_SALLE = {"en": "Works · Lisa Cirenza", "fr": "Œuvres · Lisa Cirenza"}
 SUFFIXE_RETRAITE = {"en": "Painting retreat in La Clusaz", "fr": "Retraite de peinture à La Clusaz"}
 
-# Ancien site Wix (sitemap de cirenza.com lu le 20 novembre 2026, 90 adresses) : où envoyer chaque adresse.
-# Sur la maquette, redirections temporaires ; à la mise en ligne sur cirenza.com, permanentes (301).
+# Ancien site Wix : 90 adresses du plan du site et 80 adresses vues dans Search Console (16 mois, lus le 20 novembre 2026,
+# dont certaines déjà en 404 sur le site actuel). Chaque adresse renvoie vers sa page la plus proche (demande de Lisa :
+# aucune ancienne page ne doit finir en 404). Sur la maquette, redirections temporaires ; au lancement, permanentes (301).
 # Le français de Wix vit sous /fr/ avec les mêmes chemins : la même table sert avec le préfixe /fr.
 ANCIEN_SITE = {
-    "/bio": "artiste", "/about-3": "artiste",
-    "/cvhighlights": "parcours", "/exhibitions": "parcours",
-    "/press": "presse", "/ft-article": "presse",
-    "/artworks": "oeuvres", "/original-works": "oeuvres", "/commissions": ("salle", "commissions"),
-    "/espace-crea-tea-vite": "espace", "/salon": "espace",
-    "/privateclasses": "cours_prives", "/privatehire": "evenements",
-    "/service-page/co-creating-sessions": "evenements", "/service-page/wine-tasting-art": "evenements",
-    "/service-page/randonnez-observez-peignez": "cours",
-    "/june2027retreat": "pip", "/service-page/juneregistration2027": "pip",
+    # artiste
+    "/bio": "artiste", "/cvhighlights": "parcours", "/about-9": "parcours", "/press": "presse", "/ft-article": "presse",
+    "/artworks": "oeuvres", "/original-works": "oeuvres", "/commissions": ("salle", "commissions"), "/salon": "studio",
+    "/shop-1": "boutique", "/product-page/:slug*": "boutique", "/art-collection-and-care": "studio", "/art-tech": "studio",
+    "/feed": "studio", "/feed/:path*": "studio", "/single-post/:path*": "studio",
+    # Espace
+    "/espace-crea-tea-vite": "espace", "/salon-de-crea-tea-vite": "salon_the", "/espace-crea-tea-vite/wineandart": "evenements",
+    "/privateclasses": "cours_prives", "/privatecourses": "cours_prives", "/single-project": "cours_prives",
+    "/privatehire": "evenements", "/service-page/co-creating-sessions": "cosessions", "/booking-calendar/co-creating-sessions": "cosessions",
+    "/book-online": "cosessions", "/pricing-plans/plans-pricing": "cosessions", "/thebasicscourse": "cosessions",
+    "/sansfrontiere": "cosessions", "/creativitesansfrontieres": "cosessions", "/boundlesscreativity": "cosessions",
+    "/service-page/:slug*": "cosessions",
+    "/service-page/wine-tasting-art": "evenements", "/service-page/regardscuban": "expositions", "/cubasoir%C3%A9e": "expositions",
+    "/service-page/randonnez-observez-peignez": "cours_prives",
+    "/exhibitions": "expositions", "/about-3": "expositions", "/connect": "contact",
+    "/inquiry-services-page": "contact", "/payment-request-page": "contact",
+    # retraites
+    "/june2027retreat": "pip", "/service-page/juneregistration2027": "pip", "/service-page/painting-in-paradise-2027-june": "pip",
     "/event-details/painting-in-paradise-2027-june": "pip", "/event-details/painting-in-paradise-2027-june-2027-06-21-15-00": "pip",
     "/sept2027alpinepause": "encaustics", "/sept2027waxretreat": "encaustics", "/service-page/registrationsept2027": "encaustics",
-    "/event-details/autumn-alpine-pause": "encaustics",
-    "/connect": "contact",
-    "/product-page/:slug": "boutique",
+    "/event-details/autumn-alpine-pause": "encaustics", "/service-page/molten-magic-september-2027": "encaustics",
+    "/copy-of-website-terms-and-privacy-policy": "conditions",
+    "/retreat": "retraites", "/retreat1": "retraites", "/aug2026retreat": "retraites", "/retreatlodging": "retraites",
+    "/residencysupplies": "retraites", "/service-page/molten-may-invitational-residency-2027": "retraites",
+    "/service-page/registration-2026": "retraites", "/service-page/registration-closed-for-2025": "retraites",
+    # pages techniques et anciennes pages sans équivalent
+    "/website-terms-and-privacy-policy": "accueil", "/general-4": "accueil", "/archived-pages": "accueil", "/ubu": "accueil",
 }
-# Adresses à trancher avec Lisa (pas de redirection devinée) : voir AUDIT-SEO-GEO.md
+# Ordre : les adresses précises d'abord, puis les motifs (Vercel applique la première règle qui correspond)
+MOTIFS = ("/product-page/:slug*", "/feed/:path*", "/single-post/:path*", "/service-page/:slug*")
+# Anciennes adresses de la maquette elle-même (v4 et v5)
+ANCIENNES_MAQUETTE = {
+    "/retreats/molten-magic": "encaustics", "/retreats/alpine-pause": "encaustics", "/retreats/alpine-encaustics": "encaustics",
+    "/retreats/creative-pause": "retraites", "/works/light-water-rock-and-time": ("salle", "record-of-time"),
+    "/private-courses": "cours_prives", "/private-events": "evenements", "/shop": "boutique", "/classes": "cosessions",
+}
+ANCIENNES_MAQUETTE_FR = {
+    "/fr/retraites/molten-magic": "encaustics", "/fr/retraites/alpine-pause": "encaustics", "/fr/retraites/alpine-encaustics": "encaustics",
+    "/fr/retraites/creative-pause": "retraites", "/fr/oeuvres/lumiere-eau-roche-et-temps": ("salle", "record-of-time"),
+    "/fr/cours-prives": "cours_prives", "/fr/evenements-prives": "evenements", "/fr/boutique": "boutique", "/fr/cours": "cosessions",
+}
 A_DECIDER = [
-    "/book-online", "/pricing-plans/plans-pricing", "/service-page/molten-may-invitational-residency-2027",
-    "/service-page/regardscuban", "/art-collection-and-care", "/art-tech", "/feed et /feed/categories/*",
-    "/single-post/* (30 articles de blog)", "/website-terms-and-privacy-policy",
-    "/inquiry-services-page", "/payment-request-page", "/general-4", "/single-project",
+    "Le blog : 35 articles (2015 – 2019) toujours dans Wix Blog avec leurs dates ; à afficher sur /blog/<adresse> (même contenu, sans migration), puis rediriger /single-post/<adresse> article par article.",
 ]

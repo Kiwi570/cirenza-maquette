@@ -20,7 +20,7 @@ prêt à servir le jour où le site passe sur cirenza.com.
 | FAQ visibles | Page des retraites (6 questions), Painting in Paradise. |
 | Horaires | Une seule source : la page, les données structurées et `llms.txt` disent la même chose. |
 | Images | Textes alternatifs décrits, images légères (WebP), chargement différé. Vidéos et podcast chargés au clic. |
-| Anciennes adresses | 57 redirections depuis le site Wix actuel (voir plus bas). |
+| Anciennes adresses | 145 redirections : les 90 adresses du plan du site et les 80 adresses vues dans Search Console (16 mois, 610 clics), anglais et français. |
 
 ## Le jour du lancement
 
@@ -35,7 +35,11 @@ prêt à servir le jour où le site passe sur cirenza.com.
    fermetures exceptionnelles reportées.
 6. Tests : outil « Résultats enrichis » de Google sur l'accueil, une retraite et une salle ; Lighthouse sur mobile.
 
-## Plan de redirection de l'ancien site (sitemap de cirenza.com, 90 adresses lues le 20 novembre 2026)
+## Plan de redirection de l'ancien site (plan du site et Search Console, lus le 20 novembre 2026)
+
+v6 : la table complète est dans `outils/seo.py` (`ANCIEN_SITE`) ; chaque adresse vue dans Google renvoie vers sa page la plus proche, y compris celles déjà en 404 sur le site actuel (/retreat1, /retreat, /aug2026retreat…). Pages les plus visitées : l'accueil (150 clics), /espace-crea-tea-vite (132, lien de la fiche Google : à mettre à jour au lancement), /fr, /fr/espace-crea-tea-vite, /artworks, /bio.
+
+Tableau de la v5 (conservé pour mémoire) :
 
 Redirigées (`outils/seo.py`, `ANCIEN_SITE`, en anglais et sous `/fr`) :
 

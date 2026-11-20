@@ -10,6 +10,26 @@ Artwork Archive ──(export CSV, script)──► Wix Stores ◄──(connexi
         └──── « Register Sale » par Lisa ◄──┘ mail automatique à Lisa (Wix Automations)
 ```
 
+## Le site Wix headless (créé le 20 novembre 2026)
+
+| | |
+|---|---|
+| Nom | Lisa Cirenza |
+| Identifiant du site (`metaSiteId`, à passer dans `WIX_SITE_ID`) | `385612fb-fc04-4da0-bcba-17cc37b81cd4` |
+| Client OAuth du site (`client_id`, public, pour les pages) | `00356f7b-4ff3-44e8-b1ee-2ddc8cf6ca6e` |
+| Tableau de bord | https://manage.wix.com/dashboard/385612fb-fc04-4da0-bcba-17cc37b81cd4/ |
+| Produits | https://manage.wix.com/dashboard/385612fb-fc04-4da0-bcba-17cc37b81cd4/wix-stores/products |
+| Commandes | https://manage.wix.com/dashboard/385612fb-fc04-4da0-bcba-17cc37b81cd4/ecom-platform/orders-list |
+| Automatisations (mail de vente) | https://manage.wix.com/dashboard/385612fb-fc04-4da0-bcba-17cc37b81cd4/triggers |
+
+- **Installé :** Wix Stores (catalogue V3), sans contenu de démonstration.
+- **Région :** euros, fuseau Europe/Paris, région France. La langue du site reste l'anglais, version officielle.
+- **Adresses autorisées pour le retour du paiement :** `https://cirenza-maquette.vercel.app`, `https://www.cirenza.com`,
+  `https://cirenza.com`, `http://localhost:4173`.
+- **Vérifié :** un visiteur anonyme obtient un jeton et lit le catalogue (vide pour l'instant).
+- **Le site est dans le compte Wix de P'tit Kiwi.** Pour que Lisa connecte creativehub et gère ses commandes, l'ajouter
+  comme collaboratrice, ou lui transférer le site au lancement.
+
 ## Connexion 1 · Artwork Archive (originaux)
 
 **Constat.** Artwork Archive n'a pas d'API publique. Son aide le dit pour les ventes faites ailleurs :

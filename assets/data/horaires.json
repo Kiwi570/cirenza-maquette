@@ -1,20 +1,53 @@
 {
-  "_info": "Seule source des horaires de l'Espace Créa-Tea-Vité. Même forme que les deux futures collections du tableau de bord Wix (« Horaires » : 7 lignes ; « Exceptions » : fermetures, ouvertures spéciales et annonces). Les lignes marquées \"exemple\": true sont des exemples à remplacer par Lisa.",
+  "_info": "Seule source des horaires de l'Espace Créa-Tea-Vité. Même forme que les deux futures collections du tableau de bord Wix (« Horaires » : 7 lignes ; « Exceptions » : fermetures, ouvertures spéciales et annonces).",
   "fuseau": "Europe/Paris",
   "maj": "2026-11-20",
   "horaires": [
-    {"jour": 1, "ouvert": false},
-    {"jour": 2, "ouvert": false},
-    {"jour": 3, "ouvert": false},
-    {"jour": 4, "ouvert": true, "debut": "14:30", "fin": "18:30"},
-    {"jour": 5, "ouvert": true, "debut": "14:30", "fin": "18:30"},
-    {"jour": 6, "ouvert": true, "debut": "14:30", "fin": "18:30"},
-    {"jour": 0, "ouvert": false, "surRendezVous": true}
+    {
+      "jour": 1,
+      "ouvert": false
+    },
+    {
+      "jour": 2,
+      "ouvert": false
+    },
+    {
+      "jour": 3,
+      "ouvert": false
+    },
+    {
+      "jour": 4,
+      "ouvert": true,
+      "debut": "14:30",
+      "fin": "18:30"
+    },
+    {
+      "jour": 5,
+      "ouvert": true,
+      "debut": "14:30",
+      "fin": "18:30"
+    },
+    {
+      "jour": 6,
+      "ouvert": true,
+      "debut": "14:30",
+      "fin": "18:30"
+    },
+    {
+      "jour": 0,
+      "ouvert": false,
+      "surRendezVous": true
+    }
   ],
   "exceptions": [
-    {"du": "2026-12-24", "au": "2026-12-25", "ferme": true, "afficherDes": "2026-12-14",
-     "messageEn": "Closed on 24 and 25 December. Merry Christmas!", "messageFr": "Fermé les 24 et 25 décembre. Joyeux Noël !", "exemple": true},
-    {"du": "2026-12-26", "au": "2027-01-03", "ferme": false, "debut": "10:30", "fin": "18:30", "afficherDes": "2026-12-14",
-     "messageEn": "Christmas holidays: open every day, 10:30 am – 6:30 pm", "messageFr": "Vacances de Noël : ouvert tous les jours, 10 h 30 – 18 h 30", "exemple": true}
+    {
+      "du": "2026-11-20",
+      "au": "2026-12-02",
+      "ferme": true,
+      "afficherDes": "2026-11-20",
+      "messageEn": "Seasonal closing · Re-opening 3 December: Thursdays–Saturdays 14:30–18:30 (and Sunday by appointment)",
+      "messageFr": "Fermeture de saison · Réouverture le 3 décembre : du jeudi au samedi, 14 h 30 – 18 h 30 (et le dimanche sur rendez-vous)",
+      "note": "Texte de la page Espace du site actuel (20 novembre 2026). Date de début de la fermeture à confirmer par Lisa."
+    }
   ]
 }
