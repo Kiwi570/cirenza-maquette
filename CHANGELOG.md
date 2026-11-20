@@ -1,5 +1,29 @@
 # Historique
 
+## v5 · novembre 2026 · réunion de suivi (horaires, SEO et GEO, connexions)
+
+**Horaires**
+- Une seule source, `assets/data/horaires.json`, au format des futures collections Wix « Horaires » et « Exceptions » : statut ouvert ou fermé, listes d'horaires, annonces de la barre du haut et données structurées en découlent.
+- Éditeur pour Lisa (`/manage/opening-hours`, `/fr/gestion/horaires`, hors menu, lien en bas de page) : semaine, deuxième plage, fermetures et horaires spéciaux, messages anglais et français, aperçu sur tout le site, téléchargement du fichier.
+
+**SEO et GEO**
+- 53 titres et 52 descriptions uniques ; adresse de référence, `hreflang` (en, fr, x-default), `og:url`, `og:locale` sur chaque page.
+- Données structurées : Person, ProfilePage, WebSite, ArtGallery et CafeOrCoffeeShop avec horaires, Event (trois retraites), FAQPage, ItemList de VisualArtwork, BreadcrumbList.
+- `sitemap.xml`, `robots.txt` avec plan du site, `llms.txt` pour les moteurs de réponse.
+- 57 redirections depuis les adresses de l'actuel site Wix (sitemap lu le 20 novembre 2026) ; le reste est à trancher (blog, résidence de mai, abonnements) : `AUDIT-SEO-GEO.md`.
+
+**Pages**
+- Retraites : places restantes (exemples), FAQ « Avant de réserver ».
+- Cours privés : trois catégories, huit expériences avec durée, groupe et tarif (exemples), « Comment ça marche » pour les hôtels et conciergeries, lien « Demander cette séance » qui pré-remplit le formulaire.
+- Presse : podcast (lien à venir).
+- Boutique : tirages creativehub avec format, papier et référence (SKU) par variante, prix d'exemple.
+- Contact : champs propres à chaque demande, envoi vers l'adresse de l'atelier ou de l'Espace selon l'objet.
+- Invitation discrète vers l'autre langue selon la langue du navigateur, sans redirection.
+
+**Connexions (site final en Wix Headless)**
+- `connecteurs/artwork_archive_vers_wix.py` : export CSV d'Artwork Archive vers Wix Stores (création, masquage des œuvres vendues), mode essai par défaut, testé sur un export d'exemple.
+- `connecteurs/README.md` : mail de vente à Lisa (automatisation Wix), connexion creativehub officielle à Wix, plan B par l'API.
+
 ## v4 · 11 novembre 2026 · brief de Lisa (« cirenza.com — content and design brief »)
 
 Le brief de Lisa est la source unique des textes de l'artiste : textes anglais repris mot pour mot, traduits en français. La structure de la maquette est gardée (défilement en strates numérotées, fond crème, anglais officiel, horaires en haut, citation du FT, deux SIRET, comptes à rebours).

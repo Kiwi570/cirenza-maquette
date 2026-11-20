@@ -31,6 +31,261 @@
       "source": "/fr/oeuvres/lumiere-eau-roche-et-temps",
       "destination": "/fr/oeuvres/strates-du-temps",
       "permanent": false
+    },
+    {
+      "source": "/bio",
+      "destination": "/artist",
+      "permanent": false
+    },
+    {
+      "source": "/fr/bio",
+      "destination": "/fr/artiste",
+      "permanent": false
+    },
+    {
+      "source": "/about-3",
+      "destination": "/artist",
+      "permanent": false
+    },
+    {
+      "source": "/fr/about-3",
+      "destination": "/fr/artiste",
+      "permanent": false
+    },
+    {
+      "source": "/cvhighlights",
+      "destination": "/cv",
+      "permanent": false
+    },
+    {
+      "source": "/fr/cvhighlights",
+      "destination": "/fr/parcours",
+      "permanent": false
+    },
+    {
+      "source": "/exhibitions",
+      "destination": "/cv",
+      "permanent": false
+    },
+    {
+      "source": "/fr/exhibitions",
+      "destination": "/fr/parcours",
+      "permanent": false
+    },
+    {
+      "source": "/fr/press",
+      "destination": "/fr/presse",
+      "permanent": false
+    },
+    {
+      "source": "/ft-article",
+      "destination": "/press",
+      "permanent": false
+    },
+    {
+      "source": "/fr/ft-article",
+      "destination": "/fr/presse",
+      "permanent": false
+    },
+    {
+      "source": "/artworks",
+      "destination": "/works",
+      "permanent": false
+    },
+    {
+      "source": "/fr/artworks",
+      "destination": "/fr/oeuvres",
+      "permanent": false
+    },
+    {
+      "source": "/original-works",
+      "destination": "/works",
+      "permanent": false
+    },
+    {
+      "source": "/fr/original-works",
+      "destination": "/fr/oeuvres",
+      "permanent": false
+    },
+    {
+      "source": "/commissions",
+      "destination": "/works/commissions",
+      "permanent": false
+    },
+    {
+      "source": "/fr/commissions",
+      "destination": "/fr/oeuvres/commandes",
+      "permanent": false
+    },
+    {
+      "source": "/espace-crea-tea-vite",
+      "destination": "/espace",
+      "permanent": false
+    },
+    {
+      "source": "/fr/espace-crea-tea-vite",
+      "destination": "/fr/espace",
+      "permanent": false
+    },
+    {
+      "source": "/salon",
+      "destination": "/espace",
+      "permanent": false
+    },
+    {
+      "source": "/fr/salon",
+      "destination": "/fr/espace",
+      "permanent": false
+    },
+    {
+      "source": "/privateclasses",
+      "destination": "/private-courses",
+      "permanent": false
+    },
+    {
+      "source": "/fr/privateclasses",
+      "destination": "/fr/cours-prives",
+      "permanent": false
+    },
+    {
+      "source": "/privatehire",
+      "destination": "/private-events",
+      "permanent": false
+    },
+    {
+      "source": "/fr/privatehire",
+      "destination": "/fr/evenements-prives",
+      "permanent": false
+    },
+    {
+      "source": "/service-page/co-creating-sessions",
+      "destination": "/private-events",
+      "permanent": false
+    },
+    {
+      "source": "/fr/service-page/co-creating-sessions",
+      "destination": "/fr/evenements-prives",
+      "permanent": false
+    },
+    {
+      "source": "/service-page/wine-tasting-art",
+      "destination": "/private-events",
+      "permanent": false
+    },
+    {
+      "source": "/fr/service-page/wine-tasting-art",
+      "destination": "/fr/evenements-prives",
+      "permanent": false
+    },
+    {
+      "source": "/service-page/randonnez-observez-peignez",
+      "destination": "/classes",
+      "permanent": false
+    },
+    {
+      "source": "/fr/service-page/randonnez-observez-peignez",
+      "destination": "/fr/cours",
+      "permanent": false
+    },
+    {
+      "source": "/june2027retreat",
+      "destination": "/retreats/painting-in-paradise",
+      "permanent": false
+    },
+    {
+      "source": "/fr/june2027retreat",
+      "destination": "/fr/retraites/painting-in-paradise",
+      "permanent": false
+    },
+    {
+      "source": "/service-page/juneregistration2027",
+      "destination": "/retreats/painting-in-paradise",
+      "permanent": false
+    },
+    {
+      "source": "/fr/service-page/juneregistration2027",
+      "destination": "/fr/retraites/painting-in-paradise",
+      "permanent": false
+    },
+    {
+      "source": "/event-details/painting-in-paradise-2027-june",
+      "destination": "/retreats/painting-in-paradise",
+      "permanent": false
+    },
+    {
+      "source": "/fr/event-details/painting-in-paradise-2027-june",
+      "destination": "/fr/retraites/painting-in-paradise",
+      "permanent": false
+    },
+    {
+      "source": "/event-details/painting-in-paradise-2027-june-2027-06-21-15-00",
+      "destination": "/retreats/painting-in-paradise",
+      "permanent": false
+    },
+    {
+      "source": "/fr/event-details/painting-in-paradise-2027-june-2027-06-21-15-00",
+      "destination": "/fr/retraites/painting-in-paradise",
+      "permanent": false
+    },
+    {
+      "source": "/sept2027alpinepause",
+      "destination": "/retreats/alpine-encaustics",
+      "permanent": false
+    },
+    {
+      "source": "/fr/sept2027alpinepause",
+      "destination": "/fr/retraites/alpine-encaustics",
+      "permanent": false
+    },
+    {
+      "source": "/sept2027waxretreat",
+      "destination": "/retreats/alpine-encaustics",
+      "permanent": false
+    },
+    {
+      "source": "/fr/sept2027waxretreat",
+      "destination": "/fr/retraites/alpine-encaustics",
+      "permanent": false
+    },
+    {
+      "source": "/service-page/registrationsept2027",
+      "destination": "/retreats/alpine-encaustics",
+      "permanent": false
+    },
+    {
+      "source": "/fr/service-page/registrationsept2027",
+      "destination": "/fr/retraites/alpine-encaustics",
+      "permanent": false
+    },
+    {
+      "source": "/event-details/autumn-alpine-pause",
+      "destination": "/retreats/alpine-encaustics",
+      "permanent": false
+    },
+    {
+      "source": "/fr/event-details/autumn-alpine-pause",
+      "destination": "/fr/retraites/alpine-encaustics",
+      "permanent": false
+    },
+    {
+      "source": "/connect",
+      "destination": "/contact",
+      "permanent": false
+    },
+    {
+      "source": "/fr/connect",
+      "destination": "/fr/contact",
+      "permanent": false
+    },
+    {
+      "source": "/product-page/:slug",
+      "destination": "/shop",
+      "permanent": false
+    },
+    {
+      "source": "/fr/product-page/:slug",
+      "destination": "/fr/boutique",
+      "permanent": false
     }
   ],
   "headers": [

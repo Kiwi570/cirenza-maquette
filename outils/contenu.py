@@ -25,6 +25,7 @@ PAGES = {
     "studio": {"en": "studio-notes", "fr": "fr/notes-d-atelier"},
     "boutique": {"en": "shop", "fr": "fr/boutique"},
     "contact": {"en": "contact", "fr": "fr/contact"},
+    "horaires": {"en": "manage/opening-hours", "fr": "fr/gestion/horaires"},
 }
 DOSSIER_SALLES = {"en": "works", "fr": "fr/oeuvres"}
 
@@ -48,8 +49,8 @@ COORD = {
     "facebook": "https://www.facebook.com/LisaCirenzaFineArt/",
 }
 
-# Horaires de l'Espace : version anglaise (officielle). La version française indique 19 h : à confirmer.
-HORAIRES = {"jours": [4, 5, 6], "plages": [["14:30", "18:30"]], "dimanche_rdv": True}
+# Horaires de l'Espace : une seule source, assets/data/horaires.json (lue par outils/horaires.py et par le navigateur).
+# La version française du site actuel indique 19 h, l'anglaise 18 h 30 : à confirmer par Lisa.
 
 T = {
     "en": {
@@ -259,6 +260,11 @@ PHOTOS_ANNEES = {2016: "conferences/from-oil-paint-to-pixels-affiche", 2017: "ex
                  2015: "expositions/kyoto-rencontre", 2014: "expositions/bermondsey-gallery-salle", 2024: "espace/visiteuse-contemplation", 2026: "exposition-en-cours/affiche-vernissage-bnt"}
 
 PRESSE = [
+    # v5 · réunion : le podcast vient de sortir ; nom de l'émission, titre de l'épisode et lien à envoyer par Lisa
+    {"titre": "Podcast interview", "media": "Podcast", "date": {"en": "November 2026", "fr": "novembre 2026"},
+     "texte": {"en": "A new podcast interview with Lisa about A Record of Time and Espace Créa-Tea-Vité. Show, episode title and link to come.",
+               "fr": "Un nouvel entretien en podcast avec Lisa, sur Strates du temps et l'Espace Créa-Tea-Vité. Nom de l'émission, titre de l'épisode et lien à venir."},
+     "url": None, "image": "atelier/glacier-sur-le-chevalet", "nouveau": True, "ancre": "podcast"},
     {"titre": "Beyond the Surface", "media": "Wax Fusion · International Encaustic Artists", "date": {"en": "Fall 2026, issue XIV", "fr": "automne 2026, n° XIV"},
      "texte": {"en": "“The Luminous Layer: Cultivating Hope through Creativity in an Uncertain World.” A fourteen-page feature written by Lisa: the paradox of a hyper-connected world, the physics of light in wax, works in progress, and the founding of Espace Créa-Tea-Vité.",
                "fr": "« The Luminous Layer : cultiver l'espoir par la créativité dans un monde incertain. » Un dossier de quatorze pages écrit par Lisa : le paradoxe d'un monde hyperconnecté, la physique de la lumière dans la cire, les œuvres en cours et la naissance de l'Espace Créa-Tea-Vité."},
@@ -525,7 +531,7 @@ BOUTIQUE = {
 # Pour les textes d'artiste (positionnement, déclaration, bios, CV, presse, série), seul ce brief fait foi.
 POSITION = {
     "titre": {"en": "Painter of light, water, rock and time", "fr": "Peintre de la lumière, de l'eau, de la roche et du temps"},
-    "seo": {"en": "Lisa Cirenza | Painting light, water, rock and time | French Alps", "fr": "Lisa Cirenza | Peintre de la lumière, de l'eau, de la roche et du temps | Alpes françaises"},
+    "seo": {"en": "Lisa Cirenza | Painting light, water, rock and time | French Alps", "fr": "Lisa Cirenza | Peindre la lumière, l'eau, la roche et le temps | Alpes"},
     "ligne": {"en": "Lisa Cirenza is a painter in the French Alps. Shaped by her time as a young researcher on the Juneau Icefield, she paints light, water, rock and time (ice, snow, fog, lake and mountains) in encaustic, mixed media, oil and watercolour.",
               "fr": "Lisa Cirenza est une peintre installée dans les Alpes françaises. Marquée par ses années de jeune chercheuse sur le champ de glace de Juneau, elle peint la lumière, l'eau, la roche et le temps (glace, neige, brouillard, lac et montagnes) à l'encaustique, en techniques mixtes, à l'huile et à l'aquarelle."},
     "matieres": {"en": "Water, pigments, heat and wax.", "fr": "L'eau, les pigments, la chaleur et la cire."},
@@ -710,6 +716,40 @@ COURS_PRIVES = {
 # Lettre d'information : la langue de la page choisit la liste Mailchimp
 LISTES_LETTRE = {"en": "You will join the English list: collectors and retreats.", "fr": "Vous rejoindrez la liste française : l'Espace et ses rendez-vous."}
 
-# Fermetures ou ouvertures exceptionnelles : un seul endroit à modifier ; affichées en haut de toutes les pages
-# pendant leurs dates. Exemple de forme : {"du": "2026-12-24", "au": "2026-12-26", "en": "Closed for Christmas", "fr": "Fermé pour Noël"}
-ANNONCES = []
+# Fermetures, ouvertures exceptionnelles et annonces : dans assets/data/horaires.json (« exceptions »).
+
+# ---------------------------------------------------------------- v5 · cours privés : catégories, expériences, tarifs (EXEMPLES)
+# Réunion : Lisa prépare un document de synthèse (catégories, expériences, tarifs). En attendant, la page montre la
+# structure avec des durées, tailles de groupe et prix d'EXEMPLE, signalés comme tels. Sur le site final : une
+# collection Wix « Cours privés » (une ligne par expérience) que Lisa tient à jour.
+OFFRE_COURS_PRIVES = [
+    {"cle": "atelier", "titre": {"en": "Studio sessions", "fr": "Séances à l'atelier"},
+     "intro": {"en": "Private sessions at Espace Créa-Tea-Vité, focused on process and medium.", "fr": "Des séances privées à l'Espace Créa-Tea-Vité, centrées sur le geste et le médium."},
+     "experiences": [
+         {"ref": 0, "duree": {"en": "2 h 30", "fr": "2 h 30"}, "groupe": {"en": "1 to 6 guests", "fr": "1 à 6 personnes"}, "prix": {"en": "from €140 per person", "fr": "à partir de 140 € par personne"}},
+         {"ref": 1, "duree": {"en": "2 h", "fr": "2 h"}, "groupe": {"en": "1 to 6 guests", "fr": "1 à 6 personnes"}, "prix": {"en": "from €120 per person", "fr": "à partir de 120 € par personne"}},
+         {"ref": 2, "duree": {"en": "2 h", "fr": "2 h"}, "groupe": {"en": "1 to 6 guests", "fr": "1 à 6 personnes"}, "prix": {"en": "from €110 per person", "fr": "à partir de 110 € par personne"}},
+         {"ref": 3, "duree": {"en": "2 h 30", "fr": "2 h 30"}, "groupe": {"en": "1 to 6 guests", "fr": "1 à 6 personnes"}, "prix": {"en": "from €130 per person", "fr": "à partir de 130 € par personne"}},
+         {"ref": 4, "duree": {"en": "2 h", "fr": "2 h"}, "groupe": {"en": "1 to 4 guests", "fr": "1 à 4 personnes"}, "prix": {"en": "from €150 per person", "fr": "à partir de 150 € par personne"}},
+     ]},
+    {"cle": "plein_air", "titre": {"en": "Outdoors", "fr": "En plein air"},
+     "intro": {"en": "Painting outside, around La Clusaz.", "fr": "Peindre dehors, autour de La Clusaz."},
+     "experiences": [
+         {"titre": {"en": "Private plein-air course", "fr": "Cours privé en plein air"},
+          "texte": {"en": "A private painting session outdoors, in the meadows and forests around La Clusaz.", "fr": "Une séance de peinture privée en plein air, dans les alpages et les forêts autour de La Clusaz."},
+          "photo": "retraites/participante-peint-en-plein-air",
+          "duree": {"en": "Half day (3 h)", "fr": "Demi-journée (3 h)"}, "groupe": {"en": "1 to 4 guests", "fr": "1 à 4 personnes"}, "prix": {"en": "from €180 per person", "fr": "à partir de 180 € par personne"}},
+     ]},
+    {"cle": "equipes", "titre": {"en": "Teams and institutions", "fr": "Équipes et institutions"},
+     "intro": {"en": "I don't teach teams how to replicate a process; I teach them how to cultivate the garden of creative thinking.", "fr": "Je n'apprends pas aux équipes à reproduire une méthode : je leur apprends à cultiver le jardin de la pensée créative."},
+     "experiences": [
+         {"ref_equipe": 0, "photo": "teambuilding/atelier-cires-jaunes", "duree": {"en": "Half day", "fr": "Demi-journée"}, "groupe": {"en": "6 to 20 people", "fr": "6 à 20 personnes"}, "prix": {"en": "on request", "fr": "sur devis"}},
+         {"ref_equipe": 1, "photo": "conferences/atelier-blouses-blanches", "duree": {"en": "Half day or full day", "fr": "Demi-journée ou journée"}, "groupe": {"en": "6 to 30 people", "fr": "6 à 30 personnes"}, "prix": {"en": "on request", "fr": "sur devis"}},
+     ]},
+]
+ETAPES_COURS_PRIVES = [
+    ({"en": "Send the request", "fr": "Envoyez la demande"}, {"en": "Date, group size and the session your guests would like, by the form, email or WhatsApp.", "fr": "La date, la taille du groupe et la séance souhaitée, par le formulaire, courriel ou WhatsApp."}),
+    ({"en": "Receive a quote", "fr": "Recevez un devis"}, {"en": "Lisa confirms the date and sends a quote within 24 hours.", "fr": "Lisa confirme la date et envoie un devis sous 24 heures."}),
+    ({"en": "Your guests paint", "fr": "Vos clients peignent"}, {"en": "Materials and aprons are included; tea and coffee are served at the Espace.", "fr": "Matériel et tabliers compris ; thé et café servis à l'Espace."}),
+]
+PARTENAIRES_COURS_PRIVES = {"en": "Partner rates for hotels and concierges: on request.", "fr": "Tarifs partenaires pour les hôtels et conciergeries : sur demande."}

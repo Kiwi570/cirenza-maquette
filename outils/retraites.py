@@ -294,3 +294,35 @@ PETITE_LIGNE = {"en": "Bathrooms: “Private bathroom” means your own shower a
                 "fr": "Salles de bain : « salle de bain privée » signifie votre propre douche et lavabo. Comme souvent dans les chalets et maisons de village français, les toilettes sont séparées et partagées entre les chambres. Les chambres partagées se réservent avec la personne de votre choix."}
 LOGEMENT = {"en": "Five nights at Espace Créa-Tea-Vité in La Clusaz, small groups, prices per person. Each retreat has its own price range; we choose your room together on a short discovery call before you book.",
             "fr": "Cinq nuits à l'Espace Créa-Tea-Vité, à La Clusaz, en petits groupes, prix par personne. Chaque retraite a sa fourchette de prix ; la chambre se choisit ensemble lors d'un court échange découverte, avant la réservation."}
+
+# ---------------------------------------------------------------- v5 · places restantes (EXEMPLES)
+# Réunion : « les deux retraites sont déjà à moitié complètes » (juin et septembre). Chiffres d'exemple à
+# remplacer par Lisa ; sur le site final, une collection Wix « Retraites » qu'elle met à jour à chaque inscription.
+PLACES = {
+    "creative": {"total": 10, "reservees": 0, "exemple": True},
+    "pip": {"total": 10, "reservees": 5, "exemple": True},
+    "encaustics": {"total": 8, "reservees": 4, "exemple": True},
+}
+
+# ---------------------------------------------------------------- v5 · questions fréquentes (page des retraites, et données pour les moteurs de réponse)
+# Réponses tirées des pages des retraites : rien d'ajouté.
+FAQ_RETRAITES = [
+    ({"en": "Where do the retreats take place?", "fr": "Où ont lieu les retraites ?"},
+     {"en": "All three retreats are based at Espace Créa-Tea-Vité in La Clusaz, Haute-Savoie, less than an hour from Geneva airport. Annecy and Talloires are day excursions.",
+      "fr": "Les trois retraites ont lieu à l'Espace Créa-Tea-Vité, à La Clusaz (Haute-Savoie), à moins d'une heure de l'aéroport de Genève. Annecy et Talloires sont des excursions à la journée."}),
+    ({"en": "How much does a retreat cost?", "fr": "Combien coûte une retraite ?"},
+     {"en": "From €2,450 to €3,295 per person for five nights, depending on the room. A couple's own chalet is €5,500 and a non-painting partner €4,795 (May and June only). Early-bird and returning-guest reductions apply.",
+      "fr": "De 2 450 € à 3 295 € par personne pour cinq nuits, selon la chambre. Le chalet privatif pour un couple est à 5 500 € et le partenaire non peintre à 4 795 € (mai et juin uniquement). Remises pour inscription anticipée et pour les participants déjà venus."}),
+    ({"en": "How big are the groups?", "fr": "Combien de participants ?"},
+     {"en": "Small groups: 6 to 10 guests for A Creative Pause, 10 at most for Painting in Paradise, and 8 participants for Alpine Encaustics.",
+      "fr": "De petits groupes : 6 à 10 personnes pour A Creative Pause, 10 au maximum pour Painting in Paradise, 8 participants pour Alpine Encaustics."}),
+    ({"en": "Do I need painting experience?", "fr": "Faut-il savoir peindre ?"},
+     {"en": "No art experience is needed for A Creative Pause. For Painting in Paradise and Alpine Encaustics, book a short discovery call to see if the retreat is right for you.",
+      "fr": "Aucune expérience n'est nécessaire pour A Creative Pause. Pour Painting in Paradise et Alpine Encaustics, réservez un court échange découverte pour voir si la retraite vous convient."}),
+    ({"en": "How do I book?", "fr": "Comment réserver ?"},
+     {"en": "Book a short discovery call: we choose your room together, then you reserve your place.",
+      "fr": "Réservez un court échange découverte : nous choisissons ensemble votre chambre, puis vous réservez votre place."}),
+    ({"en": "How do I get to La Clusaz?", "fr": "Comment venir à La Clusaz ?"},
+     {"en": "Fly to Geneva Airport, or take the TGV to Annecy. If you don't rent a car, transfers can be arranged from both.",
+      "fr": "En avion jusqu'à Genève, ou en TGV jusqu'à Annecy. Sans voiture de location, des transferts peuvent être organisés depuis les deux."}),
+]
