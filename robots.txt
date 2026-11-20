@@ -1,2 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /manage/
+Disallow: /fr/gestion/
+
+Sitemap: https://cirenza-maquette.vercel.app/sitemap.xml

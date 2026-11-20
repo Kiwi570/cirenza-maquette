@@ -906,39 +906,103 @@
     var get = function (t) { for (var i = 0; i < parts.length; i++) if (parts[i].type === t) return parts[i].value; return '0'; };
     return { jour: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(get('weekday')), min: Number(get('hour')) * 60 + Number(get('minute')), date: get('year') + '-' + get('month') + '-' + get('day') };
   }
-  function statutEspace() {
-    var els = $$('[data-statut]');
-    if (!els.length || !D.espace) return;
-    var H = D.espace.horaires;
-    function enMin(s) { var a = s.split(':'); return Number(a[0]) * 60 + Number(a[1]); }
-    var plages = H.plages.map(function (p) { return [enMin(p[0]), enMin(p[1])]; });
-    function heure(min) {
-      var h = Math.floor(min / 60), m = min % 60;
-      if (D.langue === 'fr') return h + ' h' + (m ? ' ' + String(m).padStart(2, '0') : '');
+  /* Horaires : une seule source (assets/data/horaires.json ; sur le site final, les collections Wix
+     « Horaires » et « Exceptions »). L'éditeur de la maquette peut en proposer un aperçu, gardé dans ce navigateur. */
+  var HOR = {
+    cleApercu: 'lc-horaires-apercu',
+    donnees: null,
+    lire: function () {
+      try {
+        var a = localStorage.getItem(this.cleApercu);
+        if (a) { var x = JSON.parse(a); if (x && x.horaires) { x._apercu = true; return x; } }
+      } catch (e) { /* stockage indisponible */ }
+      return this.donnees || (D.espace && D.espace.horaires) || null;
+    },
+    enMin: function (s) { var a = String(s).split(':'); return Number(a[0]) * 60 + Number(a[1]); },
+    plus: function (iso, n) { return new Date(Date.parse(iso + 'T12:00:00Z') + n * 86400000).toISOString().slice(0, 10); },
+    jourDe: function (iso) { return new Date(Date.parse(iso + 'T12:00:00Z')).getUTCDay(); },
+    exception: function (H, iso) {
+      var ex = H.exceptions || [];
+      for (var i = 0; i < ex.length; i++) if (ex[i].du && ex[i].au && iso >= ex[i].du && iso <= ex[i].au) return ex[i];
+      return null;
+    },
+    plagesDe: function (l) {
+      var p = [];
+      if (l && l.debut && l.fin) { p.push([l.debut, l.fin]); if (l.debut2 && l.fin2) p.push([l.debut2, l.fin2]); }
+      return p;
+    },
+    ligneDuJour: function (H, j) {
+      var L = H.horaires || [];
+      for (var i = 0; i < L.length; i++) if (L[i].jour === j) return L[i];
+      return { jour: j, ouvert: false };
+    },
+    plages: function (H, iso) {
+      var x = this.exception(H, iso);
+      if (x) return x.ferme ? [] : this.plagesDe(x);
+      var l = this.ligneDuJour(H, this.jourDe(iso));
+      return l.ouvert ? this.plagesDe(l) : [];
+    },
+    heure: function (hm) {
+      var a = String(hm).split(':'), h = Number(a[0]), m = Number(a[1]);
+      if (D.langue === 'fr') return h + ' h' + (m ? ' ' + String(m).padStart(2, '0') : '');
       var h12 = ((h + 11) % 12) + 1;
       return h12 + (m ? ':' + String(m).padStart(2, '0') : '') + (h >= 12 ? ' pm' : ' am');
-    }
-    function calculer() {
-      var n = heureParis();
-      if (H.jours.indexOf(n.jour) > -1) {
-        for (var i = 0; i < plages.length; i++) if (n.min >= plages[i][0] && n.min < plages[i][1]) return { ouvert: true, texte: T.statut_ouvert + ' · ' + T.statut_ferme_a.replace('{h}', heure(plages[i][1])) };
+    },
+    textePlages: function (p) {
+      var self = this;
+      return p.map(function (x) { return self.heure(x[0]) + ' – ' + self.heure(x[1]); }).join(', ');
+    },
+    lignes: function (H) {
+      var ordre = [1, 2, 3, 4, 5, 6, 0], groupes = [], self = this;
+      ordre.forEach(function (j, k) {
+        var l = self.ligneDuJour(H, j), p = l.ouvert ? self.plagesDe(l) : [];
+        var cle = p.length ? 'o' + JSON.stringify(p) : (l.surRendezVous ? 'rdv' : 'f');
+        var g = groupes[groupes.length - 1];
+        if (g && g.cle === cle && g.k === k - 1) { g.jours.push(j); g.k = k; } else groupes.push({ cle: cle, jours: [j], k: k, p: p });
+      });
+      var noms = T.jours || [];
+      var cap = function (x) { return x ? x.charAt(0).toUpperCase() + x.slice(1) : x; };
+      return groupes.filter(function (g) { return g.cle !== 'f'; }).map(function (g) {
+        var a = cap(noms[g.jours[0]]), b = noms[g.jours[g.jours.length - 1]];
+        return [g.jours.length > 1 ? a + ' – ' + b : a, g.cle === 'rdv' ? (D.langue === 'fr' ? 'sur rendez-vous' : 'by appointment') : self.textePlages(g.p)];
+      });
+    },
+    annonce: function (H, iso) {
+      var ex = H.exceptions || [];
+      for (var i = 0; i < ex.length; i++) {
+        var x = ex[i], des = x.afficherDes || (x.du ? this.plus(x.du, -10) : '');
+        var msg = D.langue === 'fr' ? x.messageFr : x.messageEn;
+        if (msg && des && x.au && iso >= des && iso <= x.au) return msg;
       }
-      for (var k = 0; k < 8; k++) {
-        var j = (n.jour + k) % 7;
-        if (H.jours.indexOf(j) < 0) continue;
-        for (var q = 0; q < plages.length; q++) {
-          if (k === 0 && plages[q][0] <= n.min) continue;
-          var h = heure(plages[q][0]);
-          var quand = k === 0 ? T.statut_ouvre_auj.replace('{h}', h) : T.statut_ouvre.replace('{jour}', k === 1 ? T.demain : T.jours[j]).replace('{h}', h);
+      return '';
+    },
+    statut: function (H) {
+      var n = heureParis(), self = this;
+      var auj = this.plages(H, n.date).map(function (p) { return [self.enMin(p[0]), self.enMin(p[1]), p]; });
+      for (var i = 0; i < auj.length; i++) {
+        if (n.min >= auj[i][0] && n.min < auj[i][1]) return { ouvert: true, texte: T.statut_ouvert + ' · ' + T.statut_ferme_a.replace('{h}', this.heure(auj[i][2][1])) };
+      }
+      for (var k = 0; k < 15; k++) {
+        var iso = this.plus(n.date, k), pl = this.plages(H, iso);
+        for (var q = 0; q < pl.length; q++) {
+          if (k === 0 && this.enMin(pl[q][0]) <= n.min) continue;
+          var h = this.heure(pl[q][0]);
+          var quand = k === 0 ? T.statut_ouvre_auj.replace('{h}', h) : T.statut_ouvre.replace('{jour}', k === 1 ? T.demain : T.jours[this.jourDe(iso)]).replace('{h}', h);
           return { ouvert: false, texte: T.statut_ferme + ' · ' + quand };
         }
       }
       return { ouvert: false, texte: T.statut_ferme };
     }
-    function maj() {
-      var s;
-      try { s = calculer(); } catch (e) { return; }
-      els.forEach(function (el) {
+  };
+
+  function rafraichirHoraires() {
+    var H = HOR.lire();
+    if (!H) return;
+    var n = heureParis();
+    var s = null;
+    try { s = HOR.statut(H); } catch (e) { s = null; }
+    if (s) {
+      $$('[data-statut]').forEach(function (el) {
         el.classList.toggle('est-ouvert', s.ouvert);
         var p = el.closest('.vapeur-statut');
         if (p) p.classList.toggle('est-ouvert', s.ouvert);
@@ -946,8 +1010,57 @@
         if (t) t.textContent = s.texte;
       });
     }
-    maj();
-    setInterval(maj, 30000);
+    var msg = HOR.annonce(H, n.date);
+    $$('[data-annonce]').forEach(function (a) { a.textContent = msg; a.hidden = !msg; });
+    html.classList.toggle('a-annonce', !!msg);
+    if (H._apercu || HOR.donnees) {
+      var lignes = HOR.lignes(H);
+      $$('[data-horaires-liste]').forEach(function (dl) {
+        dl.textContent = '';
+        lignes.forEach(function (l) {
+          var div = document.createElement('div'), dt = document.createElement('dt'), dd = document.createElement('dd');
+          dt.textContent = l[0];
+          dd.textContent = l[1];
+          div.appendChild(dt);
+          div.appendChild(dd);
+          dl.appendChild(div);
+        });
+      });
+    }
+    if (H._apercu && !$('.apercu-horaires') && !$('[data-editeur-horaires]')) {
+      var P = D.langue === 'fr' ? ['Aperçu des horaires modifiés', 'arrêter'] : ['Preview of the edited hours', 'stop'];
+      var pastille = document.createElement('p');
+      var lib = document.createElement('span');
+      var arreter = document.createElement('button');
+      pastille.className = 'apercu-horaires';
+      lib.textContent = P[0];
+      arreter.type = 'button';
+      arreter.textContent = P[1];
+      arreter.addEventListener('click', function () {
+        try { localStorage.removeItem(HOR.cleApercu); } catch (e) { /* rien */ }
+        location.reload();
+      });
+      pastille.appendChild(lib);
+      pastille.appendChild(arreter);
+      document.body.appendChild(pastille);
+    }
+  }
+  function statutEspace() {
+    rafraichirHoraires();
+    setInterval(rafraichirHoraires, 30000);
+    // les horaires publiés sont relus à chaque visite : modifier le fichier (sur le site final, la collection Wix) suffit
+    if (window.fetch) {
+      fetch((html.getAttribute('data-racine') || '/') + 'assets/data/horaires.json?t=' + Date.now(), { cache: 'no-store' })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (j) {
+          if (j && j.horaires) {
+            HOR.donnees = j;
+            rafraichirHoraires();
+            document.dispatchEvent(new CustomEvent('lc:horaires'));
+          }
+        })
+        .catch(function () { /* on garde les horaires de la page */ });
+    }
   }
   function comptes() {
     var auj = heureParis().date;
@@ -1487,6 +1600,8 @@
     if (o && f.elements.oeuvre) { f.elements.oeuvre.value = o; }
     if (ob) { var r = $('input[name="objet"][value="' + ob + '"]', f); if (r) r.checked = true; }
     if (re && f.elements.retraite) f.elements.retraite.value = re;
+    var se = params.get('seance');
+    if (se && f.elements.seance) f.elements.seance.value = se;
     majObjet();
     $$('input[name="objet"]', f).forEach(function (x) { x.addEventListener('change', majObjet); });
     function erreur(champ, msg) {
@@ -1518,9 +1633,25 @@
       var sujet = lab ? lab.textContent : '';
       if (objet() === 'oeuvre' && f.elements.oeuvre.value && D.oeuvres[f.elements.oeuvre.value]) sujet += ' – ' + D.oeuvres[f.elements.oeuvre.value].titreAff;
       if (objet() === 'retraite' && f.elements.retraite) sujet += ' – ' + f.elements.retraite.options[f.elements.retraite.selectedIndex].text;
-      var corps = [f.elements.message.value.trim(), '', f.elements.prenom.value + ' ' + f.elements.nom.value, f.elements.email.value, f.elements.tel.value].filter(function (x, i) { return i < 2 || x.trim(); });
+      // v5 : les champs de l'objet choisi (retraite, cours privé, événement) partent en lignes « Libellé : valeur »,
+      // faciles à lire pour Lisa comme pour un agent qui préparerait la réponse
+      var details = [];
+      blocs.forEach(function (b) {
+        if (b.hidden) return;
+        $$('select, input', b).forEach(function (c) {
+          if (c.name === 'oeuvre' || c.name === 'retraite') return;
+          var v = c.tagName === 'SELECT' ? (c.value ? c.options[c.selectedIndex].text : '') : (c.value || '').trim();
+          if (!v) return;
+          var l = c.id ? $('label[for="' + c.id + '"]', f) : null;
+          details.push((l && l.firstChild ? l.firstChild.textContent.trim() : c.name) + (D.langue === 'fr' ? ' : ' : ': ') + v);
+        });
+      });
+      var coord = [f.elements.prenom.value + ' ' + f.elements.nom.value, f.elements.email.value, f.elements.tel.value].filter(function (x) { return x.trim(); });
+      var corps = [f.elements.message.value.trim(), ''].concat(details.length ? details.concat(['']) : []).concat(coord);
+      var radio = $('input[name="objet"]:checked', f);
+      var dest = (radio && radio.getAttribute('data-courriel')) || D.espace.courriel;
       var a = $('[data-mailto]', merci);
-      if (a) a.href = 'mailto:' + D.espace.courriel + '?subject=' + encodeURIComponent(sujet) + '&body=' + encodeURIComponent(corps.join('\n'));
+      if (a) a.href = 'mailto:' + dest + '?subject=' + encodeURIComponent(sujet) + '&body=' + encodeURIComponent(corps.join('\n'));
       f.hidden = true;
       merci.hidden = false;
       merci.focus();
@@ -1730,14 +1861,208 @@
     });
   }
 
-  /* ------------------------------------------------------------ v4 · annonces de fermeture ou d'ouverture exceptionnelle */
-  function annonces() {
-    var auj = heureParis().date;
-    $$('[data-annonce]').forEach(function (a) {
-      var actif = auj >= a.getAttribute('data-du') && auj <= a.getAttribute('data-au');
-      a.hidden = !actif;
-      if (actif) html.classList.add('a-annonce');
+  /* ------------------------------------------------------------ v5 · éditeur des horaires (outil de la maquette)
+     Même champs que les futures collections Wix « Horaires » et « Exceptions ». L'aperçu reste dans ce navigateur. */
+  function editeurHoraires() {
+    var racine = $('[data-editeur-horaires]');
+    if (!racine) return;
+    var X = (window.LC_PAGE && window.LC_PAGE.editeur) || {};
+    var modele = null, publie = null;
+    var ORDRE = [1, 2, 3, 4, 5, 6, 0];
+    var cap = function (x) { return x ? x.charAt(0).toUpperCase() + x.slice(1) : x; };
+    var copie = function (o) { return JSON.parse(JSON.stringify(o)); };
+    function el(tag, attrs, texte) {
+      var n = document.createElement(tag);
+      Object.keys(attrs || {}).forEach(function (k) { if (attrs[k] !== null && attrs[k] !== undefined) n.setAttribute(k, attrs[k]); });
+      if (texte !== undefined) n.textContent = texte;
+      return n;
+    }
+    function champ(lib, input) { var l = el('label', { class: 'editeur__champ' }); l.appendChild(el('span', {}, lib)); l.appendChild(input); return l; }
+    function heureInput(v, cb) { var i = el('input', { type: 'time', value: v || '', step: 300 }); i.addEventListener('input', function () { cb(i.value); maj(); }); return i; }
+    function dateInput(v, cb) { var i = el('input', { type: 'date', value: v || '' }); i.addEventListener('input', function () { cb(i.value); maj(); }); return i; }
+    function texteInput(v, cb) { var i = el('input', { type: 'text', value: v || '' }); i.addEventListener('input', function () { cb(i.value); maj(true); }); return i; }
+
+    var semaine = $('[data-editeur-semaine]', racine), exceptions = $('[data-editeur-exceptions]', racine);
+    var apercuListe = $('[data-editeur-liste]', racine), apercuStatut = $('[data-editeur-statut]', racine), apercuAnnonce = $('[data-editeur-annonce]', racine);
+    var etat = $('[data-editeur-etat]', racine);
+
+    function dessinerSemaine() {
+      semaine.textContent = '';
+      ORDRE.forEach(function (j) {
+        var l = HOR.ligneDuJour(modele, j);
+        if (modele.horaires.indexOf(l) < 0) { modele.horaires.push(l); }
+        var ligne = el('div', { class: 'editeur__jour' });
+        ligne.appendChild(el('p', { class: 'editeur__nom' }, cap(T.jours[j])));
+        var sel = el('select', { 'aria-label': cap(T.jours[j]) });
+        [['ferme', X.ferme], ['ouvert', X.ouvert], ['rdv', X.rdv]].forEach(function (o) { sel.appendChild(el('option', { value: o[0] }, o[1])); });
+        sel.value = l.ouvert ? 'ouvert' : (l.surRendezVous ? 'rdv' : 'ferme');
+        var heures = el('div', { class: 'editeur__heures' });
+        function heuresVisibles() { heures.hidden = sel.value !== 'ouvert'; }
+        sel.addEventListener('change', function () {
+          l.ouvert = sel.value === 'ouvert';
+          l.surRendezVous = sel.value === 'rdv';
+          if (l.ouvert && !l.debut) { l.debut = '14:30'; l.fin = '18:30'; dessinerSemaine(); }
+          heuresVisibles();
+          maj();
+        });
+        heures.appendChild(champ(X.de, heureInput(l.debut, function (v) { l.debut = v; })));
+        heures.appendChild(champ(X.a, heureInput(l.fin, function (v) { l.fin = v; })));
+        heures.appendChild(champ(X.de2, heureInput(l.debut2, function (v) { l.debut2 = v; })));
+        heures.appendChild(champ(X.a2, heureInput(l.fin2, function (v) { l.fin2 = v; })));
+        heuresVisibles();
+        ligne.appendChild(sel);
+        ligne.appendChild(heures);
+        semaine.appendChild(ligne);
+      });
+    }
+    function dessinerExceptions() {
+      exceptions.textContent = '';
+      (modele.exceptions || []).forEach(function (x, i) {
+        var f = el('fieldset', { class: 'editeur__exception' });
+        var leg = el('legend', {}, X.exception + ' ' + (i + 1));
+        if (x.exemple) leg.appendChild(el('span', { class: 'exemple' }, X.exemple));
+        f.appendChild(leg);
+        var dates = el('div', { class: 'editeur__ligne' });
+        dates.appendChild(champ(X.du, dateInput(x.du, function (v) { x.du = v; })));
+        dates.appendChild(champ(X.au, dateInput(x.au, function (v) { x.au = v; })));
+        dates.appendChild(champ(X.afficher, dateInput(x.afficherDes, function (v) { x.afficherDes = v; })));
+        f.appendChild(dates);
+        var genre = el('select', {});
+        [['ferme', X.ferme_ex], ['special', X.special]].forEach(function (o) { genre.appendChild(el('option', { value: o[0] }, o[1])); });
+        genre.value = x.ferme ? 'ferme' : 'special';
+        var hs = el('div', { class: 'editeur__ligne' });
+        hs.appendChild(champ(X.de, heureInput(x.debut, function (v) { x.debut = v; })));
+        hs.appendChild(champ(X.a, heureInput(x.fin, function (v) { x.fin = v; })));
+        hs.hidden = !!x.ferme;
+        genre.addEventListener('change', function () { x.ferme = genre.value === 'ferme'; hs.hidden = x.ferme; maj(); });
+        f.appendChild(champ(X.genre, genre));
+        f.appendChild(hs);
+        var msgs = el('div', { class: 'editeur__ligne editeur__ligne--large' });
+        msgs.appendChild(champ(X.msg_en, texteInput(x.messageEn, function (v) { x.messageEn = v; })));
+        msgs.appendChild(champ(X.msg_fr, texteInput(x.messageFr, function (v) { x.messageFr = v; })));
+        f.appendChild(msgs);
+        var sup = el('button', { type: 'button', class: 'editeur__supprimer' }, X.supprimer);
+        sup.addEventListener('click', function () { modele.exceptions.splice(i, 1); dessinerExceptions(); maj(); });
+        f.appendChild(sup);
+        exceptions.appendChild(f);
+      });
+    }
+    function maj(texteSeul) {
+      var lignes = HOR.lignes(modele);
+      apercuListe.textContent = '';
+      lignes.forEach(function (l) { var d = el('div'); d.appendChild(el('dt', {}, l[0])); d.appendChild(el('dd', {}, l[1])); apercuListe.appendChild(d); });
+      var s = HOR.statut(modele);
+      apercuStatut.textContent = s.texte;
+      apercuStatut.parentNode.classList.toggle("est-ouvert", s.ouvert);
+      var auj = heureParis().date;
+      var a = HOR.annonce(modele, auj);
+      var prochaines = (modele.exceptions || []).filter(function (x) { return x.au && x.au >= auj; }).map(function (x) {
+        var des = x.afficherDes || (x.du ? HOR.plus(x.du, -10) : '');
+        return (D.langue === 'fr' ? x.messageFr : x.messageEn) + ' (' + X.visible.replace('{du}', des).replace('{au}', x.au) + ')';
+      });
+      apercuAnnonce.textContent = a ? a : X.aucune;
+      var liste = $('[data-editeur-prochaines]', racine);
+      liste.textContent = '';
+      prochaines.forEach(function (p) { liste.appendChild(el('li', {}, p)); });
+      etat.textContent = JSON.stringify(nettoye()) === JSON.stringify(nettoye(publie)) ? X.etat_publie : X.etat_modifie;
+    }
+    function nettoye(m) {
+      var x = copie(m || modele);
+      delete x._apercu;
+      x.horaires.sort(function (a, b) { return ORDRE.indexOf(a.jour) - ORDRE.indexOf(b.jour); });
+      x.maj = heureParis().date;
+      return x;
+    }
+    function charger(depart) {
+      modele = copie(depart);
+      delete modele._apercu;
+      modele.horaires = modele.horaires || [];
+      modele.exceptions = modele.exceptions || [];
+      dessinerSemaine();
+      dessinerExceptions();
+      maj();
+    }
+    $('[data-editeur-ajouter]', racine).addEventListener('click', function () {
+      var auj = heureParis().date;
+      modele.exceptions.push({ du: auj, au: auj, ferme: true, messageEn: '', messageFr: '' });
+      dessinerExceptions();
+      maj();
     });
+    $('[data-editeur-apercu]', racine).addEventListener('click', function () {
+      try { localStorage.setItem(HOR.cleApercu, JSON.stringify(nettoye())); etat.textContent = X.apercu_actif; } catch (e) { etat.textContent = X.stockage; }
+    });
+    $('[data-editeur-arreter]', racine).addEventListener('click', function () {
+      try { localStorage.removeItem(HOR.cleApercu); } catch (e) { /* rien */ }
+      charger(publie);
+      etat.textContent = X.etat_publie;
+    });
+    $('[data-editeur-telecharger]', racine).addEventListener('click', function () {
+      var blob = new Blob([JSON.stringify(nettoye(), null, 2) + '\n'], { type: 'application/json' });
+      var a = el('a', { href: URL.createObjectURL(blob), download: 'horaires.json' });
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(function () { URL.revokeObjectURL(a.href); a.parentNode.removeChild(a); }, 500);
+    });
+    publie = copie(HOR.donnees || (D.espace && D.espace.horaires));
+    charger(HOR.lire());
+    document.addEventListener('lc:horaires', function () {
+      publie = copie(HOR.donnees);
+      var a = null;
+      try { a = localStorage.getItem(HOR.cleApercu); } catch (e) { a = null; }
+      if (!a) charger(publie);
+    });
+  }
+
+  /* ------------------------------------------------------------ v5 · tirages creativehub : format et papier
+     Chaque choix a sa référence (SKU), la même dans Wix et dans creativehub : c'est elle qui relie la vente au bon tirage. */
+  function variantes() {
+    $$('[data-variante]').forEach(function (sel) {
+      var carte = sel.closest('.produit');
+      var bouton = carte && $('[data-ajouter]', carte);
+      var prixEl = carte && $('.produit__prix', carte);
+      if (!bouton) return;
+      function prixTxt(n) { return D.langue === 'fr' ? n.toLocaleString('fr-FR') + ' €' : '€' + n.toLocaleString('en-GB'); }
+      sel.addEventListener('change', function () {
+        var o = sel.options[sel.selectedIndex];
+        var d;
+        try { d = JSON.parse(bouton.getAttribute('data-ajouter')); } catch (e) { return; }
+        var px = Number(o.getAttribute('data-prix'));
+        d.id = o.value;
+        d.sku = o.value;
+        d.prix = px;
+        d.titre = sel.getAttribute('data-titre') + ' · ' + o.getAttribute('data-lib');
+        bouton.setAttribute('data-ajouter', JSON.stringify(d));
+        bouton.classList.remove('est-ajoute');
+        if (prixEl) prixEl.textContent = prixTxt(px);
+      });
+    });
+  }
+
+  /* ------------------------------------------------------------ v5 · suggestion de langue (jamais de redirection forcée)
+     Un visiteur dont le navigateur est en français voit, une fois, une invitation discrète vers la version française,
+     et inversement. Bon pour le référencement : chaque version garde sa propre adresse. */
+  function suggestionLangue() {
+    var cle = 'lc-langue-vue';
+    try { if (localStorage.getItem(cle)) return; } catch (e) { return; }
+    if (params.get('ouverture') === 'non') return;
+    var nav = (navigator.languages && navigator.languages[0]) || navigator.language || '';
+    var veutFr = /^fr\b/i.test(nav);
+    var lien = $('.entete__langue');
+    if (!lien || (D.langue === 'fr') === veutFr) return;
+    var txt = veutFr ? ['Ce site existe aussi en français.', 'Voir en français', 'Rester en anglais'] : ['This site is also in English.', 'View in English', 'Stay in French'];
+    var b = document.createElement('div');
+    b.className = 'suggestion-langue';
+    b.setAttribute('role', 'region');
+    b.setAttribute('aria-label', txt[0]);
+    b.setAttribute('lang', veutFr ? 'fr' : 'en');
+    var p = document.createElement('p'); p.textContent = txt[0];
+    var aller = document.createElement('a'); aller.href = lien.getAttribute('href'); aller.textContent = txt[1]; aller.className = 'suggestion-langue__aller';
+    var non = document.createElement('button'); non.type = 'button'; non.textContent = txt[2];
+    function vu() { try { localStorage.setItem(cle, '1'); } catch (e) { /* rien */ } }
+    aller.addEventListener('click', vu);
+    non.addEventListener('click', function () { vu(); b.parentNode.removeChild(b); });
+    b.appendChild(p); b.appendChild(aller); b.appendChild(non);
+    document.body.appendChild(b);
   }
 
   /* ------------------------------------------------------------ démarrage */
@@ -1756,12 +2081,14 @@
     inclinaisons();
     ancres();
     statutEspace();
+    editeurHoraires();
+    suggestionLangue();
+    variantes();
     comptes();
     formulaire();
     lettres();
     paniers();
     videos();
-    annonces();
     glaces();
     grattages();
     carottage();

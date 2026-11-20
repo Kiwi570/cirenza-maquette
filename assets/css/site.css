@@ -1405,3 +1405,87 @@ section { position: relative; }
 .presse-accueil__ft { width: 100%; max-width: 360px; justify-self: end; }
 .retraites-cartes--trois { align-items: stretch; }
 @media (max-width: 900px) { .presse-accueil__ft { justify-self: start; max-width: 300px; } }
+
+/* =====================================================================
+   v5 · horaires (une seule source, éditeur), SEO et GEO, retraites, formulaires, cours privés, presse, tirages
+   ===================================================================== */
+/* éditeur des horaires (outil de la maquette) */
+.editeur { display: grid; grid-template-columns: 1.25fr .75fr; gap: clamp(24px, 5vw, 80px); padding: 6vh var(--marge) 14vh; align-items: start; }
+.editeur__semaine { display: grid; gap: .2rem; margin: 1rem 0 3rem; }
+.editeur__jour { display: grid; grid-template-columns: 8rem 11rem 1fr; gap: .8rem; align-items: center; padding: .7rem 0; border-bottom: 1px solid var(--ligne); }
+.editeur__nom { margin: 0; font-size: 1.05rem; }
+.editeur__heures, .editeur__ligne { display: flex; flex-wrap: wrap; gap: .6rem 1rem; }
+.editeur__heures[hidden], .editeur__ligne[hidden] { display: none; }
+.editeur__champ { display: grid; gap: .25rem; font-family: var(--mono); font-size: .75rem; letter-spacing: .04em; color: var(--granite-doux); }
+.editeur__ligne--large .editeur__champ { flex: 1 1 260px; }
+.editeur select, .editeur input { font: inherit; font-family: var(--serif); font-size: 1rem; color: var(--granite); background: var(--neige); border: 1px solid var(--ligne-forte); border-radius: var(--rayon); padding: .5rem .6rem; min-height: 44px; }
+.editeur__exception { margin: 0 0 1.2rem; padding: 1.2rem; border: 1px solid var(--ligne-forte); border-radius: var(--rayon); background: var(--neige); display: grid; gap: .9rem; }
+.editeur__exception legend { font-family: var(--mono); font-size: .75rem; letter-spacing: .1em; text-transform: uppercase; padding: 0 .4rem; }
+.editeur__supprimer { justify-self: start; background: none; border: 0; padding: .4rem 0; min-height: 44px; font-family: var(--mono); font-size: .75rem; text-decoration: underline; color: #8b2f22; cursor: pointer; }
+.editeur__apercu { position: sticky; top: calc(var(--entete) + 2vh); padding: 1.6rem; background: var(--neige); border: 1px solid var(--ligne); border-radius: var(--rayon); display: grid; gap: .6rem; }
+.editeur__annonce span, .editeur__sous { font-family: var(--mono); font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; color: var(--granite-doux); margin: .6rem 0 0; }
+.editeur__annonce strong { display: block; font-weight: 500; margin-top: .3rem; }
+.editeur__prochaines { margin: 0; padding-left: 1.1rem; font-size: .95rem; }
+.editeur__etat { font-family: var(--mono); font-size: .75rem; color: var(--espace); margin: .4rem 0 0; }
+.editeur__boutons { display: flex; flex-wrap: wrap; gap: .6rem; }
+.exemple { display: inline-block; margin-left: .5em; padding: .1em .6em; border-radius: 999px; background: #f6e7c8; color: #6b4a12; font-family: var(--mono); font-size: .75rem; letter-spacing: .04em; text-transform: none; vertical-align: middle; }
+.apercu-horaires { position: fixed; z-index: 130; left: 16px; bottom: 16px; margin: 0; display: flex; align-items: center; gap: .6rem; padding: .5rem .6rem .5rem 1rem; border-radius: 999px; background: var(--espace); color: #fff; font-family: var(--mono); font-size: .75rem; box-shadow: 0 10px 30px -12px rgba(0,0,0,.5); }
+.apercu-horaires button { min-height: 36px; padding: 0 .9rem; border-radius: 999px; border: 1px solid rgba(255,255,255,.6); background: none; color: inherit; font: inherit; cursor: pointer; }
+@media (max-width: 900px) {
+  .editeur { grid-template-columns: 1fr; }
+  .editeur__apercu { position: static; }
+  .editeur__jour { grid-template-columns: 1fr 1fr; }
+  .editeur__heures { grid-column: 1 / -1; }
+}
+.editeur__heures input { width: 7.6rem; padding: .4rem .5rem; }
+.editeur__jour { grid-template-columns: 7rem 10rem 1fr; }
+/* retraites : places restantes (exemples tant que Lisa n'a pas donné les chiffres) */
+.places { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin-top: .7rem; font-family: var(--mono); font-size: .75rem; letter-spacing: .03em; color: var(--espace); }
+.places__jauge { flex: none; width: 64px; height: 6px; border-radius: 999px; background: var(--espace-clair); overflow: hidden; }
+.places__jauge i { display: block; height: 100%; width: calc(var(--rempli) * 100%); background: var(--espace); border-radius: inherit; }
+.places .exemple { margin-left: 0; }
+.places--fiche { display: flex; margin-top: .6rem; }
+.faq--retraites { background: var(--calcaire); }
+/* formulaire : un bloc de champs par objet */
+.formulaire__bloc { display: grid; gap: 0; }
+.formulaire__bloc[hidden] { display: none; }
+.formulaire select { min-height: 48px; }
+/* suggestion de langue : discrète, une fois, jamais de redirection */
+.suggestion-langue { position: fixed; z-index: 125; right: 16px; bottom: 16px; max-width: min(420px, calc(100vw - 32px)); display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .9rem; padding: .9rem 1.1rem; background: var(--neige); border: 1px solid var(--ligne-forte); border-radius: var(--rayon); box-shadow: 0 18px 40px -20px rgba(30,26,20,.45); }
+.suggestion-langue p { margin: 0; flex-basis: 100%; }
+.suggestion-langue__aller { font-family: var(--mono); font-size: .8rem; letter-spacing: .06em; text-transform: uppercase; }
+.suggestion-langue button { min-height: 44px; background: none; border: 0; padding: 0; font-family: var(--mono); font-size: .8rem; color: var(--granite-doux); text-decoration: underline; cursor: pointer; }
+/* cours privés : catégories, expériences, tarifs (exemples) */
+.offre__sommaire { padding: 0 var(--marge); margin: 0 0 1rem; font-family: var(--mono); font-size: .8rem; letter-spacing: .04em; }
+.offre__avertissement { margin: 0 var(--marge) 2rem; max-width: 70ch; font-size: .95rem; color: var(--granite-doux); }
+.offre { padding: 8vh var(--marge); scroll-margin-top: var(--entete); }
+.offre:nth-of-type(even) { background: #ebe7e0; }
+.offre__tete p { max-width: 60ch; }
+.offre__liste { list-style: none; margin: 2.5rem 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap: clamp(20px, 3vw, 40px); }
+.experience { display: grid; align-content: start; gap: .5rem; }
+.experience__img .fossile__cadre { aspect-ratio: 4/3; }
+.experience__n { margin: .4rem 0 0; font-family: var(--mono); font-size: .75rem; color: var(--espace); }
+.experience__titre { margin: 0; font-size: 1.25rem; line-height: 1.2; font-weight: 400; }
+.experience p { margin: 0; }
+.experience__faits { margin: .4rem 0 0; display: grid; gap: .1rem; }
+.experience__faits div { display: flex; justify-content: space-between; gap: 1rem; padding: .35rem 0; border-bottom: 1px solid var(--ligne); }
+.experience__faits dt { font-family: var(--mono); font-size: .75rem; color: var(--granite-doux); }
+.experience__faits dd { margin: 0; text-align: right; }
+.experience .exemple { justify-self: start; margin-left: 0; }
+.experience .lien-fleche { justify-self: start; margin-top: .4rem; }
+.comment-cp { padding: 12vh var(--marge); scroll-margin-top: var(--entete); }
+.comment-cp__etapes { list-style: none; margin: 2.5rem 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(20px, 4vw, 60px); }
+.comment-cp__etapes h3 { margin: .3rem 0; font-size: 1.3rem; font-weight: 400; }
+.etape-cp__n { margin: 0; width: 2.4rem; height: 2.4rem; display: grid; place-items: center; border-radius: 50%; background: var(--espace); color: #fff; font-family: var(--mono); }
+.comment-cp__partenaires { font-size: 1.05rem; }
+@media (max-width: 800px) { .comment-cp__etapes { grid-template-columns: 1fr; } }
+/* presse : podcast (lien à venir) */
+.podcast { padding: 10vh var(--marge) 4vh; scroll-margin-top: var(--entete); }
+.podcast__texte { max-width: 760px; }
+.podcast__lecteur { display: flex; align-items: center; gap: 1rem; margin-top: 1.6rem; padding: 1rem 1.2rem; border: 1px dashed var(--ligne-forte); border-radius: var(--rayon); background: var(--neige); color: var(--granite-doux); font-size: .95rem; }
+.podcast__bouton { flex: none; width: 48px; height: 48px; display: grid; place-items: center; border-radius: 50%; background: var(--atelier); color: #fff; font-size: 1rem; }
+/* boutique : tirages creativehub (format et papier) */
+.produit__variante select { width: 100%; min-height: 44px; margin: .2rem 0 .4rem; font: inherit; font-family: var(--mono); font-size: .75rem; color: var(--granite); background: var(--neige); border: 1px solid var(--ligne-forte); border-radius: var(--rayon); padding: .3rem .4rem; }
+.produit__ch { margin: 0 0 .5rem; font-family: var(--mono); font-size: .75rem; color: var(--granite-doux); }
+.produit__ch .exemple { margin-left: .3em; }
+.faq--retraites .faq__liste + p { margin-top: 1.8rem; }

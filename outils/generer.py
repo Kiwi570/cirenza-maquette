@@ -11,26 +11,34 @@ import math
 import re
 import sys
 from pathlib import Path
+from urllib.parse import quote
 
 ICI = Path(__file__).resolve().parent
 sys.path.insert(0, str(ICI))
 import catalogue as CAT  # noqa: E402
 import contenu as C  # noqa: E402
+import horaires as HOR  # noqa: E402
+import seo as SEO  # noqa: E402
 import retraites as R  # noqa: E402
 
 SITE = Path(sys.argv[1]).resolve()
 MODE = sys.argv[sys.argv.index("--liens") + 1] if "--liens" in sys.argv else "propres"
 APERCU = "--apercu" in sys.argv
 MED = json.loads((ICI / "medias.json").read_text())
-VERSION = "4"
+VERSION = "5"
 AUJ = DT.date.today()
+# Horaires de l'Espace : une seule source, assets/data/horaires.json (futures collections Wix « Horaires » et « Exceptions »)
+HEURES = HOR.charger(SITE)
+for _l in ("en", "fr"):
+    C.T[_l]["horaires_lignes"] = HOR.lignes(HEURES, _l)
+    C.T[_l]["horaires_court"] = HOR.court(HEURES, _l)
 # Base maîtresse des œuvres : Artwork Archive. Son export, une fois fusionné (outils/artwork_archive.py),
 # s'applique par-dessus catalogue.py.
 AA = json.loads((ICI / "artwork_archive.json").read_text()) if (ICI / "artwork_archive.json").exists() else {}
 AFFICHER_PRIX = True  # brief de Lisa : « prices where shown » ; les prix connus d'Artwork Archive s'affichent, les autres restent sur demande
 # Côté de la maison de chaque page : l'atelier (Lisa Cirenza Fine Art, artiste-auteur) ou l'Espace (SAS)
 UNIVERS = {"oeuvres": "atelier", "salle": "atelier", "artiste": "atelier", "parcours": "atelier", "presse": "atelier",
-           "studio": "atelier", "espace": "espace", "cours": "espace", "cours_prives": "espace", "evenements": "espace", "retraites": "espace",
+           "studio": "atelier", "espace": "espace", "cours": "espace", "cours_prives": "espace", "horaires": "espace", "evenements": "espace", "retraites": "espace",
            "pip": "espace", "creative": "espace", "encaustics": "espace",
            "accueil": "maison", "boutique": "maison", "contact": "maison", "404": "maison"}
 SITE_URL = "https://cirenza-maquette.vercel.app"
@@ -371,7 +379,7 @@ def entete(lang, cle, prof, autre_href):
     menu = (f'<div class="menu" id="menu" hidden>{bascule_univers(lang, cle, prof, "univers--menu")}<nav class="menu__grille" aria-label="{"Site" if lang == "en" else "Site"}">'
             f'{groupe(t["groupes_menu"]["oeuvres"], g_oeuvres, "menu__strate--atelier")}{groupe(t["groupes_menu"]["artiste"], g_artiste, "menu__strate--atelier")}{groupe(t["groupes_menu"]["espace"], g_espace, "menu__strate--espace")}{groupe(t["groupes_menu"]["retraites"], g_retraites, "menu__strate--espace")}</nav>'
             f'<div class="menu__bas">{statut(lang)}<p>{e(C.COORD["rue"])}, {e(C.COORD["ville"])}</p><a href="{autre_href}" hreflang="{autre}" lang="{autre}">{e(t["langue_autre"])}</a></div></div>')
-    annonces = "".join(f'<p class="barre__annonce" data-annonce data-du="{a["du"]}" data-au="{a["au"]}" hidden>{e(a[lang])}</p>' for a in C.ANNONCES)
+    annonces = '<p class="barre__annonce" data-annonce hidden></p>'
     return f'''<header class="entete" data-entete>
   <div class="entete__barre">
     <p class="barre__lieu"><a href="{lien(lang, "espace", prof)}">Espace Créa-Tea-Vité</a><span class="barre__adresse"> · {e(C.COORD["rue"])}, La Clusaz</span></p>
@@ -422,12 +430,12 @@ def pied(lang, prof, autre_href):
       <p class="pied__reseaux"><a href="{c["instagram_espace"]}"{ext}>Instagram espacecreateavite</a></p>
     </section>
     <section class="pied__infos">
-      <h2>{e(t["horaires"])}</h2><dl class="horaires">{hor}</dl>{statut(lang)}
+      <h2>{e(t["horaires"])}</h2><dl class="horaires" data-horaires-liste>{hor}</dl>{statut(lang)}
       <address>{e(c["rue"])}<br>{e(c["ville"])}, {e(c["pays"][lang])}</address>
       <p><a href="tel:{c["tel_brut"]}">{e(c["tel"])}</a> · <a href="https://wa.me/{c["tel_brut"].lstrip("+")}"{ext}>WhatsApp</a> · <a href="{lien(lang, "contact", prof)}">{e(t["nav"]["contact"])}</a></p>
     </section>
   </div>
-  <p class="pied__bas"><span>{e(t["pied_droits"])}</span><span>{e(t["mentions"])}{"\u00a0:" if lang == "fr" else ":"} {e(a_completer)}</span><span>{e(t["confidentialite"])}{"\u00a0:" if lang == "fr" else ":"} {e(a_completer)}</span><span>{e(t["traduction"])}</span><span>{e(t["pied_maquette"])}</span><a href="{autre_href}" hreflang="{autre}" lang="{autre}">{e(t["langue_autre"])}</a></p>
+  <p class="pied__bas"><span>{e(t["pied_droits"])}</span><span>{e(t["mentions"])}{"\u00a0:" if lang == "fr" else ":"} {e(a_completer)}</span><span>{e(t["confidentialite"])}{"\u00a0:" if lang == "fr" else ":"} {e(a_completer)}</span><span>{e(t["traduction"])}</span><span>{e(t["pied_maquette"])} · <a href="{lien(lang, "horaires", prof)}">{"Hours editor" if lang == "en" else "Éditeur d'horaires"}</a></span><a href="{autre_href}" hreflang="{autre}" lang="{autre}">{e(t["langue_autre"])}</a></p>
 </footer>'''
 
 
@@ -441,13 +449,178 @@ def polices():
     return "<style>" + "".join(f'@font-face{{font-family:"{f}";src:url("{prefixe(0) if MODE == "propres" else "__P__"}assets/polices/{n}") format("woff");font-style:{s};font-weight:{w};font-display:swap}}' for f, n, s, w in regles) + "</style>"
 
 
-def page(lang, cle, chemin, titre_page, corps, autre_chemin, donnees_page=None, classe_corps="", image_og=None, preload=None):
+# ================================================================ v5 · SEO et GEO : adresses absolues, données structurées (schema.org)
+LISA_ID, ESPACE_ID, SITE_ID = SITE_URL + "/#lisa", SITE_URL + "/#espace", SITE_URL + "/#site"
+
+
+def url_abs(href):
+    """Adresse absolue d'un lien interne (mode « propres » : les liens commencent par /)."""
+    if not href or not href.startswith("/"):
+        return None
+    return SITE_URL + href
+
+
+def url_page(lang, cle, salle=None):
+    return url_abs(lien_salle(lang, salle, 0) if salle else lien(lang, cle, 0)) if MODE == "propres" else None
+
+
+def img_abs(chemin_asset):
+    return f"{SITE_URL}/assets/{chemin_asset}"
+
+
+def adresse_schema():
+    c = C.COORD
+    return {"@type": "PostalAddress", "streetAddress": c["rue"], "postalCode": c["ville"].split()[0], "addressLocality": "La Clusaz",
+            "addressRegion": "Haute-Savoie", "addressCountry": "FR"}
+
+
+def schema_lisa(lang):
+    c = C.COORD
+    return {"@type": "Person", "@id": LISA_ID, "name": "Lisa Cirenza", "alternateName": "Lisa Gitkin",
+            "jobTitle": "Painter" if lang == "en" else "Peintre", "description": C.POSITION["ligne"][lang],
+            "url": url_page(lang, "artiste"), "image": img_abs("img/photos/artiste-lisa-portrait-fond-glacier-800.webp"),
+            "address": {"@type": "PostalAddress", "addressLocality": "La Clusaz", "addressCountry": "FR"},
+            "alumniOf": {"@type": "CollegeOrUniversity", "name": "Stanford University"},
+            "memberOf": {"@type": "Organization", "name": "Salon d'Automne"},
+            "knowsAbout": ["Encaustic painting", "Mixed media", "Oil painting", "Watercolour", "Glaciers", "Juneau Icefield"],
+            "founder": {"@id": ESPACE_ID},
+            "sameAs": [c["instagram"], c["linkedin"], c["facebook"], "https://www.artworkarchive.com/profile/lisa-cirenza"]}
+
+
+def schema_espace(lang):
+    c = C.COORD
+    return {"@type": ["ArtGallery", "CafeOrCoffeeShop"], "@id": ESPACE_ID, "name": c["espace"],
+            "description": C.DESCRIPTIONS["espace"][lang], "url": url_page(lang, "espace"),
+            "image": img_abs("img/photos/espace-facade-de-nuit-800.webp"), "address": adresse_schema(),
+            "telephone": c["tel_brut"], "email": c["courriel_espace"], "founder": {"@id": LISA_ID},
+            "openingHoursSpecification": HOR.schema_ouverture(HEURES), "sameAs": [c["instagram_espace"]]}
+
+
+def schema_site(lang):
+    return {"@type": "WebSite", "@id": SITE_ID, "url": SITE_URL + "/", "name": "Lisa Cirenza",
+            "inLanguage": ["en", "fr"], "publisher": {"@id": LISA_ID}}
+
+
+def schema_retraite(lang, cle):
+    r = RETRAITES[cle]
+    prix = [p for _, p, note in R.PRIX_CHAMBRES if not note]
+    photo = r["photo"]
+    return {"@type": "Event", "name": f'{r["titre"]}: {L(lang, r["accroche"])}', "startDate": r["debut"], "endDate": r["fin"],
+            "eventStatus": "https://schema.org/EventScheduled", "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+            "description": L(lang, r["groupe"]) + " " + R.LOGEMENT[lang],
+            "image": img_abs(f'img/photos/{photo.replace("/", "-")}-800.webp') if isinstance(photo, str) else None,
+            "location": {"@type": "Place", "name": C.COORD["espace"], "address": adresse_schema()},
+            "organizer": {"@id": ESPACE_ID}, "performer": {"@id": LISA_ID},
+            "offers": {"@type": "AggregateOffer", "lowPrice": min(prix), "highPrice": max(prix), "priceCurrency": "EUR",
+                       "availability": "https://schema.org/LimitedAvailability", "url": url_page(lang, cle)},
+            "url": url_page(lang, cle)}
+
+
+def schema_faq(paires, lang):
+    return {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q[lang], "acceptedAnswer": {"@type": "Answer", "text": rep[lang]}} for q, rep in paires]}
+
+
+def schema_oeuvres(lang, sid):
+    items = []
+    for i, oid in enumerate(LISTES.get(sid, [])):
+        o = OEUVRES[oid]
+        if not o["titre"]:
+            continue
+        x = {"@type": "VisualArtwork", "name": titre(o, lang), "creator": {"@id": LISA_ID}, "artform": "Painting" if lang == "en" else "Peinture",
+             "image": img_abs(f"img/oeuvres/{oid}-1600.webp"), "url": url_page(lang, "salle", sid) + f"?oeuvre={oid}" if url_page(lang, "salle", sid) else None}
+        if o.get("technique"):
+            x["artMedium"] = o["technique"].get(lang)
+        if o.get("annee"):
+            x["dateCreated"] = str(o["annee"])
+        if o.get("hcm") and o.get("lcm"):
+            x["height"] = {"@type": "Distance", "name": f'{fmt(o["hcm"], "en")} cm'}
+            x["width"] = {"@type": "Distance", "name": f'{fmt(o["lcm"], "en")} cm'}
+        items.append({"@type": "ListItem", "position": len(items) + 1, "item": x})
+    return {"@type": "ItemList", "name": SERIES[sid]["titre"][lang], "itemListElement": items}
+
+
+def schema_fil(lang, cle, titre_court, salle=None):
+    etapes = [(C.T[lang]["nav"]["accueil"], url_page(lang, "accueil"))]
+    parent = PARENT.get(cle)
+    if parent and parent != cle:
+        etapes.append((C.T[lang]["nav"][parent], url_page(lang, parent)))
+    etapes.append((titre_court, url_page(lang, cle, salle)))
+    return {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": i + 1, "name": n, "item": u} for i, (n, u) in enumerate(etapes) if u]}
+
+
+def nettoyer_schema(x):
+    if isinstance(x, dict):
+        return {k: nettoyer_schema(v) for k, v in x.items() if v not in (None, "", [], {})}
+    if isinstance(x, list):
+        return [nettoyer_schema(v) for v in x]
+    return x
+
+
+def schema_page(lang, cle, titre_page, donnees_page):
+    g = []
+    d = donnees_page or {}
+    if cle == "accueil":
+        g += [schema_site(lang), schema_lisa(lang), schema_espace(lang)]
+    elif cle in ("artiste", "parcours", "presse", "studio"):
+        g.append({"@type": "ProfilePage", "mainEntity": schema_lisa(lang)} if cle == "artiste" else schema_lisa(lang))
+    elif cle in ("espace", "contact", "cours", "cours_prives", "evenements"):
+        g.append(schema_espace(lang))
+    elif cle == "retraites":
+        g.append({"@type": "ItemList", "itemListElement": [{"@type": "ListItem", "position": i + 1, "item": schema_retraite(lang, k)} for i, k in enumerate(RETRAITES_ORDRE)]})
+        g.append(schema_faq(R.FAQ_RETRAITES, lang))
+    elif cle in RETRAITES:
+        g.append(schema_retraite(lang, cle))
+        if RETRAITES[cle].get("faq"):
+            g.append(schema_faq(RETRAITES[cle]["faq"], lang))
+    elif cle == "salle" and d.get("salle"):
+        g.append(schema_oeuvres(lang, d["salle"]))
+    if cle != "accueil" and (cle in C.PAGES or cle == "salle"):
+        court = SERIES[d["salle"]]["titre"][lang] if cle == "salle" and d.get("salle") else (RETRAITES[cle]["titre"] if cle in RETRAITES else C.T[lang]["nav"].get(cle, titre_page))
+        g.append(schema_fil(lang, cle, court, d.get("salle")))
+    if not g:
+        return ""
+    data = nettoyer_schema({"@context": "https://schema.org", "@graph": g})
+    txt = json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+    return f'<script type="application/ld+json">{txt}</script>'
+
+
+def page(lang, cle, chemin, titre_page, corps, autre_chemin, donnees_page=None, classe_corps="", image_og=None, preload=None, description=None):
     t = C.T[lang]
     prof = prof_de(chemin)
     autre = "fr" if lang == "en" else "en"
     autre_href = autre_chemin
-    titre_complet = f"{titre_page} · Lisa Cirenza" if cle != "accueil" else C.POSITION["seo"][lang]
-    description = C.DESCRIPTIONS["espace"][lang] if UNIVERS.get(cle) == "espace" else t["description"]
+    d_page = donnees_page or {}
+    seo = SEO.PAGES.get(cle) or {}
+    if cle == "accueil":
+        titre_complet = C.POSITION["seo"][lang]
+    elif cle == "salle":
+        titre_complet = f"{titre_page} · {SEO.SUFFIXE_SALLE[lang]}"
+    elif cle in RETRAITES:
+        titre_complet = f"{RETRAITES[cle]['titre']} {RETRAITES[cle]['debut'][:4]} · {SEO.SUFFIXE_RETRAITE[lang]}"
+    elif seo.get("titre"):
+        titre_complet = seo["titre"][lang]
+    else:
+        titre_complet = f"{titre_page} · Lisa Cirenza"
+    if not description:
+        if cle == "salle" and d_page.get("salle"):
+            description = SERIES[d_page["salle"]]["texte"][lang]
+        elif cle in RETRAITES:
+            r_ = RETRAITES[cle]
+            description = f'{r_["titre"]}: {L(lang, r_["accroche"])}. {L(lang, r_["dates"])}, La Clusaz, {L(lang, r_["prix"])} {"per person" if lang == "en" else "par personne"}. {L(lang, r_["groupe"])}'
+        elif seo.get("description"):
+            description = seo["description"][lang]
+        else:
+            description = C.DESCRIPTIONS["espace"][lang] if UNIVERS.get(cle) == "espace" else t["description"]
+    if len(description) > 160:
+        description = description[:157].rsplit(" ", 1)[0].rstrip(",;:") + "…"
+    canon = url_abs(lien_salle(lang, d_page["salle"], 0)) if cle == "salle" and MODE == "propres" else (url_page(lang, cle) if cle in C.PAGES else None)
+    url_autre = url_abs(autre_chemin) if MODE == "propres" else None
+    alternes = ""
+    if canon and url_autre:
+        u_en, u_fr = (canon, url_autre) if lang == "en" else (url_autre, canon)
+        alternes = (f'<link rel="canonical" href="{canon}">\n<link rel="alternate" hreflang="en" href="{u_en}">\n'
+                    f'<link rel="alternate" hreflang="fr" href="{u_fr}">\n<link rel="alternate" hreflang="x-default" href="{u_en}">\n'
+                    f'<meta property="og:url" content="{canon}">')
     og = image_og or asset(prof, "img/oeuvres/recente-01-1600.webp")
     partage = SITE / "assets" / "partage" / f"{chemin.replace('/', '-').replace('.html', '')}.jpg"
     if partage.exists():
@@ -470,11 +643,13 @@ def page(lang, cle, chemin, titre_page, corps, autre_chemin, donnees_page=None, 
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="{e(description)}">
 <meta name="theme-color" content="#f2efe8">
-<link rel="alternate" hreflang="{autre}" href="{autre_href}">
+{alternes if alternes else f'<link rel="alternate" hreflang="{autre}" href="{autre_href}">'}
 <link rel="icon" type="image/png" sizes="32x32" href="{asset(prof, "img/icones/icone-32.png")}">
 <link rel="icon" type="image/png" sizes="192x192" href="{asset(prof, "img/icones/icone-192.png")}">
 <link rel="apple-touch-icon" href="{asset(prof, "img/icones/apple-touch-icon.png")}">
 <meta property="og:type" content="website">
+<meta property="og:site_name" content="Lisa Cirenza">
+<meta property="og:locale" content="{"en_US" if lang == "en" else "fr_FR"}">
 <meta property="og:title" content="{e(titre_complet)}">
 <meta property="og:description" content="{e(description)}">
 <meta property="og:image" content="{og}">
@@ -484,6 +659,7 @@ def page(lang, cle, chemin, titre_page, corps, autre_chemin, donnees_page=None, 
 {pol}
 <link rel="stylesheet" href="{asset(prof, "css/site.css")}?v={VERSION}">
 <script>(function(d){{d.classList.remove("no-js");d.classList.add("js");try{{if(matchMedia("(prefers-reduced-motion: reduce)").matches)d.classList.add("mouvement-reduit")}}catch(x){{}}}})(document.documentElement);</script>
+{schema_page(lang, cle, titre_page, d_page)}
 {extra}
 <script defer src="{asset(prof, f"js/donnees-{lang}.js")}?v={VERSION}"></script>
 <script defer src="{asset(prof, "js/site.js")}?v={VERSION}"></script>
@@ -730,7 +906,7 @@ def page_accueil(lang):
 
 def carte_presse(lang, prof, p, sizes, avec_texte=False):
     url = p["url"]
-    cible = f' href="{url}" target="_blank" rel="noopener"' if url else f' href="{lien(lang, "presse", prof, "#" + ("m2616" if p.get("a_paraitre") else "ft"))}"'
+    cible = f' href="{url}" target="_blank" rel="noopener"' if url else f' href="{lien(lang, "presse", prof, "#" + (p.get("ancre") or ("m2616" if p.get("a_paraitre") else "ft")))}"'
     neuf = f'<span class="presse-carte__neuf">{e("New" if lang == "en" else "Nouveau")}</span>' if p.get("nouveau") else ""
     texte = f'<span class="presse-carte__texte">{e(L(lang, p["texte"]))}</span>' if avec_texte else ""
     return (f'<li class="presse-carte" data-incline><a{cible}>'
@@ -740,6 +916,29 @@ def carte_presse(lang, prof, p, sizes, avec_texte=False):
 
 
 BIO_LEGENDE = {"en": "Lisa, aged four", "fr": "Lisa à 4 ans"}
+
+
+def places(lang, cle, classe=""):
+    """Jauge des places (exemples tant que Lisa n'a pas donné les chiffres ; sur le site final : collection Wix « Retraites »)."""
+    p = R.PLACES.get(cle)
+    if not p:
+        return ""
+    total, pris = p["total"], p["reservees"]
+    reste = max(0, total - pris)
+    fr = lang == "fr"
+    if reste == 0:
+        txt = "Full · waiting list" if not fr else "Complet · liste d'attente"
+    elif pris == 0:
+        txt = f"Bookings open · {total} places" if not fr else f"Inscriptions ouvertes · {total} places"
+    elif reste <= 2:
+        txt = (f"Last {reste} places" if reste > 1 else "Last place") if not fr else (f"Plus que {reste} places" if reste > 1 else "Dernière place")
+    elif pris * 2 >= total:
+        txt = f"Half full · {reste} places left" if not fr else f"À moitié complète · {reste} places restantes"
+    else:
+        txt = f"{reste} places left" if not fr else f"{reste} places restantes"
+    ex = f'<span class="exemple">{"example" if not fr else "exemple"}</span>' if p.get("exemple") else ""
+    return (f'<span class="places {classe}" data-places="{pris}/{total}" style="--rempli:{pris / total:.3f}">'
+            f'<span class="places__jauge" aria-hidden="true"><i></i></span><span class="places__txt">{e(txt)}</span>{ex}</span>')
 
 
 def carte_retraite(lang, prof, r, cle, photo):
@@ -752,6 +951,7 @@ def carte_retraite(lang, prof, r, cle, photo):
     <span class="carte-retraite__titre">{e(r["titre"])}</span>
     <span class="carte-retraite__dates">{e(L(lang, r["dates"]))} · {e(L(lang, r["lieu"]))}</span>
     <span class="carte-retraite__prix">{e(L(lang, r["prix"]))}</span>
+    {places(lang, cle)}
   </a>
 </article>'''
 
@@ -983,6 +1183,14 @@ def page_presse(lang):
     traduit = (lambda cle: "" if lang == "fr" else f'<p class="voix__trad" lang="en">{e(M[cle]["en"])}</p>')
     corps = f'''
 {bandeau(lang, prof, None, "Reviews, features, films" if lang == "en" else "Critiques, articles, films", t["nav"]["presse"], ["The Financial Times, the BBC and Maisons et Jardins; in 2026, a feature in Wax Fusion and a portrait in M2616.", C.PDF_A_VENIR["presse"]["en"] + "."] if lang == "en" else ["Le Financial Times, la BBC et Maisons et Jardins ; en 2026, un dossier dans Wax Fusion et un portrait dans M2616.", C.PDF_A_VENIR["presse"]["fr"] + "."], figure_photo(prof, "presse/wax-fusion-fall-2026-article", "Opening page of Beyond the Surface by Lisa Cirenza in Wax Fusion, Fall 2026" if lang == "en" else "Première page de Beyond the Surface, de Lisa Cirenza, dans Wax Fusion, automne 2026", "Wax Fusion · " + ("Fall 2026, p. 18" if lang == "en" else "automne 2026, p. 18"), "fossile", "(max-width: 900px) 70vw, 32vw"), t["nav"]["presse"])}
+<section class="podcast" id="podcast" tabindex="-1" data-strate="Podcast">
+  <div class="podcast__texte">
+    {surtitre("Podcast · " + ("November 2026" if lang == "en" else "novembre 2026"))}
+    <h2 class="titre-section">{lettres("A new podcast interview" if lang == "en" else "Un nouvel entretien en podcast")}</h2>
+    <p data-apparait>{e(C.PRESSE[0]["texte"][lang])}</p>
+    <p class="podcast__lecteur"><span class="podcast__bouton" aria-hidden="true">▶</span><span>{e("The player will load here, on click only, once the link arrives (Spotify, Apple Podcasts or the show's own page)." if lang == "en" else "Le lecteur se chargera ici, au clic seulement, dès que le lien sera arrivé (Spotify, Apple Podcasts ou la page de l'émission).")}</span></p>
+  </div>
+</section>
 <section class="wax-fusion" id="wax-fusion" tabindex="-1" data-strate="Wax Fusion">
   <div class="wax-fusion__couv">{figure_photo(prof, "presse/wax-fusion-fall-2026-couverture", "Cover of Wax Fusion, Fall 2026, issue XIV" if lang == "en" else "Couverture de Wax Fusion, automne 2026, n° XIV", "", "fossile", "(max-width: 800px) 70vw, 28vw", ' data-incline')}</div>
   <div class="wax-fusion__texte">
@@ -1207,7 +1415,7 @@ def page_espace(lang):
 </section>
 <section class="infos" data-strate="{e(t["horaires"])}">
   {figure_photo(prof, "espace/enseigne-rue-village", "The Créa-Tea-Vité sign in the village street" if lang == "en" else "L'enseigne Créa-Tea-Vité dans la rue du village", "", "fossile infos__img", "(max-width: 800px) 80vw, 30vw")}
-  <div class="infos__texte">{surtitre(t["horaires"], 7)}<dl class="horaires horaires--grand">{"".join(f"<div><dt>{e(j)}</dt><dd>{e(h)}</dd></div>" for j, h in t["horaires_lignes"])}</dl>{statut(lang, "statut--grand")}
+  <div class="infos__texte">{surtitre(t["horaires"], 7)}<dl class="horaires horaires--grand" data-horaires-liste>{"".join(f"<div><dt>{e(j)}</dt><dd>{e(h)}</dd></div>" for j, h in t["horaires_lignes"])}</dl>{statut(lang, "statut--grand")}
   <p class="note">{e("The French version of the current site says 2:30 – 7 pm: to be confirmed. Exceptional closures are listed on Google Maps." if lang == "en" else "La version française du site actuel indique 14 h 30 – 19 h : à confirmer. Les fermetures exceptionnelles sont signalées sur Google Maps.")}</p>
   <address>{e(C.COORD["espace"])}<br>{e(C.COORD["rue"])}<br>{e(C.COORD["ville"])}</address><p><a href="mailto:{C.COORD["courriel_espace"]}">{C.COORD["courriel_espace"]}</a></p></div>
 </section>
@@ -1268,24 +1476,49 @@ def page_cours_prives(lang):
     chemin = fichier(lang, "cours_prives")
     prof = prof_de(chemin)
     K = C.COURS_PRIVES
-    at = "".join(f'<li class="atelier" style="--i:{i}">{figure_photo(prof, ph, "", "", "fossile atelier__img", "(max-width: 800px) 86vw, 26vw")}<p class="atelier__n">{i + 1:02d}</p><h3>{e(a[lang])}</h3><p>{e(b[lang])}</p></li>' for i, (a, b, ph) in enumerate(C.COURS["ateliers"]))
-    eq = "".join(f'<li><h3>{e(a[lang])}</h3><p>{e(b[lang])}</p></li>' for a, b in C.COURS["equipes"])
+    ex = f'<span class="exemple">{"example" if not fr else "exemple"}</span>'
+    contact = lien(lang, "contact", prof)
+
+    def experience(x, n):
+        if "ref" in x:
+            a, b, ph = C.COURS["ateliers"][x["ref"]]
+            titre_x, texte_x = a, b
+        elif "ref_equipe" in x:
+            titre_x, texte_x = C.COURS["equipes"][x["ref_equipe"]]
+            ph = x["photo"]
+        else:
+            titre_x, texte_x, ph = x["titre"], x["texte"], x["photo"]
+        demande = f'{contact}?objet=cours_prives&amp;seance={quote(titre_x["en"])}'
+        return (f'<li class="experience" style="--i:{n}">{figure_photo(prof, ph, "", "", "fossile experience__img", "(max-width: 800px) 86vw, 24vw")}'
+                f'<p class="experience__n">{n + 1:02d}</p><h4 class="experience__titre">{e(titre_x[lang])}</h4><p>{e(texte_x[lang])}</p>'
+                f'<dl class="experience__faits"><div><dt>{"Length" if not fr else "Durée"}</dt><dd>{e(x["duree"][lang])}</dd></div>'
+                f'<div><dt>{"Group" if not fr else "Groupe"}</dt><dd>{e(x["groupe"][lang])}</dd></div>'
+                f'<div><dt>{"Price" if not fr else "Tarif"}</dt><dd>{e(x["prix"][lang])}</dd></div></dl>{ex}'
+                f'<a class="lien-fleche" href="{demande}">{"Request this session" if not fr else "Demander cette séance"} →</a></li>')
+
+    n = 0
+    cats = ""
+    for i, cat in enumerate(C.OFFRE_COURS_PRIVES):
+        items = ""
+        for x in cat["experiences"]:
+            items += experience(x, n)
+            n += 1
+        cats += (f'<section class="offre" id="{cat["cle"]}" data-strate="{e(cat["titre"][lang])}">'
+                 f'<div class="offre__tete">{surtitre(cat["titre"][lang], i + 1)}<h2 class="titre-section">{lettres(cat["titre"][lang])}</h2><p data-apparait>{e(cat["intro"][lang])}</p></div>'
+                 f'<ul class="offre__liste">{items}</ul></section>')
+    etapes = "".join(f'<li><p class="etape-cp__n">{i + 1}</p><h3>{e(a[lang])}</h3><p>{e(b[lang])}</p></li>' for i, (a, b) in enumerate(C.ETAPES_COURS_PRIVES))
+    sommaire = " · ".join(f'<a href="#{cat["cle"]}">{e(cat["titre"][lang])}</a>' for cat in C.OFFRE_COURS_PRIVES)
     corps = f'''
 {bandeau(lang, prof, None, "Hotels · concierges · event planners" if not fr else "Hôtels · conciergeries · organisateurs d'événements", K["titre"][lang], [K["pour"][lang], C.COURS["citation"][lang]], figure_photo(prof, "cours/in-the-studio", "Guests painting in the studio" if not fr else "Des participants peignent à l'atelier", "", "fossile", "(max-width: 900px) 80vw, 36vw"), K["titre"][lang], "bandeau--cours-prives")}
-<section class="ateliers" data-strate="{e("Private Atelier Sessions" if not fr else "Séances d'atelier privées")}">
-  {surtitre("Private Atelier Sessions" if not fr else "Séances d'atelier privées", 1)}<h2 class="titre-section">{lettres("Focus on process and medium" if not fr else "Le geste et le médium")}</h2>
-  <ul class="ateliers__liste">{at}</ul>
-  <p class="note">{e(K["a_completer"][lang])}</p>
-</section>
-<section class="equipes" data-strate="{e("Groups and teams" if not fr else "Groupes et équipes")}">
-  <div class="equipes__images">{figure_photo(prof, "teambuilding/atelier-cires-jaunes", "A team workshop with yellow waxes" if not fr else "Un atelier d'équipe aux cires jaunes", "", "fossile", "(max-width: 800px) 86vw, 34vw")}</div>
-  <div class="equipes__texte">{surtitre("Institutional & Team Innovation" if not fr else "Institutions et équipes", 2)}<h2 class="titre-section">{lettres("The garden of creative thinking" if not fr else "Le jardin de la pensée créative")}</h2><p data-apparait>{e(C.COURS["equipes_intro"][lang])}</p><ul class="equipes__liste">{eq}</ul>
-  <p data-apparait>{bouton(t["nav"]["evenements"], lien(lang, "evenements", prof), "bouton bouton--ligne")}</p></div>
-</section>
-<section class="cocreation" data-strate="{e(C.PLEIN_AIR_PRIVE["titre"][lang])}">
-  {figure_photo(prof, "retraites/participante-peint-en-plein-air", "A guest painting outdoors in a mountain meadow" if not fr else "Une participante peint en plein air, dans un pré de montagne", "", "fossile", "(max-width: 800px) 80vw, 30vw")}
-  <div>{surtitre("Outdoors" if not fr else "En plein air", 3)}<h2 class="titre-section">{lettres(C.PLEIN_AIR_PRIVE["titre"][lang])}</h2><p class="note">{e(C.PLEIN_AIR_PRIVE["texte"][lang])}</p>
-  <p data-apparait>{bouton("Enquire for your guests" if not fr else "Demander pour vos clients", lien(lang, "contact", prof) + "?objet=cours_prives")}<a class="bouton bouton--ligne aimant" href="mailto:{C.COORD["courriel_espace"]}"><span>{C.COORD["courriel_espace"]}</span></a></p></div>
+<p class="offre__sommaire">{sommaire} · <a href="#comment">{"How it works" if not fr else "Comment ça marche"}</a></p>
+<p class="offre__avertissement">{ex} {e("Lengths, group sizes and prices on this page are examples, until Lisa sends her summary of categories, experiences and rates." if not fr else "Durées, tailles de groupe et prix de cette page sont des exemples, en attendant la synthèse de Lisa (catégories, expériences, tarifs).")}</p>
+{cats}
+<section class="comment-cp" id="comment" data-strate="{e("How it works" if not fr else "Comment ça marche")}">
+  <div class="comment-cp__tete">{surtitre("For hotels and concierges" if not fr else "Pour les hôtels et conciergeries", len(C.OFFRE_COURS_PRIVES) + 1)}<h2 class="titre-section">{lettres("How it works" if not fr else "Comment ça marche")}</h2></div>
+  <ol class="comment-cp__etapes">{etapes}</ol>
+  <p class="comment-cp__partenaires">{e(C.PARTENAIRES_COURS_PRIVES[lang])}</p>
+  <p class="note">{ex} {e("Steps, response time and what is included: examples to confirm with Lisa." if not fr else "Étapes, délai de réponse et prestations comprises : exemples à confirmer avec Lisa.")}</p>
+  <p>{bouton("Enquire for your guests" if not fr else "Demander pour vos clients", contact + "?objet=cours_prives")}<a class="bouton bouton--ligne aimant" href="https://wa.me/{C.COORD["tel_brut"].lstrip("+")}" target="_blank" rel="noopener"><span>WhatsApp</span></a><a class="bouton bouton--ligne aimant" href="mailto:{C.COORD["courriel_espace"]}"><span>{C.COORD["courriel_espace"]}</span></a></p>
 </section>'''
     corps = avec_carnet(corps, lang, prof, "cours")
     ecrire(chemin, page(lang, "cours_prives", chemin, K["titre"][lang], corps, href_autre(lang, "cours_prives", prof), {}, "page-cours page-cours-prives"))
@@ -1591,7 +1824,7 @@ def page_retraite(lang, cle):
   <dl class="fiche-pratique">
     <div><dt>{"Dates" if not fr else "Dates"}</dt><dd>{e(L(lang, r["dates"]))}</dd></div>
     <div><dt>{"Place" if not fr else "Lieu"}</dt><dd>{e(L(lang, r["lieu"]))}</dd></div>
-    <div><dt>{"Group" if not fr else "Groupe"}</dt><dd>{e(L(lang, r["groupe"]))}</dd></div>
+    <div><dt>{"Group" if not fr else "Groupe"}</dt><dd>{e(L(lang, r["groupe"]))}{places(lang, cle, "places--fiche")}</dd></div>
     <div><dt>{"Price" if not fr else "Tarif"}</dt><dd><strong>{e(L(lang, r["prix"]))}</strong> {e("per person, depending on the room" if not fr else "par personne, selon la chambre")} · <a href="#prix">{e("rooms" if not fr else "chambres")}</a></dd></div>
   </dl>
 </section>
@@ -1626,6 +1859,11 @@ def page_retraites(lang):
 </section>
 <section class="inclus inclus--prix" data-strate="{e("Prices and rooms" if not fr else "Prix et chambres")}">
   <div class="inclus__prix">{surtitre("Prices per person · the same for all three retreats" if not fr else "Prix par personne · les mêmes pour les trois retraites", 1)}<h2 class="titre-section">{lettres("Rooms and prices" if not fr else "Chambres et prix")}</h2>{grille_prix(lang)}</div>
+</section>
+<section class="faq faq--retraites" data-strate="FAQ"><div>{surtitre("Questions", 2)}<h2 class="titre-section">{lettres("Before you book" if not fr else "Avant de réserver")}</h2>
+  <div class="faq__liste">{"".join(f'<details class="faq__item"><summary>{e(q[lang])}</summary><p>{e(rep_[lang])}</p></details>' for q, rep_ in R.FAQ_RETRAITES)}</div>
+  <p>{bouton("Schedule a discovery call" if not fr else "Réserver un échange découverte", lien(lang, "contact", prof) + "?objet=retraite")}</p></div>
+  {figure_photo(prof, "retraites/roc-de-chere", "Sketching at the Roc de Chère above Lake Annecy" if not fr else "Croquis au Roc de Chère, au-dessus du lac d'Annecy", "", "fossile faq__img", "(max-width: 900px) 70vw, 30vw")}
 </section>'''
     corps = avec_carnet(corps, lang, prof, "retraites")
     ecrire(chemin, page(lang, "retraites", chemin, t["nav"]["retraites"], corps, href_autre(lang, "retraites", prof), {}, "page-retraites"))
@@ -1642,22 +1880,54 @@ AA_RECENTES = [
 ]
 
 
+# v5 · tirages imprimés et expédiés par creativehub (theprintspace) : formats, papiers et prix d'EXEMPLE.
+# La référence (SKU) est la clé de la connexion : la même dans Wix et dans creativehub (voir connecteurs/).
+CH_FORMATS = [("A4", {"en": "A4 · 21 × 29.7 cm", "fr": "A4 · 21 × 29,7 cm"}, 95),
+              ("A3", {"en": "A3 · 29.7 × 42 cm", "fr": "A3 · 29,7 × 42 cm"}, 145),
+              ("A2", {"en": "A2 · 42 × 59.4 cm", "fr": "A2 · 42 × 59,4 cm"}, 245)]
+CH_PAPIERS = [("HPR", "Hahnemühle Photo Rag 308 gsm", 0, "Photo Rag"), ("GE", "Hahnemühle German Etching 310 gsm", 10, "German Etching")]
+
+
+def sku_tirage(oid, fmt, pap):
+    return f"LC-{oid}-{fmt}-{pap}".upper()
+
+
+def variantes_tirage(lang, oid, tt):
+    opts = []
+    for f_code, f_lib, f_prix in CH_FORMATS:
+        for p_code, p_lib, p_sup, p_court in CH_PAPIERS:
+            px = f_prix + p_sup
+            opts.append({"sku": sku_tirage(oid, f_code, p_code), "lib": f"{f_lib[lang]} · {p_lib}", "court": f"{f_code} · {p_court}", "prix": px})
+    return opts
+
+
 def produit_oeuvre(lang, prof, oid, genre):
     t = C.T[lang]
     fr = lang == "fr"
     o = OEUVRES[oid]
     tt = titre(o, lang)
     prix = o["prix"][0] if o.get("prix") else None
+    variantes = ""
     if genre == "tirage":
         detail = (o["edition"] or {}).get(lang) or ""
-        prix_aff = prix_txt(prix, lang) if prix else ("Price to be completed" if not fr else "Prix à compléter")
+        opts = variantes_tirage(lang, oid, tt)
+        prix = prix or opts[0]["prix"]
+        prix_aff = ("from " if not fr else "à partir de ") + prix_txt(min(x["prix"] for x in opts), lang)
         bouton_txt = "Add to basket" if not fr else "Ajouter au panier"
+        options = "".join(f'<option value="{x["sku"]}" data-prix="{x["prix"]}" data-lib="{e(x["lib"])}">{e(x["court"])} · {e(prix_txt(x["prix"], lang))}</option>' for x in opts)
+        variantes = (f'<label class="produit__variante"><span class="vh">{"Size and paper" if not fr else "Format et papier"}</span>'
+                     f'<select data-variante data-titre="{e(tt)}" data-oid="{oid}">{options}</select></label>'
+                     f'<p class="produit__ch">{"Printed and shipped by creativehub" if not fr else "Imprimé et expédié par creativehub"} <span class="exemple">{"example prices" if not fr else "prix d'exemple"}</span></p>')
     else:
         detail = technique_txt(o, lang) or ""
         prix_aff = prix_txt(prix, lang) if prix else t["prix_demande"]
         bouton_txt = ("Add to basket" if not fr else "Ajouter au panier") if prix else ("Reserve" if not fr else "Réserver")
     dims = dims_txt(o, lang)
-    donnees = json.dumps({"id": oid, "comptoir": "atelier", "genre": genre, "titre": tt, "prix": prix, "image": f"img/oeuvres/{oid}-640.webp"}, ensure_ascii=False)
+    donnees = {"id": oid, "comptoir": "atelier", "genre": genre, "titre": tt, "prix": prix, "image": f"img/oeuvres/{oid}-640.webp"}
+    if genre == "tirage":
+        v0 = variantes_tirage(lang, oid, tt)[0]
+        donnees.update({"id": v0["sku"], "sku": v0["sku"], "titre": f'{tt} · {v0["lib"]}', "prix": v0["prix"], "fournisseur": "creativehub"})
+    donnees = json.dumps(donnees, ensure_ascii=False)
     serie = SERIES[o["series"][0]]["titre"][lang] if o["series"][0] in SERIES else ""
     return f'''<li class="produit produit--{genre}" data-genre="{genre}">
   <div class="produit__visuel">{bouton_oeuvre(prof, oid, lang, o["series"][0], "(max-width: 700px) 44vw, 18vw", "produit__toile")}</div>
@@ -1666,6 +1936,7 @@ def produit_oeuvre(lang, prof, oid, genre):
     <h3 class="produit__titre{" cartel__titre--vide" if not o["titre"] else ""}">{e(tt)}</h3>
     <p class="produit__detail">{e(detail)}{(" · " + e(dims)) if dims else ""}</p>
     <p class="produit__prix">{e(prix_aff)}</p>
+    {variantes}
     <button class="produit__ajouter" type="button" data-ajouter='{e(donnees)}'><span>{e(bouton_txt)}</span></button>
   </div>
 </li>'''
@@ -1749,7 +2020,7 @@ def page_boutique(lang):
     </div>
   </div>
   <ul class="produits" data-produits>{"".join(produit_aa(lang, x) for x in AA_RECENTES)}{"".join(produit_oeuvre(lang, prof, oid, "recent") for oid in recentes)}{"".join(produit_oeuvre(lang, prof, oid, "tirage") for oid in tirages)}{"".join(produit_oeuvre(lang, prof, oid, "archive") for oid in archive)}</ul>
-  <p class="note comptoir__note">{e("Prices shown come from Artwork Archive (public profile, 11 November 2026); the other works are price on request, and your basket becomes a reservation request. Print prices and papers: to be completed with creativehub." if not fr else "Les prix affichés viennent d'Artwork Archive (profil public, 11 novembre 2026) ; les autres œuvres sont sur demande, et votre panier devient alors une demande de réservation. Prix et papiers des tirages : à compléter avec creativehub.")}</p>
+  <p class="note comptoir__note">{e("Prices shown come from Artwork Archive (public profile, 11 November 2026); the other works are price on request, and your basket becomes a reservation request. Prints: choose the size and paper; each choice has its own reference, printed and shipped by creativehub (example prices until creativehub access is set up)." if not fr else "Les prix affichés viennent d'Artwork Archive (profil public, 11 novembre 2026) ; les autres œuvres sont sur demande, et votre panier devient alors une demande de réservation. Tirages : choisissez le format et le papier ; chaque choix a sa référence, imprimée et expédiée par creativehub (prix d'exemple en attendant l'accès à creativehub).")}</p>
 </section>
 
 <section class="comptoir comptoir--editions" id="editions" tabindex="-1" data-strate="{e(E["titre"][lang])}">
@@ -1823,7 +2094,25 @@ def page_contact(lang):
     c = C.COORD
     objets = [("oeuvre", "A work" if lang == "en" else "Une œuvre"), ("commande", "A commission" if lang == "en" else "Une commande"), ("cours_prives", "A private course for guests" if lang == "en" else "Un cours privé pour des clients"),
               ("evenement", "A private event" if lang == "en" else "Un événement privé"), ("retraite", "A retreat" if lang == "en" else "Une retraite"), ("autre", "Something else" if lang == "en" else "Autre chose")]
-    radios = "".join(f'<label class="choix"><input type="radio" name="objet" value="{v}"{" checked" if i == 0 else ""}><span>{e(l)}</span></label>' for i, (v, l) in enumerate(objets))
+    maison = {"oeuvre": c["courriel"], "commande": c["courriel"], "autre": c["courriel"]}
+    radios = "".join(f'<label class="choix"><input type="radio" name="objet" value="{v}" data-courriel="{maison.get(v, c["courriel_espace"])}"{" checked" if i == 0 else ""}><span>{e(l)}</span></label>' for i, (v, l) in enumerate(objets))
+    fr = lang == "fr"
+
+    def sel(nom, label, options, requis=False):
+        o = "".join(f'<option value="{e(v)}">{e(x)}</option>' for v, x in options)
+        return f'<div class="champ"><label for="f-{nom}">{e(label)}</label><select id="f-{nom}" name="{nom}"{" required" if requis else ""}>{o}</select></div>'
+
+    def ent(nom, label, typ="text", attrs=""):
+        return f'<div class="champ"><label for="f-{nom}">{e(label)} <small>({"optional" if not fr else "facultatif"})</small></label><input id="f-{nom}" name="{nom}" type="{typ}"{attrs}></div>'
+    chambres = [("", "—")] + [(x["en"], f'{x[lang]} · {prix_txt(px, lang)}') for x, px, _ in R.PRIX_CHAMBRES]
+    seances = [("", "—")] + [(a["en"], a[lang]) for a, b, ph in C.COURS["ateliers"]] + [(C.PLEIN_AIR_PRIVE["titre"]["en"], C.PLEIN_AIR_PRIVE["titre"][lang]), ("To define together", "To define together" if not fr else "À définir ensemble")]
+    bloc_retraite = (f'<div class="formulaire__deux">{sel("chambre", "Preferred room" if not fr else "Chambre souhaitée", chambres)}{ent("personnes", "Number of people" if not fr else "Nombre de personnes", "number", " min=\"1\" max=\"10\" inputmode=\"numeric\"")}</div>'
+                     f'{sel("appel", "Best time for a discovery call (French time)" if not fr else "Moment préféré pour l'échange découverte (heure française)", [("", "—"), ("Morning", "Morning" if not fr else "Matin"), ("Afternoon", "Afternoon" if not fr else "Après-midi"), ("Evening", "Evening" if not fr else "Soir")])}')
+    bloc_cours = (f'<div class="formulaire__deux">{sel("organisation", "You are" if not fr else "Vous êtes", [("Hotel", "A hotel" if not fr else "Un hôtel"), ("Concierge", "A concierge service" if not fr else "Une conciergerie"), ("Event planner", "An event planner" if not fr else "Un organisateur d'événements"), ("Private guest", "A private guest" if not fr else "Un particulier")])}{ent("etablissement", "Name of the hotel or company" if not fr else "Nom de l'hôtel ou de la société", "text", " autocomplete=\"organization\"")}</div>'
+                  f'<div class="formulaire__deux">{ent("date_souhaitee", "Preferred date" if not fr else "Date souhaitée", "date")}{ent("groupe", "Group size" if not fr else "Taille du groupe", "number", " min=\"1\" max=\"40\" inputmode=\"numeric\"")}</div>'
+                  f'<div class="formulaire__deux">{sel("seance", "Session" if not fr else "Séance", seances)}{ent("budget", "Budget per person or per group" if not fr else "Budget par personne ou par groupe")}</div>')
+    bloc_evenement = (f'<div class="formulaire__deux">{sel("type_evenement", "Type of event" if not fr else "Type d'événement", [("Private hire", "Private hire of the Espace" if not fr else "Privatisation de l'Espace"), ("Aperitif in the gallery", "Aperitif in the gallery" if not fr else "Apéritif dans la galerie"), ("Team workshop", "Team workshop" if not fr else "Atelier d'équipe"), ("Other", "Other" if not fr else "Autre")])}{ent("date_evenement", "Preferred date" if not fr else "Date souhaitée", "date")}</div>'
+                      f'{ent("invites", "Number of guests" if not fr else "Nombre d'invités", "number", " min=\"1\" max=\"80\" inputmode=\"numeric\"")}')
     opts = "".join(f'<option value="{oid}">{e(titre(OEUVRES[oid], lang))}{"" if OEUVRES[oid]["titre"] else " (" + oid + ")"}</option>' for sid in ORDRE for oid in LISTES[sid]) + f'<option value="where-do-i-begin">Where Do I Begin?</option>'
 
     def champ(nom, label, typ="text", requis=True, auto=""):
@@ -1842,7 +2131,9 @@ def page_contact(lang):
     <form class="formulaire" data-formulaire novalidate>
       <fieldset class="champ"><legend>{"About" if lang == "en" else "À propos de"}</legend><div class="choix-groupe">{radios}</div></fieldset>
       <div class="champ" data-pour="oeuvre"><label for="f-oeuvre">{"Which work?" if lang == "en" else "Quelle œuvre ?"}</label><select id="f-oeuvre" name="oeuvre"><option value="">—</option>{opts}</select></div>
-      <div class="champ" data-pour="retraite" hidden><label for="f-retraite">{"Which retreat?" if lang == "en" else "Quelle retraite ?"}</label><select id="f-retraite" name="retraite">{"".join(f'<option value="{k}">{e(RETRAITES[k]["titre"])} · {e(L(lang, RETRAITES[k]["dates"]))}</option>' for k in RETRAITES_ORDRE)}</select></div>
+      <div class="formulaire__bloc" data-pour="retraite" hidden><div class="champ"><label for="f-retraite">{"Which retreat?" if lang == "en" else "Quelle retraite ?"}</label><select id="f-retraite" name="retraite">{"".join(f'<option value="{k}">{e(RETRAITES[k]["titre"])} · {e(L(lang, RETRAITES[k]["dates"]))}</option>' for k in RETRAITES_ORDRE)}</select></div>{bloc_retraite}</div>
+      <div class="formulaire__bloc" data-pour="cours_prives" hidden>{bloc_cours}</div>
+      <div class="formulaire__bloc" data-pour="evenement" hidden>{bloc_evenement}</div>
       <div class="formulaire__deux">{champ("prenom", "First name" if lang == "en" else "Prénom", auto="given-name")}{champ("nom", "Last name" if lang == "en" else "Nom", auto="family-name")}</div>
       <div class="formulaire__deux">{champ("email", "Email" if lang == "en" else "Adresse électronique", "email", auto="email")}{champ("tel", "Phone" if lang == "en" else "Téléphone", "tel", False, "tel")}</div>
       {champ("message", "Message", "textarea")}
@@ -1911,7 +2202,7 @@ def donnees_js(lang):
     }
     d = {"langue": lang, "textes": t, "oeuvres": oe, "series": series, "decors": decors,
          "pageContact": C.PAGES["contact"][lang] + (".html" if MODE == "html" else ""),
-         "espace": {"horaires": C.HORAIRES, "courriel": C.COORD["courriel"]},
+         "espace": {"horaires": HEURES, "courriel": C.COORD["courriel"]},
          "retraites": {"pip": {"debut": R.PIP["debut"], "titre": R.PIP["titre"]}, "creative": {"debut": R.CREATIVE["debut"], "titre": R.CREATIVE["titre"]}, "encaustics": {"debut": R.ENCAUSTICS["debut"], "titre": R.ENCAUSTICS["titre"]}}}
     if lang == "fr":
         def corriger(x):
@@ -1925,6 +2216,159 @@ def donnees_js(lang):
         d = corriger(d)
     (SITE / "assets" / "js" / f"donnees-{lang}.js").write_text("window.LC_DONNEES=" + json.dumps(d, ensure_ascii=False, separators=(",", ":")) + ";\n", encoding="utf-8")
 
+
+
+# ================================================================ v5 · éditeur des horaires (outil de la maquette, hors menu)
+EDITEUR = {
+    "en": {"ferme": "Closed", "ouvert": "Open", "rdv": "By appointment", "de": "From", "a": "To", "de2": "2nd slot from", "a2": "To",
+           "exception": "Exception", "exemple": "Example", "du": "First day", "au": "Last day", "afficher": "Show the message from",
+           "genre": "On these days", "ferme_ex": "Closed", "special": "Special hours", "msg_en": "Message in English", "msg_fr": "Message in French",
+           "supprimer": "Remove", "visible": "shown {du} → {au}", "aucune": "No announcement today",
+           "etat_publie": "These are the published hours.", "etat_modifie": "Changes not yet previewed or published.",
+           "apercu_actif": "Preview active in this browser: open any page of the site to see it.", "stockage": "This browser blocks the preview (private browsing?)."},
+    "fr": {"ferme": "Fermé", "ouvert": "Ouvert", "rdv": "Sur rendez-vous", "de": "De", "a": "À", "de2": "2e plage de", "a2": "À",
+           "exception": "Exception", "exemple": "Exemple", "du": "Premier jour", "au": "Dernier jour", "afficher": "Afficher le message dès le",
+           "genre": "Ces jours-là", "ferme_ex": "Fermé", "special": "Horaires spéciaux", "msg_en": "Message en anglais", "msg_fr": "Message en français",
+           "supprimer": "Supprimer", "visible": "affiché du {du} au {au}", "aucune": "Aucune annonce aujourd'hui",
+           "etat_publie": "Ce sont les horaires publiés.", "etat_modifie": "Modifications pas encore prévisualisées ni publiées.",
+           "apercu_actif": "Aperçu actif dans ce navigateur : ouvrez n'importe quelle page du site pour le voir.", "stockage": "Ce navigateur bloque l'aperçu (navigation privée ?)."},
+}
+
+
+def page_horaires(lang):
+    fr = lang == "fr"
+    chemin = fichier(lang, "horaires")
+    prof = prof_de(chemin)
+    titre_p = "Opening hours" if not fr else "Horaires d'ouverture"
+    intro = (["Change the Espace's weekly hours, closures and announcements here, then preview them on the whole site before anything is published.",
+              "On the final site, these same fields live in the Wix dashboard, in two collections: Opening hours and Exceptions. You edit them from the Wix app on your phone, and the site updates by itself."]
+             if not fr else
+             ["Modifiez ici les horaires de la semaine, les fermetures et les annonces de l'Espace, puis voyez-les sur tout le site avant toute publication.",
+              "Sur le site final, ces mêmes champs sont dans le tableau de bord Wix, en deux collections : Horaires et Exceptions. Vous les modifiez depuis l'application Wix sur votre téléphone, et le site se met à jour tout seul."])
+    corps = f'''
+{bandeau(lang, prof, None, "Mock-up tool · for Lisa" if not fr else "Outil de la maquette · pour Lisa", titre_p, intro, figure_photo(prof, "espace/enseigne-rue-village", "The Espace Créa-Tea-Vité sign in the village street" if not fr else "L'enseigne de l'Espace Créa-Tea-Vité dans la rue du village", "", "fossile", "(max-width: 900px) 80vw, 30vw"), titre_p, "bandeau--horaires")}
+<section class="editeur" data-editeur-horaires data-strate="{e("Editor" if not fr else "Éditeur")}">
+  <div class="editeur__colonne">
+    {surtitre("Every week" if not fr else "Chaque semaine", 1)}
+    <div class="editeur__semaine" data-editeur-semaine></div>
+    {surtitre("Closures, special hours and announcements" if not fr else "Fermetures, horaires spéciaux et annonces", 2)}
+    <p class="note">{e("An exception replaces the usual hours between two dates. Its message appears in the bar at the top of every page, from the chosen date (ten days before by default) until the last day." if not fr else "Une exception remplace les horaires habituels entre deux dates. Son message s'affiche dans la barre en haut de toutes les pages, dès la date choisie (dix jours avant par défaut) et jusqu'au dernier jour.")}</p>
+    <div class="editeur__exceptions" data-editeur-exceptions></div>
+    <p><button class="bouton bouton--ligne" type="button" data-editeur-ajouter><span>{e("+ Add an exception" if not fr else "+ Ajouter une exception")}</span></button></p>
+  </div>
+  <aside class="editeur__apercu" aria-label="{e("Preview" if not fr else "Aperçu")}">
+    <p class="surtitre"><span>{e("What visitors see" if not fr else "Ce que voient les visiteurs")}</span></p>
+    <dl class="horaires horaires--grand" data-editeur-liste></dl>
+    <p class="statut statut--grand"><span class="statut__point" aria-hidden="true"></span><span class="statut__texte" data-editeur-statut></span></p>
+    <p class="editeur__annonce"><span>{e("Top bar today" if not fr else "Barre du haut aujourd'hui")}</span> <strong data-editeur-annonce></strong></p>
+    <p class="editeur__sous">{e("Coming up" if not fr else "À venir")}</p>
+    <ul class="editeur__prochaines" data-editeur-prochaines></ul>
+    <p class="editeur__etat" data-editeur-etat role="status"></p>
+    <div class="editeur__boutons">
+      <button class="bouton" type="button" data-editeur-apercu><span>{e("Preview on the site" if not fr else "Voir sur le site")}</span></button>
+      <button class="bouton bouton--ligne" type="button" data-editeur-arreter><span>{e("Back to the published hours" if not fr else "Revenir aux horaires publiés")}</span></button>
+      <button class="bouton bouton--ligne" type="button" data-editeur-telecharger><span>{e("Download the file" if not fr else "Télécharger le fichier")}</span></button>
+    </div>
+    <p class="note">{e("For P'tit Kiwi: the downloaded file replaces assets/data/horaires.json, and the site reads it at every visit (no rebuild needed)." if not fr else "Pour P'tit Kiwi : le fichier téléchargé remplace assets/data/horaires.json, que le site relit à chaque visite (sans régénération).")}</p>
+  </aside>
+  <noscript><p class="note">{e("The editor needs JavaScript." if not fr else "L'éditeur a besoin de JavaScript.")}</p></noscript>
+</section>'''
+    ecrire(chemin, page(lang, "horaires", chemin, titre_p, corps, href_autre(lang, "horaires", prof), {"editeur": EDITEUR[lang]}, "page-horaires"))
+
+
+
+# ================================================================ v5 · plan du site, robots, llms.txt (GEO), redirections de l'ancien site
+def pages_publiques():
+    """(cle, salle) de chaque page publique, dans les deux langues."""
+    cles = [k for k in C.PAGES if k not in ("horaires",)]
+    out = [(k, None) for k in cles]
+    out += [("salle", sid) for sid in ORDRE]
+    return out
+
+
+def ecrire_plan_du_site():
+    if MODE != "propres":
+        return
+    lignes = ['<?xml version="1.0" encoding="UTF-8"?>',
+              '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">']
+    for cle, sid in pages_publiques():
+        u = {lg: url_page(lg, cle, sid) for lg in LANGS}
+        for lg in LANGS:
+            lignes.append(f"  <url><loc>{u[lg]}</loc><lastmod>{AUJ.isoformat()}</lastmod>"
+                          f'<xhtml:link rel="alternate" hreflang="en" href="{u["en"]}"/>'
+                          f'<xhtml:link rel="alternate" hreflang="fr" href="{u["fr"]}"/>'
+                          f'<xhtml:link rel="alternate" hreflang="x-default" href="{u["en"]}"/></url>')
+    lignes.append("</urlset>")
+    (SITE / "sitemap.xml").write_text("\n".join(lignes) + "\n", encoding="utf-8")
+
+
+def ecrire_llms():
+    """llms.txt : résumé factuel pour les moteurs de réponse (ChatGPT, Perplexity, Gemini, Claude…)."""
+    t = C.T["en"]
+    lignes_h = "; ".join(f"{j}: {h}" for j, h in HOR.lignes(HEURES, "en"))
+    retraites = "\n".join(f'- [{RETRAITES[k]["titre"]}]({url_page("en", k)}): {L("en", RETRAITES[k]["accroche"])}. {L("en", RETRAITES[k]["dates"])}, La Clusaz. {L("en", RETRAITES[k]["prix"])} per person, depending on the room.'
+                          for k in RETRAITES_ORDRE)
+    pages_en = [("oeuvres", "Works: A Record of Time, then the Archive of earlier series"), ("artiste", "Artist statement, long bio and short bio"),
+                ("studio", "Studio notes: the story behind A Record of Time"), ("parcours", "Selected CV"), ("presse", "Press"),
+                ("espace", "Espace Créa-Tea-Vité: gallery, tea room and studio"), ("cours_prives", "Private bespoke courses for hotels and concierges"),
+                ("evenements", "Private events and team workshops"), ("retraites", "Painting retreats 2027"), ("boutique", "Shop: originals, prints, collectors' editions"),
+                ("contact", "Contact")]
+    pages_fr = [("accueil", "Accueil"), ("oeuvres", "Œuvres"), ("artiste", "L'artiste"), ("espace", "L'Espace Créa-Tea-Vité"), ("retraites", "Retraites 2027"), ("contact", "Contact")]
+    c = C.COORD
+    txt = f"""# Lisa Cirenza
+
+> {C.POSITION["ligne"]["en"]} She founded Espace Créa-Tea-Vité, a gallery, tea room and studio in La Clusaz (Haute-Savoie, France), where she teaches and hosts painting retreats. English is the official language of this site; a French version lives under /fr.
+
+## About
+
+{C.BIO_COURTE["en"]}
+
+- Current series: A Record of Time. Earlier series (London Underground, refugees, digital work, Cuba) are in the Archive.
+- Statement, in her words: "{C.POSITION["citation"]["en"]}"
+- She was a field researcher on the Juneau Icefield, not a glaciologist.
+- Venice: Personal Structures, European Cultural Centre, Palazzo Mora, during the 59th Venice Biennale.
+
+## Espace Créa-Tea-Vité
+
+- Address: {c["rue"]}, {c["ville"]}, France
+- Opening hours: {lignes_h} (exceptional closures are announced on every page of the site)
+- Phone and WhatsApp: {c["tel"]} · Email: {c["courriel_espace"]}
+- Instagram: {c["instagram_espace"]}
+
+## Retreats 2027 (all based in La Clusaz)
+
+{retraites}
+
+## Pages
+
+{chr(10).join(f"- [{t['nav'].get(k, k)}]({url_page('en', k)}): {d}" for k, d in pages_en)}
+
+## Français
+
+{chr(10).join(f"- [{d}]({url_page('fr', k)})" for k, d in pages_fr)}
+
+## Contact
+
+- Artist and works (Lisa Cirenza Fine Art): {c["courriel"]}
+- Espace, classes, retreats and events (Espace Créa-Tea-Vité, SAS): {c["courriel_espace"]}
+"""
+    (SITE / "llms.txt").write_text(txt, encoding="utf-8")
+
+
+def redirections():
+    """Anciennes adresses de la maquette, puis celles de l'ancien site Wix (anglais et /fr)."""
+    r = [{"source": "/retreats/molten-magic", "destination": "/retreats/alpine-encaustics", "permanent": False},
+         {"source": "/fr/retraites/molten-magic", "destination": "/fr/retraites/alpine-encaustics", "permanent": False},
+         {"source": "/retreats/alpine-pause", "destination": "/retreats/alpine-encaustics", "permanent": False},
+         {"source": "/fr/retraites/alpine-pause", "destination": "/fr/retraites/alpine-encaustics", "permanent": False},
+         {"source": "/works/light-water-rock-and-time", "destination": "/works/a-record-of-time", "permanent": False},
+         {"source": "/fr/oeuvres/lumiere-eau-roche-et-temps", "destination": "/fr/oeuvres/strates-du-temps", "permanent": False}]
+    for ancien, cible in SEO.ANCIEN_SITE.items():
+        for lg, pre in (("en", ""), ("fr", "/fr")):
+            dest = lien_salle(lg, cible[1], 0) if isinstance(cible, tuple) else lien(lg, cible, 0)
+            if pre + ancien != dest:  # ex. /press existe déjà sous le même nom
+                r.append({"source": pre + ancien, "destination": dest, "permanent": False})
+    return r
 
 # ================================================================ tout
 for lang in LANGS:
@@ -1946,21 +2390,19 @@ for lang in LANGS:
     page_cours_prives(lang)
     page_studio(lang)
     page_contact(lang)
+    page_horaires(lang)
     donnees_js(lang)
 page_404()
 # Maquette : pas d'indexation (le site actuel garde son référencement), en-têtes de sécurité de base,
 # aucune règle Cache-Control (Vercel revérifie chaque fichier), jamais X-Frame-Options (affichage dans Wix).
 (SITE / "vercel.json").write_text(json.dumps({
     "cleanUrls": True, "trailingSlash": False,
-    "redirects": [{"source": "/retreats/molten-magic", "destination": "/retreats/alpine-encaustics", "permanent": False},
-                  {"source": "/fr/retraites/molten-magic", "destination": "/fr/retraites/alpine-encaustics", "permanent": False},
-                  {"source": "/retreats/alpine-pause", "destination": "/retreats/alpine-encaustics", "permanent": False},
-                  {"source": "/fr/retraites/alpine-pause", "destination": "/fr/retraites/alpine-encaustics", "permanent": False},
-                  {"source": "/works/light-water-rock-and-time", "destination": "/works/a-record-of-time", "permanent": False},
-                  {"source": "/fr/oeuvres/lumiere-eau-roche-et-temps", "destination": "/fr/oeuvres/strates-du-temps", "permanent": False}],
+    "redirects": redirections(),
     "headers": [{"source": "/(.*)", "headers": [{"key": "X-Robots-Tag", "value": "noindex, nofollow"},
                                                 {"key": "X-Content-Type-Options", "value": "nosniff"},
                                                 {"key": "Referrer-Policy", "value": "strict-origin-when-cross-origin"}]}],
 }, indent=2) + "\n")
-(SITE / "robots.txt").write_text("User-agent: *\nAllow: /\n")
+(SITE / "robots.txt").write_text(f"User-agent: *\nAllow: /\nDisallow: /manage/\nDisallow: /fr/gestion/\n\nSitemap: {SITE_URL}/sitemap.xml\n")
+ecrire_plan_du_site()
+ecrire_llms()
 print("pages générées, liens :", MODE, "· œuvres :", len(OEUVRES))
