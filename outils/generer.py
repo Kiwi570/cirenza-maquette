@@ -35,6 +35,8 @@ for _l in ("en", "fr"):
 # Base maîtresse des œuvres : Artwork Archive. Son export, une fois fusionné (outils/artwork_archive.py),
 # s'applique par-dessus catalogue.py.
 AA = json.loads((ICI / "artwork_archive.json").read_text()) if (ICI / "artwork_archive.json").exists() else {}
+# Nouvelles œuvres venues d'Artwork Archive (outils/import_artwork_archive.py), avec leurs images préparées
+AA_NOUVELLES = json.loads((ICI / "aa_nouvelles.json").read_text()) if (ICI / "aa_nouvelles.json").exists() else []
 MAQUETTE = True  # au lancement : False (et retirer X-Robots-Tag de vercel.json)
 AFFICHER_PRIX = True  # brief de Lisa : « prices where shown » ; les prix connus d'Artwork Archive s'affichent, les autres restent sur demande
 # Côté de la maison de chaque page : l'atelier (Lisa Cirenza Fine Art, artiste-auteur) ou l'Espace (SAS)
@@ -114,8 +116,27 @@ for o in CAT.HORS_SERIE:
     LISTES["hors-serie"] = [o["id"]]
 
 
+def ajouter_nouvelles_aa():
+    """Œuvres d'Artwork Archive absentes du catalogue : ajoutées à leur salle si leurs images sont prêtes."""
+    for d in AA_NOUVELLES:
+        oid, sid = d["id"], d.get("salle") or "hors-serie"
+        if oid in OEUVRES or oid not in MED["oeuvres"]:
+            continue
+        tech = d.get("technique_en")
+        o = {"id": oid, "titre": d["titre"], "dims": d.get("dims"), "annee": d.get("annee"), "statut": d.get("statut"),
+             "technique": {"en": tech, "fr": tech} if tech else None, "profondeur": d.get("profondeur"),
+             "edition": {"en": d["edition_en"], "fr": d["edition_en"]} if d.get("edition_en") else None,
+             "texte": {"en": d["description_en"], "fr": d["description_en"]} if d.get("description_en") else None,
+             "alt": {"en": f'{d["titre"]}, ' + (f"{tech}, " if tech else "") + "by Lisa Cirenza",
+                     "fr": f'{d["titre"]}, ' + (f"{tech}, " if tech else "") + "par Lisa Cirenza"}}
+        ajouter(o, sid if sid in LISTES or sid == "hors-serie" else "hors-serie")
+        LISTES.setdefault(sid if sid in LISTES else "hors-serie", []).append(oid)
+        AA[oid] = d
+
+
 def appliquer_artwork_archive():
     """Les données d'Artwork Archive l'emportent sur le relevé de catalogue.py."""
+    ajouter_nouvelles_aa()
     for oid, d in AA.items():
         o = OEUVRES.get(oid)
         if not o:
@@ -130,7 +151,10 @@ def appliquer_artwork_archive():
         if d.get("dims"):
             h, l = d["dims"]
             o["dims"], o["hcm"], o["lcm"] = (h, l), h, l
-        if d.get("prix") and AFFICHER_PRIX:
+        if d.get("description_en"):
+            o["texte"] = {"en": d["description_en"], "fr": (o["texte"] or {}).get("fr") or d["description_en"]}
+        o["sur_demande"] = bool(d.get("sur_demande"))
+        if d.get("prix") and AFFICHER_PRIX and not d.get("sur_demande"):
             o["prix"] = (d["prix"], d.get("devise", "EUR"))
 
 
@@ -1952,7 +1976,7 @@ def produit_oeuvre(lang, prof, oid, genre):
                      f'<p class="produit__ch">{"Printed and shipped by creativehub" if not fr else "Imprimé et expédié par creativehub"} <span class="exemple">{"example prices" if not fr else "prix d'exemple"}</span></p>')
     else:
         detail = technique_txt(o, lang) or ""
-        prix_aff = prix_txt(prix, lang) if prix else t["prix_a_venir"]
+        prix_aff = prix_txt(prix, lang) if prix else (t["prix_demande"] if o.get("sur_demande") else t["prix_a_venir"])
         bouton_txt = ("Add to basket" if not fr else "Ajouter au panier") if prix else ("Reserve" if not fr else "Réserver")
     dims = dims_txt(o, lang)
     donnees = {"id": oid, "comptoir": "atelier", "genre": genre, "titre": tt, "prix": prix, "image": f"img/oeuvres/{oid}-640.webp"}
