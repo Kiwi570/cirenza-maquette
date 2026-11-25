@@ -1,5 +1,9 @@
 # Historique
 
+## v7.1 · 25 novembre 2026 · nouvelle phrase de Lisa
+
+- Partout (accueil, pied de page, déclaration, Notes d'atelier, `llms.txt`) : « Most people look up and see the Alps. I see a record of time, still being written, and light coaxing new life from every layer. » Version française : notre traduction, à relire par Lisa.
+
 ## v7 · 20 novembre 2026 · deuxième liste de Lisa
 
 Réponses point par point : `REPONSES-LISA-2.md`.
