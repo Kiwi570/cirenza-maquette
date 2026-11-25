@@ -31,7 +31,7 @@ for f in sorted(COPIE.rglob("*")):
     s = s.replace("https://cirenza-maquette.vercel.app", HOTE)
     if f.suffix == ".html":
         # medias.js avant site.js (scripts « defer » : exécutés dans l'ordre)
-        m = re.search(r'<script defer src="((?:\.\./)*|/)assets/js/site\.js\?v=(\d+)"></script>', s)
+        m = re.search(r'<script defer src="((?:\.\./)*|/)assets/js/site\.js\?v=([0-9.]+)"></script>', s)
         if m and "medias.js" not in s:
             s = s.replace(m.group(0), f'<script defer src="{m.group(1)}assets/js/medias.js?v={m.group(2)}"></script>' + m.group(0), 1)
         elif not m:
