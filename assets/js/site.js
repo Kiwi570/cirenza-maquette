@@ -1719,13 +1719,17 @@
     if (!tiroir || !txtEl) return;
     var TX = {};
     try { TX = JSON.parse(txtEl.getAttribute('data-textes-panier')); } catch (e) { }
-    var noms = { atelier: $('.panier__comptoir--atelier h3 span', tiroir).textContent, espace: $('.panier__comptoir--espace h3 span', tiroir).textContent };
+    /* v7.2 · un seul compartiment (la SAS encaisse tout) ; le code accepte encore plusieurs comptoirs */
+    var COMPTOIRS = $$('[data-comptoir]', tiroir).map(function (x) { return x.getAttribute('data-comptoir'); });
+    var noms = {};
+    COMPTOIRS.forEach(function (c) { var t = $('.panier__comptoir--' + c + ' h3 span', tiroir); noms[c] = t ? t.textContent : c; });
+    function comptoirDe(d) { return COMPTOIRS.indexOf(d.comptoir) > -1 ? d.comptoir : COMPTOIRS[0]; }
     var PN = lirePaniers();
     var dernierFocus = null;
     function prix(n) { return TX.fr ? n.toLocaleString('fr-FR') + ' €' : '€' + n.toLocaleString('en-GB'); }
     function lire(b) { try { return JSON.parse(b.getAttribute('data-ajouter')); } catch (e) { return null; } }
     function rendre() {
-      ['atelier', 'espace'].forEach(function (c) {
+      COMPTOIRS.forEach(function (c) {
         var ul = $('[data-liste="' + c + '"]', tiroir), sec = ul.closest('.panier__comptoir');
         ul.textContent = '';
         var total = 0, inconnus = 0, payables = 0;
@@ -1752,10 +1756,10 @@
         var n = $('[data-compte-panier="' + c + '"]');
         if (n) { n.textContent = PN[c].length; n.classList.toggle('est-vide', !PN[c].length); }
       });
-      if (btn) btn.hidden = !(PN.atelier.length + PN.espace.length) && !P.boutique;
+      if (btn) btn.hidden = !COMPTOIRS.reduce(function (n, c) { return n + PN[c].length; }, 0) && !P.boutique;
       $$('[data-ajouter]').forEach(function (b) {
         var d = lire(b);
-        b.classList.toggle('est-ajoute', !!(d && PN[d.comptoir] && PN[d.comptoir].some(function (x) { return x.id === d.id; })));
+        b.classList.toggle('est-ajoute', !!(d && PN[comptoirDe(d)] && PN[comptoirDe(d)].some(function (x) { return x.id === d.id; })));
       });
     }
     function ouvrir() {
@@ -1809,6 +1813,7 @@
     $$('[data-ajouter]').forEach(function (b) {
       b.addEventListener('click', function () {
         var d = lire(b);
+        if (d) d.comptoir = comptoirDe(d);
         if (!d || !PN[d.comptoir]) return;
         if (!PN[d.comptoir].some(function (x) { return x.id === d.id; })) { PN[d.comptoir].push(d); ecrirePaniers(PN); }
         if (btn) btn.hidden = false;

@@ -10,8 +10,8 @@ PAGES = {
     "mentions": {
         "titre": {"en": "Legal notice · Lisa Cirenza Fine Art and Espace Créa-Tea-Vité",
                   "fr": "Mentions légales · Lisa Cirenza Fine Art et Espace Créa-Tea-Vité"},
-        "description": {"en": "Legal notice of cirenza.com: Lisa Cirenza Fine Art (artist-author) and Espace Créa-Tea-Vité (SAS Atelier Truffle), La Clusaz.",
-                        "fr": "Mentions légales de cirenza.com : Lisa Cirenza Fine Art (artiste-auteur) et l'Espace Créa-Tea-Vité (SAS Atelier Truffle), La Clusaz."}},
+        "description": {"en": "Legal notice of cirenza.com, the site of Lisa Cirenza and Espace Créa-Tea-Vité (SAS Atelier Truffle), La Clusaz.",
+                        "fr": "Mentions légales de cirenza.com, le site de Lisa Cirenza et de l'Espace Créa-Tea-Vité (SAS Atelier Truffle), La Clusaz."}},
     "confidentialite": {
         "titre": {"en": "Privacy policy · Lisa Cirenza", "fr": "Politique de confidentialité · Lisa Cirenza"},
         "description": {"en": "How cirenza.com handles your personal data: registrations, bookings, orders, newsletter and the providers involved.",

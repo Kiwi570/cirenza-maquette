@@ -25,7 +25,7 @@ SITE = Path(sys.argv[1]).resolve()
 MODE = sys.argv[sys.argv.index("--liens") + 1] if "--liens" in sys.argv else "propres"
 APERCU = "--apercu" in sys.argv
 MED = json.loads((ICI / "medias.json").read_text())
-VERSION = "7.1"
+VERSION = "7.2"
 AUJ = DT.date.today()
 # Horaires de l'Espace : une seule source, assets/data/horaires.json (futures collections Wix « Horaires » et « Exceptions »)
 HEURES = HOR.charger(SITE)
@@ -445,7 +445,7 @@ def entete(lang, cle, prof, autre_href):
   <a class="entete__marque" href="{lien(lang, "accueil", prof)}"><span class="signature" role="img" aria-label="Lisa Cirenza"></span><span class="vh"> – {e(t["nav"]["accueil"])}</span></a>
   {bascule_univers(lang, cle, prof, "univers--entete")}
   <nav class="entete__nav" aria-label="{"Main navigation" if lang == "en" else "Navigation principale"}"><ul>{nav}</ul></nav>
-  <button class="entete__panier" type="button" data-panier-ouvrir hidden aria-label="{"Open the baskets" if lang == "en" else "Ouvrir les paniers"}"><span class="entete__panier-a" data-compte-panier="atelier">0</span><span class="entete__panier-e" data-compte-panier="espace">0</span></button>
+  <button class="entete__panier" type="button" data-panier-ouvrir hidden aria-label="{"Open the basket" if lang == "en" else "Ouvrir le panier"}"><span class="entete__panier-a" data-compte-panier="atelier">0</span></button>
   <a class="entete__recherche" href="{lien(lang, "recherche", prof)}" aria-label="{e(t["nav"]["recherche"])}"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span class="entete__recherche-texte">{e(t["nav"]["recherche"])}</span></a>
   <a class="entete__langue" href="{autre_href}" hreflang="{autre}" lang="{autre}"><span class="vh">{e(t["langue_autre"])}</span><span aria-hidden="true">{t["langue_autre_court"]}</span></a>
   <button class="entete__menu" type="button" aria-expanded="false" aria-controls="menu"><span class="entete__menu-texte">{e(t["menu"])}</span><span class="entete__menu-traits" aria-hidden="true"><i></i><i></i><i></i></span></button>
@@ -471,7 +471,7 @@ def pied(lang, prof, autre_href):
   <div class="pied__maisons">
     <section class="pied__maison pied__maison--atelier">
       <h2>{e(t["univers"]["atelier_long"])}</h2>
-      <p class="pied__forme">{e(c["forme_atelier"][lang])} · SIRET {e(c["siret_atelier"])}</p>
+      <p class="pied__forme">{e(c["vendeur"][lang][0].upper() + c["vendeur"][lang][1:])} · SIRET {e(c["siret_espace"])}</p>
       <p>{e(t["pied_atelier"])}</p>
       <ul class="pied__plan">{plan_a}<li><a href="{lien(lang, "boutique", prof, "#atelier")}">{e(t["nav"]["boutique"])}</a></li></ul>
       <p><a class="courriel" href="mailto:{c["courriel"]}">{c["courriel"]}</a></p>
@@ -2055,9 +2055,9 @@ def page_boutique(lang):
     corps = f'''
 <section class="bandeau bandeau--boutique" data-strate="{e(t["nav"]["boutique"])}">
   <div class="bandeau__texte">
-    {surtitre("Lisa Cirenza Fine Art · artist-author" if not fr else "Lisa Cirenza Fine Art · artiste-auteur")}
+    {surtitre("Lisa Cirenza Fine Art · " + c["vendeur"][lang])}
     <h1 class="bandeau__titre">{lettres(t["nav"]["boutique"])}</h1>
-    <div class="bandeau__intro" data-apparait><p>{e("Commissions, original works with their prices, collectors' editions and prints, from Lisa Cirenza Fine Art (artist-author, not VAT-registered). The checkout opens once the artist's payment account is ready; until then, your basket becomes a request." if not fr else "Commandes, œuvres originales avec leur prix, éditions de collection et tirages, par Lisa Cirenza Fine Art (artiste-auteur, non assujettie à la TVA). Le paiement ouvrira quand le compte de paiement de l'artiste sera prêt ; d'ici là, votre panier devient une demande.")}</p></div>
+    <div class="bandeau__intro" data-apparait><p>{e("Commissions, original works with their prices, collectors' editions and prints, by Lisa Cirenza, sold by Espace Créa-Tea-Vité (SAS Atelier Truffle). One basket, one card payment." if not fr else "Commandes, œuvres originales avec leur prix, éditions de collection et tirages de Lisa Cirenza, vendus par l'Espace Créa-Tea-Vité (SAS Atelier Truffle). Un seul panier, un seul paiement par carte.")}</p></div>
     <p class="comptoirs__onglets" data-apparait><a class="bouton aimant bouton--atelier" href="#commandes"><span>{e("Commissions" if not fr else "Commandes")}</span></a><a class="bouton bouton--ligne aimant" href="#atelier"><span>{e("Available works" if not fr else "Œuvres disponibles")}</span></a><a class="bouton bouton--ligne aimant" href="#editions"><span>{e(t["nav"]["editions"])}</span></a></p>
   </div>
   <div class="bandeau__image bandeau__image--duo">
@@ -2079,7 +2079,7 @@ def page_boutique(lang):
 
 <section class="comptoir comptoir--atelier" id="atelier" tabindex="-1" data-strate="{e(B["atelier_titre"][lang])}">
   <div class="comptoir__tete">
-    {surtitre(t["univers"]["atelier_long"] + " · " + c["forme_atelier"][lang], 2)}
+    {surtitre(t["univers"]["atelier_long"] + " · " + c["vendeur"][lang], 2)}
     <h2 class="titre-section">{lettres(B["atelier_titre"][lang])}</h2>
     <p data-apparait>{e("Recent work and small encaustics with their prices from Artwork Archive; prints printed on demand by creativehub; earlier originals from the Archive." if not fr else "Œuvres récentes et petites encaustiques avec leurs prix d'Artwork Archive ; tirages imprimés à la demande par creativehub ; originaux plus anciens de l'Archive.")}</p>
     <div class="filtres" role="group" aria-label="{e("Filter the atelier counter" if not fr else "Filtrer le comptoir de l'atelier")}" data-filtres>
@@ -2109,8 +2109,7 @@ def page_boutique(lang):
     <p data-apparait>{e(B["livraison"][lang])}</p>
     <p data-apparait>{e(B["retrait"][lang])}</p>
     <dl class="livraison__comptes">
-      <div class="livraison__compte livraison__compte--atelier"><dt>{e(t["univers"]["atelier_long"])}</dt><dd>{e("Stripe account no. 1 · SIRET " if not fr else "Compte Stripe n° 1 · SIRET ")}{e(c["siret_atelier"])}</dd></div>
-      <div class="livraison__compte livraison__compte--espace"><dt>{e(c["espace"])}</dt><dd>{e("Stripe account no. 2 · SIRET " if not fr else "Compte Stripe n° 2 · SIRET ")}{e(c["siret_espace"])}</dd></div>
+      <div class="livraison__compte livraison__compte--espace"><dt>{e("One payment account" if not fr else "Un seul compte de paiement")}</dt><dd>{e("Stripe · SAS Atelier Truffle · SIRET " if not fr else "Stripe · SAS Atelier Truffle · SIRET ")}{e(c["siret_espace"])}</dd></div>
     </dl>
     <p class="note">{e(B["simulation"][lang])} {e("On the live site, works, prices and sales are entered once in Artwork Archive." if not fr else "Sur le site en ligne, œuvres, prix et ventes se saisissent une seule fois dans Artwork Archive.")}</p>
   </div>
@@ -2133,10 +2132,9 @@ def panier_html(lang, prof):
     return f'''<div class="panier" id="panier" hidden role="dialog" aria-modal="true" aria-labelledby="panier-titre">
   <div class="panier__voile" data-panier-fermer></div>
   <div class="panier__tiroir">
-    <div class="panier__tete"><h2 id="panier-titre">{e("Your baskets" if not fr else "Vos paniers")}</h2><button class="panier__fermer" type="button" data-panier-fermer aria-label="{e(t["fermer"])}">×</button></div>
-    <p class="panier__explication">{e("Two counters, two separate payments: nothing is ever mixed." if not fr else "Deux comptoirs, deux paiements séparés : rien n'est jamais mélangé.")}</p>
-    {compartiment("atelier", t["univers"]["atelier_long"], C.COORD["forme_atelier"][lang], "Stripe 1")}
-    {compartiment("espace", C.COORD["espace"], C.COORD["forme_espace"][lang], "Stripe 2")}
+    <div class="panier__tete"><h2 id="panier-titre">{e("Your basket" if not fr else "Votre panier")}</h2><button class="panier__fermer" type="button" data-panier-fermer aria-label="{e(t["fermer"])}">×</button></div>
+    <p class="panier__explication">{e("One basket, one payment, to Espace Créa-Tea-Vité (SAS Atelier Truffle)." if not fr else "Un seul panier, un seul paiement, à l'Espace Créa-Tea-Vité (SAS Atelier Truffle).")}</p>
+    {compartiment("atelier", "Lisa Cirenza · Espace Créa-Tea-Vité", C.COORD["forme_espace"][lang], "Stripe")}
     <p class="note panier__note">{e(C.BOUTIQUE["simulation"][lang])}</p>
   </div>
 </div>
@@ -2657,15 +2655,15 @@ def faits_legaux(lang, cle):
     c = C.COORD
     A = "to come" if not fr else "à venir"
     if cle == "mentions":
-        lignes = [ligne_fait("Lisa Cirenza Fine Art", f'Lisa Cirenza · {c["forme_atelier"][lang]} · SIRET {c["siret_atelier"]} · {c["courriel"]}'),
+        lignes = [ligne_fait("Seller" if not fr else "Vendeur", ("Everything sold on the site (works, prints, classes, retreats, boutique): " if not fr else "Tout ce qui est vendu sur le site (œuvres, tirages, cours, retraites, boutique) : ") + "Espace Créa-Tea-Vité, SAS Atelier Truffle"),
                   ligne_fait(c["espace"], f'{c["forme_espace"][lang]} · SIRET {c["siret_espace"]} · {c["rue"]}, {c["ville"]}, {c["pays"][lang]} · {c["courriel_espace"]} · {c["tel"]}'),
                   ligne_fait("VAT number (SAS)" if not fr else "Numéro de TVA (SAS)", A, True),
                   ligne_fait("Consumer mediator" if not fr else "Médiateur de la consommation", A, True),
                   ligne_fait("Atout France registration (retreats)" if not fr else "Immatriculation Atout France (retraites)", A, True),
                   ligne_fait("Website host" if not fr else "Hébergeur du site", "Chosen at launch. This mock-up: Vercel Inc.; its copy on Wix: Wix.com Ltd." if not fr else "Choisi au lancement. Cette maquette : Vercel Inc. ; sa copie chez Wix : Wix.com Ltd.")]
     elif cle == "confidentialite":
-        P = [("Wix", "Registration forms (including any health information you choose to give), contact messages, bookings, orders and customer details: Wix is the back office of both businesses.",
-              "Formulaires d'inscription (y compris les informations de santé que vous choisissez de donner), messages, réservations, commandes et coordonnées : Wix est le back-office des deux entreprises."),
+        P = [("Wix", "Registration forms (including any health information you choose to give), contact messages, bookings, orders and customer details: Wix is the back office of the site.",
+              "Formulaires d'inscription (y compris les informations de santé que vous choisissez de donner), messages, réservations, commandes et coordonnées : Wix est le back-office du site."),
              ("Stripe", "Card payments, through the Wix checkout: card details, name, email and billing address. Card details never pass through our pages.",
               "Paiements par carte, via le paiement Wix : carte, nom, courriel et adresse de facturation. La carte ne passe jamais par nos pages."),
              ("Mailchimp", "Email address and newsletter language, only if you subscribe.", "Courriel et langue de la lettre, seulement si vous vous inscrivez."),
