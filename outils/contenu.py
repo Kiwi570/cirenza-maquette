@@ -53,6 +53,8 @@ COORD = {
     "tel_brut": "+33749095492",
     "siret_atelier": "888 534 534 00019",
     "siret_espace": "989 397 146 00014",
+    # v7.2 · un seul vendeur sur le site : la SAS (son comptable l'a confirmé, 26 novembre 2026)
+    "vendeur": {"en": "sold by Espace Créa-Tea-Vité (SAS Atelier Truffle)", "fr": "vendues par l'Espace Créa-Tea-Vité (SAS Atelier Truffle)"},
     "forme_atelier": {"en": "artist-author (artiste-auteur), not VAT-registered", "fr": "artiste-auteur, non assujettie à la TVA"},
     "forme_espace": {"en": "SAS Atelier Truffle, VAT-registered", "fr": "SAS Atelier Truffle, assujettie à la TVA"},
     "societe_espace": "SAS Atelier Truffle",
@@ -102,7 +104,7 @@ T = {
         "jours_restants": "{n} days to go", "jour_restant": "1 day to go", "aujourdhui": "Today", "passe": "Past",
         "form_obligatoire": "This field is required.", "form_email_invalide": "Please check this email address.",
         "pied_droits": "All texts, images and works © Lisa Cirenza Fine Art",
-        "pied_atelier": "Works, editions and commissions are sold by Lisa Cirenza Fine Art, artist-author.",
+        "pied_atelier": "Works, editions and commissions are sold by Espace Créa-Tea-Vité (SAS Atelier Truffle).",
         "pied_espace": "Retreats, studio sessions, courses, events, tea room and boutique are run by Espace Créa-Tea-Vité (SAS Atelier Truffle).",
         "mentions": "Legal notice", "confidentialite": "Privacy policy",
         "pied_maquette": "Design mock-up — not the live site",
@@ -146,7 +148,7 @@ T = {
         "jours_restants": "J – {n}", "jour_restant": "J – 1", "aujourdhui": "Aujourd'hui", "passe": "Passé",
         "form_obligatoire": "Ce champ est obligatoire.", "form_email_invalide": "Vérifiez cette adresse électronique.",
         "pied_droits": "Textes, images et œuvres © Lisa Cirenza Fine Art",
-        "pied_atelier": "Les œuvres, éditions et commandes sont vendues par Lisa Cirenza Fine Art, artiste-auteur.",
+        "pied_atelier": "Les œuvres, éditions et commandes sont vendues par l'Espace Créa-Tea-Vité (SAS Atelier Truffle).",
         "pied_espace": "Retraites, sessions d'atelier, cours, événements, salon de thé et boutique relèvent de l'Espace Créa-Tea-Vité (SAS Atelier Truffle).",
         "mentions": "Mentions légales", "confidentialite": "Politique de confidentialité",
         "pied_maquette": "Maquette de travail, pas le site en ligne",
@@ -498,8 +500,8 @@ PLEIN_AIR_PRIVE = {"titre": {"en": "Private plein-air course", "fr": "Cours priv
 
 # ================================================================ v3 : boutique (réunion de cadrage) : deux entités, deux comptes de paiement
 BOUTIQUE = {
-    "intro": {"en": "One house, two counters. Works, editions and commissions are sold by Lisa Cirenza Fine Art, the artist-author. Classes, retreats and the boutique belong to Espace Créa-Tea-Vité, a separate company. Each has its own basket and its own payment account, so a single order never mixes the two.",
-              "fr": "Une maison, deux comptoirs. Les œuvres, éditions et commandes sont vendues par Lisa Cirenza Fine Art, artiste-auteur. Les cours, retraites et la boutique relèvent de l'Espace Créa-Tea-Vité, une société distincte. Chacun a son panier et son compte de paiement : une commande ne mélange jamais les deux."},
+    "intro": {"en": "One house, one basket. Works, editions, commissions, classes, retreats and the boutique are all sold by Espace Créa-Tea-Vité (SAS Atelier Truffle), with a single payment account.",
+              "fr": "Une maison, un panier. Œuvres, éditions, commandes, cours, retraites et boutique sont tous vendus par l'Espace Créa-Tea-Vité (SAS Atelier Truffle), avec un seul compte de paiement."},
     "atelier_titre": {"en": "The atelier counter", "fr": "Le comptoir de l'atelier"},
     "atelier_texte": {"en": "Limited edition prints, printed to order by a fine-art print partner, and original works reserved directly with the artist.",
                       "fr": "Tirages en édition limitée, imprimés à la commande par un partenaire d'impression d'art, et œuvres originales réservées directement auprès de l'artiste."},
@@ -511,8 +513,8 @@ BOUTIQUE = {
     "livraison": {"en": "Shipping from La Clusaz: France, Europe and worldwide, insured and tracked; rates calculated at checkout (carrier to be confirmed). Outside the European Union, import duties and taxes may be charged on delivery.",
                   "fr": "Expédition depuis La Clusaz : France, Europe et monde entier, assurée et suivie ; tarifs calculés à la commande (transporteur à confirmer). Hors Union européenne, des droits et taxes d'importation peuvent être demandés à la livraison."},
     "retrait": {"en": "Free pick-up at the Espace, Thursday to Saturday, 2:30 – 6:30 pm.", "fr": "Retrait gratuit à l'Espace, du jeudi au samedi, 14 h 30 – 18 h 30."},
-    "simulation": {"en": "Mock-up: baskets and payments are simulated. On the live site each counter pays into its own Stripe account.",
-                   "fr": "Maquette : paniers et paiements simulés. Sur le site en ligne, chaque comptoir encaisse sur son propre compte Stripe."},
+    "simulation": {"en": "Mock-up: the basket and payment are simulated. On the live site, everything is paid to the Stripe account of SAS Atelier Truffle.",
+                   "fr": "Maquette : panier et paiement simulés. Sur le site en ligne, tout est encaissé sur le compte Stripe de la SAS Atelier Truffle."},
     "boutique_espace": {"en": "Art materials and local gifts: in store at the Espace; online selection to be completed.",
                         "fr": "Matériel d'art et cadeaux locaux : en boutique à l'Espace ; sélection en ligne à compléter."},
 }

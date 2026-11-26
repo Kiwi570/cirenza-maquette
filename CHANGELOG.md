@@ -1,5 +1,11 @@
 # Historique
 
+## v7.2 · 26 novembre 2026 · un seul compte de paiement
+
+- La SAS vend aussi les œuvres (accord du comptable de Lisa) : le Stripe artiste est retiré. Un seul panier, un seul paiement, à l'Espace Créa-Tea-Vité (SAS Atelier Truffle).
+- Pied de page, Commissions and Available Works, panier, pages légales : plus de mention « artiste-auteur » ni du SIRET artiste ; la SAS et son SIRET partout où l'on vend.
+- Import Artwork Archive : `outils/import_artwork_archive.py` (images, Portfolio, règles de sélection), prêt pour l'export de Lisa.
+
 ## v7.1 · 25 novembre 2026 · nouvelle phrase de Lisa
 
 - Partout (accueil, pied de page, déclaration, Notes d'atelier, `llms.txt`) : « Most people look up and see the Alps. I see a record of time, still being written, and light coaxing new life from every layer. » Version française : notre traduction, à relire par Lisa.

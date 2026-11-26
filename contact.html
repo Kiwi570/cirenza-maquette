@@ -25,12 +25,12 @@
 <meta name="twitter:card" content="summary_large_image">
 
 <link rel="preload" as="font" type="font/woff" href="/assets/polices/fraunces.woff" crossorigin><style>@font-face{font-family:"LC Fraunces";src:url("/assets/polices/fraunces.woff") format("woff");font-style:normal;font-weight:300 800;font-display:swap}@font-face{font-family:"LC Fraunces";src:url("/assets/polices/fraunces-italique.woff") format("woff");font-style:italic;font-weight:300 800;font-display:swap}@font-face{font-family:"LC Plex Mono";src:url("/assets/polices/plex-mono-regular.woff") format("woff");font-style:normal;font-weight:400;font-display:swap}@font-face{font-family:"LC Plex Mono";src:url("/assets/polices/plex-mono-medium.woff") format("woff");font-style:normal;font-weight:500;font-display:swap}</style>
-<link rel="stylesheet" href="/assets/css/site.css?v=7.1">
+<link rel="stylesheet" href="/assets/css/site.css?v=7.2">
 <script>(function(d){d.classList.remove("no-js");d.classList.add("js");try{if(matchMedia("(prefers-reduced-motion: reduce)").matches)d.classList.add("mouvement-reduit")}catch(x){}})(document.documentElement);</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":["ArtGallery","CafeOrCoffeeShop"],"@id":"https://cirenza-maquette.vercel.app/#espace","name":"Espace Créa-Tea-Vité","description":"Espace Créa-Tea-Vité in La Clusaz, near Lac d'Annecy: gallery, tea room, private bespoke courses, private events and three creative retreats in 2027.","url":"https://cirenza-maquette.vercel.app/espace","image":"https://cirenza-maquette.vercel.app/assets/img/photos/espace-facade-de-nuit-800.webp","address":{"@type":"PostalAddress","streetAddress":"27 Passage du Mont Blanc","postalCode":"74220","addressLocality":"La Clusaz","addressRegion":"Haute-Savoie","addressCountry":"FR"},"telephone":"+33749095492","email":"atelier@cirenza.com","founder":{"@id":"https://cirenza-maquette.vercel.app/#lisa"},"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":"Thursday","opens":"14:30","closes":"18:30"},{"@type":"OpeningHoursSpecification","dayOfWeek":"Friday","opens":"14:30","closes":"18:30"},{"@type":"OpeningHoursSpecification","dayOfWeek":"Saturday","opens":"14:30","closes":"18:30"},{"@type":"OpeningHoursSpecification","validFrom":"2026-11-20","validThrough":"2026-12-02","opens":"00:00","closes":"00:00"}],"sameAs":["https://www.instagram.com/espacecreateavite/"]},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://cirenza-maquette.vercel.app/"},{"@type":"ListItem","position":2,"name":"Contact","item":"https://cirenza-maquette.vercel.app/contact"}]}]}</script>
 <script>window.LC_PAGE={};</script>
-<script defer src="/assets/js/donnees-en.js?v=7.1"></script>
-<script defer src="/assets/js/site.js?v=7.1"></script>
+<script defer src="/assets/js/donnees-en.js?v=7.2"></script>
+<script defer src="/assets/js/site.js?v=7.2"></script>
 </head>
 <body class="page-contact univers-maison">
 <a class="evitement" href="#contenu">Skip to content</a>
@@ -46,7 +46,7 @@
   <a class="entete__marque" href="/"><span class="signature" role="img" aria-label="Lisa Cirenza"></span><span class="vh"> – Home</span></a>
   <nav class="univers univers--entete" aria-label="Choose a side of the house" data-univers="maison"><a class="univers__cote univers__cote--atelier" href="/works"><span class="univers__nom">Artist</span><span class="univers__sous">Lisa Cirenza · Fine Art</span></a><span class="univers__curseur" aria-hidden="true"></span><a class="univers__cote univers__cote--espace" href="/espace"><span class="univers__nom">Espace</span><span class="univers__sous">Créa-Tea-Vité</span></a></nav>
   <nav class="entete__nav" aria-label="Main navigation"><ul><li><a href="/works">Portfolio</a></li><li><a href="/artist">Bio</a></li><li><a href="/espace">L&#x27;Espace</a></li><li><a href="/retreats">Retreats</a></li><li><a href="/exhibitions-events">Exhibitions &amp; Events</a></li></ul></nav>
-  <button class="entete__panier" type="button" data-panier-ouvrir hidden aria-label="Open the baskets"><span class="entete__panier-a" data-compte-panier="atelier">0</span><span class="entete__panier-e" data-compte-panier="espace">0</span></button>
+  <button class="entete__panier" type="button" data-panier-ouvrir hidden aria-label="Open the basket"><span class="entete__panier-a" data-compte-panier="atelier">0</span></button>
   <a class="entete__recherche" href="/search" aria-label="Search"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span class="entete__recherche-texte">Search</span></a>
   <a class="entete__langue" href="/fr/contact" hreflang="fr" lang="fr"><span class="vh">Version française</span><span aria-hidden="true">FR</span></a>
   <button class="entete__menu" type="button" aria-expanded="false" aria-controls="menu"><span class="entete__menu-texte">Menu</span><span class="entete__menu-traits" aria-hidden="true"><i></i><i></i><i></i></span></button>
@@ -56,25 +56,17 @@
 <div class="panier" id="panier" hidden role="dialog" aria-modal="true" aria-labelledby="panier-titre">
   <div class="panier__voile" data-panier-fermer></div>
   <div class="panier__tiroir">
-    <div class="panier__tete"><h2 id="panier-titre">Your baskets</h2><button class="panier__fermer" type="button" data-panier-fermer aria-label="Close">×</button></div>
-    <p class="panier__explication">Two counters, two separate payments: nothing is ever mixed.</p>
+    <div class="panier__tete"><h2 id="panier-titre">Your basket</h2><button class="panier__fermer" type="button" data-panier-fermer aria-label="Close">×</button></div>
+    <p class="panier__explication">One basket, one payment, to Espace Créa-Tea-Vité (SAS Atelier Truffle).</p>
     <section class="panier__comptoir panier__comptoir--atelier" data-comptoir="atelier">
-      <h3><span>Lisa Cirenza · Fine Art</span><small>artist-author (artiste-auteur), not VAT-registered · Stripe 1</small></h3>
+      <h3><span>Lisa Cirenza · Espace Créa-Tea-Vité</span><small>SAS Atelier Truffle, VAT-registered · Stripe</small></h3>
       <ul class="panier__liste" data-liste="atelier"></ul>
       <p class="panier__vide">Nothing here yet.</p>
       <p class="panier__total"><span>Total</span><strong data-total="atelier">—</strong></p>
       <button class="bouton panier__payer" type="button" data-payer="atelier"><span>Pay with Stripe</span></button>
       <p class="panier__recu" data-recu="atelier" hidden tabindex="-1"></p>
     </section>
-    <section class="panier__comptoir panier__comptoir--espace" data-comptoir="espace">
-      <h3><span>Espace Créa-Tea-Vité</span><small>SAS Atelier Truffle, VAT-registered · Stripe 2</small></h3>
-      <ul class="panier__liste" data-liste="espace"></ul>
-      <p class="panier__vide">Nothing here yet.</p>
-      <p class="panier__total"><span>Total</span><strong data-total="espace">—</strong></p>
-      <button class="bouton panier__payer" type="button" data-payer="espace"><span>Pay with Stripe</span></button>
-      <p class="panier__recu" data-recu="espace" hidden tabindex="-1"></p>
-    </section>
-    <p class="note panier__note">Mock-up: baskets and payments are simulated. On the live site each counter pays into its own Stripe account.</p>
+    <p class="note panier__note">Mock-up: the basket and payment are simulated. On the live site, everything is paid to the Stripe account of SAS Atelier Truffle.</p>
   </div>
 </div>
 <div class="panier-texte" hidden data-textes-panier='{&quot;retirer&quot;: &quot;Remove&quot;, &quot;sur_demande&quot;: &quot;Price on request&quot;, &quot;a_completer&quot;: &quot;Price to be completed&quot;, &quot;demande&quot;: &quot;Send the request&quot;, &quot;payer&quot;: &quot;Pay with Stripe&quot;, &quot;recu_paye&quot;: &quot;Payment simulated for {n}. On the live site, Stripe would charge this account.&quot;, &quot;recu_demande&quot;: &quot;Request ready for {n}: Lisa will reply with price and availability.&quot;, &quot;plus_a_completer&quot;: &quot; + items at a price to be completed&quot;, &quot;ajoute&quot;: &quot;Added to the {n} basket&quot;, &quot;fr&quot;: false}'></div>
@@ -119,8 +111,8 @@
   <div class="pied__maisons">
     <section class="pied__maison pied__maison--atelier">
       <h2>Lisa Cirenza · Fine Art</h2>
-      <p class="pied__forme">artist-author (artiste-auteur), not VAT-registered · SIRET 888 534 534 00019</p>
-      <p>Works, editions and commissions are sold by Lisa Cirenza Fine Art, artist-author.</p>
+      <p class="pied__forme">Sold by Espace Créa-Tea-Vité (SAS Atelier Truffle) · SIRET 989 397 146 00014</p>
+      <p>Works, editions and commissions are sold by Espace Créa-Tea-Vité (SAS Atelier Truffle).</p>
       <ul class="pied__plan"><li><a href="/works">Portfolio</a></li><li><a href="/artist">Bio</a></li><li><a href="/cv">CV</a></li><li><a href="/press">Press</a></li><li><a href="/available-works#atelier">Commissions and Available Works</a></li></ul>
       <p><a class="courriel" href="mailto:art@cirenza.com">art@cirenza.com</a></p>
       <p class="pied__reseaux"><a href="https://www.instagram.com/art.lc/" target="_blank" rel="noopener">Instagram art.lc</a> · <a href="https://fr.linkedin.com/in/lisa-cirenza-3baa4913/fr" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://www.facebook.com/LisaCirenzaFineArt/" target="_blank" rel="noopener">Facebook</a></p>

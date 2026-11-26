@@ -42,8 +42,13 @@ COLONNES = {
     "devise": ["Currency"],
     "statut": ["Status", "Availability"],
     "collection": ["Collection", "Collections", "Series"],
-    "description": ["Description", "Notes"],
+    # jamais « Notes » ni « Private Notes » : ce sont les notes privées de Lisa
+    "description": ["Description", "Public Description", "Piece Description"],
     "edition": ["Edition", "Edition Info", "Edition Size"],
+    "images": ["Image URL", "Image URLs", "Images", "Image", "Image Url", "Primary Image", "Primary Image URL", "Image Link", "Image Links"],
+    "public": ["Public", "Public Status", "Is Public", "Visibility", "Make Piece Public", "Public?"],
+    "etiquettes": ["Tags", "Tag", "Keywords"],
+    "cadre": ["Framed", "Framed Dimensions", "Frame", "Framing"],
 }
 STATUTS = {"sold": "vendu", "available": "disponible", "not for sale": "non-disponible", "nfs": "non-disponible",
            "on loan": "en-pret", "in progress": "en-cours", "work in progress": "en-cours", "consigned": "disponible",
